@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\sebastian.bauer\.Rider2018.2\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\sebastian.bauer\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.1172674224.00" t="ExcludeRecursive" />
-    <e p="C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
+    <e p="C:\Users\Julius.Nordhues\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.-1327470483.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
       <e p="DynamicDocsWPF" t="IncludeRecursive">
         <e p="App.config" t="Include" />
         <e p="App.xaml" t="Include" />
