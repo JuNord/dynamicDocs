@@ -1,0 +1,18 @@
+<process name="[vacation]" description="Urlaubsantrag">
+  <process-step name="[initialization]" description="Initialisierung">
+    <dialog>
+      <teacher-dropdown name="[teacher]" description="Lehrer"/>
+    </dialog>
+    <dialog>
+      <date-dropdown name="[begin]" description="Beginn"/>
+      <number name="[left_new]" description="Resturlaub (alt)"/>
+    </dialog>
+  </process-step>
+  <process-step name="[validationBySecretary]" description="Genehmigt durch Sekretärin" target="herrewald">
+    <validation locks="true"/>
+    <mailnotify target="[teacher]" text="Antrag durch Sekretärin genehmigt"/>
+    <receipt draftname="vorlage.docx" filepath=".\receipt.docx"/>
+    <archivefor target="[teacher]"/>
+    <archivefor target="herrewald"/>
+  </process-step>
+</process>
