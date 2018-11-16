@@ -64,8 +64,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Process.cs" />
-    <Compile Include="ProcessStep.cs" />
+    <Compile Include="Model\Base Classes\InputElement.cs" />
+    <Compile Include="Model\Base Classes\Tag.cs" />
+    <Compile Include="Model\Base Classes\Unnamed.cs" />
+    <Compile Include="Model\InputElements\NumberInputBox.cs" />
+    <Compile Include="Model\InputElements\StudentDropdown.cs" />
+    <Compile Include="Model\InputElements\TeacherDropdown.cs" />
+    <Compile Include="Model\InputElements\TextInputBox.cs" />
+    <Compile Include="Model\Surrounding Tags\Dialog.cs" />
+    <Compile Include="Model\Surrounding Tags\Process.cs" />
+    <Compile Include="Model\Surrounding Tags\ProcessStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
