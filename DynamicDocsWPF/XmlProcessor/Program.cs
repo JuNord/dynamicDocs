@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
-namespace XML_Test
+namespace XmlProcessor
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             // Create an XML reader for this file.
             using (XmlReader reader = XmlReader.Create(@"C:\Users\Julius.Nordhues\source\repos\dynamicDocs\XML_Test\XMLFile1.xml"))
@@ -23,7 +19,20 @@ namespace XML_Test
                         switch (reader.NodeType)
                         {
                             case XmlNodeType.Element:
-                                Console.WriteLine("Start Element {0}", reader.Name);
+                                if (reader.HasAttributes)
+                                {
+                                    Console.WriteLine("Attributes of <" + reader.Name + ">");
+                                    string tmp = reader.GetAttribute("name");
+                                    Console.WriteLine("\tname: " + tmp );
+                                   
+                                    string tmp1 = reader.GetAttribute("description");
+                                    Console.WriteLine("\tdescription: " + tmp1 );
+     
+                                    
+                                }
+                                // Move the reader back to the element node.
+                                    //reader.MoveToElement(); 
+
                                 break;
                             
                             case XmlNodeType.EndElement:
@@ -31,7 +40,7 @@ namespace XML_Test
                                 break;
                             default:
                                 Console.WriteLine("Other node {0} with value {1}",
-                                                reader.NodeType, reader.Value);
+                                    reader.NodeType, reader.Value);
                                 break;
                         }
 
@@ -41,7 +50,5 @@ namespace XML_Test
             Console.ReadKey();
 
         }
-
-
     }
 }
