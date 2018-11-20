@@ -44,6 +44,12 @@
   <ItemGroup>
     <Content Include="XMLFile1.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DynamicDocsWPF\DynamicDocsWPF.csproj">
+      <Project>{a6acd2bb-6d00-476f-860a-fc4cb5cd2a86}</Project>
+      <Name>DynamicDocsWPF</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
