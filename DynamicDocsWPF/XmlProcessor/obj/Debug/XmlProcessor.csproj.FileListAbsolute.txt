@@ -1,0 +1,10 @@
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\XmlProcessor.exe
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\XmlProcessor.pdb
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\DynamicDocsWPF.exe
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\DynamicDocsWPF.pdb
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\DynamicDocsWPF.exe.config
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\obj\Debug\XmlProcessor.csprojAssemblyReference.cache
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\obj\Debug\XmlProcessor.csproj.CoreCompileInputs.cache
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\obj\Debug\XmlProcessor.csproj.CopyComplete
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\obj\Debug\XmlProcessor.exe
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\obj\Debug\XmlProcessor.pdb

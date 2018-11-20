@@ -10,19 +10,16 @@ namespace DynamicDocsWPF.Model.InputElements
         /// Returns a new Instance of TextInputBox.
         /// </summary>
         /// <param name="obligatory">If true, a check function will be supplied to the base class to check if the control is empty</param>
-        /// <param name="isValidForProcess">Allows to supply a function to check if an Input is true.</param>
-        public TextInputBox(Tag parent, bool obligatory = false, Func<bool> isValidForProcess = null) : base(parent, new TextBox())
+        public TextInputBox(Tag parent, bool obligatory = false) : base(parent, obligatory, new TextBox())
         {
-            IsValidForProcess = isValidForProcess;
-            
             if(obligatory)
-                FulfillsObligatory = () => UiElement.Text.Length > 0;
+                FulfillsObligatory = () => ElevatedControl.Text.Length > 0;
         }
 
-        public override void Clear() => UiElement.Clear();
+        public override void Clear() => ElevatedControl.Clear();
 
         public override bool CheckValidForControl() => true;
 
-        public override string GetValue() => UiElement.Text;
+        public override string GetValue() => ElevatedControl.Text;
     }
 }

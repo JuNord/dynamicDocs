@@ -10,26 +10,31 @@ InputElement <|-- StudentDropdown
 InputElement <|-- TeacherDropdown
 InputElement <|-- TextInputBox
 
+ProcessStep "*" --* "1" Process : -List<ProcessStep> _steps
+Dialog "*" --* "1" ProcessStep : -List<Dialog> _dialogs
+BaseInputElement "*" --* "1" Dialog : -List<BaseInputElement> _elements
+
+
 +abstract class Tag
 {
-    +Tag Parent { get; }
+    +Parent : Tag { get; }
     +Tag(Tag parent)
 }
 
 +abstract class NamedTag
 {
-    +string Name { get; private set; }
-    +string Description { get; private set; }
+    +Name : string { get; private set; }
+    +Description : string { get; private set; }
 
-    ~NamedTag(Tag parent) : base(parent)
+    ~NamedTag(Tag parent)
 }
 
 +abstract class InputElement<TControl, TValue>
 {
-    ~TControl UiElement { get; }
+    ~UiElement : TControl { get; }
 
-    ~Func<bool> IsValidForProcess { private get; set; }
-    ~Func<bool> FulfillsObligatory { private get; set; }
+    ~IsValidForProcess : Func<bool>  { private get; set; }
+    ~FulfillsObligatory : Func<bool> { private get; set; }
 
     ~InputElement(Tag parent, TControl control)
     
@@ -48,29 +53,31 @@ InputElement <|-- TextInputBox
 
 +class NumberInputBox
 {
-    +NumberInputBox(parent : Tag, obligatory : bool = false, isValidForProcess : Func<bool> = null)
+    +NumberInputBox(parent : Tag, obligatory : bool = false, 
+                    isValidForProcess : Func<bool> = null)
 }
 
 +class TextInputBox
 {
-    +TextInputBox(parent : Tag, obligatory : bool = false, isValidForProcess : Func<bool> = null)
+    +TextInputBox(parent : Tag, obligatory : bool = false, 
+                  isValidForProcess : Func<bool> = null)
 }
 
 +class StudentDropdown
 {
-    +StudentDropDown(parent : Tag, obligatory : bool = false, isValidForProcess : Func<bool> = null)
+    +StudentDropDown(parent : Tag, obligatory : bool = false, 
+                    isValidForProcess : Func<bool> = null)
 }
 
 +class TeacherDropdown
 {
-    +TeacherDropDown(parent : Tag, obligatory : bool = false, isValidForProcess : Func<bool> = null)
+    +TeacherDropDown(parent : Tag, obligatory : bool = false, 
+                    isValidForProcess : Func<bool> = null)
 }
 
 
 +class Process
-{
-    -List<ProcessStep> _steps;
-
+{ 
     +Process()
 
     +void AddStep(step : ProcessStep)
@@ -78,21 +85,17 @@ InputElement <|-- TextInputBox
 }
 
 +class ProcessStep
-{
-    -List<Dialog> _dialogs;
-
-    +ProcessStep() 
+{  
+    +ProcessStep(parent : Tag) 
 
     +void AddDialog(dialog : Dialog)
-
     +Dialog GetDialogAtIndex(index : int)
 }
     
 +class Dialog
 {
-    -List<BaseInputElement> _elements;
-
-    +Dialog()
+    +Dialog(parent : Tag)
+    
     +void AddElement(element : BaseInputElement)
     +BaseInputElement GetElementAtIndex(index : int)
     +BaseInputElement GetElementByName(name : string)
