@@ -11,7 +11,7 @@ namespace DynamicDocsWPF.Model.InputElements
         /// </summary>
         /// <param name="obligatory">If true, a check function will be supplied to the base class to check if the control is empty</param>
         /// <param name="isValidForProcess">Allows to supply a function to check if an Input is true.</param>
-        public TeacherDropdown(bool obligatory, Func<bool> isValidForProcess) : base(new ComboBox())
+        public TeacherDropdown(Tag parent, bool obligatory, Func<bool> isValidForProcess) : base(parent, new ComboBox())
         {
             IsValidForProcess = isValidForProcess;
 

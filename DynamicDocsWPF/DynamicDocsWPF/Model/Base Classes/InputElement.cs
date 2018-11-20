@@ -10,7 +10,7 @@ namespace DynamicDocsWPF.Model.Base_Classes
         protected Func<bool> IsValidForProcess { private get; set; }
         protected Func<bool> FulfillsObligatory { private get; set; }
 
-        protected InputElement(TControl control)
+        protected InputElement(Tag parent, TControl control) : base(parent)
         {
             UiElement = control;
         }
