@@ -6,9 +6,9 @@ namespace DynamicDocsWPF.Model.Surrounding_Tags
     {
         private readonly List<Dialog> _dialogs;
 
-        public ProcessStep(List<Dialog> dialogs)
+        public ProcessStep()
         {
-            _dialogs = dialogs;
+            _dialogs = new List<Dialog>();
         }
 
         public void AddDialog(Dialog dialog)

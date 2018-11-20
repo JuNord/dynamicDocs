@@ -9,9 +9,9 @@ namespace DynamicDocsWPF.Model.Surrounding_Tags
     {
         private readonly List<BaseInputElement> _elements;
 
-        public Dialog(List<BaseInputElement> elements)
+        public Dialog()
         {
-            _elements = elements;
+            _elements = new List<BaseInputElement>();
         }
 
         public void AddElement(BaseInputElement element)

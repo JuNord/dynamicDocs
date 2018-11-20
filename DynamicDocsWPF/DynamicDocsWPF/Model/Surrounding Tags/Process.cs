@@ -7,9 +7,9 @@ namespace DynamicDocsWPF.Model.Surrounding_Tags
     {
         private readonly List<ProcessStep> _steps;
 
-        public Process(List<ProcessStep> steps)
+        public Process()
         {
-            _steps = steps;
+            _steps = new List<ProcessStep>();
         }
 
         public void AddStep(ProcessStep step)
