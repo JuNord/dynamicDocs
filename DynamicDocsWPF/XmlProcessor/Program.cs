@@ -1,6 +1,9 @@
 ﻿using System;
 using System.CodeDom;
+using System.Runtime.InteropServices;
+using System.Security.Permissions;
 using System.Xml;
+
 
 namespace XmlProcessor
 {
@@ -11,23 +14,23 @@ namespace XmlProcessor
             // Create an XML reader for this file.
             using (XmlReader reader = XmlReader.Create(@"C:\Users\Julius.Nordhues\source\repos\dynamicDocs\XML_Test\XMLFile1.xml"))
             {
-                while (reader.Read())
+                while(reader.Read())
                 {
-                    // Only detect start elements.
-                    if (reader.IsStartElement())
-                    {
+                    
+
                         // Get element name and switch on it.
                         switch (reader.NodeType)
                         {
                             case XmlNodeType.Element:
                                 if (reader.HasAttributes)
                                 {
-                                    Console.WriteLine("Attributes of <" + reader.Name + ">");
-                                    string name = reader.GetAttribute("name");
+                                    Console.WriteLine("<" + reader.Name + ">");
+                                    var name = reader.GetAttribute("name");
                                     if(name!=null)
                                         Console.WriteLine("\tname: " + name );
                                    
-                                    string description = reader.GetAttribute("description");
+                                    
+                                    var description = reader.GetAttribute("description");
                                     if(description!=null)
                                         Console.WriteLine("\tdescription: " + description );
 
@@ -51,7 +54,7 @@ namespace XmlProcessor
                                     string filepath = reader.GetAttribute("filepath");
                                     if(filepath!=null)
                                         Console.WriteLine("\tfilepath: "+filepath);
-
+                                    
                                 }
                                 else
                                 {
@@ -63,15 +66,17 @@ namespace XmlProcessor
                                 break;
                             
                             case XmlNodeType.EndElement:
-                                Console.WriteLine("End Element {0}", reader.Name);
+                                Console.WriteLine("</"+reader.Name+">");
                                 break;
+                            
+                            
                             default:
                                 Console.WriteLine("Other node {0} with value {1}",
                                     reader.NodeType, reader.Value);
                                 break;
                         }
 
-                    }
+                    
                 }
             }
             Console.ReadKey();
