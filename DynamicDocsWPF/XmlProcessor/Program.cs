@@ -22,9 +22,14 @@ namespace XmlProcessor
                         switch (reader.NodeType)
                         {
                             case XmlNodeType.Element:
+                                ///
+                                /// Überprüft ob die Node (Zeile) Attribute außer dem Namen aufweißt
+                                /// 
                                 if (reader.HasAttributes)
                                 {
+                                    //Node Name wird rausgeschrieben z.B. <teacher-dropdown>
                                     Console.WriteLine("<" + reader.Name + ">");
+                                    
                                     var name = reader.GetAttribute("name");
                                     if(name!=null)
                                         Console.WriteLine("\tname: " + name );
@@ -35,30 +40,29 @@ namespace XmlProcessor
                                         Console.WriteLine("\tdescription: " + description );
 
                                     
-                                    string target = reader.GetAttribute("target");
+                                    var target = reader.GetAttribute("target");
                                     if(target!=null)
                                         Console.WriteLine("\ttarget: "+target);
                                          
-                                    string locks = reader.GetAttribute("locks");
+                                    var locks = reader.GetAttribute("locks");
                                     if(locks!=null)
                                         Console.WriteLine("\tlocks: "+locks);
                                     
-                                    string vText = reader.GetAttribute("text");
+                                    var vText = reader.GetAttribute("text");
                                     if(vText!=null)
                                         Console.WriteLine("\ttext: "+vText);
                                     
-                                    string draftname = reader.GetAttribute("draftname");
+                                    var draftname = reader.GetAttribute("draftname");
                                     if(draftname!=null)
                                         Console.WriteLine("\tdraftname: "+draftname);
                                     
-                                    string filepath = reader.GetAttribute("filepath");
+                                    var filepath = reader.GetAttribute("filepath");
                                     if(filepath!=null)
                                         Console.WriteLine("\tfilepath: "+filepath);
-                                    
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Attributes of <" + reader.Name + ">");
+                                    Console.WriteLine("<" + reader.Name + ">");
                                 }
                                 // Move the reader back to the element node.
                                     //reader.MoveToElement(); 
@@ -71,8 +75,8 @@ namespace XmlProcessor
                             
                             
                             default:
-                                Console.WriteLine("Other node {0} with value {1}",
-                                    reader.NodeType, reader.Value);
+                                
+                                
                                 break;
                         }
 
