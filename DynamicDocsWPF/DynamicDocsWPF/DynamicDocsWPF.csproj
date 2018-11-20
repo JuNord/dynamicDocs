@@ -64,9 +64,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Base Classes\BaseInputElement.cs" />
     <Compile Include="Model\Base Classes\InputElement.cs" />
     <Compile Include="Model\Base Classes\Tag.cs" />
-    <Compile Include="Model\Base Classes\Unnamed.cs" />
+    <Compile Include="Model\Base Classes\NamedTag.cs" />
     <Compile Include="Model\InputElements\NumberInputBox.cs" />
     <Compile Include="Model\InputElements\StudentDropdown.cs" />
     <Compile Include="Model\InputElements\TeacherDropdown.cs" />

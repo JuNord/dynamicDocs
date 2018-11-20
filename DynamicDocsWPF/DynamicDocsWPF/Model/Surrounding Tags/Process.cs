@@ -5,12 +5,19 @@ namespace DynamicDocsWPF.Model.Surrounding_Tags
 {
     public class Process
     {
-        private List<ProcessStep> _steps = new List<ProcessStep>();
+        private readonly List<ProcessStep> _steps;
 
-        private void bla()
+        public Process(List<ProcessStep> steps)
         {
-            var drop = new TeacherDropdown();
-            
+            _steps = steps;
         }
+
+        public void AddStep(ProcessStep step)
+        {
+            if(step != null)
+                _steps.Add(step);
+        }
+
+        public ProcessStep GetStepAtIndex(int index) => _steps?[index];
     }
 }
