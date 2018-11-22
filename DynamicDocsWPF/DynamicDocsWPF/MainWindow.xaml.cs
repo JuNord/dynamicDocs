@@ -4,6 +4,7 @@ using System.Windows.Media;
 using DynamicDocsWPF.Model.InputElements;
 using DynamicDocsWPF.Model.Surrounding_Tags;
 using DynamicDocsWPF.UIGeneration;
+using RestService;
 
 namespace DynamicDocsWPF
 {

@@ -13,6 +13,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <LangVersion>7</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -50,6 +51,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Networking\NetworkHelper.cs" />
     <Compile Include="UIGeneration\ViewCreator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -95,6 +97,13 @@
   <ItemGroup>
     <Content Include="PlantUML\Network.txt" />
     <Content Include="PlantUML\UML.txt" />
+    <Content Include="PlantUML\WebServer.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RestService\RestService.csproj">
+      <Project>{9c8cf696-190c-4b16-ac4f-7046840a0ec0}</Project>
+      <Name>RestService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

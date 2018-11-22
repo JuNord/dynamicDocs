@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\sebas_qgewjv\.Rider2018.2\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\sebas_qgewjv\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.-1818023564.00" t="ExcludeRecursive" />
-    <e p="C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
+    <e p="C:\Users\sebas\.Rider2018.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\sebas\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.2005505657.00" t="ExcludeRecursive" />
+    <e p="C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
       <e p="DynamicDocsWPF" t="IncludeRecursive">
         <e p="App.config" t="Include" />
         <e p="App.xaml" t="Include" />
@@ -31,9 +31,14 @@
             <e p="ProcessStep.cs" t="Include" />
           </e>
         </e>
+        <e p="Networking" t="Include">
+          <e p="NetworkHelper.cs" t="Include" />
+        </e>
         <e p="obj" t="ExcludeRecursive" />
         <e p="PlantUML" t="Include">
+          <e p="Network.txt" t="Include" />
           <e p="UML.txt" t="Include" />
+          <e p="WebServer.txt" t="Include" />
         </e>
         <e p="Properties" t="Include">
           <e p="AssemblyInfo.cs" t="Include" />
@@ -46,6 +51,27 @@
       </e>
       <e p="DynamicDocsWPF.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />
+      <e p="RestService" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Host.cs" t="Include" />
+        <e p="IRestService.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="RestService.csproj" t="IncludeRecursive" />
+        <e p="RestServices.cs" t="Include" />
+        <e p="Routing.cs" t="Include" />
+      </e>
+      <e p="WebServer" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="WebServer.csproj" t="IncludeRecursive" />
+      </e>
       <e p="XmlProcessor" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive" />
