@@ -11,13 +11,22 @@ namespace RestService
     {
         public string GetTemplate(string id)
         {
-            Random r = new Random();
-            string ReturnString = "";
-            int Idnum = Convert.ToInt32(id);
-            for (int i = 0; i < Idnum; i++)
-                ReturnString += char.ConvertFromUtf32(r.Next(65, 85));
+            return "";
+        }
 
-            return ReturnString;
+        public byte[] GetProcess(string name)
+        {
+            return null;
+        }
+
+        public void PostTemplate(TemplateMessage message)
+        {
+            Console.WriteLine(message.TemplateName);
+        }
+
+        public void PostProcess(ProcessMessage message)
+        {
+            Console.WriteLine(message.ProcessName);
         }
     }
 }
