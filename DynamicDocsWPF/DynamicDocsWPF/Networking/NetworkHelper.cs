@@ -2,73 +2,87 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+using System.Text;
+using System.Web;
+using Newtonsoft.Json;
+using RestService;
 
 namespace DynamicDocsWPF.Networking
 {
     public class NetworkHelper
     {
-        private string _baseUrl;
-        
-        public string BaseUrl
-        {
-            get => _baseUrl;
-            private set
-            {
-                _baseUrl = value;
-                if (!_baseUrl[_baseUrl.Length - 1].Equals('/'))
-                {
-                    _baseUrl += "/";
-                }
-            }
-        }
+        private string BaseUrl { get; }
 
         public NetworkHelper(string baseUrl)
         {
             BaseUrl = baseUrl;
         }
         
-        public byte[] GetRequest(string requestText)
+        public UploadResult PostFile(FileMessage message)
         {
-            var url = BaseUrl+requestText;
-
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            request.AutomaticDecompression = DecompressionMethods.GZip;
-
-            using (var response = (HttpWebResponse)request.GetResponse())
-            using (var stream = response.GetResponseStream())
+            try
             {
-                var bytes = new List<byte>();
-                int b;
-                
-                while((b = stream.ReadByte()) != -1)
+                var postData = JsonConvert.SerializeObject(message);
+                var bytes = Encoding.UTF8.GetBytes(postData);
+
+                var httpWebRequest = (HttpWebRequest) WebRequest.Create(BaseUrl+"/Template");
+                httpWebRequest.Method = "POST";
+                httpWebRequest.ContentLength = bytes.Length;
+                httpWebRequest.ContentType = "application/json";
+
+                using (var requestStream = httpWebRequest.GetRequestStream())
                 {
-                    bytes.Add((byte) b);
+                    requestStream.Write(bytes, 0, bytes.Length);
                 }
 
-                return bytes.ToArray();
+                var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
+                    {
+                        return JsonConvert.DeserializeObject<UploadResult>(responseStream.ReadToEnd());
+                    }
+                }
             }
+            catch (HttpException)
+            {
+            }
+
+            return UploadResult.FAILED_OTHER;
         }
 
-        private async Task<System.IO.Stream> Upload(string actionUrl, string paramString, Stream paramFileStream, byte [] paramFileBytes)
+
+        public List<string> GetTemplates() => GetList(FileType.Template);
+        public List<string> GetProcesses() => GetList(FileType.Process);
+        public FileMessage GetTemplateByName(string name) => GetFileByName(FileType.Template, name);
+        public FileMessage GetProcessByName(string name) => GetFileByName(FileType.Process, name);
+
+        private FileMessage GetFileByName(FileType fileType, string name)
         {
-            HttpContent stringContent = new StringContent(paramString);
-            HttpContent fileStreamContent = new StreamContent(paramFileStream);
-            HttpContent bytesContent = new ByteArrayContent(paramFileBytes);
-            using (var client = new HttpClient())
-            using (var formData = new MultipartFormDataContent())
+            var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(FileType), fileType)}/{name}");
+            httpWebRequest.Method = "GET";
+            var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+
+            if (httpWebResponse.StatusCode != HttpStatusCode.OK) return null;
+         
+            using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
             {
-                formData.Add(stringContent, "param1", "param1");
-                formData.Add(fileStreamContent, "file1", "file1");
-                formData.Add(bytesContent, "file2", "file2");
-                var response = await client.PostAsync(actionUrl, formData);
-                if (!response.IsSuccessStatusCode)
-                {
-                    return null;
-                }
-                return await response.Content.ReadAsStreamAsync();
+                return JsonConvert.DeserializeObject<FileMessage>(responseStream.ReadToEnd());
+            }
+        }
+        
+        private List<string> GetList(FileType fileType)
+        {
+            var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(FileType), fileType)}s");
+            httpWebRequest.Method = "GET";
+            var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+
+            if (httpWebResponse.StatusCode != HttpStatusCode.OK) return null;
+         
+            using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
+            {
+                return JsonConvert.DeserializeObject<List<string>>(responseStream.ReadToEnd());
             }
         }
     }

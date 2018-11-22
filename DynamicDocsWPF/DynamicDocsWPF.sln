@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestService", "RestService\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer", "WebServer\WebServer.csproj", "{BF249F9A-EBF0-4AAE-A7B9-28C08911D7C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServerTest", "WebServerTest\WebServerTest.csproj", "{11006886-DDB6-4143-B766-E1F8FE23807A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,9 +30,5 @@ Global
 		{BF249F9A-EBF0-4AAE-A7B9-28C08911D7C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF249F9A-EBF0-4AAE-A7B9-28C08911D7C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF249F9A-EBF0-4AAE-A7B9-28C08911D7C5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{11006886-DDB6-4143-B766-E1F8FE23807A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11006886-DDB6-4143-B766-E1F8FE23807A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11006886-DDB6-4143-B766-E1F8FE23807A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11006886-DDB6-4143-B766-E1F8FE23807A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
