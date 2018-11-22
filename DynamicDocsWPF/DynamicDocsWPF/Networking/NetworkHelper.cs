@@ -28,10 +28,9 @@ namespace DynamicDocsWPF.Networking
             BaseUrl = baseUrl;
         }
         
-        public static byte[] GetRequest(string requestText)
+        public byte[] GetRequest(string requestText)
         {
-            var html = string.Empty;
-            const string url = @BaseUrl;
+            var url = BaseUrl+requestText;
 
             var request = (HttpWebRequest)WebRequest.Create(url);
             request.AutomaticDecompression = DecompressionMethods.GZip;
@@ -46,9 +45,9 @@ namespace DynamicDocsWPF.Networking
                 {
                     bytes.Add((byte) b);
                 }
-            }
 
-            Console.WriteLine(html);
+                return bytes.ToArray();
+            }
         }
     }
 }
