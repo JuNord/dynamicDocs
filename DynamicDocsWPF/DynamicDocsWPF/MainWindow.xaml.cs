@@ -20,7 +20,7 @@ namespace DynamicDocsWPF
         public MainWindow()
         {
             InitializeComponent();
-            //Test();
+            Test();
         }
 
         private void Test()
@@ -33,21 +33,33 @@ namespace DynamicDocsWPF
             _processStep = new ProcessStep(_process);
             _dialog = new Dialog(_processStep);
 
-            var teacherDropdown = new TeacherDropdown(_dialog, true)
+            _dialog.AddElement(new TeacherDropdown(_dialog, true)
             {
-                Description = "Lehrer"
-            };
-            teacherDropdown.IsValidForProcess = () => teacherDropdown.GetValue().Equals("Ulrich Böhmer");
-            teacherDropdown.ProcessErrorMsg = "Der Wert darf nur Uli sein";
-            
-            _dialog.AddElement(teacherDropdown);
-            _dialog.AddElement(new StudentDropdown(_dialog)
-            {
-                Description = "Schüler"
+                Description = "Lehrer/in"
             });
-            _dialog.AddElement(new NumberInputBox(_dialog)
+            _dialog.AddElement(new ClassDropDown(_dialog, true)
             {
-                Description = "Urlaubstage"
+                Description = "Klasse"
+            });
+            _dialog.AddElement(new TextInputBox(_dialog, true)
+            {
+                Description = "Datum"
+            });
+            _dialog.AddElement(new NumberInputBox(_dialog,true)
+            {
+                Description = "Unterrichtsstunden"
+            });
+            _dialog.AddElement(new TextInputBox(_dialog,true)
+            {
+                Description = "Neuer Unterrichtsort"
+            });
+            _dialog.AddElement(new TextInputBox(_dialog,true)
+            {
+                Description = "Ort des Unterrichtsbeginns bei 1. Stunde"
+            });
+            _dialog.AddElement(new TextInputBox(_dialog,true)
+            {
+                Description = "Begründung / Fächerbezug"
             });
             
             ViewCreator.FillViewHolder(ViewHolder, _dialog);

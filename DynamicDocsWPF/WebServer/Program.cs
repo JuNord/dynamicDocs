@@ -1,4 +1,6 @@
-﻿using RestService;
+﻿using System;
+using System.Runtime.InteropServices;
+using RestService;
 
 namespace WebServer
 {
@@ -6,7 +8,9 @@ namespace WebServer
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine("RUNNING");
             Host.Run();
+            Console.WriteLine("STOPPED");
         }
     }
 }

@@ -1,6 +1,12 @@
 using System;
+using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Configuration;
+using System.Text;
 
 namespace RestService
 {
@@ -11,22 +17,29 @@ namespace RestService
     {
         public string GetTemplate(string id)
         {
-            return "";
+            return "BLA";
         }
 
         public byte[] GetProcess(string name)
         {
-            return null;
+            return Encoding.UTF8.GetBytes("BLA");
         }
 
-        public void PostTemplate(TemplateMessage message)
+        public TemplateMessage PostTemplate(TemplateMessage message)
         {
+            Console.WriteLine("Received SMTH");
             Console.WriteLine(message.TemplateName);
+            Console.WriteLine("SAVING AS: "+message.FileName);
+            File.WriteAllBytes(message.FileName,Encoding.UTF8.GetBytes(message.Content));
+   
+            return message;
         }
 
-        public void PostProcess(ProcessMessage message)
+        public ProcessMessage PostProcess(ProcessMessage message)
         {
-            Console.WriteLine(message.ProcessName);
+            Console.WriteLine("Received SMTH");
+            Console.WriteLine(message.XML);
+            return message;
         }
     }
 }

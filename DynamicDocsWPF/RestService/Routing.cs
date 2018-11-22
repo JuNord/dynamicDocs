@@ -2,9 +2,9 @@
 {
     public class Routing
     {
-        public const string GetTemplate = "/Template/{id}";
-        public const string GetProcess = "/Process/{id}";
-        public const string PostTemplate = "/Template/{content}";
-        public const string PostProcess = "/Template/{content}";
+        public const string GetTemplate = "/Template/{name}";
+        public const string GetProcess = "/Process/{name}";
+        public const string PostTemplate = "/Template";
+        public const string PostProcess = "/Process";
     }
 }
