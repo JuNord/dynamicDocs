@@ -1,0 +1,32 @@
+@startuml
+
+UploadResult "1" -- "1" FileHandler
+NetworkHelper "1" --* "1" FileHandler : -networkHelper
+
++enum UploadResult{
+    SUCCESS
+    FAILED_EXISTS
+    FAILED_OTHER
+}
+
++class FileHandler
+{
+    +{static} PutTemplate(replace : bool, template : byte[]) : UploadResult
+    +{static} PutProcess(replace : bool, xml : string) : UploadResult
+    +{static} GetTemplate(name : string) : byte[]
+    +{static} GetProcess(name : string) : string
+    +{static} GetTemplateList() : HashMap<string, string>
+    +{static} GetProcessList() : HashMap<string,string>    
+}
+
++class NetworkHelper
+{
+    -_baseUrl : string
+    + BaseUrl : string { get; -set;}
+    
+    +NetworkHelper(baseUrl : string)
+    
+    +GetRequest(request : string) : byte[]
+    +PostRequest(request : string, data : byte[]) : byte[]
+}
+@enduml

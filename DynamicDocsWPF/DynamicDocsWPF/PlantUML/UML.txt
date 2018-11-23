@@ -1,100 +1,127 @@
 @startuml
-Tag <|-- NamedTag
-Tag <|-- Dialog
-NamedTag <|-- BaseInputElement
-NamedTag <|-- Process
-NamedTag <|-- ProcessStep
-BaseInputElement <|-- InputElement 
-InputElement <|-- NumberInputBox
-InputElement <|-- StudentDropdown
-InputElement <|-- TeacherDropdown
-InputElement <|-- TextInputBox
 
-+abstract class Tag
-{
-    +Tag Parent { get; }
-    +Tag(Tag parent)
-}
+skinparam linetype ortho
 
-+abstract class NamedTag
-{
-    +string Name { get; private set; }
-    +string Description { get; private set; }
-
-    ~NamedTag(Tag parent) : base(parent)
-}
-
-+abstract class InputElement<TControl, TValue>
-{
-    ~TControl UiElement { get; }
-
-    ~Func<bool> IsValidForProcess { private get; set; }
-    ~Func<bool> FulfillsObligatory { private get; set; }
-
-    ~InputElement(Tag parent, TControl control)
+namespace Base{
+    Tag <|-- NamedTag
     
-    +abstract bool CheckValidForControl()  
-    +abstract TValue GetValue()    
-    +abstract void Clear()    
+    +abstract class Tag
+    {
+        +Parent : Tag { get; }
+        +Tag(Tag parent)
+    }
     
-    +bool CheckValidForProcess()
-    +bool CheckObligatory()
-}
-
-+abstract class BaseInputElement
-{
-    ~BaseInputElement(Tag parent)
-}
-
-+class NumberInputBox
-{
-    +NumberInputBox(parent : Tag, obligatory : bool = false, isValidForProcess : Func<bool> = null)
-}
-
-+class TextInputBox
-{
-    +TextInputBox(parent : Tag, obligatory : bool = false, isValidForProcess : Func<bool> = null)
-}
-
-+class StudentDropdown
-{
-    +StudentDropDown(parent : Tag, obligatory : bool = false, isValidForProcess : Func<bool> = null)
-}
-
-+class TeacherDropdown
-{
-    +TeacherDropDown(parent : Tag, obligatory : bool = false, isValidForProcess : Func<bool> = null)
-}
-
-
-+class Process
-{
-    -List<ProcessStep> _steps;
-
-    +Process()
-
-    +void AddStep(step : ProcessStep)
-    +ProcessStep GetStepAtIndex(index : int)
-}
-
-+class ProcessStep
-{
-    -List<Dialog> _dialogs;
-
-    +ProcessStep() 
-
-    +void AddDialog(dialog : Dialog)
-
-    +Dialog GetDialogAtIndex(index : int)
-}
+    +abstract class NamedTag
+    {
+        +Name : string { get; private set; }W
+        +Description : string { get; private set; }
     
-+class Dialog
-{
-    -List<BaseInputElement> _elements;
-
-    +Dialog()
-    +void AddElement(element : BaseInputElement)
-    +BaseInputElement GetElementAtIndex(index : int)
-    +BaseInputElement GetElementByName(name : string)
+        ~NamedTag(Tag parent)
+    }
+    
+   
 }
+
+namespace Input{
+    InputElement <|-- NumberInputBox
+    InputElement <|-- StudentDropdown
+    InputElement <|-- TeacherDropdown
+    InputElement <|-- TextInputBox
+    BaseInputElement <|-- InputElement 
+    Base.NamedTag <|-- BaseInputElement
+    BaseInputElement "*" --* "1" Dialog : -List<BaseInputElement> _elements
+    Base.Tag <|-- Dialog
+    
+    +class NumberInputBox
+    {
+        +NumberInputBox(parent : Tag, obligatory : bool = false, 
+                        isValidForProcess : Func<bool> = null)
+    }
+    
+    +class TextInputBox
+    {
+        +TextInputBox(parent : Tag, obligatory : bool = false, 
+                      isValidForProcess : Func<bool> = null)
+    }
+    
+    +class StudentDropdown
+    {
+        +StudentDropDown(parent : Tag, obligatory : bool = false, 
+                        isValidForProcess : Func<bool> = null)
+    }
+    
+    +class TeacherDropdown
+    {
+        +TeacherDropDown(parent : Tag, obligatory : bool = false, 
+                        isValidForProcess : Func<bool> = null)
+    }
+    
+    +abstract class InputElement<TControl, TValue>
+    {
+        ~UiElement : TControl { get; }
+    
+        ~IsValidForProcess : Func<bool>  { private get; set; }
+        ~FulfillsObligatory : Func<bool> { private get; set; }
+    
+        ~InputElement(Tag parent, TControl control)
+        
+        +abstract bool CheckValidForControl()  
+        +abstract TValue GetValue()    
+        +abstract void Clear()    
+        
+        +bool CheckValidForProcess()
+        +bool CheckObligatory()
+    }
+    
+    +abstract class BaseInputElement
+    {
+        ~BaseInputElement(Tag parent)
+    }
+    
+    +class Dialog
+    {
+        +Dialog(parent : Tag)
+        
+        +void AddElement(element : BaseInputElement)
+        +BaseInputElement GetElementAtIndex(index : int)
+        +BaseInputElement GetElementByName(name : string)
+    }
+}
+
+namespace Process{
+    ProcessStep "*" --* "1" Process : -List<ProcessStep> _steps
+    Base.NamedTag <|-- Process
+    Base.NamedTag <|-- ProcessStep
+    Input.Dialog "*" -right-* "1" ProcessStep : -List<Dialog> _dialogs
+    
+    
+    +class Process
+    { 
+        +Process()
+    
+        +void AddStep(step : ProcessStep)
+        +ProcessStep GetStepAtIndex(index : int)
+    }
+    
+    +class ProcessStep
+    {  
+        +ProcessStep(parent : Tag) 
+    
+        +void AddDialog(dialog : Dialog)
+        +Dialog GetDialogAtIndex(index : int)
+    }
+        
+    
+}
+
+
+
+
+
+
+
+
+
+
+
 @enduml
