@@ -1,16 +1,15 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using DynamicDocsWPF.Model.Base_Classes;
 
 namespace DynamicDocsWPF.Model.Surrounding_Tags
 {
-    public class Dialog : Tag
+    public class Dialog
     {
         private readonly List<BaseInputElement> _elements;
 
-        public Dialog(Tag parent) : base(parent)
+        public Dialog()
         {
             _elements = new List<BaseInputElement>();
         }
@@ -31,7 +30,5 @@ namespace DynamicDocsWPF.Model.Surrounding_Tags
 
             return null;
         }
-
-        public int GetElementCount() => _elements?.Count ?? 0;
     }
 }
