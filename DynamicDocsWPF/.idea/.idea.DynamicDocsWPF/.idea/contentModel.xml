@@ -38,6 +38,7 @@
         <e p="obj" t="ExcludeRecursive" />
         <e p="packages.config" t="Include" />
         <e p="PlantUML" t="Include">
+          <e p="Database.txt" t="Include" />
           <e p="Network.txt" t="Include" />
           <e p="UML.txt" t="Include" />
           <e p="WebServer.txt" t="Include" />

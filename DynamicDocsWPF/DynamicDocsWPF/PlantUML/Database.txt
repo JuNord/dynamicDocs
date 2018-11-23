@@ -35,8 +35,8 @@ table(ProcessTemplate) {
 
 table(RunningProcess){
     primary_key(CurrentProcess_ID : int)
-    ProcessTemplate_ID : string
-    Owner_ID : int
+    foreign_key(ProcessTemplate_ID : string)
+    foreign_key(Owner_ID : int)
     CurrentStep : int
     Declined : bool
 }
@@ -48,8 +48,8 @@ table(Roles){
 
 table(ArchivedProcess){
     primary_key(CurrentProcess_ID : int)
-    ProcessTemplate_ID : string
-    Owner_ID : int
+    foreign_key(ProcessTemplate_ID : string)
+    foreign_key(Owner_ID : int)
     CurrentStep : int
     Declined : bool
 }
