@@ -1,12 +1,13 @@
 using System.Collections.Generic;
+using DynamicDocsWPF.Model.Base_Classes;
 
 namespace DynamicDocsWPF.Model.Surrounding_Tags
 {
-    public class ProcessStep
+    public class ProcessStep : Tag
     {
         private readonly List<Dialog> _dialogs;
 
-        public ProcessStep()
+        public ProcessStep(Tag parent) : base(parent)
         {
             _dialogs = new List<Dialog>();
         }
