@@ -1,14 +1,13 @@
 using System.Collections.Generic;
-using DynamicDocsWPF.Model.Base_Classes;
 using DynamicDocsWPF.Model.InputElements;
 
 namespace DynamicDocsWPF.Model.Surrounding_Tags
 {
-    public class Process : NamedTag
+    public class Process
     {
         private readonly List<ProcessStep> _steps;
 
-        public Process() : base(null)
+        public Process()
         {
             _steps = new List<ProcessStep>();
         }
