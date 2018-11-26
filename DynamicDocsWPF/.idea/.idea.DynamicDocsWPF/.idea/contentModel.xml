@@ -27,6 +27,9 @@
             <e p="TeacherDropdown.cs" t="Include" />
             <e p="TextInputBox.cs" t="Include" />
           </e>
+          <e p="ProcessElement" t="Include">
+            <e p="ValidationTag.cs" t="Include" />
+          </e>
           <e p="Surrounding Tags" t="Include">
             <e p="Dialog.cs" t="Include" />
             <e p="Process.cs" t="Include" />

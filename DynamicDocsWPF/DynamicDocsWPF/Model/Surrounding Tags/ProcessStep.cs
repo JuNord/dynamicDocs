@@ -20,5 +20,7 @@ namespace DynamicDocsWPF.Model.Surrounding_Tags
         public int DialogCount => _dialogs?.Count??0;
         
         public Dialog GetDialogAtIndex(int index) => _dialogs?[index];
+
+        public string Target { get; set; }
     }
 }
