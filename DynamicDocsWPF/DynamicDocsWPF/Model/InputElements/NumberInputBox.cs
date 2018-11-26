@@ -17,8 +17,8 @@ namespace DynamicDocsWPF.Model.InputElements
                 ObligatoryCheck = () => !string.IsNullOrEmpty(ElevatedControl.Text);
 
             ControlErrorMsg = "Bitte nur Zahlen eingeben.";
-            
-            ValueToString = GetValue().ToString;
+
+            ValueToString = () => GetValue().ToString();
         }
 
         public override void Clear() => ElevatedControl.Clear();

@@ -44,6 +44,7 @@ namespace DynamicDocsWPF
         private void InterpretXML()
         {
             // Create an XML reader for this file.
+            
             using (XmlReader reader = XmlReader.Create(@"C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XMLFile1.xml"))
             {
                 Process process = null;
@@ -65,36 +66,21 @@ namespace DynamicDocsWPF
                                     //Node Name wird rausgeschrieben z.B. <teacher-dropdown>
                                     Console.WriteLine("<" + reader.Name + ">");
                                     
+                                    //Auslesen der möglichen Attribute
                                     var name = reader.GetAttribute("name");
-                                    if(name!=null)
-                                        Console.WriteLine("\tname: " + name );
-                                   
-                                    
                                     var description = reader.GetAttribute("description");
-                                    if(description!=null)
-                                        Console.WriteLine("\tdescription: " + description );
-
-                                    
                                     var target = reader.GetAttribute("target");
-                                    if(target!=null)
-                                        Console.WriteLine("\ttarget: "+target);
-                                         
                                     var locks = reader.GetAttribute("locks");
-                                    if(locks!=null)
-                                        Console.WriteLine("\tlocks: "+locks);
-                                    
                                     var vText = reader.GetAttribute("text");
-                                    if(vText!=null)
-                                        Console.WriteLine("\ttext: "+vText);
-                                    
                                     var draftname = reader.GetAttribute("draftname");
-                                    if(draftname!=null)
-                                        Console.WriteLine("\tdraftname: "+draftname);
-                                    
                                     var filepath = reader.GetAttribute("filepath");
-                                    if(filepath!=null)
-                                        Console.WriteLine("\tfilepath: "+filepath);
-                                    if(reader.Name.ToLower().Equals("process"))
+                                    var obligatory = reader.GetAttribute("obligatory");
+                                    
+                                    
+                                    
+                                    
+                                    //Vergleiche, erzeuge und weise Objekte zu
+                                    if (reader.Name.ToLower().Equals("process"))
                                     {
                                         process = new Tags.Process()
                                         {
@@ -103,33 +89,83 @@ namespace DynamicDocsWPF
                                         };
                                         
                                     }
-                                    if(reader.Name.ToLower().Equals("process-step"))
+                                    if (reader.Name.ToLower().Equals("process-step"))
                                     {
                                        
                                         processStep = new Tags.ProcessStep(process)
                                         {
                                             Name = name,
-                                            Description = description
+                                            Description = description,
+                                            Target = target
                                         };
                                         process?.AddStep(processStep);
                                     }
-
-                                    
-
                                     if (reader.Name.ToLower().Equals("text"))
                                     {
-                                        dialog.AddElement(new Input.TextInputBox(dialog,false)
+                                        dialog.AddElement(new Input.TextInputBox(dialog,obligatory?.Equals("true")??false)
                                         {
                                             Name = name,
-                                            Description = description
-                                            
+                                            Description = description  
                                         });
 
                                     }
+                                    if (reader.Name.ToLower().Equals("number"))
+                                    {
+                                        var numberInputBox =
+                                            new Input.NumberInputBox(dialog, obligatory?.Equals("true") ?? false)
+                                            {
+                                                Name = name,
+                                                Description = description
+                                            };
+                                        
+                                        dialog.AddElement(numberInputBox);
+                                    }
+                                    if (reader.Name.ToLower().Equals("teacher-dropdown"))
+                                    {
+                                        var teacherdropdown =
+                                            new Input.TeacherDropdown(dialog, obligatory?.Equals("true") ?? false)
+                                            {
+                                                Name = name,
+                                                Description = description
+
+                                            };
+                                    }
+                                    if (reader.Name.ToLower().Equals("student-dropdown"))
+                                     {
+                                         var studentdropdown =
+                                             new Input.StudentDropdown(dialog, obligatory?.Equals("true") ?? false)
+                                             {
+                                                 Name = name,
+                                                 Description = description
+
+                                             };
+                                     }
+                                    if (reader.Name.ToLower().Equals("date-dropdown"))
+                                     {
+                                         var datedropdown =
+                                             new Input.DateDropdown(dialog, obligatory?.Equals("true") ?? false)
+                                             {
+                                                 Name = name,
+                                                 Description = description
+
+                                             };
+                                     }
+                                    if (reader.Name.ToLower().Equals("class-dropdown"))
+                                     {
+                                         var classdropdown =
+                                             new Input.ClassDropDown(dialog, obligatory?.Equals("true") ?? false)
+                                             {
+                                                 Name = name,
+                                                 Description = description
+
+                                             };
+                                     }
+                                    
                                 }
                                 else
                                 {
-                                    Console.WriteLine("<" + reader.Name + ">");
+                                    //Dialog ist der einzige Tag, der keine Attribute besitzt, weil er nur den Rahmen 
+                                    //für die Erzeung der UI erforderlich
                                     if (reader.Name.ToLower().Equals("dialog"))
                                     {
                                         dialog=new Tags.Dialog(processStep);
@@ -141,8 +177,8 @@ namespace DynamicDocsWPF
 
                                 break;
                             
+                            //Falls wir die abschließenden Tags irgendwie benötigen würde, können wir dies hierrüber tun
                             case XmlNodeType.EndElement:
-                                Console.WriteLine("</"+reader.Name+">");
                                 break;
                             
                             
@@ -159,7 +195,6 @@ namespace DynamicDocsWPF
                 _currentDialog = 0;
                 ViewCreator.FillViewHolder(ViewHolder, _processStep.GetDialogAtIndex(_currentDialog));
             }
-            
         }
         
         private void Test()

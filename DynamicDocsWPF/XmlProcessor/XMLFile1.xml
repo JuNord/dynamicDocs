@@ -2,7 +2,16 @@
   <process-step name="[initialization]" description="Initialisierung">
     <dialog>
       <text name="Schuhgröße" description="Schuhgröße"/>
+      <number name="sfdjklsg" description="Kleidergröße" obligatory="true"/>
       <teacher-dropdown name="[teacher]" description="Lehrer"/>
+    </dialog>
+    <dialog>
+      <date-dropdown name="[begin]" description="Beginn"/>
+      <number name="[left_new]" description="Resturlaub (alt)"/>
+    </dialog>
+    <dialog>
+      <text name="[left_new]" description="Kein Urlaub (alt)"/>
+      <number name="[left_new]" description="Urlaub (alt)"/>
     </dialog>
     <dialog>
       <date-dropdown name="[begin]" description="Beginn"/>
