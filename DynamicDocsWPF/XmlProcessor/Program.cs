@@ -1,9 +1,8 @@
 ﻿using System;
-using System.CodeDom;
-using System.Runtime.InteropServices;
-using System.Security.Permissions;
+using System.Diagnostics;
 using System.Xml;
-
+using Tags = DynamicDocsWPF.Model.Surrounding_Tags;
+using Input = DynamicDocsWPF.Model.InputElements;
 
 namespace XmlProcessor
 {
@@ -14,6 +13,9 @@ namespace XmlProcessor
             // Create an XML reader for this file.
             using (XmlReader reader = XmlReader.Create(@"C:\Users\Julius.Nordhues\source\repos\dynamicDocs\XML_Test\XMLFile1.xml"))
             {
+                Tags.Process process = null;
+                Tags.ProcessStep processStep = null;
+                Tags.Dialog dialog = null;
                 while(reader.Read())
                 {
                     
@@ -59,10 +61,47 @@ namespace XmlProcessor
                                     var filepath = reader.GetAttribute("filepath");
                                     if(filepath!=null)
                                         Console.WriteLine("\tfilepath: "+filepath);
+                                    if(reader.Name.ToLower().Equals("process"))
+                                    {
+                                        process = new Tags.Process()
+                                        {
+                                            Name = name,
+                                            Description = description
+                                        };
+                                        
+                                    }
+                                    if(reader.Name.ToLower().Equals("process-step"))
+                                    {
+                                       
+                                        processStep = new Tags.ProcessStep(process)
+                                        {
+                                            Name = name,
+                                            Description = description
+                                        };
+                                        process?.AddStep(processStep);
+                                    }
+
+                                    
+
+                                    if (reader.Name.ToLower().Equals("text"))
+                                    {
+                                        dialog.AddElement(new Input.TextInputBox(dialog,false)
+                                        {
+                                            Name = name,
+                                            Description = description
+                                            
+                                        });
+
+                                    }
                                 }
                                 else
                                 {
                                     Console.WriteLine("<" + reader.Name + ">");
+                                    if (reader.Name.ToLower().Equals("dialog"))
+                                    {
+                                        dialog=new Tags.Dialog(processStep);
+                                        processStep.AddDialog(dialog);
+                                    }
                                 }
                                 // Move the reader back to the element node.
                                     //reader.MoveToElement(); 
@@ -82,7 +121,14 @@ namespace XmlProcessor
 
                     
                 }
+
+                Console.WriteLine("[VALUE:]"+ 
+                                  process.GetStepAtIndex(0).
+                                      GetDialogAtIndex(0).
+                                      GetElementAtIndex(0).
+                                      ValueToString());
             }
+            
             Console.ReadKey();
 
         }
