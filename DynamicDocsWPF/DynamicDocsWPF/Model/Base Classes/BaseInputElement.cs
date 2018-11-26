@@ -10,8 +10,9 @@ namespace DynamicDocsWPF.Model.Base_Classes
         public string ProcessErrorMsg { get; set; }
         public string ControlErrorMsg { get; protected set; }
         
-        public Func<bool> IsValidForProcess { private get; set; }
-        public Func<bool> FulfillsObligatory { private get; set; }
+        public Func<string> ValueToString { get; set; }
+        public Func<bool> ProcessValidityCheck { private get; set; }
+        public Func<bool> ObligatoryCheck { private get; set; }
 
         
         protected BaseInputElement(Tag parent, bool obligatory, Control control) : base(parent)
@@ -27,23 +28,28 @@ namespace DynamicDocsWPF.Model.Base_Classes
         /// <returns></returns>
         public abstract bool CheckValidForControl();
         
-        
-        
         /// <summary>
         /// Clears the underlying UI Control, according to its type
         /// </summary>
         public abstract void Clear();
         
         /// <summary>
+        /// Fills the underlying UI Control with startvalues
+        /// </summary>
+        public abstract void Fill();
+        
+        /// <summary>
         /// Returns whether a controls content is fulfilling additional conditions defined in the XML
         /// </summary>
         /// <returns></returns>
-        public bool CheckValidForProcess() => IsValidForProcess?.Invoke() ?? true;
+        public bool IsValidForProcess() => ProcessValidityCheck?.Invoke() ?? true;
         
         /// <summary>
         /// Returns whether a control fulfills any conditions about its obligatority
         /// </summary>
         /// <returns></returns>
-        public bool CheckObligatory() => FulfillsObligatory?.Invoke() ?? true;
+        public bool IsValidForObligatory() => ObligatoryCheck?.Invoke() ?? true;
+
+        
     }
 }

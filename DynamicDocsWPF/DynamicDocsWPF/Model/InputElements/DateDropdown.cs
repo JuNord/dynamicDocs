@@ -6,36 +6,28 @@ using DynamicDocsWPF.Model.Base_Classes;
 
 namespace DynamicDocsWPF.Model.InputElements
 {
-    public class ClassDropDown : InputElement<ComboBox, string>
+    public class DateDropdown : InputElement<DatePicker, string>
     {
         /// <summary>
         /// Returns a new Instance of TeacherDropdown.
         /// </summary>
         /// <param name="obligatory">If true, a check function will be supplied to the base class to check if the control is empty</param>
         /// <param name="isValidForProcess">Allows to supply a function to check if an Input is true.</param>
-        public ClassDropDown(Tag parent, bool obligatory = false) : base(parent, obligatory, new ComboBox())
+        public DateDropdown(Tag parent, bool obligatory = false) : base(parent, obligatory, new DatePicker())
         {
             if (obligatory)
-                ObligatoryCheck = () => ElevatedControl.SelectedIndex > -1;
-
+                ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
             
-
             ValueToString = GetValue;
         }
 
-        public override string GetValue() => (string) ElevatedControl.SelectedItem;
+        public override string GetValue() => ElevatedControl.SelectedDate?.ToShortDateString();
 
-        public override void Clear() => ElevatedControl.SelectedIndex = -1;
+        public override void Clear() => ElevatedControl.SelectedDate = DateTime.Now;
         
         public override void Fill()
         {
-            ElevatedControl.ItemsSource = new List<string>()
-            {
-                "FS161",
-                "FV161",
-                "FI161",
-                "FI162",
-            };
+            ElevatedControl.SelectedDate = DateTime.Now;
         }
 
         public override bool CheckValidForControl() => true;

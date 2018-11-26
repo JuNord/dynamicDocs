@@ -32,6 +32,6 @@ namespace DynamicDocsWPF.Model.Surrounding_Tags
             return null;
         }
 
-        public int GetElementCount() => _elements?.Count ?? 0;
+        public int ElementCount => _elements?.Count ?? 0;
     }
 }

@@ -16,8 +16,18 @@ namespace DynamicDocsWPF.Model.InputElements
         public TeacherDropdown(Tag parent, bool obligatory = false) : base(parent, obligatory, new ComboBox())
         {
             if (obligatory)
-                FulfillsObligatory = () => ElevatedControl.SelectedIndex > -1;
+                ObligatoryCheck = () => ElevatedControl.SelectedIndex > -1;
 
+           
+            
+            ValueToString = GetValue;
+        }
+
+        public override string GetValue() => (string) ElevatedControl.SelectedItem;
+
+        public override void Clear() => ElevatedControl.SelectedIndex = -1;
+        public override void Fill()
+        {
             ElevatedControl.ItemsSource = new List<string>()
             {
                 "Ulrich Böhmer",
@@ -25,10 +35,6 @@ namespace DynamicDocsWPF.Model.InputElements
                 "Manfred Ziebell"
             };
         }
-
-        public override string GetValue() => (string) ElevatedControl.SelectedItem;
-
-        public override void Clear() => ElevatedControl.SelectedIndex = -1;
 
         public override bool CheckValidForControl() => true;
     }

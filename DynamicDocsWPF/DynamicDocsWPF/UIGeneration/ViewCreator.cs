@@ -46,7 +46,7 @@ namespace DynamicDocsWPF.UIGeneration
         public static void FillViewHolder(StackPanel viewHolder, Dialog dialog)
         {
             viewHolder.Children.Clear();
-            for (var i = 0; i < dialog.GetElementCount(); i++)
+            for (var i = 0; i < dialog.ElementCount; i++)
             {
                 viewHolder.Children.Add(GetView(dialog.GetElementAtIndex(i)));
             }

@@ -58,6 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\InputElements\ClassDropDown.cs" />
+    <Compile Include="Model\InputElements\DateDropdown.cs" />
     <Compile Include="Networking\NetworkHelper.cs" />
     <Compile Include="UIGeneration\ViewCreator.cs" />
     <Page Include="MainWindow.xaml">

@@ -13,10 +13,17 @@ namespace DynamicDocsWPF.Model.InputElements
         public TextInputBox(Tag parent, bool obligatory = false) : base(parent, obligatory, new TextBox())
         {
             if(obligatory)
-                FulfillsObligatory = () => ElevatedControl.Text.Length > 0;
+                ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
+            
+            ValueToString = GetValue;
         }
 
         public override void Clear() => ElevatedControl.Clear();
+        
+        public override void Fill()
+        {
+            ElevatedControl.Text = "";
+        }
 
         public override bool CheckValidForControl() => true;
 

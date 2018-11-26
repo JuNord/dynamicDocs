@@ -33,3 +33,6 @@ C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\DynamicDocsWPF.csproj.CopyComplete
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\DynamicDocsWPF.exe
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\DynamicDocsWPF.pdb
+C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\bin\Debug\Newtonsoft.Json.dll
+C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\bin\Debug\Newtonsoft.Json.xml

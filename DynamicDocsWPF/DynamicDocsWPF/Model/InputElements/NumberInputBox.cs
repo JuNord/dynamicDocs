@@ -4,7 +4,7 @@ using DynamicDocsWPF.Model.Base_Classes;
 
 namespace DynamicDocsWPF.Model.InputElements
 {
-    public class NumberInputBox : InputElement<TextBox, string>
+    public class NumberInputBox : InputElement<TextBox, int>
     {
         /// <summary>
         /// Returns a new Instance of NumberInputBox.
@@ -14,13 +14,20 @@ namespace DynamicDocsWPF.Model.InputElements
         public NumberInputBox(Tag parent, bool obligatory = false) : base(parent, obligatory, new TextBox())
         {
             if(obligatory)
-                FulfillsObligatory = () => ElevatedControl.Text.Length > 0;
+                ObligatoryCheck = () => !string.IsNullOrEmpty(ElevatedControl.Text);
 
             ControlErrorMsg = "Bitte nur Zahlen eingeben.";
+            
+            ValueToString = GetValue().ToString;
         }
 
         public override void Clear() => ElevatedControl.Clear();
         
+        public override void Fill()
+        {
+            ElevatedControl.Text = "";
+        }
+
         public override bool CheckValidForControl()
         {
             var valid = true;
@@ -31,6 +38,6 @@ namespace DynamicDocsWPF.Model.InputElements
             return valid;
         }
 
-        public override string GetValue() => ElevatedControl.Text;
+        public override int GetValue() => int.Parse(ElevatedControl.Text);
     }
 }
