@@ -1,7 +1,7 @@
 ﻿<process name="[vacation]" description="Urlaubsantrag">
   <process-step name="[initialization]" description="Initialisierung">
     <dialog>
-      <text name="Schuhgröße" description="254546753"/>
+      <text name="Schuhgröße" description="Schuhgröße"/>
       <teacher-dropdown name="[teacher]" description="Lehrer"/>
     </dialog>
     <dialog>

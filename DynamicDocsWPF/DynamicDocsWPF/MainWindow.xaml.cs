@@ -4,9 +4,12 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Xml;
 using DynamicDocsWPF.Model.InputElements;
 using DynamicDocsWPF.Model.Surrounding_Tags;
 using DynamicDocsWPF.UIGeneration;
+using Tags = DynamicDocsWPF.Model.Surrounding_Tags;
+using Input = DynamicDocsWPF.Model.InputElements;
 using RestService;
 
 namespace DynamicDocsWPF
@@ -34,9 +37,131 @@ namespace DynamicDocsWPF
         public MainWindow()
         {
             InitializeComponent();
-            Test();
+            //Test();
+            InterpretXML();
         }
 
+        private void InterpretXML()
+        {
+            // Create an XML reader for this file.
+            using (XmlReader reader = XmlReader.Create(@"C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XMLFile1.xml"))
+            {
+                Process process = null;
+                ProcessStep processStep = null;
+                Dialog dialog = null;
+                while(reader.Read())
+                {
+                    
+
+                        // Get element name and switch on it.
+                        switch (reader.NodeType)
+                        {
+                            case XmlNodeType.Element:
+                                
+                                // Überprüft ob die Node (Zeile) Attribute außer dem Namen aufweißt
+                                
+                                if (reader.HasAttributes)
+                                {
+                                    //Node Name wird rausgeschrieben z.B. <teacher-dropdown>
+                                    Console.WriteLine("<" + reader.Name + ">");
+                                    
+                                    var name = reader.GetAttribute("name");
+                                    if(name!=null)
+                                        Console.WriteLine("\tname: " + name );
+                                   
+                                    
+                                    var description = reader.GetAttribute("description");
+                                    if(description!=null)
+                                        Console.WriteLine("\tdescription: " + description );
+
+                                    
+                                    var target = reader.GetAttribute("target");
+                                    if(target!=null)
+                                        Console.WriteLine("\ttarget: "+target);
+                                         
+                                    var locks = reader.GetAttribute("locks");
+                                    if(locks!=null)
+                                        Console.WriteLine("\tlocks: "+locks);
+                                    
+                                    var vText = reader.GetAttribute("text");
+                                    if(vText!=null)
+                                        Console.WriteLine("\ttext: "+vText);
+                                    
+                                    var draftname = reader.GetAttribute("draftname");
+                                    if(draftname!=null)
+                                        Console.WriteLine("\tdraftname: "+draftname);
+                                    
+                                    var filepath = reader.GetAttribute("filepath");
+                                    if(filepath!=null)
+                                        Console.WriteLine("\tfilepath: "+filepath);
+                                    if(reader.Name.ToLower().Equals("process"))
+                                    {
+                                        process = new Tags.Process()
+                                        {
+                                            Name = name,
+                                            Description = description
+                                        };
+                                        
+                                    }
+                                    if(reader.Name.ToLower().Equals("process-step"))
+                                    {
+                                       
+                                        processStep = new Tags.ProcessStep(process)
+                                        {
+                                            Name = name,
+                                            Description = description
+                                        };
+                                        process?.AddStep(processStep);
+                                    }
+
+                                    
+
+                                    if (reader.Name.ToLower().Equals("text"))
+                                    {
+                                        dialog.AddElement(new Input.TextInputBox(dialog,false)
+                                        {
+                                            Name = name,
+                                            Description = description
+                                            
+                                        });
+
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("<" + reader.Name + ">");
+                                    if (reader.Name.ToLower().Equals("dialog"))
+                                    {
+                                        dialog=new Tags.Dialog(processStep);
+                                        processStep.AddDialog(dialog);
+                                    }
+                                }
+                                // Move the reader back to the element node.
+                                    //reader.MoveToElement(); 
+
+                                break;
+                            
+                            case XmlNodeType.EndElement:
+                                Console.WriteLine("</"+reader.Name+">");
+                                break;
+                            
+                            
+                            default:
+                                
+                                
+                                break;
+                        }
+
+                    
+                }
+
+                _processStep = process.GetStepAtIndex(0);
+                _currentDialog = 0;
+                ViewCreator.FillViewHolder(ViewHolder, _processStep.GetDialogAtIndex(_currentDialog));
+            }
+            
+        }
+        
         private void Test()
         {
             _process = new Process()

@@ -3,7 +3,7 @@ using DynamicDocsWPF.Model.Base_Classes;
 
 namespace DynamicDocsWPF.Model.Surrounding_Tags
 {
-    public class ProcessStep : Tag
+    public class ProcessStep : NamedTag
     {
         private readonly List<Dialog> _dialogs;
 

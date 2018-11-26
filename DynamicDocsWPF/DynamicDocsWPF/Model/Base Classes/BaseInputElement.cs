@@ -6,13 +6,13 @@ namespace DynamicDocsWPF.Model.Base_Classes
     public abstract class BaseInputElement : NamedTag
     {
         public Control BaseControl { get; }
-        public bool Obligatory { get; private set; }
+        public bool Obligatory { get; }
         public string ProcessErrorMsg { get; set; }
         public string ControlErrorMsg { get; protected set; }
         
         public Func<string> ValueToString { get; set; }
         public Func<bool> ProcessValidityCheck { private get; set; }
-        public Func<bool> ObligatoryCheck { private get; set; }
+        protected Func<bool> ObligatoryCheck { private get; set; }
 
         
         protected BaseInputElement(Tag parent, bool obligatory, Control control) : base(parent)

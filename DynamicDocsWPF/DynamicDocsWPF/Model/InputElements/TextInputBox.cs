@@ -10,7 +10,7 @@ namespace DynamicDocsWPF.Model.InputElements
         /// Returns a new Instance of TextInputBox.
         /// </summary>
         /// <param name="obligatory">If true, a check function will be supplied to the base class to check if the control is empty</param>
-        public TextInputBox(Tag parent, bool obligatory = false) : base(parent, obligatory, new TextBox())
+        public TextInputBox(Tag parent, bool obligatory) : base(parent, obligatory, new TextBox())
         {
             if(obligatory)
                 ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
