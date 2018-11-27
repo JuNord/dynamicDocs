@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Controls;
 using DynamicDocsWPF.Model.Base;
 
@@ -9,6 +10,7 @@ namespace DynamicDocsWPF.Model.InputElements
 
         protected InputElement(Tag parent, string name, string description,  bool obligatory, TControl control) : base(parent, name, description, obligatory, control)
         {
+            GetFormattedValue = () => GetValue() as string ?? throw new MissingValueInterpretationException();
         }
 
         /// <summary>

@@ -6,16 +6,24 @@ namespace DynamicDocsWPF.Model.Process
     public class Process : NamedTag
     {
         private readonly List<ProcessStep> _steps;
+        private readonly List<ArchivePermissionElement> _permissions;
         
         public Process(string name, string description) : base(null, name, description)
         {
             _steps = new List<ProcessStep>();
+            _permissions = new List<ArchivePermissionElement>();
         }
 
         public void AddStep(ProcessStep step)
         {
             if(step != null)
                 _steps.Add(step);
+        }
+
+        public void AddPermission(ArchivePermissionElement element)
+        {
+            if(element != null)
+                _permissions.Add(element);
         }
 
         public int ProcessStepCount => _steps?.Count ?? 0;

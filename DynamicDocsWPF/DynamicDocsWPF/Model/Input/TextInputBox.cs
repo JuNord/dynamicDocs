@@ -16,7 +16,6 @@ namespace DynamicDocsWPF.Model.InputElements
         public TextInputBox(Tag parent, string name, string description, bool obligatory) : base(parent, name, description, obligatory, new TextBox())
         {
             ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);     
-            GetFormattedValue = GetValue;
         }
 
         public override void Clear() => ElevatedControl.Clear();

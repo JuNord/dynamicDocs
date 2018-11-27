@@ -75,18 +75,29 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="HelperClasses\DatabaseHelper.cs" />
+    <Compile Include="HelperClasses\IReceiptHelper.cs" />
     <Compile Include="HelperClasses\NetworkHelper.cs" />
     <Compile Include="HelperClasses\ViewCreator.cs" />
+    <Compile Include="HelperClasses\WordReceiptHelper.cs" />
     <Compile Include="HelperClasses\XMLHelper.cs" />
+    <Compile Include="MissingValueInterpretationException.cs" />
     <Compile Include="Model\Input\BaseInputElement.cs" />
     <Compile Include="Model\Input\ClassDropDown.cs" />
     <Compile Include="Model\Input\DateDropdown.cs" />
     <Compile Include="Model\Input\Dialog.cs" />
     <Compile Include="Model\Input\InputElement.cs" />
     <Compile Include="Model\Process\ArchivePermissionElement.cs" />
+    <Compile Include="Model\Process\INotificationElement.cs" />
     <Compile Include="Model\Process\MailNotificationElement.cs" />
     <Compile Include="Model\Process\ReceiptElement.cs" />
+    <Compile Include="Model\Process\ReceiptType.cs" />
     <Compile Include="Model\Process\ValidationElement.cs" />
+    <Compile Include="ValidationOverview.xaml.cs">
+      <DependentUpon>ValidationOverview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ValidationPopup.xaml.cs">
+      <DependentUpon>ValidationPopup.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -99,6 +110,8 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ValidationOverview.xaml" />
+    <Page Include="ValidationPopup.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Base\Tag.cs" />

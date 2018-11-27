@@ -1,9 +1,11 @@
 using System;
 using System.Web.UI;
+using System.Windows.Controls;
 using System.Xml;
 using DynamicDocsWPF.Model;
 using DynamicDocsWPF.Model.InputElements;
 using DynamicDocsWPF.Model.Process;
+using RestService;
 using Process = System.Diagnostics.Process;
 
 namespace DynamicDocsWPF.HelperClasses
@@ -52,12 +54,12 @@ namespace DynamicDocsWPF.HelperClasses
                             
                             #region InputTags
                             case Wording.TextInputBox:
-                                var textInputBox = new TextInputBox(dialog, name, description, IsObl(obligatory));
+                                var textInputBox = new TextInputBox(dialog, name, description, ToBool(obligatory));
                                 dialog.AddElement(textInputBox);
                                 break;
                             
                             case Wording.NumberInputBox:
-                                var numberInputBox = new NumberInputBox(dialog, name, description, IsObl(obligatory));
+                                var numberInputBox = new NumberInputBox(dialog, name, description, ToBool(obligatory));
 
                                 numberInputBox.ProcessValidityCheck = () => numberInputBox.GetValue() < 20;
                                 numberInputBox.ProcessErrorMsg = "Zahlen müssen kleiner als 20 sein.";
@@ -66,34 +68,41 @@ namespace DynamicDocsWPF.HelperClasses
                                 break;
                             
                             case Wording.TeacherDropdown:
-                                var teacherDropdown = new TeacherDropdown(dialog, name, description, IsObl(obligatory));
+                                var teacherDropdown = new TeacherDropdown(dialog, name, description, ToBool(obligatory));
                                 dialog.AddElement(teacherDropdown);
                                 break;
                             
                             case Wording.StudentDropdown:
-                                var studentDropdown = new StudentDropdown(dialog, name, description, IsObl(obligatory));
+                                var studentDropdown = new StudentDropdown(dialog, name, description, ToBool(obligatory));
                                 dialog.AddElement(studentDropdown);
                                 break;
                             case Wording.DateDropdown:
-                                var dateDropdown = new DateDropdown(dialog, name, description, IsObl(obligatory));
+                                var dateDropdown = new DateDropdown(dialog, name, description, ToBool(obligatory));
                                 dialog.AddElement(dateDropdown);
                                 break;
                             case 
                                 Wording.ClassDropdown:
-                                var classDropdown = new ClassDropDown(dialog, name, description, IsObl(obligatory));
+                                var classDropdown = new ClassDropDown(dialog, name, description, ToBool(obligatory));
                                 dialog.AddElement(classDropdown);
                                 break;
                             #endregion
                             
                             #region ProcessTags              
                             case Wording.ArchivePermission:
-                                
+                                var archivePermission = new ArchivePermissionElement(process, target);
+                                process.AddPermission(archivePermission);
                                 break;
                             case Wording.MailNotification:
+                                var mailNotification = new MailNotificationElement(processStep);
+                                processStep.AddNotification(mailNotification);
                                 break;
                             case Wording.Receipt:
+                                var receipt = new ReceiptElement(processStep, draftname, filepath, ReceiptType.WORD);
+                                processStep.AddReceipt(receipt);
                                 break;
                             case Wording.Validation:
+                                var validation = new ValidationElement(processStep, ToBool(locks));
+                                processStep.AddValidation(validation);
                                 break;
                             #endregion
                             
@@ -107,6 +116,6 @@ namespace DynamicDocsWPF.HelperClasses
             }      
         }
 
-        private static bool IsObl(string obligatory) => obligatory?.Equals("true") ?? false;
+        private static bool ToBool(string obligatory) => obligatory?.Equals("true") ?? false;
     }
 }

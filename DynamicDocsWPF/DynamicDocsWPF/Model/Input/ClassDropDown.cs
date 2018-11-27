@@ -18,7 +18,6 @@ namespace DynamicDocsWPF.Model.InputElements
         public ClassDropDown(Tag parent, string name, string description,  bool obligatory = false) : base(parent, name, description, obligatory, new ComboBox())
         {
             ObligatoryCheck = () => ElevatedControl.SelectedIndex > -1;
-            GetFormattedValue = GetValue;
         }
       
         public override void Fill()

@@ -4,11 +4,11 @@ namespace DynamicDocsWPF.Model.Process
 {
     public class ArchivePermissionElement : Tag
     {
-        public string Target { get; set; }
+        public string Target { get; }
         
-        public ArchivePermissionElement(Tag parent) : base(parent)
+        public ArchivePermissionElement(Tag parent, string target) : base(parent)
         {
-            
+            Target = target;
         }
     }
 }

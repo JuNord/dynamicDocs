@@ -12,12 +12,15 @@
         <e p="DynamicDocsWPF.csproj" t="IncludeRecursive" />
         <e p="HelperClasses" t="Include">
           <e p="DatabaseHelper.cs" t="Include" />
+          <e p="IReceiptHelper.cs" t="Include" />
           <e p="NetworkHelper.cs" t="Include" />
           <e p="ViewCreator.cs" t="Include" />
+          <e p="WordReceiptHelper.cs" t="Include" />
           <e p="XMLHelper.cs" t="Include" />
         </e>
         <e p="MainWindow.xaml" t="Include" />
         <e p="MainWindow.xaml.cs" t="Include" />
+        <e p="MissingValueInterpretationException.cs" t="Include" />
         <e p="Model" t="Include">
           <e p="Base" t="Include">
             <e p="NamedTag.cs" t="Include" />
@@ -36,10 +39,12 @@
           </e>
           <e p="Process" t="Include">
             <e p="ArchivePermissionElement.cs" t="Include" />
+            <e p="INotificationElement.cs" t="Include" />
             <e p="MailNotificationElement.cs" t="Include" />
             <e p="Process.cs" t="Include" />
             <e p="ProcessStep.cs" t="Include" />
             <e p="ReceiptElement.cs" t="Include" />
+            <e p="ReceiptType.cs" t="Include" />
             <e p="ValidationElement.cs" t="Include" />
           </e>
           <e p="Wording.cs" t="Include" />
@@ -57,6 +62,10 @@
           <e p="Resources.Designer.cs" t="Include" />
           <e p="Resources.resx" t="Include" />
         </e>
+        <e p="ValidationOverview.xaml" t="Include" />
+        <e p="ValidationOverview.xaml.cs" t="Include" />
+        <e p="ValidationPopup.xaml" t="Include" />
+        <e p="ValidationPopup.xaml.cs" t="Include" />
       </e>
       <e p="DynamicDocsWPF.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

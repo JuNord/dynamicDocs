@@ -16,7 +16,6 @@ namespace DynamicDocsWPF.Model.InputElements
         public NumberInputBox(Tag parent, string name, string description,  bool obligatory = false) : base(parent, name, description, obligatory, new TextBox())
         {
             ObligatoryCheck = () => !string.IsNullOrEmpty(ElevatedControl.Text);
-            GetFormattedValue = () => GetValue().ToString();
             
             ControlErrorMsg = "Bitte nur Zahlen eingeben.";
             ControlValidityCheck = () =>

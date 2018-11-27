@@ -6,7 +6,7 @@ using DynamicDocsWPF.Model.Base;
 
 namespace DynamicDocsWPF.Model.InputElements
 {
-    public class DateDropdown : InputElement<DatePicker, string>
+    public class DateDropdown : InputElement<DatePicker, DateTime?>
     {
         /// <summary>
         /// Returns a new Instance of TeacherDropdown.
@@ -18,10 +18,10 @@ namespace DynamicDocsWPF.Model.InputElements
         public DateDropdown(Tag parent, string name, string description,  bool obligatory = false) : base(parent, name, description, obligatory, new DatePicker())
         {
             ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
-            GetFormattedValue = GetValue;
+            GetFormattedValue = () => GetValue()?.ToShortDateString();
         }
 
-        public override string GetValue() => ElevatedControl.SelectedDate?.ToShortDateString();
+        public override DateTime? GetValue() => ElevatedControl.SelectedDate;
         public override void Clear() => ElevatedControl.SelectedDate = DateTime.Now;
         
         public override void Fill()

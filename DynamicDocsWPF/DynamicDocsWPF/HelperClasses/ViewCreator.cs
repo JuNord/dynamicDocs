@@ -51,5 +51,10 @@ namespace DynamicDocsWPF.HelperClasses
             }
             
         }
+
+        public static Dialog GetValidationDialog()
+        {
+            
+        }
     }
 }

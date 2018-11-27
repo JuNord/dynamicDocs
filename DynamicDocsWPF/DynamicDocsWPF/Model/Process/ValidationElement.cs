@@ -6,9 +6,9 @@ namespace DynamicDocsWPF.Model.Process
     {
         public bool Locks { get; set; }
         
-        public ValidationElement(Tag parent) : base(parent)
+        public ValidationElement(Tag parent, bool locks) : base(parent)
         {
-            
+            Locks = locks;
         }
     }
 }

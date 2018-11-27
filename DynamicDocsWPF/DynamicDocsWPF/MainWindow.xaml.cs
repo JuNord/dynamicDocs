@@ -38,9 +38,17 @@ namespace DynamicDocsWPF
             InitializeComponent();
             //Test();
             _process = XMLHelper.ReadXML(@"C:\Users\Sebastian.Bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XMLFile1.xml");
-            _currentDialog = 0;
-            _processStep = _process.GetStepAtIndex(0);
-            ViewCreator.FillViewHolder(ViewHolder, _processStep.GetDialogAtIndex(_currentDialog));
+            
+        }
+
+        private void HandleProcessStep(ProcessStep processStep)
+        {
+            const int currentDialog = 0;
+            if (processStep.DialogCount > 0)
+            {
+                ViewCreator.FillViewHolder(ViewHolder, processStep.GetDialogAtIndex(currentDialog));
+            }
+            
         }
 
       
