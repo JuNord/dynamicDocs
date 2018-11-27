@@ -1,7 +1,8 @@
 using System;
 using System.Windows.Controls;
+using DynamicDocsWPF.Model.Base;
 
-namespace DynamicDocsWPF.Model.Base_Classes
+namespace DynamicDocsWPF.Model.InputElements
 {
     public abstract class BaseInputElement : NamedTag
     {
@@ -10,24 +11,19 @@ namespace DynamicDocsWPF.Model.Base_Classes
         public string ProcessErrorMsg { get; set; }
         public string ControlErrorMsg { get; protected set; }
         
-        public Func<string> ValueToString { get; set; }
+        public Func<string> GetFormattedValue { get; set; }
         public Func<bool> ProcessValidityCheck { private get; set; }
+        protected Func<bool> ControlValidityCheck { private get;  set; }
         protected Func<bool> ObligatoryCheck { private get; set; }
 
         
-        protected BaseInputElement(Tag parent, bool obligatory, Control control) : base(parent)
+        protected BaseInputElement(Tag parent, string name, string description, bool obligatory, Control control) : base(parent, name, description)
         {
             BaseControl = control;
             Obligatory = obligatory;
+            Fill();
         }
-        
-        /// <summary>
-        /// Returns whether the value of the underlying UI Control, fulfills certain InputElement specific conditions.
-        /// e.g. If the TextBox of a NumberInputBox only includes digits
-        /// </summary>
-        /// <returns></returns>
-        public abstract bool CheckValidForControl();
-        
+            
         /// <summary>
         /// Clears the underlying UI Control, according to its type
         /// </summary>
@@ -45,10 +41,17 @@ namespace DynamicDocsWPF.Model.Base_Classes
         public bool IsValidForProcess() => ProcessValidityCheck?.Invoke() ?? true;
         
         /// <summary>
+        /// Returns whether the value of the underlying UI Control, fulfills certain InputElement specific conditions.
+        /// e.g. If the TextBox of a NumberInputBox only includes digits
+        /// </summary>
+        /// <returns></returns>
+        public bool IsValidForControl() => ControlValidityCheck?.Invoke() ?? true;
+        
+        /// <summary>
         /// Returns whether a control fulfills any conditions about its obligatority
         /// </summary>
         /// <returns></returns>
-        public bool IsValidForObligatory() => ObligatoryCheck?.Invoke() ?? true;
+        public bool IsValidForObligatory() => !Obligatory || (ObligatoryCheck?.Invoke() ?? true);
 
         
     }

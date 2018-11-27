@@ -1,13 +1,12 @@
 using System.Windows;
 using System.Windows.Controls;
-using DynamicDocsWPF.Model.Base_Classes;
-using DynamicDocsWPF.Model.Surrounding_Tags;
+using DynamicDocsWPF.Model.InputElements;
 
-namespace DynamicDocsWPF.UIGeneration
+namespace DynamicDocsWPF.HelperClasses
 {
-    public class ViewCreator
+    public static class ViewCreator
     {
-        public static Grid GetView(BaseInputElement element)
+        private static Grid GetView(BaseInputElement element)
         {
             var grid = new Grid
             {

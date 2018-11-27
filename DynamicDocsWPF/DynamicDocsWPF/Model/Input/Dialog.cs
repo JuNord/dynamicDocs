@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using DynamicDocsWPF.Model.Base_Classes;
+using DynamicDocsWPF.Model.Base;
 
-namespace DynamicDocsWPF.Model.Surrounding_Tags
+namespace DynamicDocsWPF.Model.InputElements
 {
     public class Dialog : Tag
     {

@@ -5,11 +5,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xml;
+using DynamicDocsWPF.HelperClasses;
+using DynamicDocsWPF.Model;
 using DynamicDocsWPF.Model.InputElements;
-using DynamicDocsWPF.Model.Surrounding_Tags;
-using DynamicDocsWPF.UIGeneration;
-using Tags = DynamicDocsWPF.Model.Surrounding_Tags;
-using Input = DynamicDocsWPF.Model.InputElements;
+using DynamicDocsWPF.Model.Process;
 using RestService;
 
 namespace DynamicDocsWPF
@@ -38,224 +37,13 @@ namespace DynamicDocsWPF
         {
             InitializeComponent();
             //Test();
-            InterpretXML();
+            _process = XMLHelper.ReadXML(@"C:\Users\Sebastian.Bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XMLFile1.xml");
+            _currentDialog = 0;
+            _processStep = _process.GetStepAtIndex(0);
+            ViewCreator.FillViewHolder(ViewHolder, _processStep.GetDialogAtIndex(_currentDialog));
         }
 
-        private void InterpretXML()
-        {
-            // Create an XML reader for this file.
-            
-            using (XmlReader reader = XmlReader.Create(@"C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XMLFile1.xml"))
-            {
-                Process process = null;
-                ProcessStep processStep = null;
-                Dialog dialog = null;
-                while(reader.Read())
-                {
-                    
-
-                        // Get element name and switch on it.
-                        switch (reader.NodeType)
-                        {
-                            case XmlNodeType.Element:
-                                
-                                // Überprüft ob die Node (Zeile) Attribute außer dem Namen aufweißt
-                                
-                                if (reader.HasAttributes)
-                                {
-                                    //Node Name wird rausgeschrieben z.B. <teacher-dropdown>
-                                    Console.WriteLine("<" + reader.Name + ">");
-                                    
-                                    //Auslesen der möglichen Attribute
-                                    var name = reader.GetAttribute("name");
-                                    var description = reader.GetAttribute("description");
-                                    var target = reader.GetAttribute("target");
-                                    var locks = reader.GetAttribute("locks");
-                                    var vText = reader.GetAttribute("text");
-                                    var draftname = reader.GetAttribute("draftname");
-                                    var filepath = reader.GetAttribute("filepath");
-                                    var obligatory = reader.GetAttribute("obligatory");
-                                    
-                                    
-                                    
-                                    
-                                    //Vergleiche, erzeuge und weise Objekte zu
-                                    if (reader.Name.ToLower().Equals("process"))
-                                    {
-                                        process = new Tags.Process()
-                                        {
-                                            Name = name,
-                                            Description = description
-                                        };
-                                        
-                                    }
-                                    if (reader.Name.ToLower().Equals("process-step"))
-                                    {
-                                       
-                                        processStep = new Tags.ProcessStep(process)
-                                        {
-                                            Name = name,
-                                            Description = description,
-                                            Target = target
-                                        };
-                                        process?.AddStep(processStep);
-                                    }
-                                    if (reader.Name.ToLower().Equals("text"))
-                                    {
-                                        dialog.AddElement(new Input.TextInputBox(dialog,obligatory?.Equals("true")??false)
-                                        {
-                                            Name = name,
-                                            Description = description  
-                                        });
-
-                                    }
-                                    if (reader.Name.ToLower().Equals("number"))
-                                    {
-                                        var numberInputBox =
-                                            new Input.NumberInputBox(dialog, obligatory?.Equals("true") ?? false)
-                                            {
-                                                Name = name,
-                                                Description = description
-                                            };
-                                        
-                                        dialog.AddElement(numberInputBox);
-                                    }
-                                    if (reader.Name.ToLower().Equals("teacher-dropdown"))
-                                    {
-                                        var teacherdropdown =
-                                            new Input.TeacherDropdown(dialog, obligatory?.Equals("true") ?? false)
-                                            {
-                                                Name = name,
-                                                Description = description
-
-                                            };
-                                    }
-                                    if (reader.Name.ToLower().Equals("student-dropdown"))
-                                     {
-                                         var studentdropdown =
-                                             new Input.StudentDropdown(dialog, obligatory?.Equals("true") ?? false)
-                                             {
-                                                 Name = name,
-                                                 Description = description
-
-                                             };
-                                     }
-                                    if (reader.Name.ToLower().Equals("date-dropdown"))
-                                     {
-                                         var datedropdown =
-                                             new Input.DateDropdown(dialog, obligatory?.Equals("true") ?? false)
-                                             {
-                                                 Name = name,
-                                                 Description = description
-
-                                             };
-                                     }
-                                    if (reader.Name.ToLower().Equals("class-dropdown"))
-                                     {
-                                         var classdropdown =
-                                             new Input.ClassDropDown(dialog, obligatory?.Equals("true") ?? false)
-                                             {
-                                                 Name = name,
-                                                 Description = description
-
-                                             };
-                                     }
-                                    
-                                }
-                                else
-                                {
-                                    //Dialog ist der einzige Tag, der keine Attribute besitzt, weil er nur den Rahmen 
-                                    //für die Erzeung der UI erforderlich
-                                    if (reader.Name.ToLower().Equals("dialog"))
-                                    {
-                                        dialog=new Tags.Dialog(processStep);
-                                        processStep.AddDialog(dialog);
-                                    }
-                                }
-                                // Move the reader back to the element node.
-                                    //reader.MoveToElement(); 
-
-                                break;
-                            
-                            //Falls wir die abschließenden Tags irgendwie benötigen würde, können wir dies hierrüber tun
-                            case XmlNodeType.EndElement:
-                                break;
-                            
-                            
-                            default:
-                                
-                                
-                                break;
-                        }
-
-                    
-                }
-
-                _processStep = process.GetStepAtIndex(0);
-                _currentDialog = 0;
-                ViewCreator.FillViewHolder(ViewHolder, _processStep.GetDialogAtIndex(_currentDialog));
-            }
-        }
-        
-        private void Test()
-        {
-            _process = new Process()
-            {
-                Name = "vacation",
-                Description = "Urlaubsantrag"
-            };
-            _processStep = new ProcessStep(_process);
-            
-            
-            
-            var dialog = new Dialog(_processStep);
-
-            dialog.AddElement(new TeacherDropdown(dialog, true)
-                {
-                    Description = "Lehrer/in"
-                });
-            dialog.AddElement(new ClassDropDown(dialog, true)
-            {
-                Description = "Klasse"
-            });
-            
-            _processStep.AddDialog(dialog);
-            dialog = new Dialog(_processStep);
-
-            dialog.AddElement(new DateDropdown(dialog, true)
-            {
-                Description = "Datum"
-            });
-            dialog.AddElement(new NumberInputBox(dialog,true)
-            {
-                Description = "Unterrichtsstunden"
-            });
-            
-            _processStep.AddDialog(dialog);
-            dialog = new Dialog(_processStep);
-            
-            dialog.AddElement(new TextInputBox(dialog,true)
-            {
-                Description = "Neuer Unterrichtsort"
-            });
-            dialog.AddElement(new TextInputBox(dialog,true)
-            {
-                Description = "Ort des Unterrichtsbeginns bei 1. Stunde"
-            });
-            
-            _processStep.AddDialog(dialog);
-            dialog = new Dialog(_processStep);
-            
-            dialog.AddElement(new TextInputBox(dialog,true)
-            {
-                Description = "Begründung / Fächerbezug"
-            });
-            
-            _processStep.AddDialog(dialog);
-            
-            ViewCreator.FillViewHolder(ViewHolder, _processStep.GetDialogAtIndex(0));
-        }
-
+      
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             for (var i = 0; i < _processStep.GetDialogAtIndex(_currentDialog)?.ElementCount; i++)
@@ -270,7 +58,7 @@ namespace DynamicDocsWPF
                         element.BaseControl.BorderThickness = new Thickness(2);   
                         return;
                     }
-                    else if (!element.CheckValidForControl())
+                    else if (!element.IsValidForControl())
                     {
                         InfoBlock.Text = element.ControlErrorMsg;
                         element.BaseControl.BorderBrush =  new SolidColorBrush(Color.FromArgb(170,255,50,50));

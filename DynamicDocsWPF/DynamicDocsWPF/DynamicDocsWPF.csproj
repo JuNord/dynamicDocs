@@ -74,11 +74,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\InputElements\ClassDropDown.cs" />
-    <Compile Include="Model\InputElements\DateDropdown.cs" />
-    <Compile Include="Networking\DatabaseHelper.cs" />
-    <Compile Include="Networking\NetworkHelper.cs" />
-    <Compile Include="UIGeneration\ViewCreator.cs" />
+    <Compile Include="HelperClasses\DatabaseHelper.cs" />
+    <Compile Include="HelperClasses\NetworkHelper.cs" />
+    <Compile Include="HelperClasses\ViewCreator.cs" />
+    <Compile Include="HelperClasses\XMLHelper.cs" />
+    <Compile Include="Model\Input\BaseInputElement.cs" />
+    <Compile Include="Model\Input\ClassDropDown.cs" />
+    <Compile Include="Model\Input\DateDropdown.cs" />
+    <Compile Include="Model\Input\Dialog.cs" />
+    <Compile Include="Model\Input\InputElement.cs" />
+    <Compile Include="Model\Process\ArchivePermissionElement.cs" />
+    <Compile Include="Model\Process\MailNotificationElement.cs" />
+    <Compile Include="Model\Process\ReceiptElement.cs" />
+    <Compile Include="Model\Process\ValidationElement.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -93,17 +101,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Base Classes\BaseInputElement.cs" />
-    <Compile Include="Model\Base Classes\InputElement.cs" />
-    <Compile Include="Model\Base Classes\Tag.cs" />
-    <Compile Include="Model\Base Classes\NamedTag.cs" />
-    <Compile Include="Model\InputElements\NumberInputBox.cs" />
-    <Compile Include="Model\InputElements\StudentDropdown.cs" />
-    <Compile Include="Model\InputElements\TeacherDropdown.cs" />
-    <Compile Include="Model\InputElements\TextInputBox.cs" />
-    <Compile Include="Model\Surrounding Tags\Dialog.cs" />
-    <Compile Include="Model\Surrounding Tags\Process.cs" />
-    <Compile Include="Model\Surrounding Tags\ProcessStep.cs" />
+    <Compile Include="Model\Base\Tag.cs" />
+    <Compile Include="Model\Base\NamedTag.cs" />
+    <Compile Include="Model\Input\NumberInputBox.cs" />
+    <Compile Include="Model\Input\StudentDropdown.cs" />
+    <Compile Include="Model\Input\TeacherDropdown.cs" />
+    <Compile Include="Model\Input\TextInputBox.cs" />
+    <Compile Include="Model\Process\Process.cs" />
+    <Compile Include="Model\Process\ProcessStep.cs" />
+    <Compile Include="Model\Wording.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -8,7 +7,7 @@ using System.Web;
 using Newtonsoft.Json;
 using RestService;
 
-namespace DynamicDocsWPF.Networking
+namespace DynamicDocsWPF.HelperClasses
 {
     public class NetworkHelper
     {

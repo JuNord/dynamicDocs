@@ -1,6 +1,6 @@
 using System;
 using System.Windows.Controls;
-using DynamicDocsWPF.Model.Base_Classes;
+using DynamicDocsWPF.Model.Base;
 
 namespace DynamicDocsWPF.Model.InputElements
 {
@@ -9,24 +9,18 @@ namespace DynamicDocsWPF.Model.InputElements
         /// <summary>
         /// Returns a new Instance of TextInputBox.
         /// </summary>
+        /// <param name="description"></param>
         /// <param name="obligatory">If true, a check function will be supplied to the base class to check if the control is empty</param>
-        public TextInputBox(Tag parent, bool obligatory) : base(parent, obligatory, new TextBox())
+        /// <param name="parent"></param>
+        /// <param name="name"></param>
+        public TextInputBox(Tag parent, string name, string description, bool obligatory) : base(parent, name, description, obligatory, new TextBox())
         {
-            if(obligatory)
-                ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
-            
-            ValueToString = GetValue;
+            ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);     
+            GetFormattedValue = GetValue;
         }
 
         public override void Clear() => ElevatedControl.Clear();
-        
-        public override void Fill()
-        {
-            ElevatedControl.Text = "";
-        }
-
-        public override bool CheckValidForControl() => true;
-
+        public override void Fill() => ElevatedControl.Text = "";
         public override string GetValue() => ElevatedControl.Text;
     }
 }

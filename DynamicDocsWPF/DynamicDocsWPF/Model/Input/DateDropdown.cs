@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using DynamicDocsWPF.Model.Base_Classes;
+using DynamicDocsWPF.Model.Base;
 
 namespace DynamicDocsWPF.Model.InputElements
 {
@@ -11,25 +11,22 @@ namespace DynamicDocsWPF.Model.InputElements
         /// <summary>
         /// Returns a new Instance of TeacherDropdown.
         /// </summary>
+        /// <param name="description"></param>
         /// <param name="obligatory">If true, a check function will be supplied to the base class to check if the control is empty</param>
-        /// <param name="isValidForProcess">Allows to supply a function to check if an Input is true.</param>
-        public DateDropdown(Tag parent, bool obligatory = false) : base(parent, obligatory, new DatePicker())
+        /// <param name="parent"></param>
+        /// <param name="name"></param>
+        public DateDropdown(Tag parent, string name, string description,  bool obligatory = false) : base(parent, name, description, obligatory, new DatePicker())
         {
-            if (obligatory)
-                ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
-            
-            ValueToString = GetValue;
+            ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
+            GetFormattedValue = GetValue;
         }
 
         public override string GetValue() => ElevatedControl.SelectedDate?.ToShortDateString();
-
         public override void Clear() => ElevatedControl.SelectedDate = DateTime.Now;
         
         public override void Fill()
         {
             ElevatedControl.SelectedDate = DateTime.Now;
         }
-
-        public override bool CheckValidForControl() => true;
     }
 }

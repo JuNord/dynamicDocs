@@ -1,10 +1,6 @@
-
-
-using System;
-using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 
-namespace DynamicDocsWPF.Networking
+namespace DynamicDocsWPF.HelperClasses
 {
     public class DatabaseHelper
     {

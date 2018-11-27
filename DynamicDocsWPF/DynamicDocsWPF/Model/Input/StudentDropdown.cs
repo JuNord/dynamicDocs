@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
-using DynamicDocsWPF.Model.Base_Classes;
+using DynamicDocsWPF.Model.Base;
 
 namespace DynamicDocsWPF.Model.InputElements
 {
@@ -10,16 +10,14 @@ namespace DynamicDocsWPF.Model.InputElements
         /// <summary>
         /// Returns a new Instance of StudentDropDown.
         /// </summary>
+        /// <param name="description"></param>
         /// <param name="obligatory">If true, a check function will be supplied to the base class to check if the control is empty</param>
-        /// <param name="isValidForProcess">Allows to supply a function to check if an Input is true.</param>
-        public StudentDropdown(Tag parent, bool obligatory = false) : base(parent, obligatory, new ComboBox())
+        /// <param name="parent"></param>
+        /// <param name="name"></param>
+        public StudentDropdown(Tag parent, string name, string description, bool obligatory = false) : base(parent, name, description, obligatory, new ComboBox())
         {
-            if (obligatory)
-                ObligatoryCheck = () => ElevatedControl.SelectedIndex > -1;
-            
-            
-            
-            ValueToString = GetValue;
+            ObligatoryCheck = () => ElevatedControl.SelectedIndex > -1;
+            GetFormattedValue = GetValue;
         }
 
         public override string GetValue() => (string) ElevatedControl.SelectedItem;
@@ -33,7 +31,5 @@ namespace DynamicDocsWPF.Model.InputElements
                 "Julius Nordhues"
             };
         }
-
-        public override bool CheckValidForControl() => true;
     }
 }

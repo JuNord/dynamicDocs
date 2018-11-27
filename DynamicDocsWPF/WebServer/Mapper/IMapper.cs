@@ -2,7 +2,7 @@ namespace WebServer.Mapper
 {
     public interface IMapper<T>
     {
-        T Map(string[] dataset);
-        bool TryMap(string[] dataset, out T result);
+        T Map(string[] dataSet);
+        bool TryMap(string[] dataSet, out T result);
     }
 }

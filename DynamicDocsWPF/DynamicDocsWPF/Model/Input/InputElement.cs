@@ -1,14 +1,13 @@
-using System;
 using System.Windows.Controls;
+using DynamicDocsWPF.Model.Base;
 
-namespace DynamicDocsWPF.Model.Base_Classes
+namespace DynamicDocsWPF.Model.InputElements
 {
     public abstract class InputElement<TControl, TValue> : BaseInputElement where TControl : Control
     {
         public TControl ElevatedControl => BaseControl as TControl;
 
-
-        protected InputElement(Tag parent, bool obligatory, TControl control) : base(parent, obligatory, control)
+        protected InputElement(Tag parent, string name, string description,  bool obligatory, TControl control) : base(parent, name, description, obligatory, control)
         {
         }
 

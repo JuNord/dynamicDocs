@@ -10,35 +10,39 @@
         <e p="App.xaml.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="DynamicDocsWPF.csproj" t="IncludeRecursive" />
+        <e p="HelperClasses" t="Include">
+          <e p="DatabaseHelper.cs" t="Include" />
+          <e p="NetworkHelper.cs" t="Include" />
+          <e p="ViewCreator.cs" t="Include" />
+          <e p="XMLHelper.cs" t="Include" />
+        </e>
         <e p="MainWindow.xaml" t="Include" />
         <e p="MainWindow.xaml.cs" t="Include" />
         <e p="Model" t="Include">
-          <e p="Base Classes" t="Include">
-            <e p="BaseInputElement.cs" t="Include" />
-            <e p="InputElement.cs" t="Include" />
+          <e p="Base" t="Include">
             <e p="NamedTag.cs" t="Include" />
             <e p="Tag.cs" t="Include" />
           </e>
-          <e p="InputElements" t="Include">
+          <e p="Input" t="Include">
+            <e p="BaseInputElement.cs" t="Include" />
             <e p="ClassDropDown.cs" t="Include" />
             <e p="DateDropdown.cs" t="Include" />
+            <e p="Dialog.cs" t="Include" />
+            <e p="InputElement.cs" t="Include" />
             <e p="NumberInputBox.cs" t="Include" />
             <e p="StudentDropdown.cs" t="Include" />
             <e p="TeacherDropdown.cs" t="Include" />
             <e p="TextInputBox.cs" t="Include" />
           </e>
-          <e p="ProcessElement" t="Include">
-            <e p="ValidationTag.cs" t="Include" />
-          </e>
-          <e p="Surrounding Tags" t="Include">
-            <e p="Dialog.cs" t="Include" />
+          <e p="Process" t="Include">
+            <e p="ArchivePermissionElement.cs" t="Include" />
+            <e p="MailNotificationElement.cs" t="Include" />
             <e p="Process.cs" t="Include" />
             <e p="ProcessStep.cs" t="Include" />
+            <e p="ReceiptElement.cs" t="Include" />
+            <e p="ValidationElement.cs" t="Include" />
           </e>
-        </e>
-        <e p="Networking" t="Include">
-          <e p="DatabaseHelper.cs" t="Include" />
-          <e p="NetworkHelper.cs" t="Include" />
+          <e p="Wording.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive" />
         <e p="packages.config" t="Include" />
@@ -52,9 +56,6 @@
           <e p="AssemblyInfo.cs" t="Include" />
           <e p="Resources.Designer.cs" t="Include" />
           <e p="Resources.resx" t="Include" />
-        </e>
-        <e p="UIGeneration" t="Include">
-          <e p="ViewCreator.cs" t="Include" />
         </e>
       </e>
       <e p="DynamicDocsWPF.sln" t="IncludeFlat" />

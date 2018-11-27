@@ -1,15 +1,13 @@
-using System;
 using System.Collections.Generic;
-using DynamicDocsWPF.Model.Base_Classes;
-using DynamicDocsWPF.Model.InputElements;
+using DynamicDocsWPF.Model.Base;
 
-namespace DynamicDocsWPF.Model.Surrounding_Tags
+namespace DynamicDocsWPF.Model.Process
 {
     public class Process : NamedTag
     {
         private readonly List<ProcessStep> _steps;
-
-        public Process() : base(null)
+        
+        public Process(string name, string description) : base(null, name, description)
         {
             _steps = new List<ProcessStep>();
         }
@@ -35,7 +33,7 @@ namespace DynamicDocsWPF.Model.Surrounding_Tags
                     {
                         var element = dialog.GetElementByName(name);
 
-                        if (element != null) return element.ValueToString();
+                        if (element != null) return element.GetFormattedValue();
                     }
                 }
             }
