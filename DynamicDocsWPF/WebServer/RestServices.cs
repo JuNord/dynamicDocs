@@ -4,7 +4,9 @@ using System.IO;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Text;
+using Newtonsoft.Json;
 using RestService;
+using WebServer.Model;
 
 namespace WebServer
 {
@@ -13,6 +15,7 @@ namespace WebServer
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class RestService : IRestService
     {
+        private static DatabaseHelper _database = new DatabaseHelper();
         private const string TEMPLATE_PATH = "./Templates/";
         private const string PROCESS_PATH = "./Processes/";
         
@@ -32,6 +35,33 @@ namespace WebServer
             {
                 
             };
+        }
+
+        public UploadResult PostData(DataMessage message)
+        {
+            try
+            {
+                switch (message.DataType)
+                {
+                    case DataType.ProcessUpdate:
+                        var update = JsonConvert.DeserializeObject<ProcessUpdate>(message.Content);
+                        if (update.Accepted)
+                        {
+                            
+                        }
+                        break;
+                    case DataType.ProcessTemplate:
+                        var template = JsonConvert.DeserializeObject<ProcessTemplate>(message.Content);
+                        _database.AddProcessTemplate(template);
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                return UploadResult.FAILED_OTHER;
+            }
+
+            return UploadResult.SUCCESS;
         }
 
         public UploadResult PostFile(FileMessage message)

@@ -49,6 +49,7 @@
     <Compile Include="Entry.cs" />
     <Compile Include="FileType.cs" />
     <Compile Include="ProcessInstance.cs" />
+    <Compile Include="ProcessUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileMessage.cs" />
     <Compile Include="UploadResult.cs" />

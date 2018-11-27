@@ -10,6 +10,7 @@ using DynamicDocsWPF.Model;
 using DynamicDocsWPF.Model.InputElements;
 using DynamicDocsWPF.Model.Process;
 using RestService;
+using WebServer.Model;
 
 namespace DynamicDocsWPF
 {
@@ -36,8 +37,18 @@ namespace DynamicDocsWPF
         public MainWindow()
         {
             InitializeComponent();
-            //Test();
-            _process = XMLHelper.ReadXML(@"C:\Users\Sebastian.Bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XMLFile1.xml");
+            /*_process = XMLHelper.ReadXML(@"C:\Users\Sebastian.Bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XMLFile1.xml");
+            _process.CurrentStep = 1;
+            var overview = new ValidationOverview(_process);
+            overview.ShowDialog();*/
+            
+            var helper = new NetworkHelper("http://localhost:8000/Service");
+            helper.PostProcessTemplate(new ProcessTemplate()
+            {
+                Process_ID = "blaprocess",
+                FilePath = "C:/bla",
+                Description = "VIEL VIEL BLA"
+            });
             
         }
 

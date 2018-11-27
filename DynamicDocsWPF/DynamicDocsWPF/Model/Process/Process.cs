@@ -7,6 +7,7 @@ namespace DynamicDocsWPF.Model.Process
     {
         private readonly List<ProcessStep> _steps;
         private readonly List<ArchivePermissionElement> _permissions;
+        public int CurrentStep { get; set; }
         
         public Process(string name, string description) : base(null, name, description)
         {

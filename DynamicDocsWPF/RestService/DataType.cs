@@ -3,6 +3,8 @@ namespace RestService
     public enum DataType
     {
         Entry,
-        ProcessInstance
+        ProcessInstance,
+        ProcessUpdate,
+        ProcessTemplate
     }
 }

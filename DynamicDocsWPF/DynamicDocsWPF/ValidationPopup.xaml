@@ -5,15 +5,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:DynamicDocsWPF"
         mc:Ignorable="d"
-        Title="ValidationPopup" Height="350" Width="550"
+        Title="ValidationPopup" Height="300" Width="550"
         WindowStyle="None"
-        Background="Transparent">
+        Background="Transparent"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="InfoBlock" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="22" FontFamily="Segoe UI Light" Margin="20">
+        <Rectangle Grid.RowSpan="2" RadiusX="8" RadiusY="8" Fill="#4BC3FF">
+            <Rectangle.Effect>
+                <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5"/>
+            </Rectangle.Effect>
+            </Rectangle>
+        <TextBlock x:Name="InfoBlock" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="22" FontFamily="Segoe UI Light" Margin="20">
             <Run Text="Sind alle Angaben korrekt?"/>
             <LineBreak/>
             <LineBreak/>

@@ -6,6 +6,8 @@ using System.Text;
 using System.Web;
 using Newtonsoft.Json;
 using RestService;
+using WebServer.Model;
+using Entry = RestService.Entry;
 
 namespace DynamicDocsWPF.HelperClasses
 {
@@ -48,6 +50,19 @@ namespace DynamicDocsWPF.HelperClasses
                 DataType = DataType.ProcessInstance,
                 Content = JsonConvert.SerializeObject(processInstance)
             };
+            
+            PostData(message);
+        }
+        
+        public void PostProcessTemplate(ProcessTemplate processTemplate)
+        {
+            var message = new DataMessage()
+            {
+                DataType = DataType.ProcessTemplate,
+                Content = JsonConvert.SerializeObject(processTemplate)
+            };
+            
+            PostData(message);
         }
 
         public void PostEntry(Entry entry)
@@ -57,6 +72,19 @@ namespace DynamicDocsWPF.HelperClasses
                 DataType = DataType.Entry,
                 Content = JsonConvert.SerializeObject(entry)
             };
+            
+            PostData(message);
+        }
+
+        public void PostProcessUpdate(ProcessUpdate processUpdate)
+        {
+            var message = new DataMessage()
+            {
+                DataType = DataType.Entry,
+                Content = JsonConvert.SerializeObject(processUpdate)
+            };
+
+            PostData(message);
         }
         
         private DataMessage GetDataMessage(DataType dataType, int id)
