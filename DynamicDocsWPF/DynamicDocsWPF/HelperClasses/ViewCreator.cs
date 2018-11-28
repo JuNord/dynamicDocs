@@ -1,6 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
-using DynamicDocsWPF.Model.InputElements;
+using RestService.Model.Input;
 
 namespace DynamicDocsWPF.HelperClasses
 {

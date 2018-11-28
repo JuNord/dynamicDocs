@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -7,9 +8,8 @@ using System.Windows.Media;
 using System.Xml;
 using DynamicDocsWPF.HelperClasses;
 using DynamicDocsWPF.Model;
-using DynamicDocsWPF.Model.InputElements;
-using DynamicDocsWPF.Model.Process;
 using RestService;
+using RestService.Model.Process;
 using WebServer.Model;
 
 namespace DynamicDocsWPF
@@ -43,13 +43,13 @@ namespace DynamicDocsWPF
             overview.ShowDialog();*/
             
             var helper = new NetworkHelper("http://localhost:8000/Service");
-            helper.PostProcessTemplate(new ProcessTemplate()
+            var xmlPath =
+                @"C:\Users\Sebastian.Bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XmlFile1.xml";
+
+            if (helper.PostProcessTemplate(xmlPath, false) == UploadResult.FAILED_FILEEXISTS)
             {
-                Process_ID = "blaprocess",
-                FilePath = "C:/bla",
-                Description = "VIEL VIEL BLA"
-            });
-            
+                throw new Exception("EXPLOSSSSIOON");
+            }
         }
 
         private void HandleProcessStep(ProcessStep processStep)
@@ -58,8 +58,7 @@ namespace DynamicDocsWPF
             if (processStep.DialogCount > 0)
             {
                 ViewCreator.FillViewHolder(ViewHolder, processStep.GetDialogAtIndex(currentDialog));
-            }
-            
+            }           
         }
 
       

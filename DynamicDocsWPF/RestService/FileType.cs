@@ -2,7 +2,7 @@ namespace RestService
 {
     public enum FileType
     {
-        Process,
+        ProcessTemplate,
         Template
     }
 }

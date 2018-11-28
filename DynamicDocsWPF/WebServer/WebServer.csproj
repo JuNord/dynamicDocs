@@ -54,22 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseHelper.cs" />
-    <Compile Include="IRestService.cs" />
-    <Compile Include="Mapper\IMapper.cs" />
-    <Compile Include="Mapper\UserMapper.cs" />
-    <Compile Include="Model\ArchivedProcess.cs" />
-    <Compile Include="Model\ArchivePermission.cs" />
-    <Compile Include="Model\DocTemplate.cs" />
-    <Compile Include="Model\Entry.cs" />
-    <Compile Include="Model\ProcessTemplate.cs" />
-    <Compile Include="Model\Roles.cs" />
-    <Compile Include="Model\RunningProcess.cs" />
-    <Compile Include="Model\User.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RestServices.cs" />
-    <Compile Include="Routing.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestService\RestService.csproj">

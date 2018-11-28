@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\Julius.Nordhues\.Rider2018.2\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Julius.Nordhues\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.-1327470483.00" t="ExcludeRecursive" />
-    <e p="C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
+    <e p="C:\Users\sebastian.bauer\.Rider2018.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\sebastian.bauer\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.1172674224.00" t="ExcludeRecursive" />
+    <e p="C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
       <e p="DynamicDocsWPF" t="IncludeRecursive">
         <e p="App.config" t="Include" />
         <e p="App.xaml" t="Include" />
@@ -15,10 +15,36 @@
           <e p="NetworkHelper.cs" t="Include" />
           <e p="ViewCreator.cs" t="Include" />
           <e p="WordReceiptHelper.cs" t="Include" />
-          <e p="XMLHelper.cs" t="Include" />
         </e>
         <e p="MainWindow.xaml" t="Include" />
         <e p="MainWindow.xaml.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="PlantUML" t="Include">
+          <e p="Database.txt" t="Include" />
+          <e p="Network.txt" t="Include" />
+          <e p="UML.txt" t="Include" />
+          <e p="WebServer.txt" t="Include" />
+        </e>
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
+        </e>
+        <e p="ValidationOverview.xaml" t="Include" />
+        <e p="ValidationOverview.xaml.cs" t="Include" />
+        <e p="ValidationPopup.xaml" t="Include" />
+        <e p="ValidationPopup.xaml.cs" t="Include" />
+      </e>
+      <e p="DynamicDocsWPF.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="RestService" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="DataMessage.cs" t="Include" />
+        <e p="DataType.cs" t="Include" />
+        <e p="Entry.cs" t="Include" />
+        <e p="FileMessage.cs" t="Include" />
+        <e p="FileType.cs" t="Include" />
         <e p="MissingValueInterpretationException.cs" t="Include" />
         <e p="Model" t="Include">
           <e p="Base" t="Include">
@@ -49,33 +75,6 @@
           <e p="Wording.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive" />
-        <e p="packages.config" t="Include" />
-        <e p="PlantUML" t="Include">
-          <e p="Database.txt" t="Include" />
-          <e p="Network.txt" t="Include" />
-          <e p="UML.txt" t="Include" />
-          <e p="WebServer.txt" t="Include" />
-        </e>
-        <e p="Properties" t="Include">
-          <e p="AssemblyInfo.cs" t="Include" />
-          <e p="Resources.Designer.cs" t="Include" />
-          <e p="Resources.resx" t="Include" />
-        </e>
-        <e p="ValidationOverview.xaml" t="Include" />
-        <e p="ValidationOverview.xaml.cs" t="Include" />
-        <e p="ValidationPopup.xaml" t="Include" />
-        <e p="ValidationPopup.xaml.cs" t="Include" />
-      </e>
-      <e p="DynamicDocsWPF.sln" t="IncludeFlat" />
-      <e p="packages" t="ExcludeRecursive" />
-      <e p="RestService" t="IncludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="DataMessage.cs" t="Include" />
-        <e p="DataType.cs" t="Include" />
-        <e p="Entry.cs" t="Include" />
-        <e p="FileMessage.cs" t="Include" />
-        <e p="FileType.cs" t="Include" />
-        <e p="obj" t="ExcludeRecursive" />
         <e p="ProcessInstance.cs" t="Include" />
         <e p="ProcessUpdate.cs" t="Include" />
         <e p="Properties" t="Include">
@@ -83,11 +82,17 @@
         </e>
         <e p="RestService.csproj" t="IncludeRecursive" />
         <e p="UploadResult.cs" t="Include" />
+        <e p="XMLHelper.cs" t="Include" />
       </e>
-      <e p="WebServer" t="IncludeRecursive">
+      <e p="WebServerWPF" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="App.xaml" t="Include" />
+        <e p="App.xaml.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="DatabaseHelper.cs" t="Include" />
         <e p="IRestService.cs" t="Include" />
+        <e p="MainWindow.xaml" t="Include" />
+        <e p="MainWindow.xaml.cs" t="Include" />
         <e p="Mapper" t="Include">
           <e p="IMapper.cs" t="Include" />
           <e p="UserMapper.cs" t="Include" />
@@ -103,13 +108,14 @@
           <e p="User.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive" />
-        <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
           <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
         </e>
         <e p="RestServices.cs" t="Include" />
         <e p="Routing.cs" t="Include" />
-        <e p="WebServer.csproj" t="IncludeRecursive" />
+        <e p="WebServerWPF.csproj" t="IncludeRecursive" />
       </e>
       <e p="XmlProcessor" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
