@@ -20,9 +20,9 @@ namespace DynamicDocsWPF.HelperClasses
             BaseUrl = baseUrl;
         }
        
-        public List<string> GetTemplates() => GetList(FileType.Template);
+        public List<string> GetTemplates() => GetList(FileType.DocTemplate);
         public List<string> GetProcesses() => GetList(FileType.ProcessTemplate);
-        public FileMessage GetTemplateByName(string name) => GetFileByName(FileType.Template, name);
+        public FileMessage GetTemplateByName(string name) => GetFileByName(FileType.DocTemplate, name);
         public FileMessage GetProcessByName(string name) => GetFileByName(FileType.ProcessTemplate, name);
 
         public Entry GetEntryById(int id)
@@ -54,10 +54,24 @@ namespace DynamicDocsWPF.HelperClasses
             PostData(message);
         }
         
-        public UploadResult PostProcessTemplate(string filePath, bool forceOverwrite)
+        public UploadResult UploadProcessTemplate(string filePath, bool forceOverwrite)
         {
             var process = XmlHelper.ReadXMLFromPath(filePath);
 
+            return PostFile(new FileMessage()
+            {
+                FileName = Path.GetFileName(filePath),
+                FileType = FileType.ProcessTemplate,
+                ID = process.Name,
+                Content = File.ReadAllText(filePath),
+                ForceOverWrite = forceOverwrite
+            });
+        }
+        
+        public UploadResult UploadDocTemplate(string templateId, string filePath, bool forceOverwrite)
+        {
+            var process = XmlHelper.ReadXMLFromPath(filePath);
+            
             return PostFile(new FileMessage()
             {
                 FileName = Path.GetFileName(filePath),

@@ -26,7 +26,7 @@ namespace WebServerWPF
             {
                 case FileType.ProcessTemplate:
                     break;
-                case FileType.Template:
+                case FileType.DocTemplate:
                     break;
                 default: 
                     throw new ArgumentOutOfRangeException();
@@ -98,7 +98,8 @@ namespace WebServerWPF
                             };
                             _database.AddProcessTemplate(processTemplate);
                             break;
-                        case FileType.Template:
+                        case FileType.DocTemplate:
+                            
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -120,7 +121,7 @@ namespace WebServerWPF
             switch (message.FileType)
             {
                 case FileType.ProcessTemplate: return $"{PROCESS_PATH}{message.FileName}";                   
-                case FileType.Template: return $"{TEMPLATE_PATH}{message.FileName}";
+                case FileType.DocTemplate: return $"{TEMPLATE_PATH}{message.FileName}";
                 default:
                     throw new ArgumentOutOfRangeException();
             }

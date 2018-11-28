@@ -46,7 +46,7 @@ namespace DynamicDocsWPF
             var xmlPath =
                 @"C:\Users\Sebastian.Bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XmlFile1.xml";
 
-            if (helper.PostProcessTemplate(xmlPath, false) == UploadResult.FAILED_FILEEXISTS)
+            if (helper.UploadProcessTemplate(xmlPath, false) == UploadResult.FAILED_FILEEXISTS)
             {
                 throw new Exception("EXPLOSSSSIOON");
             }
