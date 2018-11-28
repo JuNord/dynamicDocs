@@ -20,10 +20,10 @@ namespace DynamicDocsWPF.HelperClasses
             BaseUrl = baseUrl;
         }
        
-        public List<string> GetTemplates() => GetList(FileType.Template);
-        public List<string> GetProcesses() => GetList(FileType.Process);
-        public FileMessage GetTemplateByName(string name) => GetFileByName(FileType.Template, name);
-        public FileMessage GetProcessByName(string name) => GetFileByName(FileType.Process, name);
+        public List<string> GetTemplates() => GetList(FileType.DocTemplate);
+        public List<string> GetProcesses() => GetList(FileType.ProcessTemplate);
+        public FileMessage GetTemplateByName(string name) => GetFileByName(FileType.DocTemplate, name);
+        public FileMessage GetProcessByName(string name) => GetFileByName(FileType.ProcessTemplate, name);
 
         public Entry GetEntryById(int id)
         {
@@ -54,15 +54,32 @@ namespace DynamicDocsWPF.HelperClasses
             PostData(message);
         }
         
-        public void PostProcessTemplate(ProcessTemplate processTemplate)
+        public UploadResult UploadProcessTemplate(string filePath, bool forceOverwrite)
         {
-            var message = new DataMessage()
+            var process = XmlHelper.ReadXMLFromPath(filePath);
+
+            return PostFile(new FileMessage()
             {
-                DataType = DataType.ProcessTemplate,
-                Content = JsonConvert.SerializeObject(processTemplate)
-            };
+                FileName = Path.GetFileName(filePath),
+                FileType = FileType.ProcessTemplate,
+                ID = process.Name,
+                Content = File.ReadAllText(filePath),
+                ForceOverWrite = forceOverwrite
+            });
+        }
+        
+        public UploadResult UploadDocTemplate(string templateId, string filePath, bool forceOverwrite)
+        {
+            var process = XmlHelper.ReadXMLFromPath(filePath);
             
-            PostData(message);
+            return PostFile(new FileMessage()
+            {
+                FileName = Path.GetFileName(filePath),
+                FileType = FileType.ProcessTemplate,
+                ID = process.Name,
+                Content = File.ReadAllText(filePath),
+                ForceOverWrite = forceOverwrite
+            });
         }
 
         public void PostEntry(Entry entry)
@@ -136,7 +153,7 @@ namespace DynamicDocsWPF.HelperClasses
                 var postData = JsonConvert.SerializeObject(message);
                 var bytes = Encoding.UTF8.GetBytes(postData);
 
-                var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(FileType),message.FileType)}");
+                var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/fileMessage");
                 httpWebRequest.Method = "POST";
                 httpWebRequest.ContentLength = bytes.Length;
                 httpWebRequest.ContentType = "application/json";
@@ -170,7 +187,8 @@ namespace DynamicDocsWPF.HelperClasses
                 var postData = JsonConvert.SerializeObject(message);
                 var bytes = Encoding.UTF8.GetBytes(postData);
 
-                var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(FileType),message.DataType)}");
+                var requestString = $"{BaseUrl}/dataMessage";
+                var httpWebRequest = (HttpWebRequest) WebRequest.Create(requestString);
                 httpWebRequest.Method = "POST";
                 httpWebRequest.ContentLength = bytes.Length;
                 httpWebRequest.ContentType = "application/json";

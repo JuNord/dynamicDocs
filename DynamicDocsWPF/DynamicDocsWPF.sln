@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlProcessor", "XmlProcesso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestService", "RestService\RestService.csproj", "{9C8CF696-190C-4B16-AC4F-7046840A0EC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer", "WebServer\WebServer.csproj", "{BF249F9A-EBF0-4AAE-A7B9-28C08911D7C5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServerWPF", "WebServerWPF\WebServerWPF.csproj", "{60B3376C-BEC4-4302-BBDB-6E2BE0A83346}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +26,9 @@ Global
 		{9C8CF696-190C-4B16-AC4F-7046840A0EC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C8CF696-190C-4B16-AC4F-7046840A0EC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C8CF696-190C-4B16-AC4F-7046840A0EC0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF249F9A-EBF0-4AAE-A7B9-28C08911D7C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF249F9A-EBF0-4AAE-A7B9-28C08911D7C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF249F9A-EBF0-4AAE-A7B9-28C08911D7C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF249F9A-EBF0-4AAE-A7B9-28C08911D7C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60B3376C-BEC4-4302-BBDB-6E2BE0A83346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60B3376C-BEC4-4302-BBDB-6E2BE0A83346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60B3376C-BEC4-4302-BBDB-6E2BE0A83346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60B3376C-BEC4-4302-BBDB-6E2BE0A83346}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

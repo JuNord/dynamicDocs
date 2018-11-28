@@ -1,4 +1,3 @@
-using DynamicDocsWPF.Model.Process;
 using Process = System.Diagnostics.Process;
 using System.Collections.Generic;
 using Microsoft.Office.Interop.Word;
