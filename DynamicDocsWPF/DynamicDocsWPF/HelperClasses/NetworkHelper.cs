@@ -6,20 +6,20 @@ using System.Text;
 using System.Web;
 using Newtonsoft.Json;
 using RestService;
-using WebServer.Model;
-using Entry = RestService.Entry;
+using WebServerWPF.Model;
+using Entry = WebServerWPF.Model.Entry;
 
 namespace DynamicDocsWPF.HelperClasses
 {
-    public class NetworkHelper
+    public class NetworkHelper : NetworkBase
     {
         private string BaseUrl { get; }
 
-        public NetworkHelper(string baseUrl)
+        public NetworkHelper(string baseUrl) : base(baseUrl)
         {
-            BaseUrl = baseUrl;
         }
        
+        #region GET
         public List<string> GetTemplates() => GetList(FileType.DocTemplate);
         public List<string> GetProcesses() => GetList(FileType.ProcessTemplate);
         public FileMessage GetTemplateByName(string name) => GetFileByName(FileType.DocTemplate, name);
@@ -34,185 +34,69 @@ namespace DynamicDocsWPF.HelperClasses
                 : null;
         }
 
-        public ProcessInstance GetProcessInstanceById(int id)
+        public RunningProcess GetProcessInstanceById(int id)
         {
             var dataMessage = GetDataMessage(DataType.ProcessInstance, id);
 
             return dataMessage.DataType == DataType.ProcessInstance
-                ? JsonConvert.DeserializeObject<ProcessInstance>(dataMessage.Content)
+                ? JsonConvert.DeserializeObject<RunningProcess>(dataMessage.Content)
                 : null;
         }
-
-        public void PostProcessInstance(ProcessInstance processInstance)
+        #endregion
+        
+        #region CREATE
+        public UploadResult CreateUser(string email, string password)
         {
-            var message = new DataMessage()
+            var user = new User(email, HashHelper.Hash(password));
+            
+            return PostData(DataType.UserAccount, JsonConvert.SerializeObject(user));
+        }
+        
+        public UploadResult CreateProcessInstance(string processTemplateId, string ownerId)
+        {
+            var runningProcess = new RunningProcess()
             {
-                DataType = DataType.ProcessInstance,
-                Content = JsonConvert.SerializeObject(processInstance)
+                Declined = false,
+                CurrentStep = 0,
+                Owner_ID = ownerId,
+                ProcessTemplate_ID = processTemplateId
             };
             
-            PostData(message);
+            return PostData(DataType.ProcessInstance,JsonConvert.SerializeObject(runningProcess));
         }
         
         public UploadResult UploadProcessTemplate(string filePath, bool forceOverwrite)
         {
             var process = XmlHelper.ReadXMLFromPath(filePath);
-
-            return PostFile(new FileMessage()
-            {
-                FileName = Path.GetFileName(filePath),
-                FileType = FileType.ProcessTemplate,
-                ID = process.Name,
-                Content = File.ReadAllText(filePath),
-                ForceOverWrite = forceOverwrite
-            });
+            var fileName = Path.GetFileName(filePath);
+            var fileText = File.ReadAllText(filePath);
+            return PostFile(new FileMessage(FileType.ProcessTemplate, process.Name, fileName, fileText, forceOverwrite));
         }
         
         public UploadResult UploadDocTemplate(string templateId, string filePath, bool forceOverwrite)
         {
-            var process = XmlHelper.ReadXMLFromPath(filePath);
-            
-            return PostFile(new FileMessage()
-            {
-                FileName = Path.GetFileName(filePath),
-                FileType = FileType.ProcessTemplate,
-                ID = process.Name,
-                Content = File.ReadAllText(filePath),
-                ForceOverWrite = forceOverwrite
-            });
+            var fileName = Path.GetFileName(filePath);
+            var fileBytes = Encoding.Default.GetString(File.ReadAllBytes(filePath));
+            return PostFile(new FileMessage(FileType.DocTemplate, templateId, fileName, fileBytes, forceOverwrite));              
         }
 
-        public void PostEntry(Entry entry)
+        public void CreateEntry(Entry entry)
         {
-            var message = new DataMessage()
-            {
-                DataType = DataType.Entry,
-                Content = JsonConvert.SerializeObject(entry)
-            };
-            
-            PostData(message);
+            PostData(DataType.Entry, JsonConvert.SerializeObject(entry));
         }
-
-        public void PostProcessUpdate(ProcessUpdate processUpdate)
+        #endregion
+        
+        #region UPDATE
+        public UploadResult ApproveProcess(int id)
         {
-            var message = new DataMessage()
-            {
-                DataType = DataType.Entry,
-                Content = JsonConvert.SerializeObject(processUpdate)
-            };
-
-            PostData(message);
+            return PostData(DataType.ProcessUpdate, JsonConvert.SerializeObject(new ProcessUpdate(id, false)));   
         }
         
-        private DataMessage GetDataMessage(DataType dataType, int id)
+        public UploadResult DeclineProcess(int id)
         {
-            var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(DataType), dataType)}/{id}");
-            httpWebRequest.Method = "GET";
-            var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-
-            if (httpWebResponse.StatusCode != HttpStatusCode.OK) return null;
-         
-            using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
-            {
-                return JsonConvert.DeserializeObject<DataMessage>(responseStream.ReadToEnd());
-            }
+            return PostData(DataType.ProcessUpdate, JsonConvert.SerializeObject(new ProcessUpdate(id, true))); 
         }
         
-        private FileMessage GetFileByName(FileType fileType, string name)
-        {
-            var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(FileType), fileType)}/{name}");
-            httpWebRequest.Method = "GET";
-            var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-
-            if (httpWebResponse.StatusCode != HttpStatusCode.OK) return null;
-         
-            using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
-            {
-                return JsonConvert.DeserializeObject<FileMessage>(responseStream.ReadToEnd());
-            }
-        }
-        
-        private List<string> GetList(FileType fileType)
-        {
-            var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(FileType), fileType)}s");
-            httpWebRequest.Method = "GET";
-            var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-
-            if (httpWebResponse.StatusCode != HttpStatusCode.OK) return null;
-         
-            using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
-            {
-                return JsonConvert.DeserializeObject<List<string>>(responseStream.ReadToEnd());
-            }
-        }
-        
-        public UploadResult PostFile(FileMessage message)
-        {
-            try
-            {
-                var postData = JsonConvert.SerializeObject(message);
-                var bytes = Encoding.UTF8.GetBytes(postData);
-
-                var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/fileMessage");
-                httpWebRequest.Method = "POST";
-                httpWebRequest.ContentLength = bytes.Length;
-                httpWebRequest.ContentType = "application/json";
-
-                using (var requestStream = httpWebRequest.GetRequestStream())
-                {
-                    requestStream.Write(bytes, 0, bytes.Length);
-                }
-
-                var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
-                    {
-                        return JsonConvert.DeserializeObject<UploadResult>(responseStream.ReadToEnd());
-                    }
-                }
-            }
-            catch (HttpException)
-            {
-            }
-
-            return UploadResult.FAILED_OTHER;
-        }
-        
-        public UploadResult PostData(DataMessage message)
-        {
-            try
-            {
-                var postData = JsonConvert.SerializeObject(message);
-                var bytes = Encoding.UTF8.GetBytes(postData);
-
-                var requestString = $"{BaseUrl}/dataMessage";
-                var httpWebRequest = (HttpWebRequest) WebRequest.Create(requestString);
-                httpWebRequest.Method = "POST";
-                httpWebRequest.ContentLength = bytes.Length;
-                httpWebRequest.ContentType = "application/json";
-
-                using (var requestStream = httpWebRequest.GetRequestStream())
-                {
-                    requestStream.Write(bytes, 0, bytes.Length);
-                }
-
-                var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
-                    {
-                        return JsonConvert.DeserializeObject<UploadResult>(responseStream.ReadToEnd());
-                    }
-                }
-            }
-            catch (HttpException)
-            {
-            }
-
-            return UploadResult.FAILED_OTHER;
-        }
+        #endregion
     }
 }

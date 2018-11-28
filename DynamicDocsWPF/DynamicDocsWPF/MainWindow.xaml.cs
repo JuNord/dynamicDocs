@@ -10,7 +10,7 @@ using DynamicDocsWPF.HelperClasses;
 using DynamicDocsWPF.Model;
 using RestService;
 using RestService.Model.Process;
-using WebServer.Model;
+using WebServerWPF.Model;
 
 namespace DynamicDocsWPF
 {
@@ -37,18 +37,55 @@ namespace DynamicDocsWPF
         public MainWindow()
         {
             InitializeComponent();
-            /*_process = XMLHelper.ReadXML(@"C:\Users\Sebastian.Bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XMLFile1.xml");
-            _process.CurrentStep = 1;
-            var overview = new ValidationOverview(_process);
-            overview.ShowDialog();*/
             
             var helper = new NetworkHelper("http://localhost:8000/Service");
-            var xmlPath =
-                @"C:\Users\Sebastian.Bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XmlFile1.xml";
+            /*var xmlPath = @"C:\Users\Sebastian.Bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XmlFile1.xml";
 
-            if (helper.UploadProcessTemplate(xmlPath, false) == UploadResult.FAILED_FILEEXISTS)
+            var result = helper.UploadProcessTemplate(xmlPath, true);
+            HandleUploadResult(result);
+
+            var docPath =
+                @"C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\Organization\Documentation\Pflichtenheft.docx";
+
+            var resultDoc = helper.UploadDocTemplate("PflichtenheftTemplate", docPath, false);
+            HandleUploadResult(resultDoc);
+
+            var resultUst = helper.CreateUser("sebastian.bauer@atos.net", "ichbins");
+            HandleUploadResult(resultUst);
+            */
+
+            var resultInst = helper.CreateProcessInstance("vacation", "sebastian.bauer@atos.net");
+            HandleUploadResult(resultInst);
+            
+            helper.CreateEntry(new Entry()
             {
-                throw new Exception("EXPLOSSSSIOON");
+                DataType = "string",
+                Data = "Ulrich Böhmer",
+                Process_ID = 3,
+                PermissionLevel = 0,
+                FieldName = "teacher"
+            });
+            
+            var resultApp = helper.ApproveProcess(11);
+            HandleUploadResult(resultApp);
+
+            var resultDec = helper.DeclineProcess(12);
+            HandleUploadResult(resultDec);/**/
+        }
+
+        private void HandleUploadResult(UploadResult result)
+        {
+            switch (result)
+            {
+                case UploadResult.FAILED_FILEEXISTS:
+                    MessageBox.Show(this, "Filename already taken.");
+                    break;
+                case UploadResult.FAILED_ID_EXISTS:
+                    MessageBox.Show(this, "ID already taken.");
+                    break;
+                case UploadResult.FAILED_OTHER:
+                    MessageBox.Show(this, "Something went wrong.");                    
+                    break;
             }
         }
 

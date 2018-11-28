@@ -12,6 +12,7 @@
         <e p="DynamicDocsWPF.csproj" t="IncludeRecursive" />
         <e p="HelperClasses" t="Include">
           <e p="IReceiptHelper.cs" t="Include" />
+          <e p="NetworkBase.cs" t="Include" />
           <e p="NetworkHelper.cs" t="Include" />
           <e p="ViewCreator.cs" t="Include" />
           <e p="WordReceiptHelper.cs" t="Include" />
@@ -42,9 +43,9 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="DataMessage.cs" t="Include" />
         <e p="DataType.cs" t="Include" />
-        <e p="Entry.cs" t="Include" />
         <e p="FileMessage.cs" t="Include" />
         <e p="FileType.cs" t="Include" />
+        <e p="HashHelper.cs" t="Include" />
         <e p="MissingValueInterpretationException.cs" t="Include" />
         <e p="Model" t="Include">
           <e p="Base" t="Include">
@@ -75,8 +76,6 @@
           <e p="Wording.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive" />
-        <e p="ProcessInstance.cs" t="Include" />
-        <e p="ProcessUpdate.cs" t="Include" />
         <e p="Properties" t="Include">
           <e p="AssemblyInfo.cs" t="Include" />
         </e>
@@ -93,16 +92,13 @@
         <e p="IRestService.cs" t="Include" />
         <e p="MainWindow.xaml" t="Include" />
         <e p="MainWindow.xaml.cs" t="Include" />
-        <e p="Mapper" t="Include">
-          <e p="IMapper.cs" t="Include" />
-          <e p="UserMapper.cs" t="Include" />
-        </e>
         <e p="Model" t="Include">
           <e p="ArchivedProcess.cs" t="Include" />
           <e p="ArchivePermission.cs" t="Include" />
           <e p="DocTemplate.cs" t="Include" />
           <e p="Entry.cs" t="Include" />
           <e p="ProcessTemplate.cs" t="Include" />
+          <e p="ProcessUpdate.cs" t="Include" />
           <e p="Roles.cs" t="Include" />
           <e p="RunningProcess.cs" t="Include" />
           <e p="User.cs" t="Include" />

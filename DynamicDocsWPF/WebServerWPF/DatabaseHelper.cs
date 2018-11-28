@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Net.Sockets;
 using MySql.Data.MySqlClient;
-using WebServer.Model;
+using RestService;
+using WebServerWPF.Model;
 
 namespace WebServer
 {
@@ -38,14 +38,14 @@ namespace WebServer
                     Description = reader.GetString(2)
                 });
             }
-
+            reader.Close();
             return templates;
         }
 
         public void AddProcessTemplate(ProcessTemplate template)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO ProcessTemplate VALUES ({template.Process_ID}, {template.FilePath}, {template.Description});";
+            cmd.CommandText = $"INSERT INTO ProcessTemplate VALUES (\"{template.Process_ID}\", \"{template.FilePath}\", \"{template.Description}\");";
             cmd.ExecuteNonQuery();
         }
         
@@ -66,25 +66,127 @@ namespace WebServer
                 {
                     CurrentProcess_ID = int.Parse(reader.GetString(0)),
                     ProcessTemplate_ID = reader.GetString(1),
-                    Owner_ID = int.Parse(reader.GetString(2)),
+                    Owner_ID = reader.GetString(2),
                     CurrentStep = int.Parse(reader.GetString(3)),
                     Declined = bool.Parse(reader.GetString(4))    
                 });
             }
 
+            reader.Close();
             return runningprocesses;
+        }
+        
+        public RunningProcess GetRunningProcessById(int processId)
+        {
+            RunningProcess runningprocess = null;
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"SELECT * FROM RUNNINGPROCESS WHERE currentprocess_id = {processId};";
+
+            var reader = cmd.ExecuteReader();
+
+            if (reader.NextResult())
+            {
+                runningprocess = new RunningProcess()
+                {
+                    CurrentProcess_ID = int.Parse(reader.GetString(0)),
+                    ProcessTemplate_ID = reader.GetString(1),
+                    Owner_ID = reader.GetString(2),
+                    CurrentStep = int.Parse(reader.GetString(3)),
+                    Declined = bool.Parse(reader.GetString(4))
+                };
+            }
+
+            reader.Close();
+            return runningprocess;
         }
         
         //INSERT INTO RUNNINGPROCESS
         public void AddRunningProcess(RunningProcess runningProcess)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO RunningProcess VALUES ({runningProcess.CurrentProcess_ID}, " +
+            cmd.CommandText = $"INSERT INTO RunningProcess (PROCESSTEMPLATE_ID,OWNER_ID,CURRENTSTEP,DECLINED) VALUES (" +
                               $"\"{runningProcess.ProcessTemplate_ID}\", " +
-                              $"{runningProcess.Owner_ID}, " +
+                              $"\"{runningProcess.Owner_ID}\", " +
                               $"{runningProcess.CurrentStep}, " +
                               $"{runningProcess.Declined});";
             cmd.ExecuteNonQuery();
+        }
+
+        public void DeclineRunningProcess(int id)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"UPDATE RunningProcess SET declined = true WHERE currentprocess_id = {id};";
+            cmd.ExecuteNonQuery();
+            ArchiveRunningProcess(id);
+        }
+        
+        public void ApproveRunningProcess(int id)
+        {
+            var runningProcess = GetRunningProcessById(id);
+
+            if (runningProcess != null)
+            {
+                var cmd = connection.CreateCommand();
+                cmd.CommandText =
+                    $"SELECT filepath FROM ProcessTemplate WHERE process_id = {runningProcess.ProcessTemplate_ID};";
+                var reader = cmd.ExecuteReader();
+                if (reader.NextResult())
+                {
+                    var path = reader.GetString(0);
+                    var process = XmlHelper.ReadXMLFromPath(path);
+                    if (runningProcess.CurrentStep + 1 > process.ProcessStepCount)
+                    {
+                        ArchiveRunningProcess(id);
+                    }
+                    else
+                    {
+                        IncrementRunningProcess(id);
+                    }
+                }
+                reader.Close();
+            }
+        }
+        
+        private void IncrementRunningProcess(int id)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"UPDATE RunningProcess SET CurrentStep = CurrentStep + 1;";
+            cmd.ExecuteNonQuery();
+        }
+        
+        private void ArchiveRunningProcess(int processId)
+        {
+            var runningProcess = GetRunningProcessById(processId);
+            if (runningProcess != null)
+            {
+                var cmd = connection.CreateCommand();
+                cmd.CommandText =
+                    $"INSERT INTO ArchivedProcess (PROCESSTEMPLATE_ID,OWNER_ID,CURRENTSTEP,DECLINED) VALUES (" +
+                    $"\"{runningProcess.ProcessTemplate_ID}\", " +
+                    $"\"{runningProcess.Owner_ID}\", " +
+                    $"{runningProcess.CurrentStep}, " +
+                    $"{runningProcess.Declined});";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = $"DELETE FROM RunningProcess WHERE currentprocess_id = {processId}";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = $"SELECT currentprocess_id FROM ArchivedProcess WHERE " +
+                                  $"processtemplate_id = {runningProcess.ProcessTemplate_ID}" +
+                                  $"Owner_ID = \"{runningProcess.Owner_ID}\", " +
+                                  $"CurrentStep = {runningProcess.CurrentStep}, " +
+                                  $"Declined = {runningProcess.Declined});";
+                var reader = cmd.ExecuteReader();
+
+                if (reader.NextResult())
+                {
+                    var id = reader.GetInt32(0);
+                    cmd.CommandText = $"INSERT INTO ArchivePermission VALUES({id}, {runningProcess.Owner_ID});";
+                    cmd.ExecuteNonQuery();
+                }
+
+                reader.Close();
+            }
         }
         
         //SELECT * FROM USER
@@ -98,16 +200,10 @@ namespace WebServer
 
             while (reader.NextResult())
             {
-                users.Add(new User()
-                {
-                    User_ID = int.Parse(reader.GetString(0)),
-                    Email = reader.GetString(1),
-                    Password_Hash = reader.GetString(2),
-                    PermissionLevel = int.Parse(reader.GetString(3))
-                    
-                });
+                users.Add(new User(reader.GetString(0), reader.GetString(1), int.Parse(reader.GetString(2))));
             }
-
+            
+            reader.Close();
             return users;
         }
         
@@ -115,10 +211,7 @@ namespace WebServer
         public void AddUser(User user)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO User VALUES (\"{user.Password_Hash}\","+
-                              $"\"{user.Email}\"," +
-                              $"\"{user.Password_Hash}\","+
-                              $"{user.PermissionLevel}," +
+            cmd.CommandText = $"INSERT INTO User VALUES (\"{user.Email}\",\"{user.Password_Hash}\",0);";
        
             cmd.ExecuteNonQuery();
         }
@@ -137,11 +230,11 @@ namespace WebServer
                 roles.Add(new Roles()
                 {
                     Role_ID = reader.GetString(0), 
-                    User_ID = int.Parse(reader.GetString(1))
+                    User_ID = reader.GetString(1)
                 });
                 
             }
-
+            reader.Close();
             return roles;
         }
         
@@ -149,8 +242,7 @@ namespace WebServer
         public void AddRoles(Roles roles)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO Roles VALUES (\"{roles.Role_ID}\"," +
-                              $"{roles.User_ID});";
+            cmd.CommandText = $"INSERT INTO Roles VALUES (\"{roles.Role_ID}\",\"{roles.User_ID}\");";
             cmd.ExecuteNonQuery();
         }
         
@@ -170,11 +262,12 @@ namespace WebServer
                     FilePath = reader.GetString(1)
                 });
             }
-
+            
+            reader.Close();
             return doctemplates;
         }
         //INSERT INTO DOCTEMPLATES
-        public void AddDocTemplates(DocTemplate docTemplate)
+        public void AddDocTemplate(DocTemplate docTemplate)
         {
             var cmd = connection.CreateCommand();
             cmd.CommandText = $"INSERT INTO DocTemplate VALUES (\"{docTemplate.DocTemplate_ID}\"," +
@@ -196,12 +289,12 @@ namespace WebServer
                 {
                     CurrentProcess_ID = int.Parse(reader.GetString(0)),
                     ProcessTemplate_ID = reader.GetString(1),
-                    Owner_ID = int.Parse(reader.GetString(2)),
+                    Owner_ID = reader.GetString(2),
                     CurrentStep = int.Parse(reader.GetString(3)),
                     Declined = bool.Parse(reader.GetString(4))    
                 });
             }
-
+            reader.Close();
             return archivedprocesses;
         }
         
@@ -211,7 +304,7 @@ namespace WebServer
             var cmd = connection.CreateCommand();
             cmd.CommandText = $"INSERT INTO ArchivedProcess VALUES ({archivedProcess.CurrentProcess_ID}," +
                               $"{archivedProcess.ProcessTemplate_ID}," +
-                              $"{archivedProcess.Owner_ID}," +
+                              $"\"{archivedProcess.Owner_ID}\"," +
                               $"{archivedProcess.CurrentStep}," +
                               $"{archivedProcess.Declined});";
             cmd.ExecuteNonQuery();
@@ -230,10 +323,10 @@ namespace WebServer
                 archivepermission.Add(new ArchivePermission()
                 {
                     ArchivedProcess_ID = int.Parse(reader.GetString(0)),
-                    AuthorizedUser_ID = int.Parse(reader.GetString(1))
+                    AuthorizedUser_ID = reader.GetString(1)
                 });
             }
-
+            reader.Close();
             return archivepermission;
         }
         
@@ -242,7 +335,7 @@ namespace WebServer
         {
             var cmd = connection.CreateCommand();
             cmd.CommandText = $"INSERT INTO ArchivePermission VALUES({archivePermission.ArchivedProcess_ID}," +
-                              $"{archivePermission.AuthorizedUser_ID});";
+                              $"\"{archivePermission.AuthorizedUser_ID}\");";
             cmd.ExecuteNonQuery();
         }
         
@@ -266,7 +359,7 @@ namespace WebServer
                     PermissionLevel = int.Parse(reader.GetString(5))
                 });
             }
-
+            reader.Close();
             return entries;
 
         }
@@ -275,7 +368,7 @@ namespace WebServer
         public void AddEntry(Entry entry)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO Entry VALUES ({entry.Entry_ID}," +
+            cmd.CommandText = $"INSERT INTO Entry (PROCESS_ID,FIELDNAME,DATATYPE,DATA,PERMISSIONLEVEL) VALUES (" +
                               $"{entry.Process_ID}," +
                               $"\"{entry.FieldName}\"," +
                               $"\"{entry.DataType}\"," +
@@ -283,5 +376,7 @@ namespace WebServer
                               $"{entry.PermissionLevel});";
             cmd.ExecuteNonQuery();
         }
+        
+        
     }
 }

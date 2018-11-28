@@ -7,5 +7,18 @@ namespace RestService
         public string FileName { get; set; }
         public string Content { get; set; }
         public FileType FileType { get; set; }
+
+        public FileMessage()
+        {
+            
+        }
+        public FileMessage(FileType type, string id, string fileName, string content, bool forceOverWrite)
+        {
+            ForceOverWrite = forceOverWrite;
+            ID = id;
+            FileName = fileName;
+            Content = content;
+            ForceOverWrite = forceOverWrite;
+        }
     }
 }

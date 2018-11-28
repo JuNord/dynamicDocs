@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Text;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using RestService;
 using WebServer;
@@ -22,6 +24,7 @@ namespace WebServerWPF
         
         public FileMessage GetFile(string fileType, string name)
         {
+            FileMessage message = null;
             switch (Enum.Parse(typeof(FileType), fileType))
             {
                 case FileType.ProcessTemplate:
@@ -30,12 +33,10 @@ namespace WebServerWPF
                     break;
                 default: 
                     throw new ArgumentOutOfRangeException();
-                    break;
+                    
             }
-            return new FileMessage()
-            {
-                
-            };
+
+            return message;
         }
 
         public UploadResult PostData(DataMessage message)
@@ -46,15 +47,39 @@ namespace WebServerWPF
                 switch (message.DataType)
                 {
                     case DataType.ProcessUpdate:
-                        MainWindow.PostToLog("IS PROCESS UPDATE");
+                        MainWindow.PostToLog("Received a process update.");
                         var update = JsonConvert.DeserializeObject<ProcessUpdate>(message.Content);
-                        if (update.Accepted)
+                        if (update.Declined)
                         {
-                            
+                            MainWindow.PostToLog("The process was declined.");
+                            _database.DeclineRunningProcess(update.ID);
+                        }
+                        else
+                        {
+                            MainWindow.PostToLog("The process was approved.");
+                            _database.ApproveRunningProcess(update.ID);
                         }
                         break;
-                    case DataType.ProcessTemplate:
-                        
+                    case DataType.ProcessInstance:
+                        MainWindow.PostToLog("Received request to create a new Process Instance.");
+                        var instance = JsonConvert.DeserializeObject<RunningProcess>(message.Content);
+                        MainWindow.PostToLog("Registering in Database...");
+                        _database.AddRunningProcess(instance);
+                        MainWindow.PostToLog("Done");
+                        break;
+                    case DataType.UserAccount:
+                        MainWindow.PostToLog("Received request to register a new user.");
+                        var user = JsonConvert.DeserializeObject<User>(message.Content);
+                        MainWindow.PostToLog("Registering in Database...");
+                        _database.AddUser(user);
+                        MainWindow.PostToLog("Done!");
+                        break;
+                    case DataType.Entry:
+                        MainWindow.PostToLog("Received request to register a new user.");
+                        var entry = JsonConvert.DeserializeObject<Entry>(message.Content);
+                        MainWindow.PostToLog("Registering in Database...");
+                        _database.AddEntry(entry);
+                        MainWindow.PostToLog("Done!");
                         break;
                     default:
                         MainWindow.PostToLog("UNKNOWN");
@@ -63,7 +88,7 @@ namespace WebServerWPF
             }
             catch (Exception e)
             {
-                MainWindow.PostToLog(e.Message);
+                MainWindow.PostToLog(e.ToString());
                 return UploadResult.FAILED_OTHER;
             }
 
@@ -73,42 +98,62 @@ namespace WebServerWPF
         public UploadResult PostFile(FileMessage message)
         {
             try
-            {                      
+            {
                 if (!FileIsValid(message)) return UploadResult.FAILED_FILE_OR_TYPE_INVALID;
                 var path = GetFiletypeDirectory(message);
-                
+
                 if (!File.Exists(path) || message.ForceOverWrite)
                 {
                     var dir = Path.GetDirectoryName(path);
-                    if (!Directory.Exists(dir)) 
+                    if (!Directory.Exists(dir))
                         Directory.CreateDirectory(dir);
-                    
-                    MainWindow.PostToLog("DIRECTORY: "+dir);
-                    File.WriteAllBytes(path, Encoding.Default.GetBytes(message.Content));
 
                     switch (message.FileType)
                     {
                         case FileType.ProcessTemplate:
+                            MainWindow.PostToLog("Received Processtemplate...");
                             var process = XmlHelper.ReadXMLFromString(message.Content);
                             var processTemplate = new ProcessTemplate()
                             {
                                 Process_ID = process.Name,
-                                Description = process.Description,
+                                Description = process.Description, 
                                 FilePath = path
                             };
+                            MainWindow.PostToLog("Registering in Database...");
                             _database.AddProcessTemplate(processTemplate);
+                            MainWindow.PostToLog("Done!");
                             break;
                         case FileType.DocTemplate:
-                            
+                            MainWindow.PostToLog("Received Doctemplate...");
+                            var docTemplate = new DocTemplate()
+                            {
+                                DocTemplate_ID = message.ID,
+                                FilePath = path
+                            };
+                            MainWindow.PostToLog("Registering in Database...");
+                            _database.AddDocTemplate(docTemplate);
+                            MainWindow.PostToLog("Done!");
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
+                    
+                    File.WriteAllBytes(path, Encoding.Default.GetBytes(message.Content));
                 }
                 else return UploadResult.FAILED_FILEEXISTS;
             }
+            catch (MySqlException e)
+            {
+                MainWindow.PostToLog(e.Message);
+                if (e.Message.Contains("Duplicate entry"))
+                    return UploadResult.FAILED_ID_EXISTS;
+                else
+                    return UploadResult.FAILED_OTHER;
+            }
             catch (Exception e)
             {
+                MainWindow.PostToLog(e.GetType().ToString());
+                MainWindow.PostToLog(e.StackTrace);
                 MainWindow.PostToLog(e.Message);
                 return UploadResult.FAILED_OTHER;
             }

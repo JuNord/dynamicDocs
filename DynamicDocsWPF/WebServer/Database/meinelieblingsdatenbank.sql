@@ -18,27 +18,27 @@ USE `processmanagement`;
 
 -- Exportiere Struktur von Tabelle processmanagement.archivedprocess
 CREATE TABLE IF NOT EXISTS `archivedprocess` (
-  `CURRENTPROCESS_ID` int(11) NOT NULL,
+  `CURRENTPROCESS_ID` int(11) NOT NULL AUTO_INCREMENT,
   `PROCESSTEMPLATE_ID` varchar(255) DEFAULT NULL,
-  `OWNER_ID` int(11) DEFAULT NULL,
+  `OWNER_ID` varchar(255) DEFAULT NULL,
   `CURRENTSTEP` int(11) DEFAULT NULL,
   `DECLINED` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`CURRENTPROCESS_ID`),
   KEY `PROCESSTEMPLATE_ID` (`PROCESSTEMPLATE_ID`),
   KEY `OWNER_ID` (`OWNER_ID`),
   CONSTRAINT `archivedprocess_ibfk_1` FOREIGN KEY (`PROCESSTEMPLATE_ID`) REFERENCES `processtemplate` (`PROCESS_ID`) ON DELETE CASCADE,
-  CONSTRAINT `archivedprocess_ibfk_2` FOREIGN KEY (`OWNER_ID`) REFERENCES `user` (`USER_ID`) ON DELETE CASCADE
+  CONSTRAINT `archivedprocess_ibfk_2` FOREIGN KEY (`OWNER_ID`) REFERENCES `user` (`EMAIL`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Daten Export vom Benutzer nicht ausgewählt
 -- Exportiere Struktur von Tabelle processmanagement.archivepermission
 CREATE TABLE IF NOT EXISTS `archivepermission` (
-  `ARCHIVEDPROCESS_ID` int(11) NOT NULL,
-  `AUTHORIZEDUSER_ID` int(11) NOT NULL,
+  `ARCHIVEDPROCESS_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `AUTHORIZEDUSER_ID` varchar(255) NOT NULL,
   PRIMARY KEY (`ARCHIVEDPROCESS_ID`,`AUTHORIZEDUSER_ID`),
   KEY `AUTHORIZEDUSER_ID` (`AUTHORIZEDUSER_ID`),
   CONSTRAINT `archivepermission_ibfk_1` FOREIGN KEY (`ARCHIVEDPROCESS_ID`) REFERENCES `archivedprocess` (`CURRENTPROCESS_ID`) ON DELETE CASCADE,
-  CONSTRAINT `archivepermission_ibfk_2` FOREIGN KEY (`AUTHORIZEDUSER_ID`) REFERENCES `user` (`USER_ID`) ON DELETE CASCADE
+  CONSTRAINT `archivepermission_ibfk_2` FOREIGN KEY (`AUTHORIZEDUSER_ID`) REFERENCES `user` (`EMAIL`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Daten Export vom Benutzer nicht ausgewählt
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `doctemplate` (
 -- Daten Export vom Benutzer nicht ausgewählt
 -- Exportiere Struktur von Tabelle processmanagement.entry
 CREATE TABLE IF NOT EXISTS `entry` (
-  `ENTRY_ID` int(11) NOT NULL,
+  `ENTRY_ID` int(11) NOT NULL AUTO_INCREMENT,
   `PROCESS_ID` int(11) DEFAULT NULL,
   `FIELDNAME` varchar(255) DEFAULT NULL,
   `DATATYPE` varchar(255) DEFAULT NULL,
@@ -76,38 +76,37 @@ CREATE TABLE IF NOT EXISTS `processtemplate` (
 -- Exportiere Struktur von Tabelle processmanagement.roles
 CREATE TABLE IF NOT EXISTS `roles` (
   `ROLE_ID` varchar(255) NOT NULL,
-  `USER_ID` int(11) DEFAULT NULL,
+  `USER_ID` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ROLE_ID`),
   KEY `USER_ID` (`USER_ID`),
-  CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`) ON DELETE CASCADE
+  CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`EMAIL`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Daten Export vom Benutzer nicht ausgewählt
 -- Exportiere Struktur von Tabelle processmanagement.runningprocess
 CREATE TABLE IF NOT EXISTS `runningprocess` (
-  `CURRENTPROCESS_ID` int(11) NOT NULL,
+  `CURRENTPROCESS_ID` int(11) NOT NULL AUTO_INCREMENT,
   `PROCESSTEMPLATE_ID` varchar(255) DEFAULT NULL,
-  `OWNER_ID` int(11) DEFAULT NULL,
+  `OWNER_ID` varchar(255) DEFAULT NULL,
   `CURRENTSTEP` int(11) DEFAULT NULL,
   `DECLINED` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`CURRENTPROCESS_ID`),
   KEY `PROCESSTEMPLATE_ID` (`PROCESSTEMPLATE_ID`),
   KEY `OWNER_ID` (`OWNER_ID`),
   CONSTRAINT `runningprocess_ibfk_1` FOREIGN KEY (`PROCESSTEMPLATE_ID`) REFERENCES `processtemplate` (`PROCESS_ID`) ON DELETE CASCADE,
-  CONSTRAINT `runningprocess_ibfk_2` FOREIGN KEY (`OWNER_ID`) REFERENCES `user` (`USER_ID`) ON DELETE CASCADE
+  CONSTRAINT `runningprocess_ibfk_2` FOREIGN KEY (`OWNER_ID`) REFERENCES `user` (`EMAIL`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Daten Export vom Benutzer nicht ausgewählt
 -- Exportiere Struktur von Tabelle processmanagement.user
 CREATE TABLE IF NOT EXISTS `user` (
-  `USER_ID` int(11) NOT NULL,
   `EMAIL` varchar(255) DEFAULT NULL,
   `PASSWORDHASH` varchar(255) DEFAULT NULL,
   `PERMISSIONLEVEL` int(11) DEFAULT NULL,
-  PRIMARY KEY (`USER_ID`)
+  PRIMARY KEY (`EMAIL`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Daten Export vom Benutzer nicht ausgewählt
+-- Daten Export vom Benutzer nicht auprocessmanagementprocessmanagementsgewählt
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

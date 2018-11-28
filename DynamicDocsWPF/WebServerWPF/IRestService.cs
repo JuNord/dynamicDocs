@@ -3,6 +3,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using RestService;
 using WebServerWPF;
+using WebServerWPF.Model;
 
 namespace WebServer
 {

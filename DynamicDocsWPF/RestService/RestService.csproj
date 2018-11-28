@@ -51,8 +51,8 @@
   <ItemGroup>
     <Compile Include="DataMessage.cs" />
     <Compile Include="DataType.cs" />
-    <Compile Include="Entry.cs" />
     <Compile Include="FileType.cs" />
+    <Compile Include="HashHelper.cs" />
     <Compile Include="MissingValueInterpretationException.cs" />
     <Compile Include="Model\Base\NamedTag.cs" />
     <Compile Include="Model\Base\Tag.cs" />
@@ -74,8 +74,6 @@
     <Compile Include="Model\Process\ReceiptType.cs" />
     <Compile Include="Model\Process\ValidationElement.cs" />
     <Compile Include="Model\Wording.cs" />
-    <Compile Include="ProcessInstance.cs" />
-    <Compile Include="ProcessUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileMessage.cs" />
     <Compile Include="UploadResult.cs" />

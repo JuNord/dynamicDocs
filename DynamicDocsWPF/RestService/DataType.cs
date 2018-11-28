@@ -5,6 +5,7 @@ namespace RestService
         Entry,
         ProcessInstance,
         ProcessUpdate,
-        ProcessTemplate
+        ProcessTemplate,
+        UserAccount
     }
 }

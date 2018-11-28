@@ -79,6 +79,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="HelperClasses\IReceiptHelper.cs" />
+    <Compile Include="HelperClasses\NetworkBase.cs" />
     <Compile Include="HelperClasses\NetworkHelper.cs" />
     <Compile Include="HelperClasses\ViewCreator.cs" />
     <Compile Include="HelperClasses\WordReceiptHelper.cs" />
@@ -132,9 +133,9 @@
       <Project>{9c8cf696-190c-4b16-ac4f-7046840a0ec0}</Project>
       <Name>RestService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WebServer\WebServer.csproj">
-      <Project>{bf249f9a-ebf0-4aae-a7b9-28c08911d7c5}</Project>
-      <Name>WebServer</Name>
+    <ProjectReference Include="..\WebServerWPF\WebServerWPF.csproj">
+      <Project>{60b3376c-bec4-4302-bbdb-6e2be0a83346}</Project>
+      <Name>WebServerWPF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
