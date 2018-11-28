@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework64\v4.0.30319\Microsoft.VisualBasic.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <HintPath>..\..\..\..\..\..\Windows\Microsoft.Net\assembly\GAC_MSIL\PresentationFramework\v4.0_4.0.0.0__31bf3856ad364e35\PresentationFramework.dll</HintPath>
@@ -54,8 +57,18 @@
     <Compile Include="FileType.cs" />
     <Compile Include="HashHelper.cs" />
     <Compile Include="MissingValueInterpretationException.cs" />
+    <Compile Include="Model\AuthorizationResult.cs" />
     <Compile Include="Model\Base\NamedTag.cs" />
     <Compile Include="Model\Base\Tag.cs" />
+    <Compile Include="Model\Database\ArchivedProcess.cs" />
+    <Compile Include="Model\Database\ArchivePermission.cs" />
+    <Compile Include="Model\Database\DocTemplate.cs" />
+    <Compile Include="Model\Database\Entry.cs" />
+    <Compile Include="Model\Database\ProcessTemplate.cs" />
+    <Compile Include="Model\Database\ProcessUpdate.cs" />
+    <Compile Include="Model\Database\Roles.cs" />
+    <Compile Include="Model\Database\RunningProcess.cs" />
+    <Compile Include="Model\Database\User.cs" />
     <Compile Include="Model\Input\BaseInputElement.cs" />
     <Compile Include="Model\Input\ClassDropDown.cs" />
     <Compile Include="Model\Input\DateDropdown.cs" />

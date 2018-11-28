@@ -1,24 +1,27 @@
+using RestService.Model.Database;
+
 namespace RestService
 {
     public class FileMessage
     {
-        public bool ForceOverWrite { get; set; }
-        public string ID { get; set; }
-        public string FileName { get; set; }
-        public string Content { get; set; }
-        public FileType FileType { get; set; }
-
         public FileMessage()
         {
-            
         }
-        public FileMessage(FileType type, string id, string fileName, string content, bool forceOverWrite)
+
+        public FileMessage(User user, FileType type, string id, string fileName, string content, bool forceOverWrite)
         {
-            ForceOverWrite = forceOverWrite;
+            FileType = type;
             ID = id;
             FileName = fileName;
             Content = content;
             ForceOverWrite = forceOverWrite;
         }
+
+        public User User { get; set; }
+        public bool ForceOverWrite { get; set; }
+        public string ID { get; set; }
+        public string FileName { get; set; }
+        public string Content { get; set; }
+        public FileType FileType { get; set; }
     }
 }

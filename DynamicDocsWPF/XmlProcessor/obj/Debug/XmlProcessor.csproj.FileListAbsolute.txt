@@ -57,3 +57,9 @@ C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\b
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\WebServerWPF.exe
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\WebServerWPF.pdb
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\WebServerWPF.exe.config
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\RestService.dll
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\Microsoft.Office.Interop.Word.dll
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\Newtonsoft.Json.dll
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\RestService.pdb
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\Newtonsoft.Json.xml

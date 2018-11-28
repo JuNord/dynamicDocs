@@ -17,8 +17,7 @@ namespace RestService
                 Process process = null;
                 ProcessStep processStep = null;
                 Dialog dialog = null;
-                while(reader.Read())
-                {
+                while (reader.Read())
                     if (reader.NodeType == XmlNodeType.Element)
                     {
                         //Auslesen der möglichen Attribute
@@ -35,6 +34,7 @@ namespace RestService
                         switch (reader.Name.ToLower())
                         {
                             #region SurroundingTags
+
                             case Wording.Process:
                                 process = new Process(name, description);
                                 break;
@@ -46,44 +46,50 @@ namespace RestService
                                 dialog = new Dialog(processStep);
                                 processStep.AddDialog(dialog);
                                 break;
+
                             #endregion
-                            
+
                             #region InputTags
+
                             case Wording.TextInputBox:
                                 var textInputBox = new TextInputBox(dialog, name, description, ToBool(obligatory));
                                 dialog.AddElement(textInputBox);
                                 break;
-                            
+
                             case Wording.NumberInputBox:
                                 var numberInputBox = new NumberInputBox(dialog, name, description, ToBool(obligatory));
 
                                 numberInputBox.ProcessValidityCheck = () => numberInputBox.GetValue() < 20;
                                 numberInputBox.ProcessErrorMsg = "Zahlen müssen kleiner als 20 sein.";
-                                
+
                                 dialog.AddElement(numberInputBox);
                                 break;
-                            
+
                             case Wording.TeacherDropdown:
-                                var teacherDropdown = new TeacherDropdown(dialog, name, description, ToBool(obligatory));
+                                var teacherDropdown =
+                                    new TeacherDropdown(dialog, name, description, ToBool(obligatory));
                                 dialog.AddElement(teacherDropdown);
                                 break;
-                            
+
                             case Wording.StudentDropdown:
-                                var studentDropdown = new StudentDropdown(dialog, name, description, ToBool(obligatory));
+                                var studentDropdown =
+                                    new StudentDropdown(dialog, name, description, ToBool(obligatory));
                                 dialog.AddElement(studentDropdown);
                                 break;
                             case Wording.DateDropdown:
                                 var dateDropdown = new DateDropdown(dialog, name, description, ToBool(obligatory));
                                 dialog.AddElement(dateDropdown);
                                 break;
-                            case 
+                            case
                                 Wording.ClassDropdown:
                                 var classDropdown = new ClassDropDown(dialog, name, description, ToBool(obligatory));
                                 dialog.AddElement(classDropdown);
                                 break;
+
                             #endregion
-                            
+
                             #region ProcessTags              
+
                             case Wording.ArchivePermission:
                                 var archivePermission = new ArchivePermissionElement(process, target);
                                 process.AddPermission(archivePermission);
@@ -100,29 +106,32 @@ namespace RestService
                                 var validation = new ValidationElement(processStep, ToBool(locks));
                                 processStep.AddValidation(validation);
                                 break;
+
                             #endregion
-                            
+
                             default:
                                 throw new ArgumentOutOfRangeException();
                                 break;
                         }
                     }
-                }
+
                 return process;
             }
-            
         }
 
         public static Process ReadXMLFromBytes(byte[] content, Encoding encoding)
         {
             return ReadXMLFromString(encoding.GetString(content));
         }
-        
+
         public static Process ReadXMLFromPath(string path)
         {
-            return ReadXMLFromString(File.ReadAllText(path));          
+            return ReadXMLFromString(File.ReadAllText(path));
         }
 
-        private static bool ToBool(string obligatory) => obligatory?.Equals("true") ?? false;
+        private static bool ToBool(string obligatory)
+        {
+            return obligatory?.Equals("true") ?? false;
+        }
     }
 }

@@ -1,16 +1,18 @@
-namespace WebServerWPF.Model
+namespace RestService.Model.Database
 {
     public class ProcessUpdate
     {
-        public int ID { get; set; }
-        public bool Declined { get; set; }
-
-        public ProcessUpdate(){}
+        public ProcessUpdate()
+        {
+        }
 
         public ProcessUpdate(int id, bool declined)
         {
             ID = id;
             Declined = declined;
         }
+
+        public int ID { get; set; }
+        public bool Declined { get; set; }
     }
 }

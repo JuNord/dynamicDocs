@@ -1,8 +1,8 @@
-namespace WebServerWPF.Model
+namespace RestService.Model.Database
 {
     public class DocTemplate
     {
-        public string DocTemplate_ID { get; set; }
+        public string Id { get; set; }
         public string FilePath { get; set; }
     }
 }

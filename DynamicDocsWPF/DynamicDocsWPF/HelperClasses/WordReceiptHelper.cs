@@ -1,49 +1,45 @@
-using Process = System.Diagnostics.Process;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Office.Interop.Word;
 
 namespace DynamicDocsWPF.HelperClasses
 {
     public class ReceiptHelper
     {
-         public  void OpenDocument(string documentPath,params KeyValuePair<string,string>[] replacements)
+        public void OpenDocument(string documentPath, params KeyValuePair<string, string>[] replacements)
         {
-
-            ApplicationClass wordApp = new ApplicationClass();
+            var wordApp = new ApplicationClass();
             // File Path
-            string strFilePath = documentPath;
-            
+            var strFilePath = documentPath;
+
             // Create obj filename to pass it as paremeter in open 
             object objFile = strFilePath;
-            object objNull = System.Reflection.Missing.Value;
+            object objNull = Missing.Value;
             object objReadOnly = false;
-            
-            Document doc = wordApp.Documents.Open(ref objFile, 
-                                                  ref objNull, 
-                                                  ref objReadOnly,
-                                                  ref objNull, 
-                                                  ref objNull, 
-                                                  ref objNull, 
-                                                  ref objNull, 
-                                                  ref objNull, 
-                                                  ref objNull, 
-                                                  ref objNull, 
-                                                  ref objNull, 
-                                                  ref objNull, 
-                                                  ref objNull, 
-                                                  ref objNull, 
-                                                  ref objNull, 
-                                                  ref objNull);
+
+            var doc = wordApp.Documents.Open(ref objFile,
+                ref objNull,
+                ref objReadOnly,
+                ref objNull,
+                ref objNull,
+                ref objNull,
+                ref objNull,
+                ref objNull,
+                ref objNull,
+                ref objNull,
+                ref objNull,
+                ref objNull,
+                ref objNull,
+                ref objNull,
+                ref objNull,
+                ref objNull);
             foreach (var replacement in replacements)
-            {
-                FindAndReplaceMethods(wordApp,replacement.Key,replacement.Value);
-            }
+                FindAndReplaceMethods(wordApp, replacement.Key, replacement.Value);
             // close document and Quit Word
-            
+
             doc.Close(ref objNull, ref objNull, ref objNull);
-            
+
             wordApp.Quit(ref objNull, ref objNull, ref objNull);
-            
         }
 
         private void FindAndReplaceMethods(_Application doc, object findText, object replaceWithText)
@@ -64,25 +60,24 @@ namespace DynamicDocsWPF.HelperClasses
             object visible = true;
             object replace = 2;
             object wrap = 1;
-            
+
             doc.Selection.Find.ClearFormatting();
             //Find and Replace
-            doc.Selection.Find.Execute(  ref  findText, 
-                ref  matchCase, 
-                ref  matchWholeWord, 
-                ref  matchWildCards, 
-                ref  matchSoundsLike, 
-                ref  matchAllWordForms, 
-                ref  forward, 
-                ref  wrap, 
-                ref  format, 
-                ref  replaceWithText, 
-                ref  replace, 
-                ref  matchKashida, 
-                ref  matchDiacritics, 
-                ref  matchAlefHamza, 
-                ref  matchControl);
-         }
+            doc.Selection.Find.Execute(ref findText,
+                ref matchCase,
+                ref matchWholeWord,
+                ref matchWildCards,
+                ref matchSoundsLike,
+                ref matchAllWordForms,
+                ref forward,
+                ref wrap,
+                ref format,
+                ref replaceWithText,
+                ref replace,
+                ref matchKashida,
+                ref matchDiacritics,
+                ref matchAlefHamza,
+                ref matchControl);
+        }
     }
 }
-    

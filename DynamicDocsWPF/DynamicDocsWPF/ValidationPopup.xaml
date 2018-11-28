@@ -13,29 +13,32 @@
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Rectangle Grid.RowSpan="2" RadiusX="8" RadiusY="8" Fill="#4BC3FF">
             <Rectangle.Effect>
-                <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5"/>
+                <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
             </Rectangle.Effect>
-            </Rectangle>
-        <TextBlock x:Name="InfoBlock" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="22" FontFamily="Segoe UI Light" Margin="20">
-            <Run Text="Sind alle Angaben korrekt?"/>
-            <LineBreak/>
-            <LineBreak/>
-            <Run Text="Weitere Prozessteilnehmer werden gegebenenfalls über eine Genehmigung benachrichtigt."/>
-            </TextBlock>
+        </Rectangle>
+        <TextBlock x:Name="InfoBlock" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="22"
+                   FontFamily="Segoe UI Light" Margin="20">
+            <Run Text="Sind alle Angaben korrekt?" />
+            <LineBreak />
+            <LineBreak />
+            <Run Text="Weitere Prozessteilnehmer werden gegebenenfalls über eine Genehmigung benachrichtigt." />
+        </TextBlock>
         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-            <Button x:Name="Accept" Click="Accept_OnClick" Grid.Row="2" Content="Genehmigen" Width="100" Height="35" VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+            <Button x:Name="Accept" Click="Accept_OnClick" Grid.Row="2" Content="Genehmigen" Width="100" Height="35"
+                    VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
                 <Button.Effect>
-                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5"/>
+                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
                 </Button.Effect>
             </Button>
-            <Button x:Name="Decline" Click="Decline_OnClick" Grid.Row="2" Content="Ablehnen" Width="100" Height="35" VerticalAlignment="Center" Margin="20" Background="#F3002F" Foreground="White" FontWeight="Black">
+            <Button x:Name="Decline" Click="Decline_OnClick" Grid.Row="2" Content="Ablehnen" Width="100" Height="35"
+                    VerticalAlignment="Center" Margin="20" Background="#F3002F" Foreground="White" FontWeight="Black">
                 <Button.Effect>
-                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5"/>
+                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
                 </Button.Effect>
             </Button>
         </StackPanel>

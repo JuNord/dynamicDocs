@@ -1,4 +1,4 @@
-namespace WebServerWPF.Model
+namespace RestService.Model.Database
 {
     public class Entry
     {

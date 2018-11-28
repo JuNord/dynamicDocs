@@ -12,23 +12,25 @@ namespace RestService.Model.Input
             _elements = new List<BaseInputElement>();
         }
 
+        public int ElementCount => _elements?.Count ?? 0;
+
         public void AddElement(BaseInputElement element)
         {
             _elements.Add(element);
         }
 
-        public BaseInputElement GetElementAtIndex(int index) => _elements?[index];
+        public BaseInputElement GetElementAtIndex(int index)
+        {
+            return _elements?[index];
+        }
 
         public BaseInputElement GetElementByName(string name)
         {
             foreach (var element in _elements)
-            {
-                if (element.Name.Equals(name)) return element;
-            }
+                if (element.Name.Equals(name))
+                    return element;
 
             return null;
         }
-
-        public int ElementCount => _elements?.Count ?? 0;
     }
 }

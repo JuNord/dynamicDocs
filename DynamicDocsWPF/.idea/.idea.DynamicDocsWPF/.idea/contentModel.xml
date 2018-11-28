@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\sebastian.bauer\.Rider2018.2\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\sebastian.bauer\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.1172674224.00" t="ExcludeRecursive" />
-    <e p="C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
+    <e p="C:\Users\sebas_qgewjv\.Rider2018.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\sebas_qgewjv\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.-1818023564.00" t="ExcludeRecursive" />
+    <e p="C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
       <e p="DynamicDocsWPF" t="IncludeRecursive">
         <e p="App.config" t="Include" />
         <e p="App.xaml" t="Include" />
@@ -17,6 +17,8 @@
           <e p="ViewCreator.cs" t="Include" />
           <e p="WordReceiptHelper.cs" t="Include" />
         </e>
+        <e p="Login.xaml" t="Include" />
+        <e p="Login.xaml.cs" t="Include" />
         <e p="MainWindow.xaml" t="Include" />
         <e p="MainWindow.xaml.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive" />
@@ -32,6 +34,8 @@
           <e p="Resources.Designer.cs" t="Include" />
           <e p="Resources.resx" t="Include" />
         </e>
+        <e p="Register.xaml" t="Include" />
+        <e p="Register.xaml.cs" t="Include" />
         <e p="ValidationOverview.xaml" t="Include" />
         <e p="ValidationOverview.xaml.cs" t="Include" />
         <e p="ValidationPopup.xaml" t="Include" />
@@ -48,9 +52,21 @@
         <e p="HashHelper.cs" t="Include" />
         <e p="MissingValueInterpretationException.cs" t="Include" />
         <e p="Model" t="Include">
+          <e p="AuthorizationResult.cs" t="Include" />
           <e p="Base" t="Include">
             <e p="NamedTag.cs" t="Include" />
             <e p="Tag.cs" t="Include" />
+          </e>
+          <e p="Database" t="Include">
+            <e p="ArchivedProcess.cs" t="Include" />
+            <e p="ArchivePermission.cs" t="Include" />
+            <e p="DocTemplate.cs" t="Include" />
+            <e p="Entry.cs" t="Include" />
+            <e p="ProcessTemplate.cs" t="Include" />
+            <e p="ProcessUpdate.cs" t="Include" />
+            <e p="Roles.cs" t="Include" />
+            <e p="RunningProcess.cs" t="Include" />
+            <e p="User.cs" t="Include" />
           </e>
           <e p="Input" t="Include">
             <e p="BaseInputElement.cs" t="Include" />
@@ -92,18 +108,9 @@
         <e p="IRestService.cs" t="Include" />
         <e p="MainWindow.xaml" t="Include" />
         <e p="MainWindow.xaml.cs" t="Include" />
-        <e p="Model" t="Include">
-          <e p="ArchivedProcess.cs" t="Include" />
-          <e p="ArchivePermission.cs" t="Include" />
-          <e p="DocTemplate.cs" t="Include" />
-          <e p="Entry.cs" t="Include" />
-          <e p="ProcessTemplate.cs" t="Include" />
-          <e p="ProcessUpdate.cs" t="Include" />
-          <e p="Roles.cs" t="Include" />
-          <e p="RunningProcess.cs" t="Include" />
-          <e p="User.cs" t="Include" />
-        </e>
+        <e p="Model" t="Include" />
         <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
         <e p="Properties" t="Include">
           <e p="AssemblyInfo.cs" t="Include" />
           <e p="Resources.Designer.cs" t="Include" />

@@ -1,8 +1,8 @@
-namespace WebServerWPF.Model
+namespace RestService.Model.Database
 {
     public class ArchivedProcess
     {
-        public int CurrentProcess_ID { get; set; }
+        public int Id { get; set; }
         public string ProcessTemplate_ID { get; set; }
         public string Owner_ID { get; set; }
         public int CurrentStep { get; set; }

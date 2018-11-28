@@ -6,27 +6,30 @@ using System.Text;
 using System.Web;
 using Newtonsoft.Json;
 using RestService;
+using RestService.Model.Database;
 
 namespace DynamicDocsWPF.HelperClasses
 {
     public class NetworkBase
     {
-        private string BaseUrl { get; }
-
         protected NetworkBase(string baseUrl)
         {
             BaseUrl = baseUrl;
         }
 
+        private string BaseUrl { get; }
+        
         protected DataMessage GetDataMessage(DataType dataType, int id)
         {
-            var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(DataType), dataType)}/{id}");
+            var httpWebRequest =
+                (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(DataType), dataType)}/{id}");
             httpWebRequest.Method = "GET";
             var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
 
             if (httpWebResponse.StatusCode != HttpStatusCode.OK) return null;
-         
-            using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
+
+            using (var responseStream =
+                new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
             {
                 return JsonConvert.DeserializeObject<DataMessage>(responseStream.ReadToEnd());
             }
@@ -34,13 +37,15 @@ namespace DynamicDocsWPF.HelperClasses
 
         protected FileMessage GetFileByName(FileType fileType, string name)
         {
-            var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(FileType), fileType)}/{name}");
+            var httpWebRequest =
+                (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(FileType), fileType)}/{name}");
             httpWebRequest.Method = "GET";
             var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
 
             if (httpWebResponse.StatusCode != HttpStatusCode.OK) return null;
-         
-            using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
+
+            using (var responseStream =
+                new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
             {
                 return JsonConvert.DeserializeObject<FileMessage>(responseStream.ReadToEnd());
             }
@@ -48,13 +53,15 @@ namespace DynamicDocsWPF.HelperClasses
 
         protected List<string> GetList(FileType fileType)
         {
-            var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(FileType), fileType)}s");
+            var httpWebRequest =
+                (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(FileType), fileType)}s");
             httpWebRequest.Method = "GET";
             var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
 
             if (httpWebResponse.StatusCode != HttpStatusCode.OK) return null;
-         
-            using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
+
+            using (var responseStream =
+                new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
             {
                 return JsonConvert.DeserializeObject<List<string>>(responseStream.ReadToEnd());
             }
@@ -80,12 +87,11 @@ namespace DynamicDocsWPF.HelperClasses
                 var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
 
                 if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
+                    using (var responseStream =
+                        new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
                     {
                         return JsonConvert.DeserializeObject<UploadResult>(responseStream.ReadToEnd());
                     }
-                }
             }
             catch (HttpException)
             {
@@ -94,12 +100,13 @@ namespace DynamicDocsWPF.HelperClasses
             return UploadResult.FAILED_OTHER;
         }
 
-        protected UploadResult PostData(DataType type, string content)
+        protected UploadResult PostData(User user, DataType type, string content)
         {
             try
             {
-                var message = new DataMessage()
+                var message = new DataMessage
                 {
+                    User = user,
                     DataType = type,
                     Content = content
                 };
@@ -120,12 +127,11 @@ namespace DynamicDocsWPF.HelperClasses
                 var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
 
                 if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    using (var responseStream = new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
+                    using (var responseStream =
+                        new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
                     {
                         return JsonConvert.DeserializeObject<UploadResult>(responseStream.ReadToEnd());
                     }
-                }
             }
             catch (HttpException)
             {

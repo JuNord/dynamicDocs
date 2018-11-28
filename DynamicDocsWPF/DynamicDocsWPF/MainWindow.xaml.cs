@@ -1,76 +1,42 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
-using System.Xml;
 using DynamicDocsWPF.HelperClasses;
-using DynamicDocsWPF.Model;
 using RestService;
+using RestService.Model.Database;
 using RestService.Model.Process;
-using WebServerWPF.Model;
 
 namespace DynamicDocsWPF
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
+        private int _currentDialog;
         private Process _process;
         private ProcessStep _processStep;
-        private int _currentDialog;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            var login = new Login();
+            login.ShowDialog();
+            var helper = new NetworkHelper("http://localhost:8000/Service", new User(login.Email, login.Password));
+            var result = helper.UploadProcessTemplate("", true);
+            HandleUploadResult(result);
+        }
 
         private string Message
         {
             get
             {
                 if (DateTime.Now.Hour < 12) return "Guten Morgen!";
-                else if (DateTime.Now.Hour < 17) return "Guten Tag!";
-                else if (DateTime.Now.Hour < 7 || DateTime.Now.Hour >= 17) return "Guten Abend!";
-                else return "Hallo";
+                if (DateTime.Now.Hour < 17) return "Guten Tag!";
+                if (DateTime.Now.Hour < 7 || DateTime.Now.Hour >= 17) return "Guten Abend!";
+                return "Hallo";
             }
-        }
-        
-        public MainWindow()
-        {
-            InitializeComponent();
-            
-            var helper = new NetworkHelper("http://localhost:8000/Service");
-            /*var xmlPath = @"C:\Users\Sebastian.Bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XmlFile1.xml";
-
-            var result = helper.UploadProcessTemplate(xmlPath, true);
-            HandleUploadResult(result);
-
-            var docPath =
-                @"C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\Organization\Documentation\Pflichtenheft.docx";
-
-            var resultDoc = helper.UploadDocTemplate("PflichtenheftTemplate", docPath, false);
-            HandleUploadResult(resultDoc);
-
-            var resultUst = helper.CreateUser("sebastian.bauer@atos.net", "ichbins");
-            HandleUploadResult(resultUst);
-            */
-
-            var resultInst = helper.CreateProcessInstance("vacation", "sebastian.bauer@atos.net");
-            HandleUploadResult(resultInst);
-            
-            helper.CreateEntry(new Entry()
-            {
-                DataType = "string",
-                Data = "Ulrich Böhmer",
-                Process_ID = 3,
-                PermissionLevel = 0,
-                FieldName = "teacher"
-            });
-            
-            var resultApp = helper.ApproveProcess(11);
-            HandleUploadResult(resultApp);
-
-            var resultDec = helper.DeclineProcess(12);
-            HandleUploadResult(resultDec);/**/
         }
 
         private void HandleUploadResult(UploadResult result)
@@ -84,7 +50,13 @@ namespace DynamicDocsWPF
                     MessageBox.Show(this, "ID already taken.");
                     break;
                 case UploadResult.FAILED_OTHER:
-                    MessageBox.Show(this, "Something went wrong.");                    
+                    MessageBox.Show(this, "Something went wrong.");
+                    break;
+                case UploadResult.INVALID_LOGIN:
+                    MessageBox.Show(this, "Username or password was wrong.");
+                    break;
+                case UploadResult.NO_PERMISSION:
+                    MessageBox.Show(this, "You are not permitted.");
                     break;
             }
         }
@@ -93,12 +65,10 @@ namespace DynamicDocsWPF
         {
             const int currentDialog = 0;
             if (processStep.DialogCount > 0)
-            {
                 ViewCreator.FillViewHolder(ViewHolder, processStep.GetDialogAtIndex(currentDialog));
-            }           
         }
 
-      
+
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             for (var i = 0; i < _processStep.GetDialogAtIndex(_currentDialog)?.ElementCount; i++)
@@ -109,73 +79,70 @@ namespace DynamicDocsWPF
                     if (!element.IsValidForProcess())
                     {
                         InfoBlock.Text = element.ProcessErrorMsg;
-                        element.BaseControl.BorderBrush =  new SolidColorBrush(Color.FromArgb(170,255,50,50));
-                        element.BaseControl.BorderThickness = new Thickness(2);   
-                        return;
-                    }
-                    else if (!element.IsValidForControl())
-                    {
-                        InfoBlock.Text = element.ControlErrorMsg;
-                        element.BaseControl.BorderBrush =  new SolidColorBrush(Color.FromArgb(170,255,50,50));
+                        element.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
                         element.BaseControl.BorderThickness = new Thickness(2);
                         return;
                     }
-                    else
+
+                    if (!element.IsValidForControl())
                     {
-                        InfoBlock.Text = Message;
-                        element.BaseControl.BorderBrush = new SolidColorBrush(Colors.Gray);
-                        element.BaseControl.BorderThickness = new Thickness(1);
+                        InfoBlock.Text = element.ControlErrorMsg;
+                        element.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
+                        element.BaseControl.BorderThickness = new Thickness(2);
+                        return;
                     }
+
+                    InfoBlock.Text = Message;
+                    element.BaseControl.BorderBrush = new SolidColorBrush(Colors.Gray);
+                    element.BaseControl.BorderThickness = new Thickness(1);
                 }
                 else
                 {
                     InfoBlock.Text = "Bitte füllen Sie alle Muss Felder aus.";
-                    element.BaseControl.BorderBrush =  new SolidColorBrush(Color.FromArgb(170,255,50,50));
+                    element.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
                     element.BaseControl.BorderThickness = new Thickness(2);
                     return;
-                    
                 }
             }
-          
+
             _currentDialog++;
             ViewCreator.FillViewHolder(ViewHolder, _processStep.GetDialogAtIndex(_currentDialog));
         }
 
-       
+
         private Func<bool> StringToCondition(Process process, string condition)
         {
             string[] split;
-            string op = "";
+            var op = "";
             if (condition.Contains("<"))
             {
                 op = "<";
-                split = condition.Split(op[0]);                
+                split = condition.Split(op[0]);
             }
             else if (condition.Contains(">"))
             {
                 op = ">";
-                split = condition.Split(op[0]);   
-                
+                split = condition.Split(op[0]);
             }
             else if (condition.Contains("<="))
             {
                 op = "<=";
-                split = condition.Split(op[0]);   
+                split = condition.Split(op[0]);
             }
             else if (condition.Contains(">="))
             {
                 op = ">=";
-                split = condition.Split(op[0]);   
+                split = condition.Split(op[0]);
             }
             else if (condition.Contains("=="))
             {
                 op = "==";
-                split = condition.Split(op[0]);   
+                split = condition.Split(op[0]);
             }
             else if (condition.Contains("!="))
             {
                 op = "!=";
-                split = condition.Split(op[0]);   
+                split = condition.Split(op[0]);
             }
             else
             {
@@ -183,12 +150,12 @@ namespace DynamicDocsWPF
             }
 
             if (split.Length != 2) return null;
-            
+
             var numberRegex = new Regex("^\\d{1,*}$");
             var linkRegex = new Regex("^\\[(.*?)\\]$");
             var firstValue = 0.0;
             var secondValue = 0.0;
-            
+
             if (numberRegex.IsMatch(split[0]))
             {
                 firstValue = double.Parse(split[0]);
@@ -196,21 +163,18 @@ namespace DynamicDocsWPF
             else if (linkRegex.IsMatch(split[0]))
             {
                 var linkText = split[0].Substring(1, split[0].Length - 2);
-                
             }
-            if (numberRegex.IsMatch(split[1]))
-            {
-                secondValue = double.Parse(split[1]);
-            }
+
+            if (numberRegex.IsMatch(split[1])) secondValue = double.Parse(split[1]);
 
             switch (op)
             {
-                case "<": return new Func<bool>(() => firstValue < secondValue);
-                case ">": return new Func<bool>(() => firstValue > secondValue);
-                case "<=": return new Func<bool>(() => firstValue <= secondValue);
-                case ">=": return new Func<bool>(() => firstValue >= secondValue);
-                case "==": return new Func<bool>(() => Math.Abs(firstValue - secondValue) < 0.000000001);
-                case "!=": return new Func<bool>(() => Math.Abs(firstValue - secondValue) > 0.000000001);
+                case "<": return () => firstValue < secondValue;
+                case ">": return () => firstValue > secondValue;
+                case "<=": return () => firstValue <= secondValue;
+                case ">=": return () => firstValue >= secondValue;
+                case "==": return () => Math.Abs(firstValue - secondValue) < 0.000000001;
+                case "!=": return () => Math.Abs(firstValue - secondValue) > 0.000000001;
                 default: return null;
             }
 
