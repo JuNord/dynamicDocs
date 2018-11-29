@@ -83,6 +83,9 @@
     <Compile Include="HelperClasses\NetworkHelper.cs" />
     <Compile Include="HelperClasses\ViewCreator.cs" />
     <Compile Include="HelperClasses\WordReceiptHelper.cs" />
+    <Compile Include="Windows\CreateProcessInstance.xaml.cs">
+      <DependentUpon>CreateProcessInstance.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
@@ -110,6 +113,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\CreateProcessInstance.xaml" />
     <Page Include="Windows\Login.xaml" />
     <Page Include="Windows\ProcessSelect.xaml" />
     <Page Include="Windows\Register.xaml" />

@@ -34,6 +34,8 @@
           <e p="Resources.resx" t="Include" />
         </e>
         <e p="Windows" t="Include">
+          <e p="CreateProcessInstance.xaml" t="Include" />
+          <e p="CreateProcessInstance.xaml.cs" t="Include" />
           <e p="Login.xaml" t="Include" />
           <e p="Login.xaml.cs" t="Include" />
           <e p="ProcessSelect.xaml" t="Include" />

@@ -121,3 +121,5 @@ C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\Register.baml
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ValidationOverview.baml
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ValidationPopup.baml
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\CreateProcessInstance.g.cs
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\CreateProcessInstance.baml
