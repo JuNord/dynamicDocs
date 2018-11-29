@@ -15,26 +15,22 @@ namespace DynamicDocsWPF
     /// </summary>
     public partial class MainWindow
     {
-
+        private NetworkHelper _networkHelper;
         private User _user;
 
         public MainWindow()
         {
             InitializeComponent();
-            var newinstance = new CreateProcessInstance(XmlHelper.ReadXMLFromPath(@"C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\XMLFile1.xml"));
-            newinstance.ShowDialog();
-            /*var login = new Login();
+            
+            var login = new Login();
             login.ShowDialog();
 
             if (login.DialogResult == true)
             {
                 _user = new User(login.Email, login.Password);
-                var helper = new NetworkHelper("http://localhost:8000/Service", _user);
-
-                var processSelect = new ProcessSelect(helper);
-                processSelect.ShowDialog();
+                _networkHelper = new NetworkHelper("http://localhost:8000/Service", _user);
             }
-            else Close();*/
+            else Close();
         }
 
         
@@ -66,7 +62,11 @@ namespace DynamicDocsWPF
 
         private void MainMenu_BtnNewProcessInstance_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var processSelect = new ProcessSelect(_networkHelper);
+            processSelect.ShowDialog();
+            
+            var newInstance = new CreateProcessInstance(_networkHelper.GetTemplateByName(processSelect.SelectedProcessTemplate.Id));
+            newInstance.ShowDialog();
         }
     }
 }

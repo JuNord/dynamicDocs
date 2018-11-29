@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="11525250-42a4-4e99-bead-986154808775" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/DynamicDocsWPF/Windows/CreateProcessInstance.xaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DynamicDocsWPF/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DynamicDocsWPF/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/DynamicDocsWPF.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/DynamicDocsWPF.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/MainWindow.xaml.cs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,7 +34,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="cs" value="275" />
+          <entry key="cs" value="276" />
           <entry key="csproj" value="6" />
           <entry key="sql" value="1" />
           <entry key="txt" value="1" />
@@ -46,7 +44,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="C#" value="275" />
+          <entry key="C#" value="276" />
           <entry key="Csproj" value="6" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="SQL" value="1" />
@@ -56,16 +54,16 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="cs" value="22300" />
-          <entry key="txt" value="492" />
+          <entry key="cs" value="22474" />
+          <entry key="txt" value="540" />
           <entry key="xaml" value="1467" />
           <entry key="xml" value="52" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="C#" value="22300" />
-          <entry key="PLAIN_TEXT" value="492" />
+          <entry key="C#" value="22474" />
+          <entry key="PLAIN_TEXT" value="540" />
           <entry key="XAML" value="1467" />
           <entry key="XML" value="52" />
         </counts>
@@ -195,18 +193,18 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DynamicDocsWPF/MainWindow.xaml.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="23" column="86" selection-start-line="23" selection-start-column="86" selection-end-line="23" selection-end-column="86" />
+            <state relative-caret-position="244">
+              <caret line="55" column="26" lean-forward="true" selection-start-line="55" selection-start-column="26" selection-end-line="55" selection-end-column="26" />
               <folding>
-                <marker date="1543488430523" expanded="false" signature="6:253" ph="..." />
-                <marker date="1543488430523" expanded="true" signature="279:2131" ph="{...}" />
-                <marker date="1543488430523" expanded="true" signature="286:368" ph="///     Interaction logic for MainWindow.xaml ... " />
-                <marker date="1543488430523" expanded="true" signature="404:2129" ph="{...}" />
-                <marker date="1543488430523" expanded="true" signature="468:1058" ph="{...}" />
-                <marker date="1543488430523" expanded="true" signature="630:1048" ph="/* var login = new Login(); ... */" />
-                <marker date="1543488430523" expanded="true" signature="1130:1941" ph="{...}" />
-                <marker date="1543488430523" expanded="true" signature="1168:1931" ph="{...}" />
-                <marker date="1543488430523" expanded="true" signature="2054:2123" ph="{...}" />
+                <marker date="1543488960673" expanded="false" signature="6:253" ph="..." />
+                <marker date="1543488960673" expanded="true" signature="279:2219" ph="{...}" />
+                <marker date="1543488960673" expanded="true" signature="286:368" ph="///     Interaction logic for MainWindow.xaml ... " />
+                <marker date="1543488960673" expanded="true" signature="404:2217" ph="{...}" />
+                <marker date="1543488960673" expanded="true" signature="513:904" ph="{...}" />
+                <marker date="1543488960673" expanded="true" signature="685:868" ph="{...}" />
+                <marker date="1543488960673" expanded="true" signature="976:1787" ph="{...}" />
+                <marker date="1543488960673" expanded="true" signature="1014:1777" ph="{...}" />
+                <marker date="1543488960673" expanded="true" signature="1900:2211" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -215,19 +213,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DynamicDocsWPF/Windows/CreateProcessInstance.xaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="19" column="71" selection-start-line="19" selection-start-column="71" selection-end-line="19" selection-end-column="71" />
+            <state relative-caret-position="321">
+              <caret line="22" column="28" selection-start-line="22" selection-start-column="28" selection-end-line="22" selection-end-column="28" />
               <folding>
-                <marker date="1543488277940" expanded="true" signature="0:1971" ph="&lt;&lt;Grid&gt;&#10;        &lt;Grid.RowDefinitions&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;*&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;        &lt;/Grid.RowDefinitions&gt;&#10;        &lt;TextBlock x:Name=&quot;InfoBlock&quot; HorizontalAlignment=&quot;Center&quot; Text=&quot;Hallo&quot; FontSize=&quot;28&quot;&#10;                   FontFamily=&quot;Segoe UI Light&quot; Margin=&quot;20&quot; /&gt;&#10;        &lt;Border Grid.Row=&quot;1&quot; BorderThickness=&quot;2&quot; BorderBrush=&quot;White&quot; Background=&quot;White&quot; CornerRadius=&quot;5&quot;&#10;                HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot; Margin=&quot;40,20&quot;&gt;&#10;            &lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt;&#10;            &lt;ScrollViewer&gt;&#10;                &lt;StackPanel x:Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;&#10;        &lt;/Border&gt;&#10;        &lt;Button Click=&quot;CreateInstance_Btn_Next_OnClick&quot; Grid.Row=&quot;2&quot; Content=&quot;Weiter&quot; Width=&quot;100&quot; Height=&quot;35&quot;&#10;                VerticalAlignment=&quot;Center&quot; Margin=&quot;20&quot; Background=&quot;##2196f3&quot; Foreground=&quot;White&quot; FontWeight=&quot;Black&quot;&gt;&#10;            &lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;&#10;        &lt;/Button&gt;&#10;    &lt;/Grid&gt;.../&gt;" />
-                <marker date="1543488277940" expanded="true" signature="521:1961" ph="&lt;&lt;Grid.RowDefinitions&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;*&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;        &lt;/Grid.RowDefinitions&gt; &lt;TextBlock x:Name=&quot;InfoBlock&quot; HorizontalAlignment=&quot;Center&quot; Text=&quot;Hallo&quot; FontSize=&quot;28&quot;&#10;                   FontFamily=&quot;Segoe UI Light&quot; Margin=&quot;20&quot; /&gt; &lt;Border Grid.Row=&quot;1&quot; BorderThickness=&quot;2&quot; BorderBrush=&quot;White&quot; Background=&quot;White&quot; CornerRadius=&quot;5&quot;&#10;                HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot; Margin=&quot;40,20&quot;&gt;&#10;            &lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt;&#10;            &lt;ScrollViewer&gt;&#10;                &lt;StackPanel x:Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;&#10;        &lt;/Border&gt; &lt;Button Click=&quot;CreateInstance_Btn_Next_OnClick&quot; Grid.Row=&quot;2&quot; Content=&quot;Weiter&quot; Width=&quot;100&quot; Height=&quot;35&quot;&#10;                VerticalAlignment=&quot;Center&quot; Margin=&quot;20&quot; Background=&quot;##2196f3&quot; Foreground=&quot;White&quot; FontWeight=&quot;Black&quot;&gt;&#10;            &lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;&#10;        &lt;/Button&gt;.../&gt;" />
-                <marker date="1543488277940" expanded="true" signature="536:717" ph="&lt;&lt;RowDefinition Height=&quot;Auto&quot; /&gt; &lt;RowDefinition Height=&quot;*&quot; /&gt; &lt;RowDefinition Height=&quot;Auto&quot; /&gt;.../&gt;" />
-                <marker date="1543488277940" expanded="true" signature="726:873" ph="&lt;.../&gt;" />
-                <marker date="1543488277940" expanded="true" signature="882:1537" ph="&lt;&lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt; &lt;ScrollViewer&gt;&#10;                &lt;StackPanel x:Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;.../&gt;" />
-                <marker date="1543488277940" expanded="true" signature="1081:1237" ph="&lt;&lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;.../&gt;" />
-                <marker date="1543488277940" expanded="true" signature="1250:1519" ph="&lt;&lt;StackPanel x:Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;.../&gt;" />
-                <marker date="1543488277940" expanded="true" signature="1281:1491" ph="&lt;.../&gt;" />
-                <marker date="1543488277940" expanded="true" signature="1546:1949" ph="&lt;&lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;.../&gt;" />
-                <marker date="1543488277940" expanded="true" signature="1775:1931" ph="&lt;&lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;.../&gt;" />
+                <marker date="1543488623016" expanded="true" signature="0:1969" ph="&lt;&lt;Grid&gt;&#10;        &lt;Grid.RowDefinitions&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;*&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;        &lt;/Grid.RowDefinitions&gt;&#10;        &lt;TextBlock x:Name=&quot;InfoBlock&quot; HorizontalAlignment=&quot;Center&quot; Text=&quot;Hallo&quot; FontSize=&quot;28&quot;&#10;                   FontFamily=&quot;Segoe UI Light&quot; Margin=&quot;20&quot; /&gt;&#10;        &lt;Border Grid.Row=&quot;1&quot; BorderThickness=&quot;2&quot; BorderBrush=&quot;White&quot; Background=&quot;White&quot; CornerRadius=&quot;5&quot;&#10;                HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot; Margin=&quot;40,20&quot;&gt;&#10;            &lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt;&#10;            &lt;ScrollViewer&gt;&#10;                &lt;StackPanel Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;&#10;        &lt;/Border&gt;&#10;        &lt;Button Click=&quot;CreateInstance_Btn_Next_OnClick&quot; Grid.Row=&quot;2&quot; Content=&quot;Weiter&quot; Width=&quot;100&quot; Height=&quot;35&quot;&#10;                VerticalAlignment=&quot;Center&quot; Margin=&quot;20&quot; Background=&quot;##2196f3&quot; Foreground=&quot;White&quot; FontWeight=&quot;Black&quot;&gt;&#10;            &lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;&#10;        &lt;/Button&gt;&#10;    &lt;/Grid&gt;.../&gt;" />
+                <marker date="1543488623016" expanded="true" signature="521:1959" ph="&lt;&lt;Grid.RowDefinitions&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;*&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;        &lt;/Grid.RowDefinitions&gt; &lt;TextBlock x:Name=&quot;InfoBlock&quot; HorizontalAlignment=&quot;Center&quot; Text=&quot;Hallo&quot; FontSize=&quot;28&quot;&#10;                   FontFamily=&quot;Segoe UI Light&quot; Margin=&quot;20&quot; /&gt; &lt;Border Grid.Row=&quot;1&quot; BorderThickness=&quot;2&quot; BorderBrush=&quot;White&quot; Background=&quot;White&quot; CornerRadius=&quot;5&quot;&#10;                HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot; Margin=&quot;40,20&quot;&gt;&#10;            &lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt;&#10;            &lt;ScrollViewer&gt;&#10;                &lt;StackPanel Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;&#10;        &lt;/Border&gt; &lt;Button Click=&quot;CreateInstance_Btn_Next_OnClick&quot; Grid.Row=&quot;2&quot; Content=&quot;Weiter&quot; Width=&quot;100&quot; Height=&quot;35&quot;&#10;                VerticalAlignment=&quot;Center&quot; Margin=&quot;20&quot; Background=&quot;##2196f3&quot; Foreground=&quot;White&quot; FontWeight=&quot;Black&quot;&gt;&#10;            &lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;&#10;        &lt;/Button&gt;.../&gt;" />
+                <marker date="1543488623016" expanded="true" signature="536:717" ph="&lt;&lt;RowDefinition Height=&quot;Auto&quot; /&gt; &lt;RowDefinition Height=&quot;*&quot; /&gt; &lt;RowDefinition Height=&quot;Auto&quot; /&gt;.../&gt;" />
+                <marker date="1543488623016" expanded="true" signature="726:873" ph="&lt;.../&gt;" />
+                <marker date="1543488623016" expanded="true" signature="882:1535" ph="&lt;&lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt; &lt;ScrollViewer&gt;&#10;                &lt;StackPanel Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;.../&gt;" />
+                <marker date="1543488623016" expanded="true" signature="1081:1237" ph="&lt;&lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;.../&gt;" />
+                <marker date="1543488623016" expanded="true" signature="1250:1517" ph="&lt;&lt;StackPanel Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;.../&gt;" />
+                <marker date="1543488623016" expanded="true" signature="1281:1489" ph="&lt;.../&gt;" />
+                <marker date="1543488623016" expanded="true" signature="1544:1947" ph="&lt;&lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;.../&gt;" />
+                <marker date="1543488623016" expanded="true" signature="1773:1929" ph="&lt;&lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;.../&gt;" />
               </folding>
             </state>
           </provider>
@@ -236,34 +234,54 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DynamicDocsWPF/Windows/CreateProcessInstance.xaml.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
+            <state>
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
               <folding>
-                <marker date="1543488387237" expanded="true" signature="6:170" ph="..." />
-                <marker date="1543488387237" expanded="true" signature="204:5534" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="262:5532" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="443:699" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="577:654" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="739:1061" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="765:1051" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="1134:1341" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="1430:3637" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="1534:1636" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="1682:1784" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="1831:1934" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="1981:2084" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="2131:2234" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="2281:2384" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="2401:2468" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="2746:2827" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="2877:2980" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="3091:3601" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="3725:5526" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="3833:5386" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="3997:5023" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="4069:4404" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="4459:4794" ph="{...}" />
-                <marker date="1543488387237" expanded="true" signature="5044:5372" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="6:170" ph="..." />
+                <marker date="1543488638623" expanded="true" signature="204:5547" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="262:5545" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="443:712" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="612:689" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="752:1074" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="778:1064" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="1147:1354" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="1443:3650" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="1547:1649" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="1695:1797" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="1844:1947" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="1994:2097" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="2144:2247" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="2294:2397" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="2414:2481" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="2759:2840" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="2890:2993" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="3104:3614" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="3738:5539" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="3846:5399" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="4010:5036" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="4082:4417" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="4472:4807" ph="{...}" />
+                <marker date="1543488638623" expanded="true" signature="5057:5385" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RestService/Model/Process/ProcessStep.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="24" column="34" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
+              <folding>
+                <marker date="1543473179816" expanded="false" signature="6:94" ph="..." />
+                <marker date="1543473179816" expanded="true" signature="131:1686" ph="{...}" />
+                <marker date="1543473179816" expanded="true" signature="173:1684" ph="{...}" />
+                <marker date="1543473179816" expanded="true" signature="537:802" ph="{...}" />
+                <marker date="1543473179816" expanded="true" signature="1139:1193" ph="{...}" />
+                <marker date="1543473179816" expanded="true" signature="1249:1305" ph="{...}" />
+                <marker date="1543473179816" expanded="true" signature="1370:1432" ph="{...}" />
+                <marker date="1543473179816" expanded="true" signature="1504:1570" ph="{...}" />
+                <marker date="1543473179816" expanded="true" signature="1621:1678" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -914,11 +932,18 @@
       <option name="project" value="LOCAL" />
       <updated>1543488003579</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Exported XML UI Rendering to a separate Class">
+      <created>1543488672302</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1543488672303</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="84445000" />
+    <option name="totallyTimeSpent" value="85031000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -933,12 +958,12 @@
     <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49884528" visible="true" weight="0.25809062" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49884528" visible="true" weight="0.25809062" />
       <window_info id="Structure" order="1" sideWeight="0.5011547" side_tool="true" weight="0.2710356" />
       <window_info id="Favorites" order="2" sideWeight="0.5011547" side_tool="true" weight="0.2710356" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32794458" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32794458" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39722863" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -947,7 +972,7 @@
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
-      <window_info anchor="bottom" id="XAML Preview" order="11" visible="true" weight="0.41108546" />
+      <window_info anchor="bottom" id="XAML Preview" order="11" weight="0.41108546" />
       <window_info anchor="bottom" id="Unit Tests" order="12" weight="0.3290993" />
       <window_info anchor="bottom" id="Terminal" order="13" weight="0.3298731" />
       <window_info anchor="bottom" id="Event Log" order="14" side_tool="true" />
@@ -990,7 +1015,8 @@
     <MESSAGE value="Edited method for posting ProcessTemplates to the server" />
     <MESSAGE value="Added loads of network an Databasefiles" />
     <MESSAGE value="Implemented basic Authorization&#10;Added Login and Registration UI" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented basic Authorization&#10;Added Login and Registration UI" />
+    <MESSAGE value="Exported XML UI Rendering to a separate Class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Exported XML UI Rendering to a separate Class" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1055,7 +1081,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/WebServerWPF/Mapper/UserMapper.cs" />
     <entry file="file://$PROJECT_DIR$/WebServerWPF/Mapper/IMapper.cs" />
     <entry file="file://$PROJECT_DIR$/RestService/ProcessInstance.cs" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5CBC0110-254A-4FC8-86DA-3202CABC47C1/74/69ac6f57/RunningProcess.cs" />
@@ -1674,73 +1699,91 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/RestService/Model/Process/ProcessStep.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="24" column="34" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
+          <folding>
+            <marker date="1543473179816" expanded="false" signature="6:94" ph="..." />
+            <marker date="1543473179816" expanded="true" signature="131:1686" ph="{...}" />
+            <marker date="1543473179816" expanded="true" signature="173:1684" ph="{...}" />
+            <marker date="1543473179816" expanded="true" signature="537:802" ph="{...}" />
+            <marker date="1543473179816" expanded="true" signature="1139:1193" ph="{...}" />
+            <marker date="1543473179816" expanded="true" signature="1249:1305" ph="{...}" />
+            <marker date="1543473179816" expanded="true" signature="1370:1432" ph="{...}" />
+            <marker date="1543473179816" expanded="true" signature="1504:1570" ph="{...}" />
+            <marker date="1543473179816" expanded="true" signature="1621:1678" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/DynamicDocsWPF/Windows/CreateProcessInstance.xaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="19" column="71" selection-start-line="19" selection-start-column="71" selection-end-line="19" selection-end-column="71" />
+        <state relative-caret-position="321">
+          <caret line="22" column="28" selection-start-line="22" selection-start-column="28" selection-end-line="22" selection-end-column="28" />
           <folding>
-            <marker date="1543488277940" expanded="true" signature="0:1971" ph="&lt;&lt;Grid&gt;&#10;        &lt;Grid.RowDefinitions&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;*&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;        &lt;/Grid.RowDefinitions&gt;&#10;        &lt;TextBlock x:Name=&quot;InfoBlock&quot; HorizontalAlignment=&quot;Center&quot; Text=&quot;Hallo&quot; FontSize=&quot;28&quot;&#10;                   FontFamily=&quot;Segoe UI Light&quot; Margin=&quot;20&quot; /&gt;&#10;        &lt;Border Grid.Row=&quot;1&quot; BorderThickness=&quot;2&quot; BorderBrush=&quot;White&quot; Background=&quot;White&quot; CornerRadius=&quot;5&quot;&#10;                HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot; Margin=&quot;40,20&quot;&gt;&#10;            &lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt;&#10;            &lt;ScrollViewer&gt;&#10;                &lt;StackPanel x:Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;&#10;        &lt;/Border&gt;&#10;        &lt;Button Click=&quot;CreateInstance_Btn_Next_OnClick&quot; Grid.Row=&quot;2&quot; Content=&quot;Weiter&quot; Width=&quot;100&quot; Height=&quot;35&quot;&#10;                VerticalAlignment=&quot;Center&quot; Margin=&quot;20&quot; Background=&quot;##2196f3&quot; Foreground=&quot;White&quot; FontWeight=&quot;Black&quot;&gt;&#10;            &lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;&#10;        &lt;/Button&gt;&#10;    &lt;/Grid&gt;.../&gt;" />
-            <marker date="1543488277940" expanded="true" signature="521:1961" ph="&lt;&lt;Grid.RowDefinitions&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;*&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;        &lt;/Grid.RowDefinitions&gt; &lt;TextBlock x:Name=&quot;InfoBlock&quot; HorizontalAlignment=&quot;Center&quot; Text=&quot;Hallo&quot; FontSize=&quot;28&quot;&#10;                   FontFamily=&quot;Segoe UI Light&quot; Margin=&quot;20&quot; /&gt; &lt;Border Grid.Row=&quot;1&quot; BorderThickness=&quot;2&quot; BorderBrush=&quot;White&quot; Background=&quot;White&quot; CornerRadius=&quot;5&quot;&#10;                HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot; Margin=&quot;40,20&quot;&gt;&#10;            &lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt;&#10;            &lt;ScrollViewer&gt;&#10;                &lt;StackPanel x:Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;&#10;        &lt;/Border&gt; &lt;Button Click=&quot;CreateInstance_Btn_Next_OnClick&quot; Grid.Row=&quot;2&quot; Content=&quot;Weiter&quot; Width=&quot;100&quot; Height=&quot;35&quot;&#10;                VerticalAlignment=&quot;Center&quot; Margin=&quot;20&quot; Background=&quot;##2196f3&quot; Foreground=&quot;White&quot; FontWeight=&quot;Black&quot;&gt;&#10;            &lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;&#10;        &lt;/Button&gt;.../&gt;" />
-            <marker date="1543488277940" expanded="true" signature="536:717" ph="&lt;&lt;RowDefinition Height=&quot;Auto&quot; /&gt; &lt;RowDefinition Height=&quot;*&quot; /&gt; &lt;RowDefinition Height=&quot;Auto&quot; /&gt;.../&gt;" />
-            <marker date="1543488277940" expanded="true" signature="726:873" ph="&lt;.../&gt;" />
-            <marker date="1543488277940" expanded="true" signature="882:1537" ph="&lt;&lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt; &lt;ScrollViewer&gt;&#10;                &lt;StackPanel x:Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;.../&gt;" />
-            <marker date="1543488277940" expanded="true" signature="1081:1237" ph="&lt;&lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;.../&gt;" />
-            <marker date="1543488277940" expanded="true" signature="1250:1519" ph="&lt;&lt;StackPanel x:Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;.../&gt;" />
-            <marker date="1543488277940" expanded="true" signature="1281:1491" ph="&lt;.../&gt;" />
-            <marker date="1543488277940" expanded="true" signature="1546:1949" ph="&lt;&lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;.../&gt;" />
-            <marker date="1543488277940" expanded="true" signature="1775:1931" ph="&lt;&lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;.../&gt;" />
+            <marker date="1543488623016" expanded="true" signature="0:1969" ph="&lt;&lt;Grid&gt;&#10;        &lt;Grid.RowDefinitions&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;*&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;        &lt;/Grid.RowDefinitions&gt;&#10;        &lt;TextBlock x:Name=&quot;InfoBlock&quot; HorizontalAlignment=&quot;Center&quot; Text=&quot;Hallo&quot; FontSize=&quot;28&quot;&#10;                   FontFamily=&quot;Segoe UI Light&quot; Margin=&quot;20&quot; /&gt;&#10;        &lt;Border Grid.Row=&quot;1&quot; BorderThickness=&quot;2&quot; BorderBrush=&quot;White&quot; Background=&quot;White&quot; CornerRadius=&quot;5&quot;&#10;                HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot; Margin=&quot;40,20&quot;&gt;&#10;            &lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt;&#10;            &lt;ScrollViewer&gt;&#10;                &lt;StackPanel Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;&#10;        &lt;/Border&gt;&#10;        &lt;Button Click=&quot;CreateInstance_Btn_Next_OnClick&quot; Grid.Row=&quot;2&quot; Content=&quot;Weiter&quot; Width=&quot;100&quot; Height=&quot;35&quot;&#10;                VerticalAlignment=&quot;Center&quot; Margin=&quot;20&quot; Background=&quot;##2196f3&quot; Foreground=&quot;White&quot; FontWeight=&quot;Black&quot;&gt;&#10;            &lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;&#10;        &lt;/Button&gt;&#10;    &lt;/Grid&gt;.../&gt;" />
+            <marker date="1543488623016" expanded="true" signature="521:1959" ph="&lt;&lt;Grid.RowDefinitions&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;*&quot; /&gt;&#10;            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#10;        &lt;/Grid.RowDefinitions&gt; &lt;TextBlock x:Name=&quot;InfoBlock&quot; HorizontalAlignment=&quot;Center&quot; Text=&quot;Hallo&quot; FontSize=&quot;28&quot;&#10;                   FontFamily=&quot;Segoe UI Light&quot; Margin=&quot;20&quot; /&gt; &lt;Border Grid.Row=&quot;1&quot; BorderThickness=&quot;2&quot; BorderBrush=&quot;White&quot; Background=&quot;White&quot; CornerRadius=&quot;5&quot;&#10;                HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot; Margin=&quot;40,20&quot;&gt;&#10;            &lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt;&#10;            &lt;ScrollViewer&gt;&#10;                &lt;StackPanel Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;&#10;        &lt;/Border&gt; &lt;Button Click=&quot;CreateInstance_Btn_Next_OnClick&quot; Grid.Row=&quot;2&quot; Content=&quot;Weiter&quot; Width=&quot;100&quot; Height=&quot;35&quot;&#10;                VerticalAlignment=&quot;Center&quot; Margin=&quot;20&quot; Background=&quot;##2196f3&quot; Foreground=&quot;White&quot; FontWeight=&quot;Black&quot;&gt;&#10;            &lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;&#10;        &lt;/Button&gt;.../&gt;" />
+            <marker date="1543488623016" expanded="true" signature="536:717" ph="&lt;&lt;RowDefinition Height=&quot;Auto&quot; /&gt; &lt;RowDefinition Height=&quot;*&quot; /&gt; &lt;RowDefinition Height=&quot;Auto&quot; /&gt;.../&gt;" />
+            <marker date="1543488623016" expanded="true" signature="726:873" ph="&lt;.../&gt;" />
+            <marker date="1543488623016" expanded="true" signature="882:1535" ph="&lt;&lt;Border.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Border.Effect&gt; &lt;ScrollViewer&gt;&#10;                &lt;StackPanel Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;&#10;            &lt;/ScrollViewer&gt;.../&gt;" />
+            <marker date="1543488623016" expanded="true" signature="1081:1237" ph="&lt;&lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;6&quot; BlurRadius=&quot;5&quot; /&gt;.../&gt;" />
+            <marker date="1543488623016" expanded="true" signature="1250:1517" ph="&lt;&lt;StackPanel Name=&quot;ViewHolder&quot; HorizontalAlignment=&quot;Stretch&quot; VerticalAlignment=&quot;Stretch&quot;&#10;                            Margin=&quot;40,20&quot; MaxWidth=&quot;700&quot;&gt;&#10;                               &#10;                &lt;/StackPanel&gt;.../&gt;" />
+            <marker date="1543488623016" expanded="true" signature="1281:1489" ph="&lt;.../&gt;" />
+            <marker date="1543488623016" expanded="true" signature="1544:1947" ph="&lt;&lt;Button.Effect&gt;&#10;                &lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;&#10;            &lt;/Button.Effect&gt;.../&gt;" />
+            <marker date="1543488623016" expanded="true" signature="1773:1929" ph="&lt;&lt;DropShadowEffect Color=&quot;Black&quot; Direction=&quot;-70&quot; Opacity=&quot;0.5&quot; ShadowDepth=&quot;3&quot; BlurRadius=&quot;5&quot; /&gt;.../&gt;" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DynamicDocsWPF/Windows/CreateProcessInstance.xaml.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
+        <state>
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
           <folding>
-            <marker date="1543488387237" expanded="true" signature="6:170" ph="..." />
-            <marker date="1543488387237" expanded="true" signature="204:5534" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="262:5532" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="443:699" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="577:654" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="739:1061" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="765:1051" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="1134:1341" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="1430:3637" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="1534:1636" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="1682:1784" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="1831:1934" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="1981:2084" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="2131:2234" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="2281:2384" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="2401:2468" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="2746:2827" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="2877:2980" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="3091:3601" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="3725:5526" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="3833:5386" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="3997:5023" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="4069:4404" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="4459:4794" ph="{...}" />
-            <marker date="1543488387237" expanded="true" signature="5044:5372" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="6:170" ph="..." />
+            <marker date="1543488638623" expanded="true" signature="204:5547" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="262:5545" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="443:712" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="612:689" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="752:1074" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="778:1064" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="1147:1354" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="1443:3650" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="1547:1649" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="1695:1797" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="1844:1947" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="1994:2097" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="2144:2247" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="2294:2397" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="2414:2481" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="2759:2840" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="2890:2993" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="3104:3614" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="3738:5539" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="3846:5399" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="4010:5036" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="4082:4417" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="4472:4807" ph="{...}" />
+            <marker date="1543488638623" expanded="true" signature="5057:5385" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DynamicDocsWPF/MainWindow.xaml.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="23" column="86" selection-start-line="23" selection-start-column="86" selection-end-line="23" selection-end-column="86" />
+        <state relative-caret-position="244">
+          <caret line="55" column="26" lean-forward="true" selection-start-line="55" selection-start-column="26" selection-end-line="55" selection-end-column="26" />
           <folding>
-            <marker date="1543488430523" expanded="false" signature="6:253" ph="..." />
-            <marker date="1543488430523" expanded="true" signature="279:2131" ph="{...}" />
-            <marker date="1543488430523" expanded="true" signature="286:368" ph="///     Interaction logic for MainWindow.xaml ... " />
-            <marker date="1543488430523" expanded="true" signature="404:2129" ph="{...}" />
-            <marker date="1543488430523" expanded="true" signature="468:1058" ph="{...}" />
-            <marker date="1543488430523" expanded="true" signature="630:1048" ph="/* var login = new Login(); ... */" />
-            <marker date="1543488430523" expanded="true" signature="1130:1941" ph="{...}" />
-            <marker date="1543488430523" expanded="true" signature="1168:1931" ph="{...}" />
-            <marker date="1543488430523" expanded="true" signature="2054:2123" ph="{...}" />
+            <marker date="1543488960673" expanded="false" signature="6:253" ph="..." />
+            <marker date="1543488960673" expanded="true" signature="279:2219" ph="{...}" />
+            <marker date="1543488960673" expanded="true" signature="286:368" ph="///     Interaction logic for MainWindow.xaml ... " />
+            <marker date="1543488960673" expanded="true" signature="404:2217" ph="{...}" />
+            <marker date="1543488960673" expanded="true" signature="513:904" ph="{...}" />
+            <marker date="1543488960673" expanded="true" signature="685:868" ph="{...}" />
+            <marker date="1543488960673" expanded="true" signature="976:1787" ph="{...}" />
+            <marker date="1543488960673" expanded="true" signature="1014:1777" ph="{...}" />
+            <marker date="1543488960673" expanded="true" signature="1900:2211" ph="{...}" />
           </folding>
         </state>
       </provider>
