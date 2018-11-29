@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using DynamicDocsWPF.Model;
 using RestService;
+using RestService.Model.Database;
 using WebServerWPF;
 
 namespace WebServer
@@ -9,6 +11,16 @@ namespace WebServer
     [ServiceContract(Name = "RestServices")]
     public interface IRestService
     {
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = Routing.CheckAuth, RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        AuthorizationResult CheckAuth(User user);
+        
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = Routing.GetPermissionLevel, RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        int GetPermissionLevel(User user);
+        
         [OperationContract]
         [WebGet(UriTemplate = Routing.GetFile, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
@@ -33,5 +45,10 @@ namespace WebServer
         [WebGet(UriTemplate = Routing.GetTemplateList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         List<string> GetTemplateList();
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = Routing.GetDataList, RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        DataMessage GetDataList(DataMessage message);
     }
 }

@@ -66,6 +66,45 @@ namespace DynamicDocsWPF.HelperClasses
                 return JsonConvert.DeserializeObject<List<string>>(responseStream.ReadToEnd());
             }
         }
+        
+        protected DataMessage GetDataList(DataType dataType, User user)
+        {
+            try
+            {
+                var message = new DataMessage()
+                {
+                    DataType = dataType,
+                    Content = null,
+                    User = user
+                };
+                var postData = JsonConvert.SerializeObject(message);
+                var bytes = Encoding.UTF8.GetBytes(postData);
+
+                var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/getlist");
+                httpWebRequest.Method = "POST";
+                httpWebRequest.ContentLength = bytes.Length;
+                httpWebRequest.ContentType = "application/json";
+
+                using (var requestStream = httpWebRequest.GetRequestStream())
+                {
+                    requestStream.Write(bytes, 0, bytes.Length);
+                }
+
+                var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                    using (var responseStream =
+                        new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
+                    {
+                        return JsonConvert.DeserializeObject<DataMessage>(responseStream.ReadToEnd());
+                    }
+            }
+            catch (HttpException)
+            {
+            }
+
+            return null;
+        }
 
         protected UploadResult PostFile(FileMessage message)
         {

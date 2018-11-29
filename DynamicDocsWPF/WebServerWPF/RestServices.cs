@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.IO;
+using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
+using System.ServiceModel.Description;
 using System.Text;
 using System.Xml;
 using DynamicDocsWPF.Model;
@@ -22,7 +24,21 @@ namespace WebServerWPF
     {
         private const string TemplatePath = "./Templates/";
         private const string ProcessPath = "./Processes/";
-        private static readonly DatabaseHelper _database = new DatabaseHelper();
+        private static readonly DatabaseHelper Database = new DatabaseHelper();
+
+        public AuthorizationResult CheckAuth(User user)
+        {
+            return IsAuthorized(user);
+        }
+
+        public int GetPermissionLevel(User user)
+        {
+            if (IsAuthorized(user) == AuthorizationResult.AUTHORIZED)
+            {
+                return Database.GetUserByMail(user.Email).PermissionLevel;
+            }
+            else return -1;
+        }
 
         public FileMessage GetFile(string fileType, string name)
         {
@@ -42,7 +58,7 @@ namespace WebServerWPF
 
         private AuthorizationResult IsAuthorized(User user)
         {
-            var dbUser = _database.GetUserByMail(user.Email);
+            var dbUser = Database.GetUserByMail(user.Email);
             if (dbUser != null)
             {
                 if (HashHelper.CheckHash(user.Password_Hash, dbUser.Password_Hash))
@@ -57,7 +73,7 @@ namespace WebServerWPF
         {
             if (IsAuthorized(user) != AuthorizationResult.AUTHORIZED)
             {
-                var dbUser = _database.GetUserByMail(user.Email);
+                var dbUser = Database.GetUserByMail(user.Email);
                 if (dbUser != null)
                 {
                     if (HashHelper.CheckHash(user.Password_Hash, dbUser.Password_Hash))
@@ -75,7 +91,9 @@ namespace WebServerWPF
         {
             try
             {
-                var auth = IsAuthorized(message.User);
+                AuthorizationResult auth = AuthorizationResult.INVALID_LOGIN;
+                if(message.DataType != DataType.UserAccount) auth = IsAuthorized(message.User);
+                
                 if (auth == AuthorizationResult.AUTHORIZED || message.DataType == DataType.UserAccount)
                 {
                     switch (message.DataType)
@@ -88,12 +106,12 @@ namespace WebServerWPF
                                 if (update.Declined)
                                 {
                                     MainWindow.PostToLog("The process was declined.");
-                                    _database.DeclineRunningProcess(update.ID);
+                                    Database.DeclineRunningProcess(update.ID);
                                 }
                                 else
                                 {
                                     MainWindow.PostToLog("The process was approved.");
-                                    _database.ApproveRunningProcess(update.ID);
+                                    Database.ApproveRunningProcess(update.ID);
                                 }
                             }
                             else return UploadResult.NO_PERMISSION;
@@ -105,7 +123,7 @@ namespace WebServerWPF
                                 MainWindow.PostToLog("Received request to create a new Process Instance.");
                                 var instance = JsonConvert.DeserializeObject<RunningProcess>(message.Content);
                                 MainWindow.PostToLog("Registering in Database...");
-                                _database.AddRunningProcess(instance);
+                                Database.AddRunningProcess(instance);
                                 MainWindow.PostToLog("Done");
                             }
                             else return UploadResult.NO_PERMISSION;
@@ -113,11 +131,10 @@ namespace WebServerWPF
                             break;
                         case DataType.UserAccount:    
                             MainWindow.PostToLog("Received request to register a new user.");
-                            var user = JsonConvert.DeserializeObject<User>(message.Content);
                             MainWindow.PostToLog("Registering in Database...");
-                            if (_database.GetUserByMail(user.Email) == null)
+                            if (Database.GetUserByMail(message.User.Email) == null)
                             {
-                                _database.AddUser(user);
+                                Database.AddUser(message.User);
                             }
                             else
                             {
@@ -132,7 +149,7 @@ namespace WebServerWPF
                                 MainWindow.PostToLog("Received request to register a new user.");
                                 var entry = JsonConvert.DeserializeObject<Entry>(message.Content);
                                 MainWindow.PostToLog("Registering in Database...");
-                                _database.AddEntry(entry);
+                                Database.AddEntry(entry);
                                 MainWindow.PostToLog("Done!");
                             }
                             else return UploadResult.NO_PERMISSION;
@@ -222,7 +239,7 @@ namespace WebServerWPF
                                         FilePath = path
                                     };
                                     MainWindow.PostToLog("Registering in Database...");
-                                    _database.AddProcessTemplate(processTemplate);
+                                    Database.AddProcessTemplate(processTemplate);
                                     MainWindow.PostToLog("Done!");
                                     break;
                                 case FileType.DocTemplate:
@@ -233,7 +250,7 @@ namespace WebServerWPF
                                         FilePath = path
                                     };
                                     MainWindow.PostToLog("Registering in Database...");
-                                    _database.AddDocTemplate(docTemplate);
+                                    Database.AddDocTemplate(docTemplate);
                                     MainWindow.PostToLog("Done!");
                                     break;
                                 default:
@@ -303,6 +320,35 @@ namespace WebServerWPF
         public List<string> GetTemplateList()
         {
             return new List<string>();
+        }
+
+        public DataMessage GetDataList(DataMessage message)
+        {
+            var outputMessage = new DataMessage()
+            {
+                DataType = message.DataType,
+
+            };
+            switch (message.DataType)
+            {
+                case DataType.Entry:
+                    break;
+                case DataType.ProcessInstance:
+                    break;
+                case DataType.ProcessUpdate:
+                    break;
+                case DataType.ProcessTemplate:
+                    outputMessage.Content = JsonConvert.SerializeObject(Database.GetProcessTemplates());
+                    break;
+                case DataType.UserAccount:
+                    break;
+                case DataType.AuthorizationResult:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(message.DataType), message.DataType, null);
+            }
+
+            return outputMessage;
         }
 
         private static string GetFiletypeDirectory(FileMessage message)

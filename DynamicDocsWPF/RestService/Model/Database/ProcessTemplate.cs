@@ -5,5 +5,10 @@ namespace RestService.Model.Database
         public string Id { get; set; }
         public string FilePath { get; set; }
         public string Description { get; set; }
+
+        public override string ToString()
+        {
+            return Description;
+        }
     }
 }

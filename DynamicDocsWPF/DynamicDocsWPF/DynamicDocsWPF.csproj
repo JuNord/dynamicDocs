@@ -83,19 +83,21 @@
     <Compile Include="HelperClasses\NetworkHelper.cs" />
     <Compile Include="HelperClasses\ViewCreator.cs" />
     <Compile Include="HelperClasses\WordReceiptHelper.cs" />
-    <Compile Include="Login.xaml.cs">
+    <Compile Include="Windows\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Register.xaml.cs">
+    <Compile Include="Windows\ProcessSelect.xaml.cs">
+      <DependentUpon>ProcessSelect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ValidationOverview.xaml.cs">
+    <Compile Include="Windows\ValidationOverview.xaml.cs">
       <DependentUpon>ValidationOverview.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ValidationPopup.xaml.cs">
+    <Compile Include="Windows\ValidationPopup.xaml.cs">
       <DependentUpon>ValidationPopup.xaml</DependentUpon>
     </Compile>
-    <Page Include="Login.xaml" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -108,9 +110,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Register.xaml" />
-    <Page Include="ValidationOverview.xaml" />
-    <Page Include="ValidationPopup.xaml" />
+    <Page Include="Windows\Login.xaml" />
+    <Page Include="Windows\ProcessSelect.xaml" />
+    <Page Include="Windows\Register.xaml" />
+    <Page Include="Windows\ValidationOverview.xaml" />
+    <Page Include="Windows\ValidationPopup.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -131,6 +135,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Designstuff.xml" />
     <Content Include="PlantUML\Database.txt" />
     <Content Include="PlantUML\Network.txt" />
     <Content Include="PlantUML\UML.txt" />

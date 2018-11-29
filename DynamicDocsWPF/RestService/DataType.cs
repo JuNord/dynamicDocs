@@ -6,6 +6,7 @@ namespace RestService
         ProcessInstance,
         ProcessUpdate,
         ProcessTemplate,
-        UserAccount
+        UserAccount,
+        AuthorizationResult
     }
 }

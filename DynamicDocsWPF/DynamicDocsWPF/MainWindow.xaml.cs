@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 using DynamicDocsWPF.HelperClasses;
+using DynamicDocsWPF.Windows;
 using RestService;
 using RestService.Model.Database;
 using RestService.Model.Process;
@@ -17,27 +18,26 @@ namespace DynamicDocsWPF
         private int _currentDialog;
         private Process _process;
         private ProcessStep _processStep;
+        private User _user;
 
         public MainWindow()
         {
             InitializeComponent();
-            var login = new Login();
+            /*var login = new Login();
             login.ShowDialog();
-            var helper = new NetworkHelper("http://localhost:8000/Service", new User(login.Email, login.Password));
-            var result = helper.UploadProcessTemplate("", true);
-            HandleUploadResult(result);
+
+            if (login.DialogResult == true)
+            {
+                _user = new User(login.Email, login.Password);
+                var helper = new NetworkHelper("http://localhost:8000/Service", _user);
+
+                var processSelect = new ProcessSelect(helper);
+                processSelect.ShowDialog();
+            }
+            else Close();*/
         }
 
-        private string Message
-        {
-            get
-            {
-                if (DateTime.Now.Hour < 12) return "Guten Morgen!";
-                if (DateTime.Now.Hour < 17) return "Guten Tag!";
-                if (DateTime.Now.Hour < 7 || DateTime.Now.Hour >= 17) return "Guten Abend!";
-                return "Hallo";
-            }
-        }
+        
 
         private void HandleUploadResult(UploadResult result)
         {
@@ -69,6 +69,17 @@ namespace DynamicDocsWPF
         }
 
 
+        private string Message
+        {
+            get
+            {
+                if (DateTime.Now.Hour < 12) return "Guten Morgen!";
+                if (DateTime.Now.Hour < 17) return "Guten Tag!";
+                if (DateTime.Now.Hour < 7 || DateTime.Now.Hour >= 17) return "Guten Abend!";
+                return "Hallo";
+            }
+        }
+        
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             for (var i = 0; i < _processStep.GetDialogAtIndex(_currentDialog)?.ElementCount; i++)
@@ -179,6 +190,11 @@ namespace DynamicDocsWPF
             }
 
             return null;
+        }
+
+        private void MainMenu_BtnNewProcessInstance_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

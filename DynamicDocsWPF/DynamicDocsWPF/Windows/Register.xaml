@@ -1,15 +1,15 @@
-<Window x:Class="DynamicDocsWPF.Register"
+<Window x:Class="DynamicDocsWPF.Windows.Register"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:DynamicDocsWPF"
         mc:Ignorable="d"
-        Title="Registrierung" Height="380" Width="500"
+        Title="Registrierung" Height="450" Width="500"
         Background="#3CA4FF"
-        WindowStyle="None"
-        AllowsTransparency="True"
+        ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
+    <ScrollViewer>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -64,4 +64,5 @@
         </StackPanel>
         
     </Grid>
+    </ScrollViewer>
 </Window>

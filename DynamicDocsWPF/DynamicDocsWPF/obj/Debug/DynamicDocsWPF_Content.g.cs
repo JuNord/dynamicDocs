@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("designstuff.xml")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("plantuml/database.txt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("plantuml/network.txt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("plantuml/uml.txt")]

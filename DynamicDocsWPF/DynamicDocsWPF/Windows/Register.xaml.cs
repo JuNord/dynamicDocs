@@ -1,11 +1,8 @@
 using System.Windows;
-using System.Windows.Controls;
 using DynamicDocsWPF.HelperClasses;
 using RestService;
-using RestService.Model.Database;
-using WebServerWPF;
 
-namespace DynamicDocsWPF
+namespace DynamicDocsWPF.Windows
 {
     public partial class Register : Window
     {
@@ -20,11 +17,11 @@ namespace DynamicDocsWPF
         {
             if (string.IsNullOrWhiteSpace(Email))
             {
-                Register_InfoText.Text = "Bitte geben sie eine Email-Adresse ein.";
+                Register_InfoText.Text = "Bitte geben Sie eine Email-Adresse ein.";
             }
             else if (string.IsNullOrWhiteSpace(Password))
             {
-                Register_InfoText.Text = "Bitte geben sie ein Passwort ein.";
+                Register_InfoText.Text = "Bitte geben Sie ein Passwort ein.";
             }
             else
             {
@@ -33,7 +30,15 @@ namespace DynamicDocsWPF
                 {
                     Register_InfoText.Text = "Ein Nutzer mit dieser Email Adresse existiert bereits.";
                 }
-                else Close();
+                else if(result == UploadResult.SUCCESS)
+                {
+                    DialogResult = true;
+                    Close();
+                }
+                else
+                {
+                    Register_InfoText.Text = "Etwas ist schiefgelaufen. Prüfen Sie Ihre Eingaben oder kontaktieren Sie den Administrator.";
+                }
             }
         }
     }
