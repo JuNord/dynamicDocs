@@ -22,9 +22,9 @@ namespace WebServer
         int GetPermissionLevel(User user);
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetFile, BodyStyle = WebMessageBodyStyle.Bare,
+        [WebInvoke(Method = "POST", UriTemplate = Routing.GetFile, RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        FileMessage GetFile(string fileType, string name);
+        FileMessage GetFile(DataMessage message);
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = Routing.PostFile, RequestFormat = WebMessageFormat.Json,

@@ -249,7 +249,7 @@ namespace WebServerWPF
             cmd.CommandText = $"INSERT INTO Roles VALUES (\"{roles.Id}\",\"{roles.User_ID}\");";
             cmd.ExecuteNonQuery();
         }
-
+        
         //SELECT * FROM DOCTEMPLATES
         public List<DocTemplate> GetDocTemplates()
         {
@@ -269,6 +269,25 @@ namespace WebServerWPF
 
             return doctemplates;
         }
+        
+        public DocTemplate GetDocTemplateById(string id)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText =
+                $"SELECT * FROM DocTemplate WHERE id = \"{id}\";";
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                    return new DocTemplate()
+                    {
+                        Id = reader.GetString(0),
+                        FilePath = reader.GetString(1)
+                    };
+            }
+
+            return null;
+        }
+
 
         //INSERT INTO DOCTEMPLATES
         public void AddDocTemplate(DocTemplate docTemplate)

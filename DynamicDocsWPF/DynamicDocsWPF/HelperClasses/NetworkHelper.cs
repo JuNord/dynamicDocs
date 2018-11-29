@@ -105,14 +105,14 @@ namespace DynamicDocsWPF.HelperClasses
             return list;
         }
 
-        public FileMessage GetTemplateByName(string name)
+        public FileMessage GetTemplateByName(string id)
         {
-            return GetFileByName(FileType.DocTemplate, name);
+            return GetFileById(id, FileType.DocTemplate, User);
         }
 
-        public FileMessage GetProcessByName(string name)
+        public string GetProcessById(string id)
         {
-            return GetFileByName(FileType.ProcessTemplate, name);
+            return GetFileById(id, FileType.ProcessTemplate, User).Content;
         }
 
         public Entry GetEntryById(int id)

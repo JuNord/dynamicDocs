@@ -35,20 +35,48 @@ namespace DynamicDocsWPF.HelperClasses
             }
         }
 
-        protected FileMessage GetFileByName(FileType fileType, string name)
+        protected FileMessage GetFileById(string id, FileType fileType, User user)
         {
-            var httpWebRequest =
-                (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{Enum.GetName(typeof(FileType), fileType)}/{name}");
-            httpWebRequest.Method = "GET";
-            var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-
-            if (httpWebResponse.StatusCode != HttpStatusCode.OK) return null;
-
-            using (var responseStream =
-                new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
+            try
             {
-                return JsonConvert.DeserializeObject<FileMessage>(responseStream.ReadToEnd());
+                var request = new FileRequest()
+                {
+                    Id = id,
+                    FileType = fileType
+                };
+                var message = new DataMessage()
+                {
+                    DataType = DataType.FileRequest,
+                    Content = JsonConvert.SerializeObject(request),
+                    User = user
+                };
+                var postData = JsonConvert.SerializeObject(message);
+                var bytes = Encoding.UTF8.GetBytes(postData);
+
+                var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/getfile");
+                httpWebRequest.Method = "POST";
+                httpWebRequest.ContentLength = bytes.Length;
+                httpWebRequest.ContentType = "application/json";
+
+                using (var requestStream = httpWebRequest.GetRequestStream())
+                {
+                    requestStream.Write(bytes, 0, bytes.Length);
+                }
+
+                var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                    using (var responseStream =
+                        new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
+                    {
+                        return JsonConvert.DeserializeObject<FileMessage>(responseStream.ReadToEnd());
+                    }
             }
+            catch (HttpException)
+            {
+            }
+
+            return null;
         }
 
         protected List<string> GetList(FileType fileType)

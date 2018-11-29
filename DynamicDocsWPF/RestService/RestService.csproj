@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="DataMessage.cs" />
     <Compile Include="DataType.cs" />
+    <Compile Include="FileRequest.cs" />
     <Compile Include="FileType.cs" />
     <Compile Include="HashHelper.cs" />
     <Compile Include="MissingValueInterpretationException.cs" />

@@ -10,6 +10,7 @@ namespace RestService
 
         public FileMessage(User user, FileType type, string id, string fileName, string content, bool forceOverWrite)
         {
+            User = user;
             FileType = type;
             ID = id;
             FileName = fileName;

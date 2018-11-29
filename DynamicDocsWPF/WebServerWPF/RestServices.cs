@@ -40,20 +40,39 @@ namespace WebServerWPF
             else return -1;
         }
 
-        public FileMessage GetFile(string fileType, string name)
+        public FileMessage GetFile(DataMessage message)
         {
-            FileMessage message = null;
-            switch (Enum.Parse(typeof(FileType), fileType))
+            FileMessage fileMessage = null;
+            if (message.DataType == DataType.FileRequest)
             {
-                case FileType.ProcessTemplate:
-                    break;
-                case FileType.DocTemplate:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                var request = JsonConvert.DeserializeObject<FileRequest>(message.Content);
+                switch (message.DataType)
+                {
+                    case DataType.ProcessTemplate:
+                        var processTemplate = Database.GetProcessTemplateById(request.Id);
+                        
+                        fileMessage = new FileMessage()
+                        {
+                            ID = request.Id,                 
+                            FileType = request.FileType,
+                            Content = File.ReadAllText(processTemplate.FilePath)
+                        };
+                        break;
+                    case DataType.DocTemplate:
+                        var docTemplate = Database.GetDocTemplateById(request.Id);
+                        
+                        fileMessage = new FileMessage()
+                        {
+                            ID = request.Id,                 
+                            FileType = request.FileType,
+                            Content = File.ReadAllText(docTemplate.FilePath)
+                        };
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
-
-            return message;
+            return fileMessage;
         }
 
         private AuthorizationResult IsAuthorized(User user)
@@ -71,7 +90,7 @@ namespace WebServerWPF
 
         private AuthorizationResult IsPermitted(User user, int permissionLevel)
         {
-            if (IsAuthorized(user) != AuthorizationResult.AUTHORIZED)
+            if (IsAuthorized(user) == AuthorizationResult.AUTHORIZED)
             {
                 var dbUser = Database.GetUserByMail(user.Email);
                 if (dbUser != null)

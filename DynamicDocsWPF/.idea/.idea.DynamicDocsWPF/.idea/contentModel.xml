@@ -55,6 +55,7 @@
         <e p="DataMessage.cs" t="Include" />
         <e p="DataType.cs" t="Include" />
         <e p="FileMessage.cs" t="Include" />
+        <e p="FileRequest.cs" t="Include" />
         <e p="FileType.cs" t="Include" />
         <e p="HashHelper.cs" t="Include" />
         <e p="MissingValueInterpretationException.cs" t="Include" />

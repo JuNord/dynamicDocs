@@ -7,6 +7,9 @@ namespace RestService
         ProcessUpdate,
         ProcessTemplate,
         UserAccount,
-        AuthorizationResult
+        AuthorizationResult,
+        FileType,
+        DocTemplate,
+        FileRequest
     }
 }

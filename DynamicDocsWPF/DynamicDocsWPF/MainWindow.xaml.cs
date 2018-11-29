@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Media;
 using DynamicDocsWPF.HelperClasses;
@@ -7,6 +8,7 @@ using DynamicDocsWPF.Windows;
 using RestService;
 using RestService.Model.Database;
 using RestService.Model.Process;
+using Login = DynamicDocsWPF.Windows.Login;
 
 namespace DynamicDocsWPF
 {
@@ -29,6 +31,7 @@ namespace DynamicDocsWPF
             {
                 _user = new User(login.Email, login.Password);
                 _networkHelper = new NetworkHelper("http://localhost:8000/Service", _user);
+
             }
             else Close();
         }
@@ -65,7 +68,10 @@ namespace DynamicDocsWPF
             var processSelect = new ProcessSelect(_networkHelper);
             processSelect.ShowDialog();
             
-            var newInstance = new CreateProcessInstance(_networkHelper.GetTemplateByName(processSelect.SelectedProcessTemplate.Id));
+            
+            var file = _networkHelper.GetProcessById(processSelect.SelectedProcessTemplate.Id);
+            var process = XmlHelper.ReadXMLFromString(file);
+            var newInstance = new CreateProcessInstance(process);
             newInstance.ShowDialog();
         }
     }
