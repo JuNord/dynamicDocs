@@ -30,7 +30,7 @@ namespace WebServer
         [OperationContract]
         [WebGet(UriTemplate = Routing.GetDocTemplateList+Routing.AuthExtension, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
-        ReplyGetProcessTemplateList GetDocTemplateList(string email, string password);
+        ReplyGetDocTemplateList GetDocTemplateList(string email, string password);
         
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = Routing.PostProcessTemplate+Routing.AuthExtension, RequestFormat = WebMessageFormat.Json,
@@ -43,9 +43,9 @@ namespace WebServer
         ReplyPostProcessTemplate PostDocTemplate(RequestPostDocTemplate requestPostDocTemplate);
         
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = Routing.CheckAuth, RequestFormat = WebMessageFormat.Json,
+        [WebInvoke(Method = "POST", UriTemplate = Routing.GetAuthorized+Routing.AuthExtension, RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        AuthorizationResult CheckAuth(User user);
+        AuthorizationResult CheckAuth();
         
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = Routing.GetPermissionLevel, RequestFormat = WebMessageFormat.Json,

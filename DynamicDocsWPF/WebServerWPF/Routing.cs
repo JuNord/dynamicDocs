@@ -9,6 +9,7 @@
         public const string PostProcessTemplate = "/ProcessTemplate/{requestPostProcessTemplate}";
         public const string PostDocTemplate = "/DocumentTemplate/{requestPostDocTemplate}";
         public const string GetProcessTemplateList = "/ProcessTemplateList";
-        public const string GetDocTemplateList = "/ProcessTemplateList";
+        public const string GetDocTemplateList = "/ProcessDocTemplateList";
+        public const string GetAuthorized = "/AuthCheck";
     }
 }
