@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 using DynamicDocsWPF.HelperClasses;
+using RestService.Model.Input;
 using RestService.Model.Process;
 
 namespace DynamicDocsWPF.Windows
@@ -12,6 +14,15 @@ namespace DynamicDocsWPF.Windows
         private int _currentDialog;
         private Process _process;
         private ProcessStep _processStep;
+
+        public CreateProcessInstance()
+        {
+            InitializeComponent();
+            ViewHolder.Children.Add(ViewCreator.GetViewTable(
+                new List<BaseInputElement>()
+                    {new TextInputBox(null, null, "Hallo", false), new TextInputBox(null, null, "Hallo", false),
+                new TextInputBox(null, null, "Hallo", false)}));
+        }
         
         public CreateProcessInstance(Process process)
         {

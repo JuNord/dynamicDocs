@@ -10,3 +10,15 @@ C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\ob
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\bin\Debug\PresentationFramework.dll
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\bin\Debug\Microsoft.VisualBasic.dll
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\bin\Debug\de\Microsoft.VisualBasic.resources.dll
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\bin\Debug\RestService.dll
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\bin\Debug\RestService.pdb
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\bin\Debug\Microsoft.VisualBasic.dll
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\bin\Debug\PresentationFramework.dll
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\bin\Debug\System.Runtime.Serialization.dll
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\bin\Debug\de\Microsoft.VisualBasic.resources.dll
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\bin\Debug\de\System.Runtime.Serialization.resources.dll
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\obj\Debug\RestService.csprojAssemblyReference.cache
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\obj\Debug\RestService.csproj.CoreCompileInputs.cache
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\obj\Debug\RestService.csproj.CopyComplete
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\obj\Debug\RestService.dll
+C:\Users\Julius.Nordhues\RiderProjects\dynamicDocs\DynamicDocsWPF\RestService\obj\Debug\RestService.pdb

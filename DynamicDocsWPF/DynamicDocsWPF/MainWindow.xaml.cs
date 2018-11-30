@@ -24,7 +24,7 @@ namespace DynamicDocsWPF
         {
             InitializeComponent();
             
-            var login = new Login();
+            /*var login = new Login();
             login.ShowDialog();
 
             if (login.DialogResult == true)
@@ -33,7 +33,8 @@ namespace DynamicDocsWPF
                 _networkHelper = new NetworkHelper("http://localhost:8000/Service", _user);
 
             }
-            else Close();
+            else Close();*/
+            new CreateProcessInstance().ShowDialog();
         }
 
         
