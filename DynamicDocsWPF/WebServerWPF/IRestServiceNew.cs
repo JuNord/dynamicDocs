@@ -19,7 +19,7 @@ namespace WebServer
         ReplyGetProcessTemplate GetProcessTemplate(RequestGetProcessTemplate request);
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetProcessTemplate, BodyStyle = WebMessageBodyStyle.Bare,
+        [WebGet(UriTemplate = Routing.GetDocTemplate, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetDocTemplate GetDocTemplate(RequestGetDocTemplate request);
         
@@ -47,6 +47,11 @@ namespace WebServer
         [WebGet(UriTemplate = Routing.GetPermissionLevel, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetPermissionLevel GetPermissionLevel(RequestGetPermissionLevel request);
+        
+        [OperationContract]
+        [WebGet(UriTemplate = Routing.GetProcessInstance, BodyStyle = WebMessageBodyStyle.Bare,
+            ResponseFormat = WebMessageFormat.Json)]
+        ReplyGetProcessInstance GetProcessInstance(RequestGetProcessInstance request);
         
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = Routing.PostProcessTemplate, RequestFormat = WebMessageFormat.Json,

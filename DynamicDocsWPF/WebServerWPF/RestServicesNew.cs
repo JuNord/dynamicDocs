@@ -39,7 +39,29 @@ namespace WebServerWPF
             {
                 PermissionLevel = -1
             };
-        } 
+        }
+
+        public ReplyGetProcessInstance GetProcessInstance(RequestGetProcessInstance request)
+        {
+            try
+            {
+                if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
+                {
+                    var reply = new ReplyGetProcessInstance()
+                    {
+                        ProcessInstance = Database.GetRunningProcessById(request.Id)
+                    };
+
+                    return reply;
+                }
+            }
+            catch (Exception e)
+            {
+                PrintException(e);
+            }
+
+            return null;
+        }
 
         public AuthorizationResult IsAuthorized(User user)
         {

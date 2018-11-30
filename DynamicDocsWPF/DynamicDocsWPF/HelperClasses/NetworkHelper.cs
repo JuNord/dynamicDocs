@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -8,6 +9,8 @@ using DynamicDocsWPF.Model;
 using Newtonsoft.Json;
 using RestService;
 using RestService.Model.Database;
+using WebServerWPF.RestDots;
+using WebServerWPF.RestDTOs;
 
 namespace DynamicDocsWPF.HelperClasses
 {
@@ -25,128 +28,114 @@ namespace DynamicDocsWPF.HelperClasses
 
         #region GET
 
-        public static string GetRequest(string baseUrl, object data)
+        public string GetProcessTemplate(string id)
         {
+            var request = new RequestGetProcessTemplate()
+            {
+                Id = id
+            };
+
+            var reply = JsonConvert.DeserializeObject<ReplyGetProcessTemplate>(
+                GetRequest(User, "ProcessTemplate", JsonConvert.SerializeObject(request))
+            );
+
+            return reply.Text;
+        }
+        
+        public ReplyGetDocTemplate GetDocTemplate(string id)
+        {
+            var request = new RequestGetDocTemplate()
+            {
+                Id = id
+            };
+
+            var reply = JsonConvert.DeserializeObject<ReplyGetDocTemplate>(
+                GetRequest(User, "DocumentTemplate", JsonConvert.SerializeObject(request))
+            );
+
+            return reply;
+        }
+        
+        public AuthorizationResult CheckAuthorization()
+        {
+            var reply = JsonConvert.DeserializeObject<ReplyGetAuthenticationResult>(
+                    GetRequest(User, "AuthCheck")
+                );
+
+            return reply.AuthorizationResult;
+        }
+        
+        public int GetPermissionLevel()
+        {
+            var request = new RequestGetPermissionLevel()
+            {
+                Username = User.Email
+            };
             
+            var reply = JsonConvert.DeserializeObject<ReplyGetPermissionLevel>(
+                GetRequest(User, "PermissionLevel", JsonConvert.SerializeObject(request))
+            );
+
+            return reply.PermissionLevel;
+        }
+
+        public List<DocTemplate> GetDocTemplates()
+        {
+            var reply = JsonConvert.DeserializeObject<ReplyGetDocTemplateList>(GetRequest(User, "DocTemplateList"));
+            return reply.DocTemplates;
+        }
+
+        public List<ProcessTemplate> GetProcessTemplates()
+        {
+            var reply = JsonConvert.DeserializeObject<ReplyGetProcessTemplateList>(GetRequest(User, "ProcessTemplateList"));
+            return reply.ProcessTemplates;
         }
         
-        public static AuthorizationResult CheckAuthorization(string baseUrl, string email, string password)
-        {
-            try
-            {
-                var user = new User(email, password);
-                var postData = JsonConvert.SerializeObject(user);
-                var bytes = Encoding.UTF8.GetBytes(postData);
-
-                var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{baseUrl}/checkauth");
-                httpWebRequest.Method = "POST";
-                httpWebRequest.ContentLength = bytes.Length;
-                httpWebRequest.ContentType = "application/json";
-
-                using (var requestStream = httpWebRequest.GetRequestStream())
-                {
-                    requestStream.Write(bytes, 0, bytes.Length);
-                }
-
-                var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                    using (var responseStream =
-                        new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
-                    {
-                        return JsonConvert.DeserializeObject<AuthorizationResult>(responseStream.ReadToEnd());
-                    }
-            }
-            catch (HttpException)
-            {
-            }
-
-            return AuthorizationResult.INVALID_LOGIN;  
-        }
-        
-        public int GetPermission(string email, string password)
-        {
-            try
-            {
-                var user = new User(email, password);
-                var postData = JsonConvert.SerializeObject(user);
-                var bytes = Encoding.UTF8.GetBytes(postData);
-
-                var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/checkauth");
-                httpWebRequest.Method = "POST";
-                httpWebRequest.ContentLength = bytes.Length;
-                httpWebRequest.ContentType = "application/json";
-
-                using (var requestStream = httpWebRequest.GetRequestStream())
-                {
-                    requestStream.Write(bytes, 0, bytes.Length);
-                }
-
-                var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                    using (var responseStream =
-                        new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
-                    {
-                        return JsonConvert.DeserializeObject<int>(responseStream.ReadToEnd());
-                    }
-            }
-            catch (HttpException)
-            {
-            }
-
-            return -1;  
-        }
-        
-        public List<string> GetTemplates()
-        {
-            return GetList(FileType.DocTemplate);
-        }
-
-        public List<ProcessTemplate> GetProcesses()
-        {
-            var message = GetDataList(DataType.ProcessTemplate, User);
-            var list = JsonConvert.DeserializeObject<List<ProcessTemplate>>(message.Content);
-            return list;
-        }
-
-        public FileMessage GetTemplateByName(string id)
-        {
-            return GetFileById(id, FileType.DocTemplate, User);
-        }
-
-        public string GetProcessById(string id)
-        {
-            return GetFileById(id, FileType.ProcessTemplate, User).Content;
-        }
-
-        public Entry GetEntryById(int id)
-        {
-            var dataMessage = GetDataMessage(DataType.Entry, id);
-
-            return dataMessage.DataType == DataType.Entry
-                ? JsonConvert.DeserializeObject<Entry>(dataMessage.Content)
-                : null;
-        }
-
         public RunningProcess GetProcessInstanceById(int id)
         {
-            var dataMessage = GetDataMessage(DataType.ProcessInstance, id);
+            var request = new RequestGetProcessInstance()
+            {
+                Id = id
+            };
 
-            return dataMessage.DataType == DataType.ProcessInstance
-                ? JsonConvert.DeserializeObject<RunningProcess>(dataMessage.Content)
-                : null;
+            var reply = JsonConvert.DeserializeObject<ReplyGetProcessInstance>(
+                GetRequest(User, "ProcessInstance", JsonConvert.SerializeObject(request))
+            );
+
+            return reply.ProcessInstance;
         }
 
+        public List<Entry> GetEntries(int instanceId)
+        {
+            var request = new RequestGetEntryList()
+            {
+                InstanceId = instanceId
+            };
+
+            var reply = JsonConvert.DeserializeObject<ReplyGetEntryList>(
+                GetRequest(User, "ProcessTemplate", JsonConvert.SerializeObject(request))
+            );
+
+            return reply.Entries;
+        }
+        
+        
         #endregion
 
         #region CREATE
 
-        public static UploadResult CreateUser(string baseUrl, string email, string password)
+        public UploadResult Register()
         {
-            var user = new User(email, HashHelper.Hash(password));
+            var request = new RequestPostUser()
+            {
+                User = User
+            };
 
-            return new NetworkHelper(baseUrl, new User()).PostData(user, DataType.UserAccount, "");
+            var reply = JsonConvert.DeserializeObject<ReplyPostUser>(
+                PostRequest(User, "User", JsonConvert.SerializeObject(request))
+            );
+
+            return reply.UploadResult;
         }
 
         public UploadResult CreateProcessInstance(string processTemplateId, string ownerId)
@@ -158,44 +147,116 @@ namespace DynamicDocsWPF.HelperClasses
                 Owner_ID = ownerId,
                 Template_ID = processTemplateId
             };
-
-            return PostData(User,DataType.ProcessInstance, JsonConvert.SerializeObject(runningProcess));
+            var request = new RequestPostProcessInstance()
+            {
+                RunningProcess = runningProcess
+            };
+            var reply = JsonConvert.DeserializeObject<ReplyPostUser>(
+                 PostRequest(User,"ProcessCreate", JsonConvert.SerializeObject(request))
+                );
+            return reply.UploadResult;
         }
 
         public UploadResult UploadProcessTemplate(string filePath, bool forceOverwrite)
         {
             var process = XmlHelper.ReadXMLFromPath(filePath);
-            var fileName = Path.GetFileName(filePath);
-            var fileText = File.ReadAllText(filePath);
-            return PostFile(new FileMessage(User, FileType.ProcessTemplate, process.Name, fileName, fileText, forceOverwrite));
+            var request = new RequestPostProcessTemplate()
+            {
+                Id = process.Name,
+                Description = process.Description,
+                ForceOverWrite = forceOverwrite,
+                Text = File.ReadAllText(filePath)
+            };
+            var reply = JsonConvert.DeserializeObject<ReplyPostProcessTemplate>(
+              PostRequest(User, "ProcessTemplate", JsonConvert.SerializeObject(request))
+                );
+            return reply.UploadResult;
         }
 
         public UploadResult UploadDocTemplate(string templateId, string filePath, bool forceOverwrite)
         {
-            var fileName = Path.GetFileName(filePath);
-            var fileBytes = Encoding.Default.GetString(File.ReadAllBytes(filePath));
-            return PostFile(new FileMessage(User, FileType.DocTemplate, templateId, fileName, fileBytes, forceOverwrite));
+            var request = new RequestPostDocTemplate()
+            {
+                Id = templateId,
+                ForceOverWrite = forceOverwrite,
+                Content = Encoding.Default.GetString(File.ReadAllBytes(filePath))
+            };
+            var reply = JsonConvert.DeserializeObject<ReplyPostDocTemplate>(
+                PostRequest(User, "DocumentTemplate", JsonConvert.SerializeObject(request))
+            );
+            return reply.UploadResult;
         }
 
-        public void CreateEntry(Entry entry)
+        public UploadResult CreateEntry(Entry entry)
         {
-            PostData(User,DataType.Entry, JsonConvert.SerializeObject(entry));
+            var request = new RequestPostEntry()
+            {
+                Entry = entry
+            };
+            var reply = JsonConvert.DeserializeObject<ReplyPostEntry>(
+                PostRequest(User, "Entry", JsonConvert.SerializeObject(request))
+            );
+            return reply.UploadResult;
         }
 
         #endregion
 
         #region UPDATE
 
-        public UploadResult ApproveProcess(int id)
+        public UploadResult PostProcessUpdate(int id, bool declined)
         {
-            return PostData(User,DataType.ProcessUpdate, JsonConvert.SerializeObject(new ProcessUpdate(id, false)));
-        }
-
-        public UploadResult DeclineProcess(int id)
-        {
-            return PostData(User,DataType.ProcessUpdate, JsonConvert.SerializeObject(new ProcessUpdate(id, true)));
+            var request = new RequestPostProcessUpdate()
+            {
+                Id = id,
+                Declined = declined
+            };
+            var reply = JsonConvert.DeserializeObject<ReplyPostProcessUpdate>(
+                PostRequest(User, "ProcessUpdate", JsonConvert.SerializeObject(request))
+            );
+            return reply.UploadResult;
         }
 
         #endregion
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

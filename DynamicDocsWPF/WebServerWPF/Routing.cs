@@ -13,6 +13,7 @@
         public const string GetEntryList = "/Entries/{request}";
         public const string PostProcessUpdate = "/ProcessUpdate";
         public const string PostProcessInstance = "/ProcessCreate";
+        public const string GetProcessInstance = "/ProcessInstance/{request}";
         public const string PostEntry = "/Entry";
         public const string PostUser = "/User";
     }

@@ -17,8 +17,8 @@ namespace DynamicDocsWPF
     /// </summary>
     public partial class MainWindow
     {
-        private NetworkHelper _networkHelper;
-        private User _user;
+        private readonly NetworkHelper _networkHelper;
+        private readonly User _user;
 
         public MainWindow()
         {
@@ -34,9 +34,7 @@ namespace DynamicDocsWPF
 
             }
             else Close();
-        }
-
-        
+        } 
 
         private void HandleUploadResult(UploadResult result)
         {
@@ -60,9 +58,6 @@ namespace DynamicDocsWPF
             }
         }
 
-       
-        
-
         private void MainMenu_BtnNewProcessInstance_OnClick(object sender, RoutedEventArgs e)
         {
             var processSelect = new ProcessSelect(_networkHelper);
@@ -70,7 +65,7 @@ namespace DynamicDocsWPF
 
             if (processSelect.DialogResult == true)
             {
-                var file = _networkHelper.GetProcessById(processSelect.SelectedProcessTemplate.Id);
+                var file = _networkHelper.GetProcessTemplate(processSelect.SelectedProcessTemplate.Id);
                 var process = XmlHelper.ReadXMLFromString(file);
                 var newInstance = new CreateProcessInstance(process);
                 newInstance.ShowDialog();

@@ -1,6 +1,7 @@
 using System.Windows;
 using DynamicDocsWPF.HelperClasses;
 using RestService;
+using RestService.Model.Database;
 
 namespace DynamicDocsWPF.Windows
 {
@@ -8,6 +9,7 @@ namespace DynamicDocsWPF.Windows
     {
         public string Email => EmailBox.Text;
         public string Password => PasswordBox.Password;
+        public User User => new User(Email, Password);
         public Register()
         {
             InitializeComponent();
@@ -25,19 +27,19 @@ namespace DynamicDocsWPF.Windows
             }
             else
             {
-                var result = NetworkHelper.CreateUser("http://localhost:8000/Service", Email, HashHelper.Hash(Password));
-                if (result == UploadResult.USER_EXISTS)
+                var result = new NetworkHelper("http://localhost:8000/Service",User).Register();
+                switch (result)
                 {
-                    Register_InfoText.Text = "Ein Nutzer mit dieser Email Adresse existiert bereits.";
-                }
-                else if(result == UploadResult.SUCCESS)
-                {
-                    DialogResult = true;
-                    Close();
-                }
-                else
-                {
-                    Register_InfoText.Text = "Etwas ist schiefgelaufen. Prüfen Sie Ihre Eingaben oder kontaktieren Sie den Administrator.";
+                    case UploadResult.USER_EXISTS:
+                        Register_InfoText.Text = "Ein Nutzer mit dieser Email Adresse existiert bereits.";
+                        break;
+                    case UploadResult.SUCCESS:
+                        DialogResult = true;
+                        Close();
+                        break;
+                    default:
+                        Register_InfoText.Text = "Etwas ist schiefgelaufen. Prüfen Sie Ihre Eingaben oder kontaktieren Sie den Administrator.";
+                        break;
                 }
             }
         }

@@ -12,7 +12,7 @@ namespace DynamicDocsWPF.Windows
         {
             _networkHelper = networkHelper;
             InitializeComponent();
-            ProcessCombobox.ItemsSource = _networkHelper.GetProcesses();
+            ProcessCombobox.ItemsSource = _networkHelper.GetProcessTemplates();
         }
 
         private void ProcessSelect_btnSelect_OnClick(object sender, RoutedEventArgs e)
