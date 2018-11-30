@@ -7,8 +7,9 @@
         public const string PostProcessTemplate = "/ProcessTemplate";
         public const string PostDocTemplate = "/DocumentTemplate";
         public const string GetProcessTemplateList = "/ProcessTemplateList";
-        public const string GetDocTemplateList = "/ProcessDocTemplateList";
+        public const string GetDocTemplateList = "/DocTemplateList";
         public const string GetAuthorized = "/AuthCheck";
+        public const string GetPermissionLevel = "/PermissionLevel";
         public const string GetEntryList = "/Entries/{request}";
         public const string PostProcessUpdate = "/ProcessUpdate";
         public const string PostProcessInstance = "/ProcessCreate";

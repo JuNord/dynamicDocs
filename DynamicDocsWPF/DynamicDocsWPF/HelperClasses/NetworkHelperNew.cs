@@ -64,38 +64,53 @@ namespace DynamicDocsWPF.HelperClasses
             return reply.AuthorizationResult;
         }
         
-        public int GetPermission(string email, string password)
+        public int GetPermissionLevel()
         {
-            try
+            var request = new RequestGetPermissionLevel()
             {
-                var user = new User(email, password);
-                var postData = JsonConvert.SerializeObject(user);
-                var bytes = Encoding.UTF8.GetBytes(postData);
+                Username = User.Email
+            };
+            
+            var reply = JsonConvert.DeserializeObject<ReplyGetPermissionLevel>(
+                GetRequest(User, "PermissionLevel", JsonConvert.SerializeObject(request))
+            );
 
-                var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/checkauth");
-                httpWebRequest.Method = "POST";
-                httpWebRequest.ContentLength = bytes.Length;
-                httpWebRequest.ContentType = "application/json";
+            return reply.PermissionLevel;
+        }
 
-                using (var requestStream = httpWebRequest.GetRequestStream())
-                {
-                    requestStream.Write(bytes, 0, bytes.Length);
-                }
+        public List<DocTemplate> GetDocTemplates()
+        {
+            var reply = JsonConvert.DeserializeObject<ReplyGetDocTemplateList>(GetRequest(User, "DocTemplateList"));
+            return reply.DocTemplates;
+        }
 
-                var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+        public List<ProcessTemplate> GetProcessTemplates()
+        {
+            var reply = JsonConvert.DeserializeObject<ReplyGetProcessTemplateList>(GetRequest(User, "ProcessTemplateList"));
+            return reply.ProcessTemplates;
+        }
+        
+        public string GetProcessById(string id)
+        {
+            return GetFileById(id, FileType.ProcessTemplate, User).Content;
+        }
 
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                    using (var responseStream =
-                        new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
-                    {
-                        return JsonConvert.DeserializeObject<int>(responseStream.ReadToEnd());
-                    }
-            }
-            catch (HttpException)
-            {
-            }
+        public Entry GetEntryById(int id)
+        {
+            var dataMessage = GetDataMessage(DataType.Entry, id);
 
-            return -1;  
+            return dataMessage.DataType == DataType.Entry
+                ? JsonConvert.DeserializeObject<Entry>(dataMessage.Content)
+                : null;
+        }
+
+        public RunningProcess GetProcessInstanceById(int id)
+        {
+            var dataMessage = GetDataMessage(DataType.ProcessInstance, id);
+
+            return dataMessage.DataType == DataType.ProcessInstance
+                ? JsonConvert.DeserializeObject<RunningProcess>(dataMessage.Content)
+                : null;
         }
         
         public string GetRequest(User user, string url, string message = null)
@@ -123,51 +138,7 @@ namespace DynamicDocsWPF.HelperClasses
 
             return null;  
         }
-        
-        
-        
-        
-        
-        public List<string> GetTemplates()
-        {
-            return GetList(FileType.DocTemplate);
-        }
-
-        public List<ProcessTemplate> GetProcesses()
-        {
-            var message = GetDataList(DataType.ProcessTemplate, User);
-            var list = JsonConvert.DeserializeObject<List<ProcessTemplate>>(message.Content);
-            return list;
-        }
-
-        public FileMessage GetTemplateByName(string id)
-        {
-            return GetFileById(id, FileType.DocTemplate, User);
-        }
-
-        public string GetProcessById(string id)
-        {
-            return GetFileById(id, FileType.ProcessTemplate, User).Content;
-        }
-
-        public Entry GetEntryById(int id)
-        {
-            var dataMessage = GetDataMessage(DataType.Entry, id);
-
-            return dataMessage.DataType == DataType.Entry
-                ? JsonConvert.DeserializeObject<Entry>(dataMessage.Content)
-                : null;
-        }
-
-        public RunningProcess GetProcessInstanceById(int id)
-        {
-            var dataMessage = GetDataMessage(DataType.ProcessInstance, id);
-
-            return dataMessage.DataType == DataType.ProcessInstance
-                ? JsonConvert.DeserializeObject<RunningProcess>(dataMessage.Content)
-                : null;
-        }
-
+   
         #endregion
 
         #region CREATE

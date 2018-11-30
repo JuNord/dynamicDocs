@@ -78,6 +78,7 @@
     <Compile Include="RestDTOs\ReplyPostProcessTemplate.cs" />
     <Compile Include="RestDTOs\ReplyPostProcessUpdate.cs" />
     <Compile Include="RestDTOs\ReplyPostUser.cs" />
+    <Compile Include="RestDTOs\RequestGetPermissionLevel.cs" />
     <Compile Include="RestDTOs\RequestPostEntry.cs" />
     <Compile Include="RestDTOs\RequestPostProcessInstance.cs" />
     <Compile Include="RestDTOs\RequestGetDocTemplate.cs" />

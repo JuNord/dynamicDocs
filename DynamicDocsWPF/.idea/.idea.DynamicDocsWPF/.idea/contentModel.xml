@@ -141,6 +141,7 @@
           <e p="ReplyPostUser.cs" t="Include" />
           <e p="RequestGetDocTemplate.cs" t="Include" />
           <e p="RequestGetEntryList.cs" t="Include" />
+          <e p="RequestGetPermissionLevel.cs" t="Include" />
           <e p="RequestGetProcessTemplate.cs" t="Include" />
           <e p="RequestPostDocTemplate.cs" t="Include" />
           <e p="RequestPostEntry.cs" t="Include" />

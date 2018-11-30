@@ -44,9 +44,9 @@ namespace WebServer
         ReplyGetEntryList GetEntryList(RequestGetEntryList request);
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetEntryList, BodyStyle = WebMessageBodyStyle.Bare,
+        [WebGet(UriTemplate = Routing.GetPermissionLevel, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
-        ReplyGetPermissionLevel GetPermissionLevel(User user);
+        ReplyGetPermissionLevel GetPermissionLevel(RequestGetPermissionLevel request);
         
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = Routing.PostProcessTemplate, RequestFormat = WebMessageFormat.Json,

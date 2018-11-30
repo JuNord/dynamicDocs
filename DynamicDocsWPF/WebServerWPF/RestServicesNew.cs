@@ -25,13 +25,13 @@ namespace WebServerWPF
         private const string ProcessPath = "./Processes/";
         private static readonly DatabaseHelper Database = new DatabaseHelper();
 
-        public ReplyGetPermissionLevel GetPermissionLevel(User user)
+        public ReplyGetPermissionLevel GetPermissionLevel(RequestGetPermissionLevel request)
         {
-            if (IsAuthorized(user) == AuthorizationResult.AUTHORIZED)
+            if (IsPermitted(GetAuthUser(),3) == AuthorizationResult.PERMITTED || (IsAuthorized(GetAuthUser()) == AuthorizationResult.AUTHORIZED && GetAuthUser().Email.Equals(request.Username)))
             {
                 return new ReplyGetPermissionLevel()
                 {
-                    PermissionLevel = Database.GetUserByMail(user.Email).PermissionLevel
+                    PermissionLevel = Database.GetUserByMail(request.Username).PermissionLevel
                 };
             }
 
