@@ -90,18 +90,32 @@ namespace DynamicDocsWPF.HelperClasses
             return reply.ProcessTemplates;
         }
         
-        public string GetProcessById(string id)
+        public RunningProcess GetProcessById(int id)
         {
-            return GetFileById(id, FileType.ProcessTemplate, User).Content;
+            var request = new RequestGetProcessInstance()
+            {
+                Id = id
+            };
+
+            var reply = JsonConvert.DeserializeObject<ReplyGetProcessInstance>(
+                GetRequest(User, "ProcessTemplate", JsonConvert.SerializeObject(request))
+            );
+
+            return reply.ProcessInstance;
         }
 
-        public Entry GetEntryById(int id)
+        public List<Entry> GetEntries(int processId)
         {
-            var dataMessage = GetDataMessage(DataType.Entry, id);
+            var request = new RequestGetEntryList()
+            {
+                Id = id
+            };
 
-            return dataMessage.DataType == DataType.Entry
-                ? JsonConvert.DeserializeObject<Entry>(dataMessage.Content)
-                : null;
+            var reply = JsonConvert.DeserializeObject<ReplyGetProcessInstance>(
+                GetRequest(User, "ProcessTemplate", JsonConvert.SerializeObject(request))
+            );
+
+            return reply.ProcessInstance;
         }
 
         public RunningProcess GetProcessInstanceById(int id)

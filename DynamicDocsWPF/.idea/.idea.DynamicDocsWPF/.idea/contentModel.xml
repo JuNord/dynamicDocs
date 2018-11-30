@@ -131,6 +131,7 @@
           <e p="ReplyGetDocTemplateList.cs" t="Include" />
           <e p="ReplyGetEntryList.cs" t="Include" />
           <e p="ReplyGetPermissionLevel.cs" t="Include" />
+          <e p="ReplyGetProcessInstance.cs" t="Include" />
           <e p="ReplyGetProcessTemplate.cs" t="Include" />
           <e p="ReplyGetProcessTemplateList.cs" t="Include" />
           <e p="ReplyPostDocTemplate .cs" t="Include" />
@@ -142,6 +143,7 @@
           <e p="RequestGetDocTemplate.cs" t="Include" />
           <e p="RequestGetEntryList.cs" t="Include" />
           <e p="RequestGetPermissionLevel.cs" t="Include" />
+          <e p="RequestGetProcessInstance.cs" t="Include" />
           <e p="RequestGetProcessTemplate.cs" t="Include" />
           <e p="RequestPostDocTemplate.cs" t="Include" />
           <e p="RequestPostEntry.cs" t="Include" />
