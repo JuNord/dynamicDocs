@@ -2,13 +2,13 @@
 {
     public static class Routing
     {
-        public const string CheckAuth = "/checkauth";
-        public const string GetPermissionLevel = "/permission";
-        public const string GetFile = "/getfile";
-        public const string GetDataList = "/getlist";
-        public const string GetProcessList = "/Processes";
-        public const string GetTemplateList = "/Templates";
-        public const string PostFile = "/fileMessage";
-        public const string PostData = "/dataMessage";
+        public const string AuthExtension = "?{Email}:{Password}";
+        
+        public const string GetProcessTemplate = "/ProcessTemplate/{requestGetProcessTemplate}";
+        public const string GetDocTemplate = "/ProcessTemplate/{requestGetDocTemplate}";
+        public const string PostProcessTemplate = "/ProcessTemplate/{requestPostProcessTemplate}";
+        public const string PostDocTemplate = "/DocumentTemplate/{requestPostDocTemplate}";
+        public const string GetProcessTemplateList = "/ProcessTemplateList";
+        public const string GetDocTemplateList = "/ProcessTemplateList";
     }
 }

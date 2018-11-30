@@ -21,7 +21,7 @@
   <process-step name="validationBySecretary" description="Genehmigt durch Sekretärin" target="herrewald">
     <validation locks="true"/>
     <mailnotify target="[teacher]" text="Antrag durch Sekretär/in genehmigt"/>
-    <receipt draftname="vorlage.docx" filepath=".\receipt.docx"/>
+    <receipt draftname="vorlage"/>
   </process-step>
   <archivefor target="[teacher]"/>
   <archivefor target="Secretary"/>

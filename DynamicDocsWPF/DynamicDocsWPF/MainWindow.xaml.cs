@@ -67,12 +67,20 @@ namespace DynamicDocsWPF
         {
             var processSelect = new ProcessSelect(_networkHelper);
             processSelect.ShowDialog();
-            
-            
-            var file = _networkHelper.GetProcessById(processSelect.SelectedProcessTemplate.Id);
-            var process = XmlHelper.ReadXMLFromString(file);
-            var newInstance = new CreateProcessInstance(process);
-            newInstance.ShowDialog();
+
+            if (processSelect.DialogResult == true)
+            {
+                var file = _networkHelper.GetProcessById(processSelect.SelectedProcessTemplate.Id);
+                var process = XmlHelper.ReadXMLFromString(file);
+                var newInstance = new CreateProcessInstance(process);
+                newInstance.ShowDialog();
+            }
+        }
+
+        private void MainMenu_BtnUploadProcess_OnClick(object sender, RoutedEventArgs e)
+        {
+            var create = new CreateProcessTemplate(_networkHelper);
+            create.ShowDialog();
         }
     }
 }

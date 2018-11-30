@@ -51,5 +51,20 @@ namespace RestService.Model.Process
         {
             return _dialogs?[index];
         }
+        
+        public ReceiptElement GetReceiptAtIndex(int index)
+        {
+            return _receipts?[index];
+        }
+        
+        public ValidationElement GetValidationAtIndex(int index)
+        {
+            return _validations?[index];
+        }
+        
+        public INotificationElement GetNotificationAtIndex(int index)
+        {
+            return _notifications?[index];
+        }
     }
 }

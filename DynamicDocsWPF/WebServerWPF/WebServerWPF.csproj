@@ -61,8 +61,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="IRestServiceNew.cs" />
+    <Compile Include="RestDots\ReplyGetAuthorizationResult.cs" />
+    <Compile Include="RestDots\ReplyGetDocTemplate.cs" />
+    <Compile Include="RestDots\ReplyGetDocTemplateList.cs" />
+    <Compile Include="RestDots\ReplyGetProcessTemplate.cs" />
+    <Compile Include="RestDots\ReplyGetProcessTemplateList.cs" />
+    <Compile Include="RestDots\ReplyPostProcessTemplate.cs" />
+    <Compile Include="RestDots\RequestGetDocTemplate.cs" />
+    <Compile Include="RestDots\RequestGetProcessTemplate.cs" />
+    <Compile Include="RestDots\RequestPostDocTemplate.cs" />
+    <Compile Include="RestDots\RequestPostProcessTemplate.cs" />
     <Compile Include="RestServices.cs" />
+    <Compile Include="RestServicesNew.cs" />
     <Compile Include="Routing.cs" />
+    <Compile Include="RoutingNew.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
