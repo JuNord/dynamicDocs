@@ -205,7 +205,7 @@ namespace WebServerWPF
                     return new User()
                     {
                         Email = reader.GetString(0),
-                        Password_Hash = reader.GetString(1),
+                        Password = reader.GetString(1),
                         PermissionLevel = reader.GetInt32(2)
                     };
                 }
@@ -217,7 +217,7 @@ namespace WebServerWPF
         public void AddUser(User user)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO User VALUES (\"{user.Email}\",\"{user.Password_Hash}\",0);";
+            cmd.CommandText = $"INSERT INTO User VALUES (\"{user.Email}\",\"{user.Password}\",0);";
 
             cmd.ExecuteNonQuery();
         }
@@ -328,11 +328,11 @@ namespace WebServerWPF
         }
 
         //SELECT * FROM ENTRY
-        public List<Entry> GetEntry()
+        public List<Entry> GetEntry(int processId)
         {
             var entries = new List<Entry>();
             var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT * FROM entry;";
+            cmd.CommandText = $"SELECT * FROM entry WHERE process_id = {processId};";
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())

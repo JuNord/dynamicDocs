@@ -81,6 +81,7 @@
     <Compile Include="HelperClasses\IReceiptHelper.cs" />
     <Compile Include="HelperClasses\NetworkBase.cs" />
     <Compile Include="HelperClasses\NetworkHelper.cs" />
+    <Compile Include="HelperClasses\NetworkHelperNew.cs" />
     <Compile Include="HelperClasses\ViewCreator.cs" />
     <Compile Include="HelperClasses\WordReceiptHelper.cs" />
     <Compile Include="Windows\CreateProcessInstance.xaml.cs">

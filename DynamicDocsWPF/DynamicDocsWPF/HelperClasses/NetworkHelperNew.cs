@@ -8,15 +8,17 @@ using DynamicDocsWPF.Model;
 using Newtonsoft.Json;
 using RestService;
 using RestService.Model.Database;
+using WebServerWPF.RestDots;
+using WebServerWPF.RestDTOs;
 
 namespace DynamicDocsWPF.HelperClasses
 {
-    public class NetworkHelper : NetworkBase
+    public class NetworkHelperNew : NetworkBase
     {
         public User User { get; set; }
 
         
-        public NetworkHelper(string baseUrl, User user) : base(baseUrl)
+        public NetworkHelperNew(string baseUrl, User user) : base(baseUrl)
         {
             User = user;
         }
@@ -25,43 +27,41 @@ namespace DynamicDocsWPF.HelperClasses
 
         #region GET
 
-        public static string GetRequest(string baseUrl, object data)
+        public string GetProcessTemplate(string id)
         {
-            
+            var request = new RequestGetProcessTemplate()
+            {
+                Id = id
+            };
+
+            var reply = JsonConvert.DeserializeObject<ReplyGetProcessTemplate>(
+                GetRequest(User, "ProcessTemplate", JsonConvert.SerializeObject(request))
+            );
+
+            return reply.Text;
         }
         
-        public static AuthorizationResult CheckAuthorization(string baseUrl, string email, string password)
+        public ReplyGetDocTemplate GetDocTemplate(string id)
         {
-            try
+            var request = new RequestGetDocTemplate()
             {
-                var user = new User(email, password);
-                var postData = JsonConvert.SerializeObject(user);
-                var bytes = Encoding.UTF8.GetBytes(postData);
+                Id = id
+            };
 
-                var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{baseUrl}/checkauth");
-                httpWebRequest.Method = "POST";
-                httpWebRequest.ContentLength = bytes.Length;
-                httpWebRequest.ContentType = "application/json";
+            var reply = JsonConvert.DeserializeObject<ReplyGetDocTemplate>(
+                GetRequest(User, "DocumentTemplate", JsonConvert.SerializeObject(request))
+            );
 
-                using (var requestStream = httpWebRequest.GetRequestStream())
-                {
-                    requestStream.Write(bytes, 0, bytes.Length);
-                }
+            return reply;
+        }
+        
+        public AuthorizationResult CheckAuthorization()
+        {
+            var reply = JsonConvert.DeserializeObject<ReplyGetAuthenticationResult>(
+                    GetRequest(User, "AuthCheck")
+                );
 
-                var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                    using (var responseStream =
-                        new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
-                    {
-                        return JsonConvert.DeserializeObject<AuthorizationResult>(responseStream.ReadToEnd());
-                    }
-            }
-            catch (HttpException)
-            {
-            }
-
-            return AuthorizationResult.INVALID_LOGIN;  
+            return reply.AuthorizationResult;
         }
         
         public int GetPermission(string email, string password)
@@ -97,6 +97,36 @@ namespace DynamicDocsWPF.HelperClasses
 
             return -1;  
         }
+        
+        public string GetRequest(User user, string url, string message = null)
+        {
+            try
+            {
+                HttpWebRequest httpWebRequest;
+                if(!string.IsNullOrWhiteSpace(message)) 
+                    httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{url}/{message}");
+                else httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{url}");
+                httpWebRequest.Method = "GET";
+
+                var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                    using (var responseStream =
+                        new StreamReader(httpWebResponse.GetResponseStream() ?? throw new HttpException()))
+                    {
+                        return responseStream.ReadToEnd();
+                    }
+            }
+            catch (HttpException)
+            {
+            }
+
+            return null;  
+        }
+        
+        
+        
+        
         
         public List<string> GetTemplates()
         {

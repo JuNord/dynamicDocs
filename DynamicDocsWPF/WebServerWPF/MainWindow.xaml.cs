@@ -20,7 +20,7 @@ namespace WebServerWPF
 
         private static void RunService()
         {
-            _serviceHost = new WebServiceHost(typeof(RestService));
+            _serviceHost = new WebServiceHost(typeof(RestServiceNew));
             var httpBinding = new WebHttpBinding();
             var readerQuotas = new XmlDictionaryReaderQuotas
             {
@@ -35,7 +35,7 @@ namespace WebServerWPF
             httpBinding.MaxBufferSize = MaxRequestSize;
             httpBinding.MaxReceivedMessageSize = MaxRequestSize;
 
-            _serviceHost.AddServiceEndpoint(typeof(IRestService), httpBinding, new Uri(BaseUrl));
+            _serviceHost.AddServiceEndpoint(typeof(IRestServiceNew), httpBinding, new Uri(BaseUrl));
 
             _serviceHost.Open();
 

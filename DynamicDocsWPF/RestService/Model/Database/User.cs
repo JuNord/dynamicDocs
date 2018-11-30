@@ -6,15 +6,15 @@ namespace RestService.Model.Database
         {
         }
 
-        public User(string email, string passwordHash, int permissionLevel = 0)
+        public User(string email, string password, int permissionLevel = 0)
         {
             Email = email;
-            Password_Hash = passwordHash;
+            Password = password;
             PermissionLevel = permissionLevel;
         }
 
         public string Email { get; set; }
-        public string Password_Hash { get; set; }
+        public string Password { get; set; }
         public int PermissionLevel { get; set; }
     }
 }

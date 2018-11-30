@@ -1,6 +1,6 @@
-namespace WebServerWPF.RestDots
+namespace WebServerWPF.RestDTOs
 {
-    public class RequestPostProcessTemplate
+    public class ReplyGetProcessTemplate
     {
         public string Id { get; set; }
         public string Description { get; set; }

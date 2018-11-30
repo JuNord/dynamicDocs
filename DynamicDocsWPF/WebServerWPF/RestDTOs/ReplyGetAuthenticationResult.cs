@@ -1,8 +1,8 @@
 using DynamicDocsWPF.Model;
 
-namespace WebServerWPF.RestDots
+namespace WebServerWPF.RestDTOs
 {
-    public class ReplyGetAuthorizationResult
+    public class ReplyGetAuthenticationResult
     {
         public AuthorizationResult AuthorizationResult { get; set; }
     }

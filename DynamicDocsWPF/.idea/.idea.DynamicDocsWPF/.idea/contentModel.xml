@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\sebas_qgewjv\.Rider2018.2\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\sebas_qgewjv\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.-1818023564.00" t="ExcludeRecursive" />
-    <e p="C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
+    <e p="C:\Users\sebastian.bauer\.Rider2018.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\sebastian.bauer\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.1172674224.00" t="ExcludeRecursive" />
+    <e p="C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
       <e p="DynamicDocsWPF" t="IncludeRecursive">
         <e p="App.config" t="Include" />
         <e p="App.xaml" t="Include" />
@@ -15,6 +15,7 @@
           <e p="IReceiptHelper.cs" t="Include" />
           <e p="NetworkBase.cs" t="Include" />
           <e p="NetworkHelper.cs" t="Include" />
+          <e p="NetworkHelperNew.cs" t="Include" />
           <e p="ViewCreator.cs" t="Include" />
           <e p="WordReceiptHelper.cs" t="Include" />
         </e>
@@ -115,7 +116,6 @@
         <e p="App.xaml.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="DatabaseHelper.cs" t="Include" />
-        <e p="IRestService.cs" t="Include" />
         <e p="IRestServiceNew.cs" t="Include" />
         <e p="MainWindow.xaml" t="Include" />
         <e p="MainWindow.xaml.cs" t="Include" />
@@ -125,22 +125,32 @@
           <e p="Resources.Designer.cs" t="Include" />
           <e p="Resources.resx" t="Include" />
         </e>
-        <e p="RestDots" t="Include">
-          <e p="ReplyGetAuthorizationResult.cs" t="Include" />
+        <e p="RestDTOs" t="Include">
+          <e p="ReplyGetAuthenticationResult.cs" t="Include" />
           <e p="ReplyGetDocTemplate.cs" t="Include" />
           <e p="ReplyGetDocTemplateList.cs" t="Include" />
+          <e p="ReplyGetEntryList.cs" t="Include" />
+          <e p="ReplyGetPermissionLevel.cs" t="Include" />
           <e p="ReplyGetProcessTemplate.cs" t="Include" />
           <e p="ReplyGetProcessTemplateList.cs" t="Include" />
+          <e p="ReplyPostDocTemplate .cs" t="Include" />
+          <e p="ReplyPostEntry.cs" t="Include" />
+          <e p="ReplyPostProcessInstance.cs" t="Include" />
           <e p="ReplyPostProcessTemplate.cs" t="Include" />
+          <e p="ReplyPostProcessUpdate.cs" t="Include" />
+          <e p="ReplyPostUser.cs" t="Include" />
           <e p="RequestGetDocTemplate.cs" t="Include" />
+          <e p="RequestGetEntryList.cs" t="Include" />
           <e p="RequestGetProcessTemplate.cs" t="Include" />
           <e p="RequestPostDocTemplate.cs" t="Include" />
+          <e p="RequestPostEntry.cs" t="Include" />
+          <e p="RequestPostProcessInstance.cs" t="Include" />
           <e p="RequestPostProcessTemplate.cs" t="Include" />
+          <e p="RequestPostProcessUpdate.cs" t="Include" />
+          <e p="RequestPostUser.cs" t="Include" />
         </e>
-        <e p="RestServices.cs" t="Include" />
         <e p="RestServicesNew.cs" t="Include" />
         <e p="Routing.cs" t="Include" />
-        <e p="RoutingNew.cs" t="Include" />
         <e p="WebServerWPF.csproj" t="IncludeRecursive" />
       </e>
       <e p="XmlProcessor" t="IncludeRecursive">

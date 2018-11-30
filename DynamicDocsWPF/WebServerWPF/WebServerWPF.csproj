@@ -48,6 +48,9 @@
       <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework64\v4.0.30319\System.ServiceModel.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -62,20 +65,30 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IRestServiceNew.cs" />
-    <Compile Include="RestDots\ReplyGetAuthorizationResult.cs" />
-    <Compile Include="RestDots\ReplyGetDocTemplate.cs" />
-    <Compile Include="RestDots\ReplyGetDocTemplateList.cs" />
-    <Compile Include="RestDots\ReplyGetProcessTemplate.cs" />
-    <Compile Include="RestDots\ReplyGetProcessTemplateList.cs" />
-    <Compile Include="RestDots\ReplyPostProcessTemplate.cs" />
-    <Compile Include="RestDots\RequestGetDocTemplate.cs" />
-    <Compile Include="RestDots\RequestGetProcessTemplate.cs" />
-    <Compile Include="RestDots\RequestPostDocTemplate.cs" />
-    <Compile Include="RestDots\RequestPostProcessTemplate.cs" />
-    <Compile Include="RestServices.cs" />
+    <Compile Include="RestDTOs\ReplyGetAuthenticationResult.cs" />
+    <Compile Include="RestDTOs\ReplyGetDocTemplate.cs" />
+    <Compile Include="RestDTOs\ReplyGetDocTemplateList.cs" />
+    <Compile Include="RestDTOs\ReplyGetEntryList.cs" />
+    <Compile Include="RestDTOs\ReplyGetPermissionLevel.cs" />
+    <Compile Include="RestDTOs\ReplyGetProcessTemplate.cs" />
+    <Compile Include="RestDTOs\ReplyGetProcessTemplateList.cs" />
+    <Compile Include="RestDTOs\ReplyPostDocTemplate .cs" />
+    <Compile Include="RestDTOs\ReplyPostEntry.cs" />
+    <Compile Include="RestDTOs\ReplyPostProcessInstance.cs" />
+    <Compile Include="RestDTOs\ReplyPostProcessTemplate.cs" />
+    <Compile Include="RestDTOs\ReplyPostProcessUpdate.cs" />
+    <Compile Include="RestDTOs\ReplyPostUser.cs" />
+    <Compile Include="RestDTOs\RequestPostEntry.cs" />
+    <Compile Include="RestDTOs\RequestPostProcessInstance.cs" />
+    <Compile Include="RestDTOs\RequestGetDocTemplate.cs" />
+    <Compile Include="RestDTOs\RequestGetEntryList.cs" />
+    <Compile Include="RestDTOs\RequestGetProcessTemplate.cs" />
+    <Compile Include="RestDTOs\RequestPostDocTemplate.cs" />
+    <Compile Include="RestDTOs\RequestPostProcessTemplate.cs" />
+    <Compile Include="RestDTOs\RequestPostProcessUpdate.cs" />
+    <Compile Include="RestDTOs\RequestPostUser.cs" />
     <Compile Include="RestServicesNew.cs" />
     <Compile Include="Routing.cs" />
-    <Compile Include="RoutingNew.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -85,7 +98,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DatabaseHelper.cs" />
-    <Compile Include="IRestService.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -6,6 +6,7 @@ using RestService;
 using RestService.Model.Database;
 using WebServerWPF;
 using WebServerWPF.RestDots;
+using WebServerWPF.RestDTOs;
 
 namespace WebServer
 {
@@ -13,73 +14,68 @@ namespace WebServer
     public interface IRestServiceNew
     {
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetProcessTemplate+Routing.AuthExtension, BodyStyle = WebMessageBodyStyle.Bare,
+        [WebGet(UriTemplate = Routing.GetProcessTemplate, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
-        ReplyGetProcessTemplate GetProcessTemplate(RequestGetProcessTemplate requestGetProcessTemplate, string email, string password);
+        ReplyGetProcessTemplate GetProcessTemplate(RequestGetProcessTemplate request);
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetProcessTemplate+Routing.AuthExtension, BodyStyle = WebMessageBodyStyle.Bare,
+        [WebGet(UriTemplate = Routing.GetProcessTemplate, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
-        ReplyGetDocTemplate GetDocTemplate(RequestGetDocTemplate requestGetDocTemplate, string email, string password);
+        ReplyGetDocTemplate GetDocTemplate(RequestGetDocTemplate request);
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetProcessTemplateList+Routing.AuthExtension, BodyStyle = WebMessageBodyStyle.Bare,
+        [WebGet(UriTemplate = Routing.GetProcessTemplateList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
-        ReplyGetProcessTemplateList GetProcessTemplateList(string email, string password);
+        ReplyGetProcessTemplateList GetProcessTemplateList();
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetDocTemplateList+Routing.AuthExtension, BodyStyle = WebMessageBodyStyle.Bare,
+        [WebGet(UriTemplate = Routing.GetDocTemplateList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
-        ReplyGetDocTemplateList GetDocTemplateList(string email, string password);
+        ReplyGetDocTemplateList GetDocTemplateList();
         
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = Routing.PostProcessTemplate+Routing.AuthExtension, RequestFormat = WebMessageFormat.Json,
+        [WebGet(UriTemplate = Routing.GetAuthorized, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
-        ReplyPostProcessTemplate PostProcessTemplate(RequestPostProcessTemplate requestPostProcessTemplate);
+        ReplyGetAuthenticationResult CheckAuthentication();
         
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = Routing.PostDocTemplate+Routing.AuthExtension, RequestFormat = WebMessageFormat.Json,
+        [WebGet(UriTemplate = Routing.GetEntryList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
-        ReplyPostProcessTemplate PostDocTemplate(RequestPostDocTemplate requestPostDocTemplate);
+        ReplyGetEntryList GetEntryList(RequestGetEntryList request);
         
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = Routing.GetAuthorized+Routing.AuthExtension, RequestFormat = WebMessageFormat.Json,
+        [WebGet(UriTemplate = Routing.GetEntryList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
-        AuthorizationResult CheckAuth();
+        ReplyGetPermissionLevel GetPermissionLevel(User user);
         
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = Routing.GetPermissionLevel, RequestFormat = WebMessageFormat.Json,
+        [WebInvoke(Method = "POST", UriTemplate = Routing.PostProcessTemplate, RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        int GetPermissionLevel(User user);
+        ReplyPostProcessTemplate PostProcessTemplate(RequestPostProcessTemplate request);
         
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = Routing.GetFile, RequestFormat = WebMessageFormat.Json,
+        [WebInvoke(Method = "POST", UriTemplate = Routing.PostDocTemplate, RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        FileMessage GetFile(DataMessage message);
+        ReplyPostDocTemplate PostDocTemplate(RequestPostDocTemplate request);
+        
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = Routing.PostProcessUpdate, RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        ReplyPostProcessUpdate PostProcessUpdate(RequestPostProcessUpdate request);
+        
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = Routing.PostProcessInstance, RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        ReplyPostProcessInstance PostProcessInstance(RequestPostProcessInstance request);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = Routing.PostFile, RequestFormat = WebMessageFormat.Json,
+        [WebInvoke(Method = "POST", UriTemplate = Routing.PostEntry, RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        UploadResult PostFile(FileMessage message);
-
+        ReplyPostEntry PostEntry(RequestPostEntry request);
+        
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = Routing.PostData, RequestFormat = WebMessageFormat.Json,
+        [WebInvoke(Method = "POST", UriTemplate = Routing.PostUser, RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        UploadResult PostData(DataMessage message);
-
-        [OperationContract]
-        [WebGet(UriTemplate = Routing.GetProcessList, BodyStyle = WebMessageBodyStyle.Bare,
-            ResponseFormat = WebMessageFormat.Json)]
-        List<string> GetProcessList();
-
-        [OperationContract]
-        [WebGet(UriTemplate = Routing.GetTemplateList, BodyStyle = WebMessageBodyStyle.Bare,
-            ResponseFormat = WebMessageFormat.Json)]
-        List<string> GetTemplateList();
-
-        [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = Routing.GetDataList, RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json)]
-        DataMessage GetDataList(DataMessage message);
+        ReplyPostUser Register(RequestPostUser request);
     }
 }

@@ -5,6 +5,7 @@ namespace DynamicDocsWPF.Model
         AUTHORIZED,
         NO_PERMISSION,
         INVALID_LOGIN,
-        PERMITTED
+        PERMITTED,
+        INVALID_FORMAT
     }
 }

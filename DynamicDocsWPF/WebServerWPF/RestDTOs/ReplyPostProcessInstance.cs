@@ -1,8 +1,8 @@
 using RestService;
 
-namespace WebServerWPF.RestDots
+namespace WebServerWPF.RestDTOs
 {
-    public class ReplyPostProcessTemplate
+    public class ReplyPostProcessInstance
     {
         public UploadResult UploadResult { get; set; }
     }
