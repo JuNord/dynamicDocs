@@ -58,8 +58,9 @@ namespace DynamicDocsWPF.HelperClasses
         
         public AuthorizationResult CheckAuthorization()
         {
+            var response = GetRequest(User, "AuthCheck");
             var reply = JsonConvert.DeserializeObject<ReplyGetAuthenticationResult>(
-                    GetRequest(User, "AuthCheck")
+                    response
                 );
 
             return reply.AuthorizationResult;

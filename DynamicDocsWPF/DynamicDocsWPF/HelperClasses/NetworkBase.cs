@@ -31,7 +31,7 @@ namespace DynamicDocsWPF.HelperClasses
                 var encoded = Convert.ToBase64String(
                                 Encoding.GetEncoding("ISO-8859-1")
                                     .GetBytes($"{user.Email}:{user.Password}"));
-                httpWebRequest.Headers.Add("Authorization","Basic " + encoded);
+                httpWebRequest.Headers.Add(HttpRequestHeader.Authorization,"Basic " + encoded);
 
                 var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
 

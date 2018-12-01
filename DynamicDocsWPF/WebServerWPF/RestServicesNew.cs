@@ -3,11 +3,13 @@ using System.IO;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
+using System.ServiceModel.Web;
 using System.Text;
 using System.Web;
 using System.Xml;
 using DynamicDocsWPF.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using RestService;
 using RestService.Model.Database;
 using WebServer;
@@ -23,10 +25,12 @@ namespace WebServerWPF
     {
         private const string DocPath = "./Docs/";
         private const string ProcessPath = "./Processes/";
+        private HttpContext _httpContext = HttpContext.Current;
         private static readonly DatabaseHelper Database = new DatabaseHelper();
 
-        public ReplyGetPermissionLevel GetPermissionLevel(RequestGetPermissionLevel request)
+        public ReplyGetPermissionLevel GetPermissionLevel(string message)
         {
+            var request = JsonConvert.DeserializeObject<RequestGetPermissionLevel>(message);
             if (IsPermitted(GetAuthUser(),3) == AuthorizationResult.PERMITTED || (IsAuthorized(GetAuthUser()) == AuthorizationResult.AUTHORIZED && GetAuthUser().Email.Equals(request.Username)))
             {
                 return new ReplyGetPermissionLevel()
@@ -41,8 +45,10 @@ namespace WebServerWPF
             };
         }
 
-        public ReplyGetProcessInstance GetProcessInstance(RequestGetProcessInstance request)
+        public ReplyGetProcessInstance GetProcessInstance(string message)
         {
+            var request = JsonConvert.DeserializeObject<RequestGetProcessInstance>(message);
+
             try
             {
                 if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
@@ -74,9 +80,7 @@ namespace WebServerWPF
 
         public User GetAuthUser()
         {
-            var httpContext = HttpContext.Current;
-
-            var authHeader = httpContext.Request.Headers["Authorization"];
+            var authHeader = WebOperationContext.Current.IncomingRequest.Headers["Authorization"];
 
             if (authHeader != null && authHeader.StartsWith("Basic"))
             {
@@ -109,8 +113,10 @@ namespace WebServerWPF
             return AuthorizationResult.PERMITTED;
         }
 
-        public ReplyGetProcessTemplate GetProcessTemplate(RequestGetProcessTemplate request)
+        public ReplyGetProcessTemplate GetProcessTemplate(string message)
         {
+            var request = JsonConvert.DeserializeObject<RequestGetProcessTemplate>(message);
+
             try
             {
                 if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
@@ -135,8 +141,10 @@ namespace WebServerWPF
             return null;
         }
 
-        public ReplyGetDocTemplate GetDocTemplate(RequestGetDocTemplate request)
+        public ReplyGetDocTemplate GetDocTemplate(string message)
         {
+            var request = JsonConvert.DeserializeObject<RequestGetDocTemplate>(message);
+
             try
             {
                 if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
@@ -213,8 +221,10 @@ namespace WebServerWPF
             };
         }
 
-        public ReplyGetEntryList GetEntryList(RequestGetEntryList request)
+        public ReplyGetEntryList GetEntryList(string message)
         {
+            var request = JsonConvert.DeserializeObject<RequestGetEntryList>(message);
+
             try
             {
                 if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)

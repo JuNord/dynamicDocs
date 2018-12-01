@@ -34,7 +34,7 @@ namespace WebServerWPF
             httpBinding.GetType().GetProperty("ReaderQuotas")?.SetValue(httpBinding, readerQuotas, null);
             httpBinding.MaxBufferSize = MaxRequestSize;
             httpBinding.MaxReceivedMessageSize = MaxRequestSize;
-
+            
             _serviceHost.AddServiceEndpoint(typeof(IRestServiceNew), httpBinding, new Uri(BaseUrl));
 
             _serviceHost.Open();
