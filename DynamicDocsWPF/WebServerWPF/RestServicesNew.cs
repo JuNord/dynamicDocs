@@ -55,7 +55,7 @@ namespace WebServerWPF
                 {
                     var reply = new ReplyGetProcessInstance()
                     {
-                        ProcessInstance = Database.GetRunningProcessById(request.Id)
+                        ProcessInstance = Database.GetProcessInstanceById(request.Id)
                     };
 
                     return reply;
@@ -71,11 +71,20 @@ namespace WebServerWPF
 
         public AuthorizationResult IsAuthorized(User user)
         {
-            var dbUser = Database.GetUserByMail(user.Email);
-            
-            if (dbUser == null) return AuthorizationResult.INVALID_LOGIN;
-            
-            return HashHelper.CheckHash(user.Password, dbUser.Password) ? AuthorizationResult.AUTHORIZED : AuthorizationResult.INVALID_LOGIN;
+            try
+            {
+                var dbUser = Database.GetUserByMail(user.Email);
+
+                if (dbUser == null) return AuthorizationResult.INVALID_LOGIN;
+
+                return HashHelper.CheckHash(user.Password, dbUser.Password)
+                    ? AuthorizationResult.AUTHORIZED
+                    : AuthorizationResult.INVALID_LOGIN;
+            }
+            catch (Exception e)
+            {
+                return AuthorizationResult.INVALID_FORMAT;
+            }
         }
 
         public User GetAuthUser()
@@ -200,6 +209,28 @@ namespace WebServerWPF
                     var reply = new ReplyGetDocTemplateList()
                     {
                         DocTemplates = Database.GetDocTemplates()
+                    };
+
+                    return reply;
+                }
+            }
+            catch (Exception e)
+            {
+                PrintException(e);
+            }
+
+            return null;
+        }
+
+        public ReplyGetProcessInstanceList GetProcessInstanceList()
+        {
+            try
+            {
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
+                {
+                    var reply = new ReplyGetProcessInstanceList()
+                    {
+                        ProcessInstances = Database.GetProcessInstances(GetAuthUser())
                     };
 
                     return reply;
@@ -396,13 +427,15 @@ namespace WebServerWPF
                         if (request.Declined)
                         {
                             MainWindow.PostToLog("The process was declined.");
-                            Database.DeclineRunningProcess(request.Id);
+                            Database.DeclineProcessInstance(request.Id);
                         }
                         else
                         {
                             MainWindow.PostToLog("The process was approved.");
-                            Database.ApproveRunningProcess(request.Id);
+                            Database.ApproveProcessInstance(request.Id);
                         }
+                        if(request.Locks)
+                            Database.LockProcessInstance(request.Id);
                         break;
                     case AuthorizationResult.NO_PERMISSION: 
                         reply.UploadResult = UploadResult.NO_PERMISSION;                            
@@ -446,7 +479,7 @@ namespace WebServerWPF
                     case AuthorizationResult.PERMITTED:
                         MainWindow.PostToLog("Received request to create a new Process Instance.");
                         MainWindow.PostToLog("Registering in Database...");
-                        reply.InstanceId = (int) Database.AddRunningProcess(request.RunningProcess);
+                        reply.InstanceId = (int) Database.AddProcessInstance(request.ProcessInstance);
                         MainWindow.PostToLog("Done");
                         break;
                     case AuthorizationResult.NO_PERMISSION: 

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -6,6 +7,7 @@ using System.Windows.Media;
 using DynamicDocsWPF.HelperClasses;
 using RestService;
 using RestService.Model.Database;
+using RestService.Model.Input;
 using RestService.Model.Process;
 
 namespace DynamicDocsWPF.Windows
@@ -14,24 +16,12 @@ namespace DynamicDocsWPF.Windows
     {
         private int _currentDialog;
         private int _instanceId = -1;
-        private Process _process;
+        private ProcessObject _processObject;
         private readonly NetworkHelper _networkHelper;
         private ProcessStep _processStep;
+        private CustomEnumerable<Dialog> _dialogEnumerable;
         
-        public CreateProcessInstance(Process process, NetworkHelper networkHelper)
-        {
-            InitializeComponent();
-            _process = process;
-            _networkHelper = networkHelper;
-            _processStep = process.GetStepAtIndex(0);
-            if (_processStep != null)
-            {
-                HandleProcessStep(_processStep);
-            }
-            
-        }
-        
-        private string Message
+        private static string MoTD
         {
             get
             {
@@ -41,15 +31,27 @@ namespace DynamicDocsWPF.Windows
                 return "Hallo";
             }
         }
-        
-        private void HandleProcessStep(ProcessStep processStep)
+
+        public CreateProcessInstance(ProcessObject processObject, NetworkHelper networkHelper)
         {
-            const int currentDialog = 0;
-            if (processStep.DialogCount > 0)
-                ViewCreator.FillViewHolder(ViewHolder, processStep.GetDialogAtIndex(currentDialog));
+            InitializeComponent();
+            _processObject = processObject;
+            _networkHelper = networkHelper;
+            _processStep = processObject.GetStepAtIndex(0);
+
+            if (_processStep != null)
+            {
+                _dialogEnumerable = _processStep?.Dialogs;
+
+                if (_dialogEnumerable != null)
+                {
+                    _dialogEnumerable?.MoveNext();
+                    ViewCreator.FillViewHolder(ViewHolder, _dialogEnumerable.Current);
+                }
+            }
         }
-        
-        private Func<bool> StringToCondition(Process process, string condition)
+
+        private Func<bool> StringToCondition(ProcessObject processObject, string condition)
         {
             string[] split = new string[0];
             var op = "";
@@ -117,49 +119,18 @@ namespace DynamicDocsWPF.Windows
             return null;
         }
 
-        private void CreateInstance_Btn_Next_OnClick(object sender, RoutedEventArgs e)
+        private void Next_OnClick(object sender, RoutedEventArgs e)
         {
-            for (var i = 0; i < _processStep.GetDialogAtIndex(_currentDialog)?.ElementCount; i++)
+            if (_dialogEnumerable.Current?.Elements != null)
             {
-                var element = _processStep.GetDialogAtIndex(_currentDialog).GetElementAtIndex(i);
-                if (element.IsValidForObligatory())
+                if (_dialogEnumerable.Current.Elements.Any(baseInputElement => !IsInputValueValid(baseInputElement)))
                 {
-                    if (!element.IsValidForProcess())
-                    {
-                        InfoBlock.Text = element.ProcessErrorMsg;
-                        element.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
-                        element.BaseControl.BorderThickness = new Thickness(2);
-                        return;
-                    }
-
-                    if (!element.IsValidForControl())
-                    {
-                        InfoBlock.Text = element.ControlErrorMsg;
-                        element.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
-                        element.BaseControl.BorderThickness = new Thickness(2);
-                        return;
-                    }
-
-                    InfoBlock.Text = Message;
-                    element.BaseControl.BorderBrush = new SolidColorBrush(Colors.Gray);
-                    element.BaseControl.BorderThickness = new Thickness(1);
-                }
-                else
-                {
-                    InfoBlock.Text = "Bitte füllen Sie alle Muss Felder aus.";
-                    element.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
-                    element.BaseControl.BorderThickness = new Thickness(2);
                     return;
                 }
             }
-
-            if (_currentDialog+1 < _processStep.DialogCount)
-            {
-                _currentDialog++;
-                
-                ViewCreator.FillViewHolder(ViewHolder, _processStep.GetDialogAtIndex(_currentDialog));
-            }
-            else
+            else return;
+            
+            if (!_dialogEnumerable.MoveNext())
             {
                 var sendPopup = new InfoPopup(MessageBoxButton.YesNo, "Sollen die eingegebenen Daten abgeschickt werden?");
 
@@ -177,17 +148,59 @@ namespace DynamicDocsWPF.Windows
                     
                     if (ensurePopup.DialogResult == false) SendData();
                 }
-
-                Close();
             }
+            else
+            {  
+                ViewCreator.FillViewHolder(ViewHolder, _dialogEnumerable.Current);    
+            }
+        }
+        
+        private void Back_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_dialogEnumerable.MoveBack())
+            {
+                ViewCreator.FillViewHolder(ViewHolder, _dialogEnumerable.Current);
+            }
+        }
 
-            if (_currentDialog == _processStep.DialogCount - 1)
-                BtnNext.Content = "Senden";
+        private bool IsInputValueValid(BaseInputElement baseInputElement)
+        {
+            if (baseInputElement.FulfillsObligatoryConditions())
+            {
+                if (!baseInputElement.FulfillsProcessConditions())
+                {
+                    InfoBlock.Text = baseInputElement.ProcessErrorMsg;
+                    baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
+                    baseInputElement.BaseControl.BorderThickness = new Thickness(2);
+                    return false;
+                }
+
+                if (!baseInputElement.FulfillsControlConditions())
+                {
+                    InfoBlock.Text = baseInputElement.ControlErrorMsg;
+                    baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
+                    baseInputElement.BaseControl.BorderThickness = new Thickness(2);
+                    return false;
+                }
+
+                InfoBlock.Text = MoTD;
+                baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Colors.Gray);
+                baseInputElement.BaseControl.BorderThickness = new Thickness(1);
+                return true;
+
+            }
+            else
+            {
+                InfoBlock.Text = "Bitte füllen Sie alle Muss Felder aus.";
+                baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
+                baseInputElement.BaseControl.BorderThickness = new Thickness(2);
+                return false;
+            }
         }
 
         private void SendData()
         {
-            var reply = _networkHelper.CreateProcessInstance(_process.Name, _networkHelper.User.Email);
+            var reply = _networkHelper.CreateProcessInstance(_processObject.Name, _networkHelper.User.Email);
 
             _instanceId = reply.InstanceId;
 
@@ -198,14 +211,12 @@ namespace DynamicDocsWPF.Windows
                     var dialog = _processStep.GetDialogAtIndex(i);
                     for (var j = 0; j < dialog.ElementCount; j++)
                     {
-                        var element = dialog.GetElementAtIndex(0);
+                        var element = dialog.GetElementAtIndex(j);
                         var entry = new Entry()
                         {
-                            Process_ID = _instanceId,
-                            PermissionLevel = 1,
+                            InstanceId = _instanceId,
                             FieldName = element.Name,
-                            Data = element.GetFormattedValue(),
-                            DataType = element.DataType.ToString()
+                            Data = element.GetFormattedValue()
                         };
 
                         _networkHelper.CreateEntry(entry);

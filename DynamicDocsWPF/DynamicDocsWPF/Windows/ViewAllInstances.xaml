@@ -5,13 +5,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:DynamicDocsWPF.Windows"
         mc:Ignorable="d"
-        Title="ViewAllInstances" Height="450" Width="800">
+        Title="ViewAllInstances" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <ListView Name="InstanceList"/>
+        <ListView Name="InstanceList" SelectionChanged="InstanceList_OnSelectionChanged"/>
         <Grid Grid.Column="1">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -28,7 +28,7 @@
             <ScrollViewer>
                 <StackPanel Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             Margin="40,20" MaxWidth="700">
-                               
+                                
                 </StackPanel>
             </ScrollViewer>
         </Border>

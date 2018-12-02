@@ -17,7 +17,7 @@ namespace DynamicDocsWPF.Windows
     public partial class CreateProcessTemplate : Window
     {
         private bool _isOkay = false;
-        private Process _process;
+        private ProcessObject _processObject;
         private NetworkHelper _networkHelper;
         private string _filePath = null;
         public CreateProcessTemplate(NetworkHelper networkHelper)
@@ -114,8 +114,8 @@ namespace DynamicDocsWPF.Windows
                 // handling code you have defined.
                 try
                 {
-                    _process = XmlHelper.ReadXMLFromPath(dialog.FileName);
-                    var bla = _networkHelper.GetProcessTemplate(_process.Name);
+                    _processObject = XmlHelper.ReadXMLFromPath(dialog.FileName);
+                    var bla = _networkHelper.GetProcessTemplate(_processObject.Name);
 
                     if (bla == null)
                     {
@@ -125,7 +125,7 @@ namespace DynamicDocsWPF.Windows
                     }
                     else
                     {
-                        var info = new InfoPopup(MessageBoxButton.YesNo, $"Der Prozess \"{_process.Name}\", existiert bereits. Möchten Sie ihn ersetzen?");
+                        var info = new InfoPopup(MessageBoxButton.YesNo, $"Der Prozess \"{_processObject.Name}\", existiert bereits. Möchten Sie ihn ersetzen?");
                         info.ShowDialog();
                         if (DialogResult == false)
                         {
@@ -150,7 +150,7 @@ namespace DynamicDocsWPF.Windows
         private List<DocTemplate> CheckDependencies()
         {
             var list = new List<DocTemplate>();
-            foreach(var step in _process.Steps)
+            foreach(var step in _processObject.Steps)
             {
                 foreach(var receipt in step.Receipts)
                 {

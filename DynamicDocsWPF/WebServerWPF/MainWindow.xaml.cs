@@ -4,6 +4,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Threading;
 using System.Xml;
+using MySql.Data.MySqlClient;
 using WebServer;
 
 namespace WebServerWPF
@@ -62,7 +63,7 @@ namespace WebServerWPF
 
         public static void PostToLog(string text)
         {
-            mainWindow.Log.Text += "\n" + text;
+            mainWindow.Log.Text += $"\n[{DateTime.Now.ToShortTimeString()}] {text}";
         }
 
         protected override void OnClosing(CancelEventArgs e)

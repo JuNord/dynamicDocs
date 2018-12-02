@@ -72,109 +72,119 @@ namespace WebServerWPF
         //Dat wat Julius jemacht hat
 
         //SELECT * FROM RUNNING PROCESS
-        public List<RunningProcess> GetRunningProcesses()
+        public List<ProcessInstance> GetProcessInstances(User user)
         {
-            var runningprocesses = new List<RunningProcess>();
+            var processInstances = new List<ProcessInstance>();
             var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT * FROM RUNNINGPROCESS;";
+            cmd.CommandText =$"SELECT * FROM processinstance WHERE owner_id = \"{user.Email}\";";
 
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
-                    runningprocesses.Add(new RunningProcess
+                    processInstances.Add(new ProcessInstance
                     {
                         Id = int.Parse(reader.GetString(0)),
-                        Template_ID = reader.GetString(1),
-                        Owner_ID = reader.GetString(2),
+                        TemplateId = reader.GetString(1),
+                        OwnerId = reader.GetString(2),
                         CurrentStep = reader.GetInt32(3),
                         Declined = reader.GetBoolean(4),
-                        Archived = reader.GetBoolean(5)
+                        Archived = reader.GetBoolean(5),
+                        Locked = reader.GetBoolean(6)
                     });
             }
 
-            return runningprocesses;
+            return processInstances;
         }
 
-        public RunningProcess GetRunningProcessById(int processId)
+        public ProcessInstance GetProcessInstanceById(int instanceId)
         {
-            RunningProcess runningprocess = null;
+            ProcessInstance processinstance = null;
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT * FROM RUNNINGPROCESS WHERE id = {processId};";
+            cmd.CommandText = $"SELECT * FROM processinstance WHERE id = {instanceId};";
 
             using (var reader = cmd.ExecuteReader())
             {
                 if (reader.Read())
-                    runningprocess = new RunningProcess
+                    processinstance = new ProcessInstance
                     {
                         Id = int.Parse(reader.GetString(0)),
-                        Template_ID = reader.GetString(1),
-                        Owner_ID = reader.GetString(2),
+                        TemplateId = reader.GetString(1),
+                        OwnerId = reader.GetString(2),
                         CurrentStep = reader.GetInt32(3),
                         Declined = reader.GetBoolean(4),
-                        Archived = reader.GetBoolean(5)
+                        Archived = reader.GetBoolean(5),
+                        Locked = reader.GetBoolean(6)
                     };
             }
 
-            return runningprocess;
+            return processinstance;
         }
 
-        //INSERT INTO RUNNINGPROCESS
-        public long AddRunningProcess(RunningProcess runningProcess)
+        //INSERT INTO processinstance
+        public long AddProcessInstance(ProcessInstance processInstance)
         {
             var cmd = connection.CreateCommand();
             cmd.CommandText =
-                "INSERT INTO RunningProcess (TEMPLATE_ID,OWNER_ID,CURRENTSTEP,DECLINED,ARCHIVED) VALUES (" +
-                $"\"{runningProcess.Template_ID}\", " +
-                $"\"{runningProcess.Owner_ID}\", " +
-                $"{runningProcess.CurrentStep}, " +
-                $"{runningProcess.Declined}," +
-                $"{runningProcess.Archived});";
+                "INSERT INTO processinstance (TEMPLATE_ID,OWNER_ID,CURRENTSTEP,DECLINED,ARCHIVED,LOCKED) VALUES (" +
+                $"\"{processInstance.TemplateId}\", " +
+                $"\"{processInstance.OwnerId}\", " +
+                $"{processInstance.CurrentStep}, " +
+                $"{processInstance.Declined}," +
+                $"{processInstance.Archived}," +
+                $"{processInstance.Locked});";
             cmd.ExecuteNonQuery();
 
-            return cmd.LastInsertedId;
+            return cmd.LastInsertedId;  
         }
 
-        public void DeclineRunningProcess(int id)
+        public void LockProcessInstance(int id)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"UPDATE RunningProcess SET declined = true WHERE id = {id};";
+            cmd.CommandText = $"UPDATE processinstance SET locked = true WHERE id = {id};";
             cmd.ExecuteNonQuery();
-            ArchiveRunningProcess(id);
         }
 
-        public void ApproveRunningProcess(int id)
+        public void DeclineProcessInstance(int id)
         {
-            var runningProcess = GetRunningProcessById(id);
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"UPDATE processinstance SET declined = true WHERE id = {id};";
+            cmd.ExecuteNonQuery();
+            Archiveprocessinstance(id);
+        }
 
-            if (runningProcess != null)
+        public void ApproveProcessInstance(int id)
+        {
+            var processinstance = GetProcessInstanceById(id);
+
+            if (processinstance != null)
             {
-                var template = GetProcessTemplateById(runningProcess.Template_ID);
+                var template = GetProcessTemplateById(processinstance.TemplateId);
                 if (template != null)
                 {
                     var process = XmlHelper.ReadXMLFromPath(template.FilePath);
-                    if (runningProcess.CurrentStep + 1 > process.ProcessStepCount)
-                        ArchiveRunningProcess(id);
+                    if (processinstance.CurrentStep + 1 > process.ProcessStepCount)
+                        Archiveprocessinstance(id);
                     else
-                        IncrementRunningProcess(id);
+                        Incrementprocessinstance(id);
                 }
             }
         }
 
-        private void IncrementRunningProcess(int id)
+        private void Incrementprocessinstance(int id)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"UPDATE RunningProcess SET CurrentStep = CurrentStep + 1 WHERE id = {id};";
+            cmd.CommandText = $"UPDATE processinstance SET CurrentStep = CurrentStep + 1 WHERE id = {id};";
             cmd.ExecuteNonQuery();
         }
 
-        private void ArchiveRunningProcess(int id)
+        private void Archiveprocessinstance(int id)
         {
-            var runningProcess = GetRunningProcessById(id);
-            if (runningProcess != null)
+            var processinstance = GetProcessInstanceById(id);
+            if (processinstance != null)
             {
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = $"UPDATE runningProcess SET archived = true WHERE id = {id};" +
-                                  $"INSERT INTO ArchivePermission VALUES({id}, \"{runningProcess.Owner_ID}\");";
+                cmd.CommandText = $"UPDATE processinstance SET archived = true WHERE id = {id};" +
+                                  $"INSERT INTO ArchivePermission VALUES({id}, \"{processinstance.OwnerId}\");";
                 cmd.ExecuteNonQuery();
             }
         }
@@ -330,22 +340,20 @@ namespace WebServerWPF
         }
 
         //SELECT * FROM ENTRY
-        public List<Entry> GetEntry(int processId)
+        public List<Entry> GetEntry(int instanceId)
         {
             var entries = new List<Entry>();
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT * FROM entry WHERE process_id = {processId};";
+            cmd.CommandText = $"SELECT * FROM entry WHERE process_id = {instanceId};";
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                     entries.Add(new Entry
                     {
-                        Entry_ID = int.Parse(reader.GetString(0)),
-                        Process_ID = int.Parse(reader.GetString(1)),
+                        EntryId = int.Parse(reader.GetString(0)),
+                        InstanceId = int.Parse(reader.GetString(1)),
                         FieldName = reader.GetString(2),
-                        DataType = reader.GetString(3),
-                        Data = reader.GetString(4),
-                        PermissionLevel = int.Parse(reader.GetString(5))
+                        Data = reader.GetString(3)
                     });
             }
 
@@ -356,12 +364,10 @@ namespace WebServerWPF
         public void AddEntry(Entry entry)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = "INSERT INTO Entry (PROCESS_ID,FIELDNAME,DATATYPE,DATA,PERMISSIONLEVEL) VALUES (" +
-                              $"{entry.Process_ID}," +
+            cmd.CommandText = "INSERT INTO Entry (PROCESS_ID,FIELDNAME,DATA) VALUES (" +
+                              $"{entry.InstanceId}," +
                               $"\"{entry.FieldName}\"," +
-                              $"\"{entry.DataType}\"," +
-                              $"\"{entry.Data}\"," +
-                              $"{entry.PermissionLevel});";
+                              $"\"{entry.Data}\");";
             cmd.ExecuteNonQuery();
         }
     }

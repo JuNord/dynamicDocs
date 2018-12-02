@@ -58,6 +58,7 @@
       <e p="packages" t="ExcludeRecursive" />
       <e p="RestService" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
+        <e p="CustomEnumerable.cs" t="Include" />
         <e p="DataMessage.cs" t="Include" />
         <e p="DataType.cs" t="Include" />
         <e p="FileMessage.cs" t="Include" />
@@ -76,10 +77,10 @@
             <e p="ArchivePermission.cs" t="Include" />
             <e p="DocTemplate.cs" t="Include" />
             <e p="Entry.cs" t="Include" />
+            <e p="ProcessInstance.cs" t="Include" />
             <e p="ProcessTemplate.cs" t="Include" />
             <e p="ProcessUpdate.cs" t="Include" />
             <e p="Roles.cs" t="Include" />
-            <e p="RunningProcess.cs" t="Include" />
             <e p="User.cs" t="Include" />
           </e>
           <e p="Input" t="Include">
@@ -97,7 +98,7 @@
             <e p="ArchivePermissionElement.cs" t="Include" />
             <e p="INotificationElement.cs" t="Include" />
             <e p="MailNotificationElement.cs" t="Include" />
-            <e p="Process.cs" t="Include" />
+            <e p="ProcessObject.cs" t="Include" />
             <e p="ProcessStep.cs" t="Include" />
             <e p="ReceiptElement.cs" t="Include" />
             <e p="ReceiptType.cs" t="Include" />
@@ -135,6 +136,7 @@
           <e p="ReplyGetEntryList.cs" t="Include" />
           <e p="ReplyGetPermissionLevel.cs" t="Include" />
           <e p="ReplyGetProcessInstance.cs" t="Include" />
+          <e p="ReplyGetProcessInstanceList.cs" t="Include" />
           <e p="ReplyGetProcessTemplate.cs" t="Include" />
           <e p="ReplyGetProcessTemplateList.cs" t="Include" />
           <e p="ReplyPostDocTemplate .cs" t="Include" />

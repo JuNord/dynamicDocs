@@ -16,7 +16,6 @@ namespace RestService.Model.Input
             description, obligatory, new TextBox(), DataType.String)
         {
             ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
-            GetFormattedValue = GetValue;
         }
 
         public override void Clear()
@@ -24,7 +23,7 @@ namespace RestService.Model.Input
             ElevatedControl.Clear();
         }
 
-        public override void Fill()
+        public override void SetStartValue()
         {
             ElevatedControl.Text = "";
         }
@@ -32,6 +31,11 @@ namespace RestService.Model.Input
         public override string GetValue()
         {
             return ElevatedControl.Text;
+        }
+        
+        public override void SetValueFromString(string value)
+        {
+            ElevatedControl.Text = value;
         }
     }
 }

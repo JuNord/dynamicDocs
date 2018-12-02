@@ -17,7 +17,6 @@ namespace RestService.Model.Input
             description, obligatory, new DatePicker(), DataType.DateTime)
         {
             ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
-            GetFormattedValue = () => GetValue()?.ToShortDateString();
         }
 
         public override DateTime? GetValue()
@@ -30,9 +29,17 @@ namespace RestService.Model.Input
             ElevatedControl.SelectedDate = DateTime.Now;
         }
 
-        public override void Fill()
+        public override void SetStartValue()
         {
             ElevatedControl.SelectedDate = DateTime.Now;
         }
+
+        public override void SetValueFromString(string value)
+        {
+            DateTime.TryParse(value, out var interpretedValue);
+            ElevatedControl.SelectedDate = interpretedValue;
+        }
+
+        public override string GetFormattedValue() => GetValue()?.ToShortDateString();
     }
 }

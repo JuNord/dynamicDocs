@@ -11,10 +11,10 @@ namespace RestService.Model.Process
         private readonly List<ReceiptElement> _receipts;
         private readonly List<ValidationElement> _validations;
         
-        public IEnumerable<Dialog> Dialogs => _dialogs;
-        public IEnumerable<INotificationElement> Notifications => _notifications;
-        public IEnumerable<ReceiptElement> Receipts => _receipts;
-        public IEnumerable<ValidationElement> Validations => _validations;
+        public CustomEnumerable<Dialog> Dialogs { get; }
+        public CustomEnumerable<INotificationElement> Notifications { get; }
+        public CustomEnumerable<ReceiptElement> Receipts { get; }
+        public CustomEnumerable<ValidationElement> Validations { get; }
 
         public ProcessStep(Tag parent, string name, string description, string target) : base(parent, name, description)
         {
@@ -22,6 +22,10 @@ namespace RestService.Model.Process
             _receipts = new List<ReceiptElement>();
             _validations = new List<ValidationElement>();
             _notifications = new List<INotificationElement>();
+            Dialogs = new CustomEnumerable<Dialog>(_dialogs);
+            Notifications = new CustomEnumerable<INotificationElement>(_notifications);
+            Receipts = new CustomEnumerable<ReceiptElement>(_receipts);
+            Validations = new CustomEnumerable<ValidationElement>(_validations);
             Target = target;
         }
 

@@ -29,8 +29,6 @@ namespace RestService.Model.Input
 
                 return valid;
             };
-
-            GetFormattedValue = () => GetValue().ToString();
         }
 
         public override int GetValue()
@@ -50,9 +48,14 @@ namespace RestService.Model.Input
             ElevatedControl.Clear();
         }
 
-        public override void Fill()
+        public override void SetStartValue()
         {
             ElevatedControl.Text = "";
+        }
+
+        public override void SetValueFromString(string value)
+        {
+            ElevatedControl.Text = value;
         }
     }
 }

@@ -63,7 +63,7 @@ namespace DynamicDocsWPF.HelperClasses
                     response
                 );
 
-            return reply.AuthorizationResult;
+            return reply?.AuthorizationResult ?? AuthorizationResult.INVALID_FORMAT;
         }
         
         public int GetPermissionLevel()
@@ -77,22 +77,22 @@ namespace DynamicDocsWPF.HelperClasses
                 GetRequest(User, "PermissionLevel", JsonConvert.SerializeObject(request))
             );
 
-            return reply.PermissionLevel;
+            return reply?.PermissionLevel ?? -1;
         }
 
         public List<DocTemplate> GetDocTemplates()
         {
             var reply = JsonConvert.DeserializeObject<ReplyGetDocTemplateList>(GetRequest(User, "DocTemplateList"));
-            return reply.DocTemplates;
+            return reply?.DocTemplates;
         }
 
         public List<ProcessTemplate> GetProcessTemplates()
         {
             var reply = JsonConvert.DeserializeObject<ReplyGetProcessTemplateList>(GetRequest(User, "ProcessTemplateList"));
-            return reply.ProcessTemplates;
+            return reply?.ProcessTemplates;
         }
         
-        public RunningProcess GetProcessInstanceById(int id)
+        public ProcessInstance GetProcessInstanceById(int id)
         {
             var request = new RequestGetProcessInstance()
             {
@@ -103,17 +103,17 @@ namespace DynamicDocsWPF.HelperClasses
                 GetRequest(User, "ProcessInstance", JsonConvert.SerializeObject(request))
             );
 
-            return reply.ProcessInstance;
+            return reply?.ProcessInstance;
         }
         
         //TODO: Implement Instancelist retrieval
-        public List<RunningProcess> GetProcessInstances()
+        public List<ProcessInstance> GetProcessInstances()
         {
-            var reply = JsonConvert.DeserializeObject<ReplyGetProcessInstance>(
-                GetRequest(User, "ProcessInstance", JsonConvert.SerializeObject(request))
+            var reply = JsonConvert.DeserializeObject<ReplyGetProcessInstanceList>(
+                GetRequest(User, "ProcessInstanceList")
             );
 
-            return reply.ProcessInstance;
+            return reply?.ProcessInstances;
         }
 
         public List<Entry> GetEntries(int instanceId)
@@ -124,10 +124,10 @@ namespace DynamicDocsWPF.HelperClasses
             };
 
             var reply = JsonConvert.DeserializeObject<ReplyGetEntryList>(
-                GetRequest(User, "ProcessTemplate", JsonConvert.SerializeObject(request))
+                GetRequest(User, "Entries", JsonConvert.SerializeObject(request))
             );
 
-            return reply.Entries;
+            return reply?.Entries;
         }
         
         
@@ -147,21 +147,21 @@ namespace DynamicDocsWPF.HelperClasses
                 PostRequest(null, "User", JsonConvert.SerializeObject(request))
             );
 
-            return reply.UploadResult;
+            return reply?.UploadResult ?? UploadResult.FAILED_OTHER;
         }
 
         public ReplyPostProcessInstance CreateProcessInstance(string processTemplateId, string ownerId)
         {
-            var runningProcess = new RunningProcess
+            var runningProcess = new ProcessInstance
             {
                 Declined = false,
                 CurrentStep = 0,
-                Owner_ID = ownerId,
-                Template_ID = processTemplateId
+                OwnerId = ownerId,
+                TemplateId = processTemplateId
             };
             var request = new RequestPostProcessInstance()
             {
-                RunningProcess = runningProcess
+                ProcessInstance = runningProcess
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostProcessInstance>(
                  PostRequest(User,"ProcessCreate", JsonConvert.SerializeObject(request))
@@ -182,7 +182,7 @@ namespace DynamicDocsWPF.HelperClasses
             var reply = JsonConvert.DeserializeObject<ReplyPostProcessTemplate>(
               PostRequest(User, "ProcessTemplate", JsonConvert.SerializeObject(request))
                 );
-            return reply.UploadResult;
+            return reply?.UploadResult ?? UploadResult.FAILED_OTHER;
         }
 
         public UploadResult UploadDocTemplate(string templateId, string filePath, bool forceOverwrite)
@@ -196,7 +196,7 @@ namespace DynamicDocsWPF.HelperClasses
             var reply = JsonConvert.DeserializeObject<ReplyPostDocTemplate>(
                 PostRequest(User, "DocumentTemplate", JsonConvert.SerializeObject(request))
             );
-            return reply.UploadResult;
+            return reply?.UploadResult ?? UploadResult.FAILED_OTHER;
         }
 
         public UploadResult CreateEntry(Entry entry)
@@ -208,24 +208,25 @@ namespace DynamicDocsWPF.HelperClasses
             var reply = JsonConvert.DeserializeObject<ReplyPostEntry>(
                 PostRequest(User, "Entry", JsonConvert.SerializeObject(request))
             );
-            return reply.UploadResult;
+            return reply?.UploadResult ?? UploadResult.FAILED_OTHER;
         }
 
         #endregion
 
         #region UPDATE
 
-        public UploadResult PostProcessUpdate(int id, bool declined)
+        public UploadResult PostProcessUpdate(int id, bool declined, bool locks)
         {
             var request = new RequestPostProcessUpdate()
             {
                 Id = id,
-                Declined = declined
+                Declined = declined,
+                Locks = locks
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostProcessUpdate>(
                 PostRequest(User, "ProcessUpdate", JsonConvert.SerializeObject(request))
             );
-            return reply.UploadResult;
+            return reply?.UploadResult ?? UploadResult.FAILED_OTHER;
         }
 
         #endregion

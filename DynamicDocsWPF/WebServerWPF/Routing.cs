@@ -14,6 +14,7 @@
         public const string PostProcessUpdate = "/ProcessUpdate";
         public const string PostProcessInstance = "/ProcessCreate";
         public const string GetProcessInstance = "/ProcessInstance/{message}";
+        public const string GetProcessInstanceList = "/ProcessInstanceList";
         public const string PostEntry = "/Entry";
         public const string PostUser = "/User";
     }

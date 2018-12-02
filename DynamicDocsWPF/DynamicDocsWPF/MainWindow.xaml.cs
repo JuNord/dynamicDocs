@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.UI.WebControls;
 using System.Windows;
@@ -23,34 +24,44 @@ namespace DynamicDocsWPF
         public MainWindow()
         {
             InitializeComponent();
-            
             var login = new Login();
-            login.ShowDialog();
-
-            if (login.DialogResult == true)
+            try
             {
-                _user = new User(login.Email, login.Password);
-                _networkHelper = new NetworkHelper("http://localhost:8000/Service", _user);
-                int level = _networkHelper.GetPermissionLevel();
+                
+                login.ShowDialog();
 
-                switch (level)
+                if (login.DialogResult == true)
                 {
-                    case 0:
-                        NoPermissionText.Visibility = Visibility.Visible;
-                        MainMenu_BtnNewProcessInstance.Visibility = Visibility.Collapsed;
-                        MainMenu_BtnUploadProcess.Visibility = Visibility.Collapsed;                  
-                        MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
-                        break;
-                    case 1:
-                        MainMenu_BtnUploadProcess.Visibility = Visibility.Collapsed;                  
-                        MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
-                        break;
-                    case 2:
-                        MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
-                        break;
+                    _user = new User(login.Email, login.Password);
+                    _networkHelper = new NetworkHelper("http://localhost:8000/Service", _user);
+                    int level = _networkHelper.GetPermissionLevel();
+
+                    switch (level)
+                    {
+                        case 0:
+                            NoPermissionText.Visibility = Visibility.Visible;
+                            MainMenu_BtnNewProcessInstance.Visibility = Visibility.Collapsed;
+                            MainMenu_BtnViewInstances.Visibility = Visibility.Collapsed;
+                            MainMenu_BtnUploadProcess.Visibility = Visibility.Collapsed;
+                            MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
+                            break;
+                        case 1:
+                            MainMenu_BtnUploadProcess.Visibility = Visibility.Collapsed;
+                            MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
+                            break;
+                        case 2:
+                            MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
+                            break;
+                    }
                 }
+                else Close();
             }
-            else Close();
+            catch (WebException)
+            {
+                new InfoPopup(MessageBoxButton.OK ,"Der Server ist derzeit nicht erreichbar.").ShowDialog();
+                login.Close();
+                Close();
+            }
         } 
 
         private void HandleUploadResult(UploadResult result)
@@ -93,6 +104,12 @@ namespace DynamicDocsWPF
         {
             var create = new CreateProcessTemplate(_networkHelper);
             create.ShowDialog();
+        }
+
+        private void MainMenu_BtnViewInstances_OnClick(object sender, RoutedEventArgs e)
+        {
+            var view = new ViewAllInstances(_networkHelper);
+            view.ShowDialog();
         }
     }
 }

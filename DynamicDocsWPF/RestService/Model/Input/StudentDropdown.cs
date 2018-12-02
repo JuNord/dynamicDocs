@@ -17,7 +17,6 @@ namespace RestService.Model.Input
             name, description, obligatory, new ComboBox(), DataType.String)
         {
             ObligatoryCheck = () => ElevatedControl.SelectedIndex > -1;
-            GetFormattedValue = GetValue;
         }
 
         public override string GetValue()
@@ -30,13 +29,18 @@ namespace RestService.Model.Input
             ElevatedControl.SelectedIndex = -1;
         }
 
-        public override void Fill()
+        public override void SetStartValue()
         {
             ElevatedControl.ItemsSource = new List<string>
             {
                 "Dennis Wüppelmann",
                 "Julius Nordhues"
             };
+        }
+
+        public override void SetValueFromString(string value)
+        {
+            ElevatedControl.SelectedValue = value;
         }
     }
 }

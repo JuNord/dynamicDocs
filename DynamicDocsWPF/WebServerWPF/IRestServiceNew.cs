@@ -39,6 +39,11 @@ namespace WebServer
         ReplyGetAuthenticationResult CheckAuthentication();
         
         [OperationContract]
+        [WebGet(UriTemplate = Routing.GetProcessInstanceList, BodyStyle = WebMessageBodyStyle.Bare,
+            ResponseFormat = WebMessageFormat.Json)]
+        ReplyGetProcessInstanceList GetProcessInstanceList();
+        
+        [OperationContract]
         [WebGet(UriTemplate = Routing.GetEntryList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetEntryList GetEntryList(string message);

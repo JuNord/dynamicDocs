@@ -3,17 +3,20 @@ using RestService.Model.Base;
 
 namespace RestService.Model.Process
 {
-    public class Process : NamedTag
+    public class ProcessObject : NamedTag
     {
-        private readonly List<ArchivePermissionElement> _permissions;
+        private readonly List<ArchivePermissionElement> _archivePermissions;
         private readonly List<ProcessStep> _steps;
 
-        public IEnumerable<ProcessStep> Steps => _steps;
+        public CustomEnumerable<ProcessStep> Steps { get; }
+        public CustomEnumerable<ArchivePermissionElement> ArchivePermissions { get; }
 
-        public Process(string name, string description) : base(null, name, description)
+        public ProcessObject(string name, string description) : base(null, name, description)
         {
             _steps = new List<ProcessStep>();
-            _permissions = new List<ArchivePermissionElement>();
+            Steps = new CustomEnumerable<ProcessStep>(_steps);
+            _archivePermissions = new List<ArchivePermissionElement>();
+            ArchivePermissions = new CustomEnumerable<ArchivePermissionElement>(_archivePermissions);
         }
 
         public int CurrentStep { get; set; }
@@ -29,7 +32,7 @@ namespace RestService.Model.Process
         public void AddPermission(ArchivePermissionElement element)
         {
             if (element != null)
-                _permissions.Add(element);
+                _archivePermissions.Add(element);
         }
 
         public ProcessStep GetStepAtIndex(int index)
