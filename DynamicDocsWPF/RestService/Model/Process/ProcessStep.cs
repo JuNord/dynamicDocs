@@ -10,6 +10,11 @@ namespace RestService.Model.Process
         private readonly List<INotificationElement> _notifications;
         private readonly List<ReceiptElement> _receipts;
         private readonly List<ValidationElement> _validations;
+        
+        public IEnumerable<Dialog> Dialogs => _dialogs;
+        public IEnumerable<INotificationElement> Notifications => _notifications;
+        public IEnumerable<ReceiptElement> Receipts => _receipts;
+        public IEnumerable<ValidationElement> Validations => _validations;
 
         public ProcessStep(Tag parent, string name, string description, string target) : base(parent, name, description)
         {

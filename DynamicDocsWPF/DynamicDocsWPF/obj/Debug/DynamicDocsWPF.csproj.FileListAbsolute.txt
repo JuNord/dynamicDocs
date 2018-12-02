@@ -152,3 +152,5 @@ C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\Register.baml
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ValidationOverview.baml
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ValidationPopup.baml
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\InfoPopup.g.cs
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\InfoPopup.baml

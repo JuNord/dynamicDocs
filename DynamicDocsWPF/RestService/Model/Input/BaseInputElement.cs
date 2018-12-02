@@ -6,11 +6,12 @@ namespace RestService.Model.Input
 {
     public abstract class BaseInputElement : NamedTag
     {
-        protected BaseInputElement(Tag parent, string name, string description, bool obligatory, Control control) :
+        protected BaseInputElement(Tag parent, string name, string description, bool obligatory, Control control, DataType dataType) :
             base(parent, name, description)
         {
             BaseControl = control;
             Obligatory = obligatory;
+            dataType = DataType;
             Fill();
         }
 
@@ -19,6 +20,7 @@ namespace RestService.Model.Input
         public string ProcessErrorMsg { get; set; }
         public string ControlErrorMsg { get; protected set; }
 
+        public DataType DataType { get; set; }
         public Func<string> GetFormattedValue { get; set; }
         public Func<bool> ProcessValidityCheck { private get; set; }
         protected Func<bool> ControlValidityCheck { private get; set; }

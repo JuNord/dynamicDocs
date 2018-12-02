@@ -1,8 +1,11 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 using DynamicDocsWPF.HelperClasses;
+using RestService;
+using RestService.Model.Database;
 using RestService.Model.Process;
 
 namespace DynamicDocsWPF.Windows
@@ -10,13 +13,16 @@ namespace DynamicDocsWPF.Windows
     public partial class CreateProcessInstance : Window
     {
         private int _currentDialog;
+        private int _instanceId = -1;
         private Process _process;
+        private readonly NetworkHelper _networkHelper;
         private ProcessStep _processStep;
         
-        public CreateProcessInstance(Process process)
+        public CreateProcessInstance(Process process, NetworkHelper networkHelper)
         {
             InitializeComponent();
             _process = process;
+            _networkHelper = networkHelper;
             _processStep = process.GetStepAtIndex(0);
             if (_processStep != null)
             {
@@ -45,7 +51,7 @@ namespace DynamicDocsWPF.Windows
         
         private Func<bool> StringToCondition(Process process, string condition)
         {
-            string[] split;
+            string[] split = new string[0];
             var op = "";
             if (condition.Contains("<"))
             {
@@ -65,7 +71,6 @@ namespace DynamicDocsWPF.Windows
             else if (condition.Contains(">="))
             {
                 op = ">=";
-                split = condition.Split(op[0]);
             }
             else if (condition.Contains("=="))
             {
@@ -76,10 +81,6 @@ namespace DynamicDocsWPF.Windows
             {
                 op = "!=";
                 split = condition.Split(op[0]);
-            }
-            else
-            {
-                split = new string[0];
             }
 
             if (split.Length != 2) return null;
@@ -96,6 +97,8 @@ namespace DynamicDocsWPF.Windows
             else if (linkRegex.IsMatch(split[0]))
             {
                 var linkText = split[0].Substring(1, split[0].Length - 2);
+                
+                
             }
 
             if (numberRegex.IsMatch(split[1])) secondValue = double.Parse(split[1]);
@@ -150,8 +153,65 @@ namespace DynamicDocsWPF.Windows
                 }
             }
 
-            _currentDialog++;
-            ViewCreator.FillViewHolder(ViewHolder, _processStep.GetDialogAtIndex(_currentDialog));
+            if (_currentDialog+1 < _processStep.DialogCount)
+            {
+                _currentDialog++;
+                
+                ViewCreator.FillViewHolder(ViewHolder, _processStep.GetDialogAtIndex(_currentDialog));
+            }
+            else
+            {
+                var sendPopup = new InfoPopup(MessageBoxButton.YesNo, "Sollen die eingegebenen Daten abgeschickt werden?");
+
+                sendPopup.ShowDialog();
+
+                if (sendPopup.DialogResult == true)
+                {
+                    SendData();
+                }
+                else
+                {
+                    var ensurePopup = new InfoPopup(MessageBoxButton.YesNo, "Sind sie sicher ?");
+
+                    ensurePopup.ShowDialog();
+                    
+                    if (ensurePopup.DialogResult == false) SendData();
+                }
+
+                Close();
+            }
+
+            if (_currentDialog == _processStep.DialogCount - 1)
+                BtnNext.Content = "Senden";
+        }
+
+        private void SendData()
+        {
+            var reply = _networkHelper.CreateProcessInstance(_process.Name, _networkHelper.User.Email);
+
+            _instanceId = reply.InstanceId;
+
+            if (reply.UploadResult == UploadResult.SUCCESS)
+            {
+                for (var i = 0; i < _processStep.DialogCount; i++)
+                {
+                    var dialog = _processStep.GetDialogAtIndex(i);
+                    for (var j = 0; j < dialog.ElementCount; j++)
+                    {
+                        var element = dialog.GetElementAtIndex(0);
+                        var entry = new Entry()
+                        {
+                            Process_ID = _instanceId,
+                            PermissionLevel = 1,
+                            FieldName = element.Name,
+                            Data = element.GetFormattedValue(),
+                            DataType = element.DataType.ToString()
+                        };
+
+                        _networkHelper.CreateEntry(entry);
+                    }
+                }
+            }
         }
     }
 }

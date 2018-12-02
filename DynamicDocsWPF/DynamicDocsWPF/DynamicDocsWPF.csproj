@@ -92,6 +92,9 @@
     <Compile Include="Windows\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\InfoPopup.xaml.cs">
+      <DependentUpon>InfoPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ProcessSelect.xaml.cs">
       <DependentUpon>ProcessSelect.xaml</DependentUpon>
     </Compile>
@@ -103,6 +106,9 @@
     </Compile>
     <Compile Include="Windows\ValidationPopup.xaml.cs">
       <DependentUpon>ValidationPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ViewAllInstances.xaml.cs">
+      <DependentUpon>ViewAllInstances.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -119,10 +125,12 @@
     <Page Include="Windows\CreateProcessInstance.xaml" />
     <Page Include="Windows\CreateProcessTemplate.xaml" />
     <Page Include="Windows\Login.xaml" />
+    <Page Include="Windows\InfoPopup.xaml" />
     <Page Include="Windows\ProcessSelect.xaml" />
     <Page Include="Windows\Register.xaml" />
     <Page Include="Windows\ValidationOverview.xaml" />
     <Page Include="Windows\ValidationPopup.xaml" />
+    <Page Include="Windows\ViewAllInstances.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

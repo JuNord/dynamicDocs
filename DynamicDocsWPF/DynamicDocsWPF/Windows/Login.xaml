@@ -42,7 +42,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Label FontSize="13" Grid.Column="0" Content="Email:" HorizontalAlignment="Left" Width="70" />
-                        <TextBox x:Name="EmailBox"  Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0"/>
+                        <TextBox VerticalContentAlignment="Center" x:Name="EmailBox"  Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0"/>
                     </Grid>
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20">
                         <Grid.ColumnDefinitions>
@@ -50,7 +50,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Label FontSize="13" Grid.Column="0" Content="Passwort:" HorizontalAlignment="Left" Width="70" />
-                        <PasswordBox x:Name="PasswordBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0" Width="200"/>
+                        <PasswordBox  VerticalContentAlignment="Center" x:Name="PasswordBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0" Width="200"/>
                     </Grid>
                 </StackPanel>
             </Grid>

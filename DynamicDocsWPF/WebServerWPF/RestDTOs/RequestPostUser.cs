@@ -4,6 +4,7 @@ namespace WebServerWPF.RestDTOs
 {
     public class RequestPostUser
     {
-        public User User { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

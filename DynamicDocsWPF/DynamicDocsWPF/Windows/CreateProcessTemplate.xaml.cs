@@ -1,11 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Xml;
 using DynamicDocsWPF.HelperClasses;
+using Microsoft.Office.Interop.Word;
 using Microsoft.Win32;
 using RestService;
+using RestService.Model.Database;
 using RestService.Model.Process;
+using Application = System.Windows.Application;
+using Window = System.Windows.Window;
 
 namespace DynamicDocsWPF.Windows
 {
@@ -14,17 +19,86 @@ namespace DynamicDocsWPF.Windows
         private bool _isOkay = false;
         private Process _process;
         private NetworkHelper _networkHelper;
+        private string _filePath = null;
         public CreateProcessTemplate(NetworkHelper networkHelper)
         {
             _networkHelper = networkHelper;
             InitializeComponent();
+            
+            
         }
 
         private void CreateProcessTemplate_OnClick(object sender, RoutedEventArgs e)
         {
             if (_isOkay == true)
             {
-                CheckDependencies();
+                var list = CheckDependencies();
+
+                foreach (var element in list)
+                {
+                    var docUploadResult = _networkHelper.UploadDocTemplate(element.Id, element.FilePath, true);
+
+                    switch (docUploadResult)
+                    {
+                        case UploadResult.SUCCESS:
+                            break;
+                        case UploadResult.FAILED_ID_EXISTS:
+                            new InfoPopup(MessageBoxButton.OK,$"Eine Vorlage \"{element.Id}\" bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <receipt...>").ShowDialog();
+                            Close();
+                            break;
+                        case UploadResult.FAILED_FILEEXISTS:
+                            new InfoPopup(MessageBoxButton.OK,$"Eine Vorlage \"{element.Id}\" bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <receipt...>").ShowDialog();
+                            Close();
+                            break;
+                        case UploadResult.FAILED_FILE_OR_TYPE_INVALID:
+                            new InfoPopup(MessageBoxButton.OK,"Der Server hat die Vorlagedatei als fehlerhaft gemeldet. Bitte überprüfen Sie ihre Vorlage.").ShowDialog();
+                            Close();
+                            break;
+                        case UploadResult.FAILED_OTHER:
+                            new InfoPopup(MessageBoxButton.OK,$"Ups da ist wohl etwas beim Upload der Vorlage \"{element.Id}\" schief gelaufen. Bitte wenden Sie sich an einen Administrator.").ShowDialog();
+                            Close();
+                            break;
+                        case UploadResult.NO_PERMISSION:
+                            new InfoPopup(MessageBoxButton.OK,"Es tut uns leid, doch sie besitzen nicht die notwendigen Berechtigungen.").ShowDialog();
+                            Close();
+                            break;
+                        case UploadResult.INVALID_LOGIN:
+                            new InfoPopup(MessageBoxButton.OK,"Irgendetwas scheint mit ihrem Konto nicht zu stimmen. Bitte starten sie das Programm neu.").ShowDialog();
+                            Application.Current.Shutdown();
+                            break;
+                    }
+                }
+                
+                var processUploadResult = _networkHelper.UploadProcessTemplate(_filePath, true);
+                switch (processUploadResult)
+                {
+                    case UploadResult.SUCCESS:
+                        new InfoPopup(MessageBoxButton.OK,"Vorlage erfolgreich angelegt.").ShowDialog();
+                        Close();
+                        break;
+                    case UploadResult.FAILED_ID_EXISTS:
+                        new InfoPopup(MessageBoxButton.OK,"Ein Prozess mit diesem technischen Namen bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <process...>").ShowDialog();
+                        Close();
+                        break;
+                    case UploadResult.FAILED_FILE_OR_TYPE_INVALID:
+                        new InfoPopup(MessageBoxButton.OK,"Der Server hat die Prozessdatei als fehlerhaft gemeldet. Bitte überarbeiten Sie den Prozess.").ShowDialog();
+                        Close();
+                        break;
+                    case UploadResult.FAILED_OTHER:
+                        new InfoPopup(MessageBoxButton.OK,"Ups da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator.").ShowDialog();
+                        Close();
+                        break;
+                    case UploadResult.NO_PERMISSION:
+                        new InfoPopup(MessageBoxButton.OK,"Es tut uns leid, doch sie besitzen nicht die notwendigen Berechtigungen.").ShowDialog();
+                        Close();
+                        break;
+                    case UploadResult.INVALID_LOGIN:
+                        new InfoPopup(MessageBoxButton.OK,"Irgendetwas scheint mit ihrem Konto nicht zu stimmen. Bitte starten sie das Programm neu.").ShowDialog();
+                        Application.Current.Shutdown();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
@@ -41,9 +115,25 @@ namespace DynamicDocsWPF.Windows
                 try
                 {
                     _process = XmlHelper.ReadXMLFromPath(dialog.FileName);
-                    InfoText.Text = "Super! Die Datei scheint korrekt zu sein.";
-                    _networkHelper.UploadProcessTemplate(dialog.FileName, true);
-                    _isOkay = true;
+                    var bla = _networkHelper.GetProcessTemplate(_process.Name);
+
+                    if (bla == null)
+                    {
+                        InfoText.Text = "Super! Die Datei scheint korrekt zu sein.";
+                        _filePath = dialog.FileName;
+                        _isOkay = true;
+                    }
+                    else
+                    {
+                        var info = new InfoPopup(MessageBoxButton.YesNo, $"Der Prozess \"{_process.Name}\", existiert bereits. Möchten Sie ihn ersetzen?");
+                        info.ShowDialog();
+                        if (DialogResult == false)
+                        {
+                            new InfoPopup(MessageBoxButton.OK, "Bitte überarbeiten Sie den Prozess.").ShowDialog();
+                            Close();
+                        }
+                        else _isOkay = true;
+                    }
                 }
                 catch (XmlException e2)
                 {
@@ -57,29 +147,61 @@ namespace DynamicDocsWPF.Windows
             }
         }
 
-        private void CheckDependencies()
+        private List<DocTemplate> CheckDependencies()
         {
-            for (int i = 0; i < _process.ProcessStepCount; i++)
+            var list = new List<DocTemplate>();
+            foreach(var step in _process.Steps)
             {
-                var step = _process.GetStepAtIndex(i);
-                for (int j = 0; j < step.ReceiptCount; j++)
+                foreach(var receipt in step.Receipts)
                 {
-                    var receipt = step.GetReceiptAtIndex(j);
-                    
-                    MessageBox.Show("Die Prozessdatei verweist auf ein Draft. Bitte wählen Sie die zugehörige Datei aus.");
-                    var dialog = new OpenFileDialog();
-                    dialog.Filter = "Draft Files (*.docx)|*.docx";
-                    dialog.ShowDialog();
-
-                    if (File.Exists(dialog.FileName))
+                    var onlineTemplate = _networkHelper.GetDocTemplate(receipt.DraftName);
+                    if (onlineTemplate == null)
                     {
-                        var result = _networkHelper.UploadDocTemplate(receipt.DraftName, Path.GetFileName(dialog.FileName), false);
+                        new InfoPopup(MessageBoxButton.OK, "Der Prozess erfordert eine Vorlage \"{receipt.DraftName}\". Bitte wählen Sie eine Datei aus.").ShowDialog();
+                        var dialog = new OpenFileDialog();
+                        dialog.Filter = "Draft Files (*.docx)|*.docx";
+                        dialog.ShowDialog();
 
-                        if (result == UploadResult.FAILED_FILEEXISTS)
-                            MessageBox.Show("The draftfile already exists.");
+                        if (File.Exists(dialog.FileName))
+                        {                          
+                            list.Add(new DocTemplate(){Id = receipt.DraftName, FilePath = dialog.FileName});
+                        }
+                        else
+                        {
+                            new InfoPopup(MessageBoxButton.OK, "Ups. Da ist wohl etwas schief gelaufen. Die Datei konnte nicht gefunden werden.").ShowDialog();
+                            Close();
+                        }
+                    }
+                    else
+                    {
+                        var info = new InfoPopup(MessageBoxButton.YesNo, $"Der Prozess erfordert eine Vorlage \"{receipt.DraftName}\", die bereits auf dem Server existiert. Möchten Sie sie ersetzen?");
+                        info.ShowDialog();
+                        if (info.DialogResult == true)
+                        {
+                            var dialog = new OpenFileDialog();
+                            dialog.Filter = "Draft Files (*.docx)|*.docx";
+                            dialog.ShowDialog();
+
+                            if (File.Exists(dialog.FileName))
+                            {
+                                list.Add(new DocTemplate(){Id = receipt.DraftName, FilePath = dialog.FileName});
+                            }
+                            else
+                            {
+                                new InfoPopup(MessageBoxButton.OK, "Ups. Da ist wohl etwas schief gelaufen. Die Datei konnte nicht gefunden werden.").ShowDialog();
+                                Close();
+                            }
+                        }
+                        else
+                        {
+                            new InfoPopup(MessageBoxButton.OK, "Bitte überarbeiten Sie den Prozess.").ShowDialog();
+                            Close();
+                        }
                     }
                 }
             }
+
+            return list;
         }
     }
 }

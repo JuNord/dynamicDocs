@@ -79,3 +79,5 @@ C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\obj\Debug\W
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\obj\Debug\WebServerWPF.csproj.CopyComplete
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\obj\Debug\WebServerWPF.exe
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\obj\Debug\WebServerWPF.pdb
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\bin\Debug\System.Web.dll
+C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\bin\Debug\de\System.Web.resources.dll

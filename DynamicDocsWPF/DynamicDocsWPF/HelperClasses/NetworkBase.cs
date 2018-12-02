@@ -53,18 +53,21 @@ namespace DynamicDocsWPF.HelperClasses
         {
                 try
                 {
-                    var postData = JsonConvert.SerializeObject(message);
-                    var bytes = Encoding.UTF8.GetBytes(postData);
+                    var bytes = Encoding.UTF8.GetBytes(message);
 
-                    var requestString = $"{BaseUrl}/url";
+                    var requestString = $"{BaseUrl}/{url}";
                     var httpWebRequest = (HttpWebRequest) WebRequest.Create(requestString);
                     httpWebRequest.Method = "POST";
                     httpWebRequest.ContentLength = bytes.Length;
-                    httpWebRequest.ContentType = "application/json";
-                    var encoded = Convert.ToBase64String(
-                        Encoding.GetEncoding("ISO-8859-1")
-                            .GetBytes($"{user.Email}:{user.Password}"));
-                    httpWebRequest.Headers.Add("Authorization","Basic " + encoded);
+                    httpWebRequest.ContentType = "application/json; charset=utf-8";
+
+                    if (user != null)
+                    {
+                        var encoded = Convert.ToBase64String(
+                            Encoding.GetEncoding("ISO-8859-1")
+                                .GetBytes($"{user.Email}:{user.Password}"));
+                        httpWebRequest.Headers.Add("Authorization", "Basic " + encoded);
+                    }
 
                     using (var requestStream = httpWebRequest.GetRequestStream())
                     {

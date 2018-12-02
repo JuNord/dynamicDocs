@@ -31,7 +31,24 @@ namespace DynamicDocsWPF
             {
                 _user = new User(login.Email, login.Password);
                 _networkHelper = new NetworkHelper("http://localhost:8000/Service", _user);
+                int level = _networkHelper.GetPermissionLevel();
 
+                switch (level)
+                {
+                    case 0:
+                        NoPermissionText.Visibility = Visibility.Visible;
+                        MainMenu_BtnNewProcessInstance.Visibility = Visibility.Collapsed;
+                        MainMenu_BtnUploadProcess.Visibility = Visibility.Collapsed;                  
+                        MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
+                        break;
+                    case 1:
+                        MainMenu_BtnUploadProcess.Visibility = Visibility.Collapsed;                  
+                        MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
+                        break;
+                    case 2:
+                        MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
+                        break;
+                }
             }
             else Close();
         } 
@@ -67,7 +84,7 @@ namespace DynamicDocsWPF
             {
                 var file = _networkHelper.GetProcessTemplate(processSelect.SelectedProcessTemplate.Id);
                 var process = XmlHelper.ReadXMLFromString(file);
-                var newInstance = new CreateProcessInstance(process);
+                var newInstance = new CreateProcessInstance(process, _networkHelper);
                 newInstance.ShowDialog();
             }
         }

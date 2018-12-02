@@ -8,6 +8,8 @@ namespace RestService.Model.Process
         private readonly List<ArchivePermissionElement> _permissions;
         private readonly List<ProcessStep> _steps;
 
+        public IEnumerable<ProcessStep> Steps => _steps;
+
         public Process(string name, string description) : base(null, name, description)
         {
             _steps = new List<ProcessStep>();
@@ -34,6 +36,7 @@ namespace RestService.Model.Process
         {
             return _steps?[index];
         }
+        
 
         public string GetElementValue(string name)
         {

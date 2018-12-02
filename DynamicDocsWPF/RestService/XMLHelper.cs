@@ -58,10 +58,6 @@ namespace RestService
 
                             case Wording.NumberInputBox:
                                 var numberInputBox = new NumberInputBox(dialog, name, description, ToBool(obligatory));
-
-                                numberInputBox.ProcessValidityCheck = () => numberInputBox.GetValue() < 20;
-                                numberInputBox.ProcessErrorMsg = "Zahlen müssen kleiner als 20 sein.";
-
                                 dialog.AddElement(numberInputBox);
                                 break;
 

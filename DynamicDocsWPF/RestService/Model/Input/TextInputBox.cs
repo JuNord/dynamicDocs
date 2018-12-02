@@ -13,9 +13,10 @@ namespace RestService.Model.Input
         /// <param name="parent"></param>
         /// <param name="name"></param>
         public TextInputBox(Tag parent, string name, string description, bool obligatory) : base(parent, name,
-            description, obligatory, new TextBox())
+            description, obligatory, new TextBox(), DataType.String)
         {
             ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
+            GetFormattedValue = GetValue;
         }
 
         public override void Clear()

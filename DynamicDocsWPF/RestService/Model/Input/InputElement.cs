@@ -5,8 +5,8 @@ namespace RestService.Model.Input
 {
     public abstract class InputElement<TControl, TValue> : BaseInputElement where TControl : Control
     {
-        protected InputElement(Tag parent, string name, string description, bool obligatory, TControl control) : base(
-            parent, name, description, obligatory, control)
+        protected InputElement(Tag parent, string name, string description, bool obligatory, TControl control, DataType dataType) : base(
+            parent, name, description, obligatory, control, dataType) 
         {
             GetFormattedValue = () => GetValue() as string ?? throw new MissingValueInterpretationException();
         }

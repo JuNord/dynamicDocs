@@ -39,7 +39,7 @@ namespace DynamicDocsWPF.HelperClasses
                 GetRequest(User, "ProcessTemplate", JsonConvert.SerializeObject(request))
             );
 
-            return reply.Text;
+            return reply?.Text;
         }
         
         public ReplyGetDocTemplate GetDocTemplate(string id)
@@ -105,6 +105,16 @@ namespace DynamicDocsWPF.HelperClasses
 
             return reply.ProcessInstance;
         }
+        
+        //TODO: Implement Instancelist retrieval
+        public List<RunningProcess> GetProcessInstances()
+        {
+            var reply = JsonConvert.DeserializeObject<ReplyGetProcessInstance>(
+                GetRequest(User, "ProcessInstance", JsonConvert.SerializeObject(request))
+            );
+
+            return reply.ProcessInstance;
+        }
 
         public List<Entry> GetEntries(int instanceId)
         {
@@ -129,17 +139,18 @@ namespace DynamicDocsWPF.HelperClasses
         {
             var request = new RequestPostUser()
             {
-                User = User
+                Email = User.Email,
+                Password = User.Password
             };
 
             var reply = JsonConvert.DeserializeObject<ReplyPostUser>(
-                PostRequest(User, "User", JsonConvert.SerializeObject(request))
+                PostRequest(null, "User", JsonConvert.SerializeObject(request))
             );
 
             return reply.UploadResult;
         }
 
-        public UploadResult CreateProcessInstance(string processTemplateId, string ownerId)
+        public ReplyPostProcessInstance CreateProcessInstance(string processTemplateId, string ownerId)
         {
             var runningProcess = new RunningProcess
             {
@@ -152,10 +163,10 @@ namespace DynamicDocsWPF.HelperClasses
             {
                 RunningProcess = runningProcess
             };
-            var reply = JsonConvert.DeserializeObject<ReplyPostUser>(
+            var reply = JsonConvert.DeserializeObject<ReplyPostProcessInstance>(
                  PostRequest(User,"ProcessCreate", JsonConvert.SerializeObject(request))
                 );
-            return reply.UploadResult;
+            return reply;
         }
 
         public UploadResult UploadProcessTemplate(string filePath, bool forceOverwrite)

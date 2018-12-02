@@ -14,9 +14,10 @@ namespace RestService.Model.Input
         /// <param name="parent"></param>
         /// <param name="name"></param>
         public ClassDropDown(Tag parent, string name, string description, bool obligatory = false) : base(parent, name,
-            description, obligatory, new ComboBox())
+            description, obligatory, new ComboBox(), DataType.String)
         {
             ObligatoryCheck = () => ElevatedControl.SelectedIndex > -1;
+            GetFormattedValue = GetValue;
         }
 
         public override void Fill()

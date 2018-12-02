@@ -119,7 +119,7 @@ namespace WebServerWPF
         }
 
         //INSERT INTO RUNNINGPROCESS
-        public void AddRunningProcess(RunningProcess runningProcess)
+        public long AddRunningProcess(RunningProcess runningProcess)
         {
             var cmd = connection.CreateCommand();
             cmd.CommandText =
@@ -130,6 +130,8 @@ namespace WebServerWPF
                 $"{runningProcess.Declined}," +
                 $"{runningProcess.Archived});";
             cmd.ExecuteNonQuery();
+
+            return cmd.LastInsertedId;
         }
 
         public void DeclineRunningProcess(int id)

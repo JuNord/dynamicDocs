@@ -446,7 +446,7 @@ namespace WebServerWPF
                     case AuthorizationResult.PERMITTED:
                         MainWindow.PostToLog("Received request to create a new Process Instance.");
                         MainWindow.PostToLog("Registering in Database...");
-                        Database.AddRunningProcess(request.RunningProcess);
+                        reply.InstanceId = (int) Database.AddRunningProcess(request.RunningProcess);
                         MainWindow.PostToLog("Done");
                         break;
                     case AuthorizationResult.NO_PERMISSION: 
@@ -531,22 +531,10 @@ namespace WebServerWPF
             var reply = new ReplyPostUser();
             try
             {
-                var auth = IsPermitted(GetAuthUser(),2);
-                switch (auth)
-                {
-                    case AuthorizationResult.PERMITTED:
-                        MainWindow.PostToLog("Received request to register a new user.");
-                        MainWindow.PostToLog("Registering in Database...");          
-                        Database.AddUser(request.User);
-                        MainWindow.PostToLog("Done!");
-                        break;
-                    case AuthorizationResult.NO_PERMISSION: 
-                        reply.UploadResult = UploadResult.NO_PERMISSION;                            
-                        break;                      
-                    case AuthorizationResult.INVALID_LOGIN:
-                        reply.UploadResult = UploadResult.INVALID_LOGIN;
-                        break;
-                }
+                MainWindow.PostToLog("Received request to register a new user.");
+                MainWindow.PostToLog("Registering in Database...");          
+                Database.AddUser(new User(request.Email, request.Password));
+                MainWindow.PostToLog("Done!");
             }
             catch (MySqlException e)
             {
@@ -556,11 +544,6 @@ namespace WebServerWPF
                     reply.UploadResult = UploadResult.USER_EXISTS;
                 }
                 PrintException(e);
-            }
-            catch (XmlException e)
-            {
-                PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_FILE_OR_TYPE_INVALID;
             }
             catch (Exception e)
             {

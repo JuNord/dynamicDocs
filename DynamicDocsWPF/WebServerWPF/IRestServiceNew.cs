@@ -14,42 +14,42 @@ namespace WebServer
     public interface IRestServiceNew
     {
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetProcessTemplate, BodyStyle = WebMessageBodyStyle.Wrapped,
+        [WebGet(UriTemplate = Routing.GetProcessTemplate, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetProcessTemplate GetProcessTemplate(string message);
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetDocTemplate, BodyStyle = WebMessageBodyStyle.Wrapped,
+        [WebGet(UriTemplate = Routing.GetDocTemplate, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetDocTemplate GetDocTemplate(string message);
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetProcessTemplateList, BodyStyle = WebMessageBodyStyle.Wrapped,
+        [WebGet(UriTemplate = Routing.GetProcessTemplateList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetProcessTemplateList GetProcessTemplateList();
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetDocTemplateList, BodyStyle = WebMessageBodyStyle.Wrapped,
+        [WebGet(UriTemplate = Routing.GetDocTemplateList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetDocTemplateList GetDocTemplateList();
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetAuthorized, BodyStyle = WebMessageBodyStyle.Wrapped,
+        [WebGet(UriTemplate = Routing.GetAuthorized, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetAuthenticationResult CheckAuthentication();
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetEntryList, BodyStyle = WebMessageBodyStyle.Wrapped,
+        [WebGet(UriTemplate = Routing.GetEntryList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetEntryList GetEntryList(string message);
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetPermissionLevel, BodyStyle = WebMessageBodyStyle.Wrapped,
+        [WebGet(UriTemplate = Routing.GetPermissionLevel, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetPermissionLevel GetPermissionLevel(string message);
         
         [OperationContract]
-        [WebGet(UriTemplate = Routing.GetProcessInstance, BodyStyle = WebMessageBodyStyle.Wrapped,
+        [WebGet(UriTemplate = Routing.GetProcessInstance, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetProcessInstance GetProcessInstance(string message);
         
@@ -79,8 +79,7 @@ namespace WebServer
         ReplyPostEntry PostEntry(RequestPostEntry request);
         
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = Routing.PostUser, RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = Routing.PostUser, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         ReplyPostUser Register(RequestPostUser request);
     }
 }

@@ -7,6 +7,8 @@ namespace RestService.Model.Input
     {
         private readonly List<BaseInputElement> _elements;
 
+        public IEnumerator<BaseInputElement> ElementEnumerator => _elements.GetEnumerator();
+        
         public Dialog(Tag parent) : base(parent)
         {
             _elements = new List<BaseInputElement>();
