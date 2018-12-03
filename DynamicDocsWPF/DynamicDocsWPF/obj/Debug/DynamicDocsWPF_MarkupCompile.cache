@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\App.xaml
-8930922691
+10668926235
 5576674863
-16782568072
+18-706723087
 26-2026788334
-MainWindow.xaml;Windows\CreateProcessInstance.xaml;Windows\CreateProcessTemplate.xaml;Windows\Login.xaml;Windows\ProcessSelect.xaml;Windows\Register.xaml;Windows\ValidationOverview.xaml;Windows\ValidationPopup.xaml;
+MainWindow.xaml;Windows\CreateProcessInstance.xaml;Windows\CreateProcessTemplate.xaml;Windows\Login.xaml;Windows\InfoPopup.xaml;Windows\ProcessSelect.xaml;Windows\Register.xaml;Windows\ValidationOverview.xaml;Windows\ValidationPopup.xaml;Windows\ViewAllInstances.xaml;
 
 False
 

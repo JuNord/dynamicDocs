@@ -1,57 +1,99 @@
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using DynamicDocsWPF.HelperClasses;
+using RestService;
 using RestService.Model.Database;
-using Process = RestService.Model.Process.Process;
+using RestService.Model.Input;
+using RestService.Model.Process;
 
 namespace DynamicDocsWPF.Windows
 {
     public partial class ValidationOverview : Window
     {
-        private Process _process;
-        private User _user;
-        private int dialogIndex;
-        private int stepIndex;
+        private readonly int _instanceId;
+        private ProcessObject _processObject;
+        private readonly NetworkHelper _networkHelper;
+        private int _stepIndex;
+        private CustomEnumerable<Dialog> _dialogEnumerable;
+        private readonly CustomEnumerable<ProcessStep> _processStepEnumerator;
         
-        public ValidationOverview(Process process, User user)
+        public ValidationOverview(int instanceId, ProcessObject processObject, NetworkHelper networkHelper)
         {
-            _process = process;
-            _user = user;
+            _instanceId = instanceId;
+            _processObject = processObject;
+            _networkHelper = networkHelper;
             InitializeComponent();
 
-           
-            var dialog = process.GetStepAtIndex(0).GetDialogAtIndex(0);
-            ViewCreator.FillViewHolder(ViewHolder, dialog);
+            _processStepEnumerator = processObject.Steps;
+            _processStepEnumerator.MoveNext();
+            _dialogEnumerable = _processStepEnumerator.Current?.Dialogs;
+            _dialogEnumerable?.MoveNext();
+            ViewCreator.FillViewHolder(ViewHolder, _dialogEnumerable?.Current);
         }
         
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void Next_OnClick(object sender, RoutedEventArgs e)
         {
-            dialogIndex++;
-            if (dialogIndex >= _process.GetStepAtIndex(stepIndex).DialogCount)
+            _stepIndex++;
+            if (!_dialogEnumerable.MoveNext())
             {
-                dialogIndex = 0;
-                stepIndex++;
-                if (stepIndex >= Math.Min(_process.ProcessStepCount, _process.CurrentStep))
+                if (!_processStepEnumerator.MoveNext() || _stepIndex > _processObject.CurrentStep)
                 {
                     var popup = new ValidationPopup();
                     popup.ShowDialog();
-                    if (popup.DialogResult??false)
+                    switch (popup.DialogResult)
                     {
-                        var networkHelper = new NetworkHelper("http://localhost:8000/", _user);
-                      
-                    }
-                    else
-                    {
-                        
-                    }
-                   
+                        case true:
+                            _networkHelper.PostProcessUpdate(_instanceId, false, false);
+                            break;
+                        default:
+                            _networkHelper.PostProcessUpdate(_instanceId, true, false);
+                            break;
+                    }             
                     Close();
                     return;
                 }
+                else
+                {
+                    _dialogEnumerable = _processStepEnumerator.Current?.Dialogs;
+                }
             }
-            if(_process.GetStepAtIndex(stepIndex).DialogCount > 0)
-                ViewCreator.FillViewHolder(ViewHolder, _process.GetStepAtIndex(stepIndex).GetDialogAtIndex(dialogIndex));
+            else
+            {
+                ViewCreator.FillViewHolder(ViewHolder, _dialogEnumerable.Current);
+            }
         }
 
+        private void Back_OnClick(object sender, RoutedEventArgs e)
+        {
+            _stepIndex--;
+            if (!_dialogEnumerable.MoveBack())
+            {
+                if (!_processStepEnumerator.MoveBack() || _stepIndex > _processObject.CurrentStep)
+                {
+                    var popup = new ValidationPopup();
+                    popup.ShowDialog();
+                    switch (popup.DialogResult)
+                    {
+                        case true:
+                            _networkHelper.PostProcessUpdate(_instanceId, false, false);
+                            break;
+                        default:
+                            _networkHelper.PostProcessUpdate(_instanceId, true, false);
+                            break;
+                    }             
+                    Close();
+                    return;
+                }
+                else
+                {
+                    _dialogEnumerable = _processStepEnumerator.Current?.Dialogs;
+                }
+            }
+            else
+            {
+                ViewCreator.FillViewHolder(ViewHolder, _dialogEnumerable.Current);
+            }
+        }
     }
 }

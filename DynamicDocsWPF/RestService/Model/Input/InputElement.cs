@@ -5,10 +5,10 @@ namespace RestService.Model.Input
 {
     public abstract class InputElement<TControl, TValue> : BaseInputElement where TControl : Control
     {
-        protected InputElement(Tag parent, string name, string description, bool obligatory, TControl control) : base(
-            parent, name, description, obligatory, control)
+        protected InputElement(Tag parent, string name, string description, bool obligatory, TControl control,
+            DataType dataType) : base(
+            parent, name, description, obligatory, control, dataType)
         {
-            GetFormattedValue = () => GetValue() as string ?? throw new MissingValueInterpretationException();
         }
 
         public TControl ElevatedControl => BaseControl as TControl;
@@ -17,5 +17,14 @@ namespace RestService.Model.Input
         ///     Returns the value of the underlying UI Control, according to its type
         /// </summary>
         public abstract TValue GetValue();
+
+        /// <inheritdoc />
+        /// <summary>
+        ///  Returns the value of the underlying UI Control, formatted as a string.
+        ///  When not overridden, tries to safely cast the value to string and throws Exception on failure
+        /// </summary>
+        /// <returns></returns>
+        public override string GetFormattedValue() =>
+            GetValue().ToString() ?? throw new MissingValueInterpretationException();
     }
 }

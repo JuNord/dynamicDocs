@@ -14,7 +14,7 @@ namespace RestService.Model.Input
         /// <param name="parent"></param>
         /// <param name="name"></param>
         public StudentDropdown(Tag parent, string name, string description, bool obligatory = false) : base(parent,
-            name, description, obligatory, new ComboBox())
+            name, description, obligatory, new ComboBox(), DataType.String)
         {
             ObligatoryCheck = () => ElevatedControl.SelectedIndex > -1;
         }
@@ -29,13 +29,18 @@ namespace RestService.Model.Input
             ElevatedControl.SelectedIndex = -1;
         }
 
-        public override void Fill()
+        public override void SetStartValue()
         {
             ElevatedControl.ItemsSource = new List<string>
             {
                 "Dennis Wüppelmann",
                 "Julius Nordhues"
             };
+        }
+
+        public override void SetValueFromString(string value)
+        {
+            ElevatedControl.SelectedValue = value;
         }
     }
 }

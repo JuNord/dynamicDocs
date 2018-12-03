@@ -1,7 +1,9 @@
+using System.Configuration;
 using System.Windows;
 using DynamicDocsWPF.HelperClasses;
 using DynamicDocsWPF.Model;
 using RestService;
+using RestService.Model.Database;
 using Window = System.Windows.Window;
 
 namespace DynamicDocsWPF.Windows
@@ -10,6 +12,7 @@ namespace DynamicDocsWPF.Windows
     {
         public string Email => EmailBox.Text;
         public string Password => PasswordBox.Password;
+        public User User => new User(Email, Password);
         private NetworkHelper _networkHelper;
         
         public Login()
@@ -28,7 +31,7 @@ namespace DynamicDocsWPF.Windows
             }
             else
             {
-                if (NetworkHelper.CheckAuthorization("http://localhost:8000/Service", Email, HashHelper.Hash(Password)) ==
+                if (new NetworkHelper("http://localhost:8000/Service",User).CheckAuthorization() ==
                     AuthorizationResult.AUTHORIZED)
                 {
                     DialogResult = true;

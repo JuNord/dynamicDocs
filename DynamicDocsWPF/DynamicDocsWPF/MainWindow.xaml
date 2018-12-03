@@ -18,7 +18,15 @@
             <Border.Effect>
                 <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
             </Border.Effect>
-            <StackPanel Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock HorizontalAlignment="Left" FontSize="21" Foreground="#3384D1" FontFamily="Segoe UI Light" Margin="10,5,0,0" >
+                    <Run Text="Hauptmenü"/>
+                </TextBlock>
+            <StackPanel Grid.Row="1" Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         Margin="40,20" MaxWidth="700">
                 <Button Name="MainMenu_BtnNewProcessInstance" Click="MainMenu_BtnNewProcessInstance_OnClick"
                         Content="Prozess starten" Width="250" Height="35"
@@ -27,6 +35,13 @@
                         <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
                     </Button.Effect>
                 </Button>       
+                <Button Name="MainMenu_BtnViewInstances" Click="MainMenu_BtnViewInstances_OnClick"
+                        Content="Prozesse ansehen" Width="250" Height="35"
+                        VerticalAlignment="Center" Margin="10" Background="#2196f3" Foreground="White" FontWeight="Black">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                    </Button.Effect>
+                </Button>   
                 <Button Name="MainMenu_BtnUploadProcess" Click="MainMenu_BtnUploadProcess_OnClick"
                         Content="Vorlagen verwalten" Width="250" Height="35"
                         VerticalAlignment="Center" Margin="10" Background="#2196f3" Foreground="White" FontWeight="Black">
@@ -41,7 +56,16 @@
                         <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
                     </Button.Effect>
                 </Button>       
+                
+                <TextBlock Name="NoPermissionText" Visibility="Collapsed" FontSize="18" Foreground="DarkGray" TextWrapping="Wrap">
+                    <Run Text="Nichts zu sehen?"/>
+                    <LineBreak/>
+                    <Run Text="Vermutlich fehlen Ihnen Berechtigungen."/> 
+                    <LineBreak/>
+                    <Run Text="Bitte wenden Sie sich an einen Administrator."/>
+                    </TextBlock>
             </StackPanel>
+           </Grid>
         </Border>
     </Grid>
 </Window>

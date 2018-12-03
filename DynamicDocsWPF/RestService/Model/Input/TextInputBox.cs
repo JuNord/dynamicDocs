@@ -13,7 +13,7 @@ namespace RestService.Model.Input
         /// <param name="parent"></param>
         /// <param name="name"></param>
         public TextInputBox(Tag parent, string name, string description, bool obligatory) : base(parent, name,
-            description, obligatory, new TextBox())
+            description, obligatory, new TextBox(), DataType.String)
         {
             ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
         }
@@ -23,7 +23,7 @@ namespace RestService.Model.Input
             ElevatedControl.Clear();
         }
 
-        public override void Fill()
+        public override void SetStartValue()
         {
             ElevatedControl.Text = "";
         }
@@ -31,6 +31,11 @@ namespace RestService.Model.Input
         public override string GetValue()
         {
             return ElevatedControl.Text;
+        }
+        
+        public override void SetValueFromString(string value)
+        {
+            ElevatedControl.Text = value;
         }
     }
 }

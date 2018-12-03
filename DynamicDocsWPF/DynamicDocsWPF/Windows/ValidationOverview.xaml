@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:DynamicDocsWPF"
         mc:Ignorable="d"
-        Title="ValidationOverview" Height="450" Width="800">
+        Title="ValidationOverview" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -34,11 +34,19 @@
                 </StackPanel>
             </ScrollViewer>
         </Border>
-        <Button Click="ButtonBase_OnClick" Grid.Row="2" Content="Weiter" Width="100" Height="35"
-                VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
-            <Button.Effect>
-                <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
-            </Button.Effect>
-        </Button>
+        <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Click="Back_OnClick"  Content="Zurück" Width="100" Height="35"
+                     Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                </Button.Effect>
+            </Button>
+            <Button Click="Next_OnClick"  Content="Weiter" Width="100" Height="35"
+                    Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                </Button.Effect>
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

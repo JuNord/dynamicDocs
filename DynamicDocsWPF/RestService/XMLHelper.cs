@@ -10,11 +10,11 @@ namespace RestService
 {
     public class XmlHelper
     {
-        public static Process ReadXMLFromString(string content)
+        public static ProcessObject ReadXMLFromString(string content)
         {
             using (var reader = XmlReader.Create(new StringReader(content)))
             {
-                Process process = null;
+                ProcessObject processObject = null;
                 ProcessStep processStep = null;
                 Dialog dialog = null;
                 while (reader.Read())
@@ -36,11 +36,11 @@ namespace RestService
                             #region SurroundingTags
 
                             case Wording.Process:
-                                process = new Process(name, description);
+                                processObject = new ProcessObject(name, description);
                                 break;
                             case Wording.ProcessStep:
-                                processStep = new ProcessStep(process, name, description, target);
-                                process?.AddStep(processStep);
+                                processStep = new ProcessStep(processObject, name, description, target);
+                                processObject?.AddStep(processStep);
                                 break;
                             case Wording.Dialog:
                                 dialog = new Dialog(processStep);
@@ -58,10 +58,6 @@ namespace RestService
 
                             case Wording.NumberInputBox:
                                 var numberInputBox = new NumberInputBox(dialog, name, description, ToBool(obligatory));
-
-                                numberInputBox.ProcessValidityCheck = () => numberInputBox.GetValue() < 20;
-                                numberInputBox.ProcessErrorMsg = "Zahlen müssen kleiner als 20 sein.";
-
                                 dialog.AddElement(numberInputBox);
                                 break;
 
@@ -91,8 +87,8 @@ namespace RestService
                             #region ProcessTags              
 
                             case Wording.ArchivePermission:
-                                var archivePermission = new ArchivePermissionElement(process, target);
-                                process.AddPermission(archivePermission);
+                                var archivePermission = new ArchivePermissionElement(processObject, target);
+                                processObject.AddPermission(archivePermission);
                                 break;
                             case Wording.MailNotification:
                                 var mailNotification = new MailNotificationElement(processStep);
@@ -115,16 +111,16 @@ namespace RestService
                         }
                     }
 
-                return process;
+                return processObject;
             }
         }
 
-        public static Process ReadXMLFromBytes(byte[] content, Encoding encoding)
+        public static ProcessObject ReadXMLFromBytes(byte[] content, Encoding encoding)
         {
             return ReadXMLFromString(encoding.GetString(content));
         }
 
-        public static Process ReadXMLFromPath(string path)
+        public static ProcessObject ReadXMLFromPath(string path)
         {
             return ReadXMLFromString(File.ReadAllText(path));
         }

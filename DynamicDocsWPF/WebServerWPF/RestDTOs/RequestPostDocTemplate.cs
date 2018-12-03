@@ -1,6 +1,6 @@
 namespace WebServerWPF.RestDots
 {
-    public abstract class RequestPostDocTemplate
+    public class RequestPostDocTemplate
     {
         public string Id { get; set; }
         public string Content { get; set; }

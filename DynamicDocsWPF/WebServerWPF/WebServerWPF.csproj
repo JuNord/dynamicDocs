@@ -69,6 +69,7 @@
     <Compile Include="RestDTOs\ReplyGetDocTemplate.cs" />
     <Compile Include="RestDTOs\ReplyGetDocTemplateList.cs" />
     <Compile Include="RestDTOs\ReplyGetEntryList.cs" />
+    <Compile Include="RestDTOs\ReplyGetProcessInstanceList.cs" />
     <Compile Include="RestDTOs\ReplyGetProcessInstance.cs" />
     <Compile Include="RestDTOs\ReplyGetPermissionLevel.cs" />
     <Compile Include="RestDTOs\ReplyGetProcessTemplate.cs" />

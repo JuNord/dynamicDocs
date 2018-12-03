@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Windows.Controls;
 using RestService.Model.Base;
 
@@ -14,7 +15,7 @@ namespace RestService.Model.Input
         /// <param name="parent"></param>
         /// <param name="name"></param>
         public NumberInputBox(Tag parent, string name, string description, bool obligatory = false) : base(parent, name,
-            description, obligatory, new TextBox())
+            description, obligatory, new TextBox(), DataType.Int)
         {
             ObligatoryCheck = () => !string.IsNullOrEmpty(ElevatedControl.Text);
 
@@ -47,9 +48,14 @@ namespace RestService.Model.Input
             ElevatedControl.Clear();
         }
 
-        public override void Fill()
+        public override void SetStartValue()
         {
             ElevatedControl.Text = "";
+        }
+
+        public override void SetValueFromString(string value)
+        {
+            ElevatedControl.Text = value;
         }
     }
 }

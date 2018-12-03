@@ -4,6 +4,6 @@ namespace WebServerWPF.RestDTOs
 {
     public class RequestPostProcessInstance
     {
-        public RunningProcess RunningProcess { get; set; }
+        public ProcessInstance ProcessInstance { get; set; }
     }
 }

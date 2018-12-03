@@ -3,11 +3,13 @@ using System.IO;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
+using System.ServiceModel.Web;
 using System.Text;
 using System.Web;
 using System.Xml;
 using DynamicDocsWPF.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using RestService;
 using RestService.Model.Database;
 using WebServer;
@@ -23,10 +25,12 @@ namespace WebServerWPF
     {
         private const string DocPath = "./Docs/";
         private const string ProcessPath = "./Processes/";
+        private HttpContext _httpContext = HttpContext.Current;
         private static readonly DatabaseHelper Database = new DatabaseHelper();
 
-        public ReplyGetPermissionLevel GetPermissionLevel(RequestGetPermissionLevel request)
+        public ReplyGetPermissionLevel GetPermissionLevel(string message)
         {
+            var request = JsonConvert.DeserializeObject<RequestGetPermissionLevel>(message);
             if (IsPermitted(GetAuthUser(),3) == AuthorizationResult.PERMITTED || (IsAuthorized(GetAuthUser()) == AuthorizationResult.AUTHORIZED && GetAuthUser().Email.Equals(request.Username)))
             {
                 return new ReplyGetPermissionLevel()
@@ -39,22 +43,53 @@ namespace WebServerWPF
             {
                 PermissionLevel = -1
             };
-        } 
+        }
+
+        public ReplyGetProcessInstance GetProcessInstance(string message)
+        {
+            var request = JsonConvert.DeserializeObject<RequestGetProcessInstance>(message);
+
+            try
+            {
+                if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
+                {
+                    var reply = new ReplyGetProcessInstance()
+                    {
+                        ProcessInstance = Database.GetProcessInstanceById(request.Id)
+                    };
+
+                    return reply;
+                }
+            }
+            catch (Exception e)
+            {
+                PrintException(e);
+            }
+
+            return null;
+        }
 
         public AuthorizationResult IsAuthorized(User user)
         {
-            var dbUser = Database.GetUserByMail(user.Email);
-            
-            if (dbUser == null) return AuthorizationResult.INVALID_LOGIN;
-            
-            return HashHelper.CheckHash(user.Password, dbUser.Password) ? AuthorizationResult.AUTHORIZED : AuthorizationResult.INVALID_LOGIN;
+            try
+            {
+                var dbUser = Database.GetUserByMail(user.Email);
+
+                if (dbUser == null) return AuthorizationResult.INVALID_LOGIN;
+
+                return HashHelper.CheckHash(user.Password, dbUser.Password)
+                    ? AuthorizationResult.AUTHORIZED
+                    : AuthorizationResult.INVALID_LOGIN;
+            }
+            catch (Exception e)
+            {
+                return AuthorizationResult.INVALID_FORMAT;
+            }
         }
 
         public User GetAuthUser()
         {
-            var httpContext = HttpContext.Current;
-
-            var authHeader = httpContext.Request.Headers["Authorization"];
+            var authHeader = WebOperationContext.Current.IncomingRequest.Headers["Authorization"];
 
             if (authHeader != null && authHeader.StartsWith("Basic"))
             {
@@ -87,8 +122,10 @@ namespace WebServerWPF
             return AuthorizationResult.PERMITTED;
         }
 
-        public ReplyGetProcessTemplate GetProcessTemplate(RequestGetProcessTemplate request)
+        public ReplyGetProcessTemplate GetProcessTemplate(string message)
         {
+            var request = JsonConvert.DeserializeObject<RequestGetProcessTemplate>(message);
+
             try
             {
                 if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
@@ -113,8 +150,10 @@ namespace WebServerWPF
             return null;
         }
 
-        public ReplyGetDocTemplate GetDocTemplate(RequestGetDocTemplate request)
+        public ReplyGetDocTemplate GetDocTemplate(string message)
         {
+            var request = JsonConvert.DeserializeObject<RequestGetDocTemplate>(message);
+
             try
             {
                 if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
@@ -183,6 +222,28 @@ namespace WebServerWPF
             return null;
         }
 
+        public ReplyGetProcessInstanceList GetProcessInstanceList()
+        {
+            try
+            {
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
+                {
+                    var reply = new ReplyGetProcessInstanceList()
+                    {
+                        ProcessInstances = Database.GetProcessInstances(GetAuthUser())
+                    };
+
+                    return reply;
+                }
+            }
+            catch (Exception e)
+            {
+                PrintException(e);
+            }
+
+            return null;
+        }
+
         public ReplyGetAuthenticationResult CheckAuthentication()
         {
             return new ReplyGetAuthenticationResult()
@@ -191,8 +252,10 @@ namespace WebServerWPF
             };
         }
 
-        public ReplyGetEntryList GetEntryList(RequestGetEntryList request)
+        public ReplyGetEntryList GetEntryList(string message)
         {
+            var request = JsonConvert.DeserializeObject<RequestGetEntryList>(message);
+
             try
             {
                 if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
@@ -364,13 +427,15 @@ namespace WebServerWPF
                         if (request.Declined)
                         {
                             MainWindow.PostToLog("The process was declined.");
-                            Database.DeclineRunningProcess(request.Id);
+                            Database.DeclineProcessInstance(request.Id);
                         }
                         else
                         {
                             MainWindow.PostToLog("The process was approved.");
-                            Database.ApproveRunningProcess(request.Id);
+                            Database.ApproveProcessInstance(request.Id);
                         }
+                        if(request.Locks)
+                            Database.LockProcessInstance(request.Id);
                         break;
                     case AuthorizationResult.NO_PERMISSION: 
                         reply.UploadResult = UploadResult.NO_PERMISSION;                            
@@ -414,7 +479,7 @@ namespace WebServerWPF
                     case AuthorizationResult.PERMITTED:
                         MainWindow.PostToLog("Received request to create a new Process Instance.");
                         MainWindow.PostToLog("Registering in Database...");
-                        Database.AddRunningProcess(request.RunningProcess);
+                        reply.InstanceId = (int) Database.AddProcessInstance(request.ProcessInstance);
                         MainWindow.PostToLog("Done");
                         break;
                     case AuthorizationResult.NO_PERMISSION: 
@@ -499,22 +564,10 @@ namespace WebServerWPF
             var reply = new ReplyPostUser();
             try
             {
-                var auth = IsPermitted(GetAuthUser(),2);
-                switch (auth)
-                {
-                    case AuthorizationResult.PERMITTED:
-                        MainWindow.PostToLog("Received request to register a new user.");
-                        MainWindow.PostToLog("Registering in Database...");          
-                        Database.AddUser(request.User);
-                        MainWindow.PostToLog("Done!");
-                        break;
-                    case AuthorizationResult.NO_PERMISSION: 
-                        reply.UploadResult = UploadResult.NO_PERMISSION;                            
-                        break;                      
-                    case AuthorizationResult.INVALID_LOGIN:
-                        reply.UploadResult = UploadResult.INVALID_LOGIN;
-                        break;
-                }
+                MainWindow.PostToLog("Received request to register a new user.");
+                MainWindow.PostToLog("Registering in Database...");          
+                Database.AddUser(new User(request.Email, request.Password));
+                MainWindow.PostToLog("Done!");
             }
             catch (MySqlException e)
             {
@@ -524,11 +577,6 @@ namespace WebServerWPF
                     reply.UploadResult = UploadResult.USER_EXISTS;
                 }
                 PrintException(e);
-            }
-            catch (XmlException e)
-            {
-                PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_FILE_OR_TYPE_INVALID;
             }
             catch (Exception e)
             {
