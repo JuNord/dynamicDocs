@@ -259,7 +259,7 @@ namespace WebServerWPF
         private void SetNewResponsibleUser(int id, User user)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO TABLE processinstance VALUES({id},{user.Email});";
+            cmd.CommandText = $"INSERT INTO TABLE processinstance VALUES({id},\"{user.Email}\");";
             cmd.ExecuteNonQuery();
         }
         
