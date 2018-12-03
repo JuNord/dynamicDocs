@@ -18,7 +18,7 @@
       <number name="left_new" description="Resturlaub (alt)"/>
     </dialog>
   </process-step>
-  <process-step name="validationBySecretary" description="Genehmigt durch Sekretärin" target="herrewald">
+  <process-step name="validationBySecretary" description="Genehmigt durch Sekretärin" target="manfred.ziebell">
     <validation locks="true"/>
     <mailnotify target="[teacher]" text="Antrag durch Sekretär/in genehmigt"/>
     <receipt draftname="vorlage"/>

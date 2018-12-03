@@ -43,6 +43,7 @@ namespace DynamicDocsWPF
                             MainMenu_BtnNewProcessInstance.Visibility = Visibility.Collapsed;
                             MainMenu_BtnViewInstances.Visibility = Visibility.Collapsed;
                             MainMenu_BtnUploadProcess.Visibility = Visibility.Collapsed;
+                            MainMenu_BtnViewResponsibilities.Visibility = Visibility.Collapsed;
                             MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
                             break;
                         case 1:
@@ -109,6 +110,12 @@ namespace DynamicDocsWPF
         private void MainMenu_BtnViewInstances_OnClick(object sender, RoutedEventArgs e)
         {
             var view = new ViewAllInstances(_networkHelper);
+            view.ShowDialog();
+        }
+
+        private void MainMenu_BtnViewResponsibilities_OnClick(object sender, RoutedEventArgs e)
+        {
+            var view = new ViewPendingInstances(_networkHelper);
             view.ShowDialog();
         }
     }

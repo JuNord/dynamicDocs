@@ -32,7 +32,7 @@ namespace RestService
 
         public bool MoveBack()
         {
-            if (_index - 1 > 0)
+            if (_index - 1 >= 0)
             {
                 _index--;
                 return true;

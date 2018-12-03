@@ -91,6 +91,12 @@ namespace DynamicDocsWPF.HelperClasses
             var reply = JsonConvert.DeserializeObject<ReplyGetProcessTemplateList>(GetRequest(User, "ProcessTemplateList"));
             return reply?.ProcessTemplates;
         }
+
+        public List<PendingInstance> GetResponsibilities()
+        {
+            var reply = JsonConvert.DeserializeObject<ReplyGetResponsibilityList>(GetRequest(User, "ResponsibilityList"));
+            return reply?.Responsibilities;
+        }
         
         public ProcessInstance GetProcessInstanceById(int id)
         {

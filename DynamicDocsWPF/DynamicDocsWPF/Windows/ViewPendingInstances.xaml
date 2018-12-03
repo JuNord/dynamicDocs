@@ -1,0 +1,49 @@
+<Window x:Class="DynamicDocsWPF.Windows.ViewPendingInstances"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:DynamicDocsWPF.Windows"
+        mc:Ignorable="d"
+        Title="ViewAllInstances" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <ListView Name="InstanceList" SelectionChanged="InstanceList_OnSelectionChanged"/>
+        <Grid Grid.Column="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="InfoBlock" HorizontalAlignment="Center" Text="Hallo" FontSize="28"
+                   FontFamily="Segoe UI Light" Margin="20" />
+        <Border Grid.Row="1" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
+            </Border.Effect>
+            <ScrollViewer>
+                <ContentPresenter Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                  Margin="40,20" MaxWidth="700"/>
+            </ScrollViewer>
+        </Border>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                <Button Click="ViewAllInstances_Btn_Back_OnClick" Content="Zurück" Width="100" Height="35"
+                        VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                    </Button.Effect>
+                </Button>
+                <Button Name="BtnNext" Click="ViewAllInstances_Btn_Next_OnClick" Content="Weiter" Width="100" Height="35"
+                        VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                    </Button.Effect>
+                </Button>
+            </StackPanel>
+    </Grid>
+    </Grid>
+</Window>

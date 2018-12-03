@@ -20,10 +20,8 @@
                 <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
             </Border.Effect>
             <ScrollViewer>
-                <StackPanel Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                            Margin="40,20" MaxWidth="700">
-                               
-                </StackPanel>
+                <ContentPresenter Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                  Margin="40,20" MaxWidth="700"/>
             </ScrollViewer>
         </Border>
         <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">

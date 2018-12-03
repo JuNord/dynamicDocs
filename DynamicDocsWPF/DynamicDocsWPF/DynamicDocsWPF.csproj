@@ -81,7 +81,6 @@
     <Compile Include="HelperClasses\IReceiptHelper.cs" />
     <Compile Include="HelperClasses\NetworkBase.cs" />
     <Compile Include="HelperClasses\NetworkHelper.cs" />
-    <Compile Include="HelperClasses\ViewCreator.cs" />
     <Compile Include="HelperClasses\WordReceiptHelper.cs" />
     <Compile Include="Windows\CreateProcessInstance.xaml.cs">
       <DependentUpon>CreateProcessInstance.xaml</DependentUpon>
@@ -101,14 +100,14 @@
     <Compile Include="Windows\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ValidationOverview.xaml.cs">
-      <DependentUpon>ValidationOverview.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\ValidationPopup.xaml.cs">
       <DependentUpon>ValidationPopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ViewAllInstances.xaml.cs">
       <DependentUpon>ViewAllInstances.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ViewPendingInstances.xaml.cs">
+      <DependentUpon>ViewPendingInstances.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -128,9 +127,9 @@
     <Page Include="Windows\InfoPopup.xaml" />
     <Page Include="Windows\ProcessSelect.xaml" />
     <Page Include="Windows\Register.xaml" />
-    <Page Include="Windows\ValidationOverview.xaml" />
     <Page Include="Windows\ValidationPopup.xaml" />
     <Page Include="Windows\ViewAllInstances.xaml" />
+    <Page Include="Windows\ViewPendingInstances.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -151,6 +150,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="backupValidationOverview.txt" />
     <Content Include="Designstuff.xml" />
     <Content Include="PlantUML\Database.txt" />
     <Content Include="PlantUML\Network.txt" />

@@ -107,7 +107,6 @@ namespace RestService
 
                             default:
                                 throw new ArgumentOutOfRangeException();
-                                break;
                         }
                     }
 

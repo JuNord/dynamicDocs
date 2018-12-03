@@ -13,7 +13,6 @@ namespace DynamicDocsWPF.Windows
         public string Email => EmailBox.Text;
         public string Password => PasswordBox.Password;
         public User User => new User(Email, Password);
-        private NetworkHelper _networkHelper;
         
         public Login()
         {

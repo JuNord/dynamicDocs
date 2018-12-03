@@ -26,18 +26,24 @@
                 <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
             </Border.Effect>
             <ScrollViewer>
-                <StackPanel Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                            Margin="40,20" MaxWidth="700">
-                                
-                </StackPanel>
+                <ContentPresenter Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            Margin="40,20" MaxWidth="700"/>
             </ScrollViewer>
         </Border>
-        <Button Name="BtnNext" Click="ViewAllInstances_Btn_Next_OnClick" Grid.Row="2" Content="Weiter" Width="100" Height="35"
-                VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
-            <Button.Effect>
-                <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
-            </Button.Effect>
-        </Button>
-    </Grid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+            <Button Click="ViewAllInstances_Btn_Back_OnClick" Content="Zurück" Width="100" Height="35"
+                    VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                </Button.Effect>
+            </Button>
+            <Button Name="BtnNext" Click="ViewAllInstances_Btn_Next_OnClick" Content="Weiter" Width="100" Height="35"
+                    VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                </Button.Effect>
+            </Button>
+        </StackPanel>
+        </Grid>
     </Grid>
 </Window>

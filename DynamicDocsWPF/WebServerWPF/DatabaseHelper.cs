@@ -1,7 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
 using RestService;
 using RestService.Model.Database;
+using RestService.Model.Process;
 
 namespace WebServerWPF
 {
@@ -95,7 +101,7 @@ namespace WebServerWPF
 
             return processInstances;
         }
-
+      
         public ProcessInstance GetProcessInstanceById(int instanceId)
         {
             ProcessInstance processinstance = null;
@@ -134,7 +140,14 @@ namespace WebServerWPF
                 $"{processInstance.Locked});";
             cmd.ExecuteNonQuery();
 
-            return cmd.LastInsertedId;  
+            int instanceId = (int) cmd.LastInsertedId;
+            
+            var processTemplate = GetProcessTemplateById(processInstance.TemplateId);
+            var processObject = XmlHelper.ReadXMLFromString(File.ReadAllText(processTemplate.FilePath));
+            
+            PushToNextUser(instanceId, processObject, GetProcessInstanceById(instanceId));
+            
+            return instanceId;  
         }
 
         public void LockProcessInstance(int id)
@@ -149,35 +162,115 @@ namespace WebServerWPF
             var cmd = connection.CreateCommand();
             cmd.CommandText = $"UPDATE processinstance SET declined = true WHERE id = {id};";
             cmd.ExecuteNonQuery();
-            Archiveprocessinstance(id);
-        }
+            ArchiveProcessinstance(id);
+        }   
 
         public void ApproveProcessInstance(int id)
         {
-            var processinstance = GetProcessInstanceById(id);
+            var processInstance = GetProcessInstanceById(id);
 
-            if (processinstance != null)
+            if (processInstance != null)
             {
-                var template = GetProcessTemplateById(processinstance.TemplateId);
+                var template = GetProcessTemplateById(processInstance.TemplateId);
                 if (template != null)
                 {
-                    var process = XmlHelper.ReadXMLFromPath(template.FilePath);
-                    if (processinstance.CurrentStep + 1 > process.ProcessStepCount)
-                        Archiveprocessinstance(id);
+                    var processObject = XmlHelper.ReadXMLFromPath(template.FilePath);
+                    
+                    
+                    if (processInstance.CurrentStep + 1 > processObject.ProcessStepCount)
+                    {
+                        ArchiveProcessinstance(id);
+                    }
                     else
-                        Incrementprocessinstance(id);
+                    {
+                        PushToNextUser(id, processObject, processInstance);   
+                    }
                 }
             }
         }
 
-        private void Incrementprocessinstance(int id)
+        private void PushToNextUser(int id, ProcessObject processObject, ProcessInstance processinstance)
+        {
+            User nextResponsibleUser;
+            var entries = GetEntries(id);
+            var processStep = processObject.GetStepAtIndex(processinstance.CurrentStep+1);
+            if (IsPlaceHolder(processStep.Target))
+            {
+                var mail = GetStringValueFromEntryList(entries, processStep.Target.Substring(1, processStep.Target.Length - 2));
+                nextResponsibleUser = GetUserByMail(mail);
+            }
+            else
+            {
+                nextResponsibleUser = GetUserByMail(processStep.Target);
+            }
+                        
+            if (nextResponsibleUser != null)
+            {
+                IncrementProcessInstance(id);
+                SetNewResponsibleUser(id, nextResponsibleUser);
+            }
+            
+            //TODO: HANDLE MISSING NEXT USER
+        }
+
+        private string GetStringValueFromEntryList(List<Entry> entries, string fieldName)
+        {
+            return entries.First(entry => entry.FieldName.Equals(fieldName)).Data;
+        }
+
+        private bool IsPlaceHolder(string value)
+        {
+            try
+            {
+                var linkRegex = new Regex("^\\[(.*?)\\]$");
+                return linkRegex.IsMatch(value);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public List<PendingInstance> GetResponsibilities(User user)
+        {
+            var responsibilities = new List<PendingInstance>();
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"SELECT * FROM pendinginstance WHERE responsible_User_Id = {user.Email};";
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                responsibilities.Add(new PendingInstance()
+                {
+                    InstanceId = reader.GetInt32(0),
+                    ResponsibleUserId = reader.GetString(1)
+                });
+            }
+
+            return responsibilities;
+        }
+        
+        private void RemoveAllPendings(int id)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"DELETE pendinginstance WHERE id = {id};";
+            cmd.ExecuteNonQuery();
+        }
+        
+        private void SetNewResponsibleUser(int id, User user)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"INSERT INTO TABLE processinstance VALUES({id},{user.Email});";
+            cmd.ExecuteNonQuery();
+        }
+        
+        private void IncrementProcessInstance(int id)
         {
             var cmd = connection.CreateCommand();
             cmd.CommandText = $"UPDATE processinstance SET CurrentStep = CurrentStep + 1 WHERE id = {id};";
-            cmd.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();         
         }
 
-        private void Archiveprocessinstance(int id)
+        private void ArchiveProcessinstance(int id)
         {
             var processinstance = GetProcessInstanceById(id);
             if (processinstance != null)
@@ -186,6 +279,7 @@ namespace WebServerWPF
                 cmd.CommandText = $"UPDATE processinstance SET archived = true WHERE id = {id};" +
                                   $"INSERT INTO ArchivePermission VALUES({id}, \"{processinstance.OwnerId}\");";
                 cmd.ExecuteNonQuery();
+                RemoveAllPendings(id);
             }
         }
 
@@ -340,7 +434,7 @@ namespace WebServerWPF
         }
 
         //SELECT * FROM ENTRY
-        public List<Entry> GetEntry(int instanceId)
+        public List<Entry> GetEntries(int instanceId)
         {
             var entries = new List<Entry>();
             var cmd = connection.CreateCommand();

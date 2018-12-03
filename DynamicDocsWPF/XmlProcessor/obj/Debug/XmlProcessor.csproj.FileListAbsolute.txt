@@ -56,3 +56,10 @@ C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\RestService.pdb
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\Newtonsoft.Json.pdb
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\Newtonsoft.Json.xml
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\WebServerWPF.exe
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\MySql.Data.dll
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\Google.Protobuf.dll
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\WebServerWPF.pdb
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\WebServerWPF.exe.config
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\MySql.Data.xml
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\Google.Protobuf.xml

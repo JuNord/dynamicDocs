@@ -135,7 +135,7 @@ namespace DynamicDocsWPF.Windows
                         else _isOkay = true;
                     }
                 }
-                catch (XmlException e2)
+                catch (XmlException)
                 {
                     InfoText.Text = "Die XML ist fehlerhaft. Sind alle Tags geschlossen?";
                 }

@@ -66,6 +66,7 @@
     <Compile Include="Model\Database\ArchivePermission.cs" />
     <Compile Include="Model\Database\DocTemplate.cs" />
     <Compile Include="Model\Database\Entry.cs" />
+    <Compile Include="Model\Database\PendingInstance.cs" />
     <Compile Include="Model\Database\ProcessTemplate.cs" />
     <Compile Include="Model\Database\ProcessUpdate.cs" />
     <Compile Include="Model\Database\Roles.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileMessage.cs" />
     <Compile Include="UploadResult.cs" />
+    <Compile Include="StackPanelFactory.cs" />
     <Compile Include="XMLHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

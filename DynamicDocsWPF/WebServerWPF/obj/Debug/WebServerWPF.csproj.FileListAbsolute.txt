@@ -81,3 +81,5 @@ C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\obj\Debug\W
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\obj\Debug\WebServerWPF.pdb
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\bin\Debug\System.Web.dll
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\bin\Debug\de\System.Web.resources.dll
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\bin\Debug\System.Web.dll
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\WebServerWPF\bin\Debug\de\System.Web.resources.dll

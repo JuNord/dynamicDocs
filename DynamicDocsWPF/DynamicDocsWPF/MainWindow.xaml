@@ -42,6 +42,13 @@
                         <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
                     </Button.Effect>
                 </Button>   
+                <Button Name="MainMenu_BtnViewResponsibilities" Click="MainMenu_BtnViewResponsibilities_OnClick"
+                        Content="Verantwortlichkeiten ansehen" Width="250" Height="35"
+                        VerticalAlignment="Center" Margin="10" Background="#2196f3" Foreground="White" FontWeight="Black">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                    </Button.Effect>
+                </Button>   
                 <Button Name="MainMenu_BtnUploadProcess" Click="MainMenu_BtnUploadProcess_OnClick"
                         Content="Vorlagen verwalten" Width="250" Height="35"
                         VerticalAlignment="Center" Margin="10" Background="#2196f3" Foreground="White" FontWeight="Black">

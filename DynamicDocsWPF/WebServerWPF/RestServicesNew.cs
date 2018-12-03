@@ -81,7 +81,7 @@ namespace WebServerWPF
                     ? AuthorizationResult.AUTHORIZED
                     : AuthorizationResult.INVALID_LOGIN;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return AuthorizationResult.INVALID_FORMAT;
             }
@@ -244,6 +244,28 @@ namespace WebServerWPF
             return null;
         }
 
+        public ReplyGetResponsibilityList GetResponsibilityList()
+        {
+            try
+            {
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
+                {
+                    var reply = new ReplyGetResponsibilityList()
+                    {
+                        Responsibilities = Database.GetResponsibilities(GetAuthUser())
+                    };
+
+                    return reply;
+                }
+            }
+            catch (Exception e)
+            {
+                PrintException(e);
+            }
+
+            return null;
+        }
+
         public ReplyGetAuthenticationResult CheckAuthentication()
         {
             return new ReplyGetAuthenticationResult()
@@ -262,7 +284,7 @@ namespace WebServerWPF
                 {
                     var reply = new ReplyGetEntryList()
                     {
-                        Entries = Database.GetEntry(request.InstanceId)
+                        Entries = Database.GetEntries(request.InstanceId)
                     };
 
                     return reply;

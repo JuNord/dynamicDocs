@@ -106,12 +106,10 @@ C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\ob
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\Login.g.cs
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ProcessSelect.g.cs
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\Register.g.cs
-C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ValidationOverview.g.cs
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ValidationPopup.g.cs
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\Login.baml
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ProcessSelect.baml
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\Register.baml
-C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ValidationOverview.baml
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ValidationPopup.baml
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\CreateProcessInstance.g.cs
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\CreateProcessInstance.baml
@@ -156,3 +154,11 @@ C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\ob
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\InfoPopup.baml
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ViewAllInstances.g.cs
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ViewAllInstances.baml
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\CreateProcessTemplate.g.cs
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\InfoPopup.g.cs
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ViewAllInstances.g.cs
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\CreateProcessTemplate.baml
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\InfoPopup.baml
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ViewAllInstances.baml
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ViewPendingInstances.g.cs
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ViewPendingInstances.baml

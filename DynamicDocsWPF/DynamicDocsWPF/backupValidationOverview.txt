@@ -1,0 +1,63 @@
+private void Next_OnClick(object sender, RoutedEventArgs e)
+        {
+            _stepIndex++;
+            if (!_dialogEnumerable.MoveNext())
+            {
+                if (!_processStepEnumerator.MoveNext() || _stepIndex > _processObject.CurrentStep)
+                {
+                    var popup = new ValidationPopup();
+                    popup.ShowDialog();
+                    switch (popup.DialogResult)
+                    {
+                        case true:
+                            _networkHelper.PostProcessUpdate(_instanceId, false, false);
+                            break;
+                        default:
+                            _networkHelper.PostProcessUpdate(_instanceId, true, false);
+                            break;
+                    }             
+                    Close();
+                    return;
+                }
+                else
+                {
+                    _dialogEnumerable = _processStepEnumerator.Current?.Dialogs;
+                }
+            }
+            else
+            {
+                StackPanelFactory.CreatePanel(ViewHolder, _dialogEnumerable.Current);
+            }
+        }
+
+        private void Back_OnClick(object sender, RoutedEventArgs e)
+        {
+            _stepIndex--;
+            if (!_dialogEnumerable.MoveBack())
+            {
+                if (!_processStepEnumerator.MoveBack() || _stepIndex > _processObject.CurrentStep)
+                {
+                    var popup = new ValidationPopup();
+                    popup.ShowDialog();
+                    switch (popup.DialogResult)
+                    {
+                        case true:
+                            _networkHelper.PostProcessUpdate(_instanceId, false, false);
+                            break;
+                        default:
+                            _networkHelper.PostProcessUpdate(_instanceId, true, false);
+                            break;
+                    }             
+                    Close();
+                    return;
+                }
+                else
+                {
+                    _dialogEnumerable = _processStepEnumerator.Current?.Dialogs;
+                }
+            }
+            else
+            {
+                StackPanelFactory.CreatePanel(ViewHolder, _dialogEnumerable.Current);
+            }
+        }

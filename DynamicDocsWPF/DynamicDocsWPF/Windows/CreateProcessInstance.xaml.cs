@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
@@ -14,12 +13,11 @@ namespace DynamicDocsWPF.Windows
 {
     public partial class CreateProcessInstance : Window
     {
-        private int _currentDialog;
         private int _instanceId = -1;
-        private ProcessObject _processObject;
+        private readonly ProcessObject _processObject;
         private readonly NetworkHelper _networkHelper;
-        private ProcessStep _processStep;
-        private CustomEnumerable<Dialog> _dialogEnumerable;
+        private readonly ProcessStep _processStep;
+        private readonly CustomEnumerable<Dialog> _dialogEnumerable;
         
         private static string MoTD
         {
@@ -46,44 +44,75 @@ namespace DynamicDocsWPF.Windows
                 if (_dialogEnumerable != null)
                 {
                     _dialogEnumerable?.MoveNext();
-                    ViewCreator.FillViewHolder(ViewHolder, _dialogEnumerable.Current);
+                    ViewHolder.Content = _dialogEnumerable.Current.GetStackPanel();
                 }
             }
         }
 
-        private Func<bool> StringToCondition(ProcessObject processObject, string condition)
+        private Func<double> StringToCalculation(ProcessObject processObject, string calculation)
         {
             string[] split = new string[0];
             var op = "";
+            if (calculation.Contains("+")) 
+                op = "+";
+            else if (calculation.Contains("-"))
+                op = "-";
+            else if (calculation.Contains("*"))
+                op = "*";
+            else if (calculation.Contains("/"))
+                op = "/";
+            else return null;
+
+            split = calculation.Split(op[0]);
+            
+            
+            if (split.Length != 2) return null;
+
+            var numberRegex = new Regex("^\\d{1,*}$");
+            var linkRegex = new Regex("^\\[(.*?)\\]$");
+            var firstValue = 0.0;
+            var secondValue = 0.0;
+
+            if (numberRegex.IsMatch(split[0]))
+                firstValue = double.Parse(split[0]);
+            
+            else if (linkRegex.IsMatch(split[0]))
+            {
+                var linkText = split[0].Substring(1, split[0].Length - 2);
+                
+                
+            }
+
+            if (numberRegex.IsMatch(split[1])) 
+                secondValue = double.Parse(split[1]);
+
+            switch (op)
+            {
+                case "+": return () => firstValue + secondValue;
+                case "-": return () => firstValue - secondValue;
+                case "*": return () => firstValue * secondValue;
+                case "/": return () => firstValue / secondValue;
+                default: return null;
+            }
+        }
+        
+        private Func<bool> StringToCondition(ProcessObject processObject, string condition)
+        {
+            var split = new string[0];
+            var op = "";
             if (condition.Contains("<"))
-            {
                 op = "<";
-                split = condition.Split(op[0]);
-            }
             else if (condition.Contains(">"))
-            {
                 op = ">";
-                split = condition.Split(op[0]);
-            }
             else if (condition.Contains("<="))
-            {
                 op = "<=";
-                split = condition.Split(op[0]);
-            }
             else if (condition.Contains(">="))
-            {
                 op = ">=";
-            }
             else if (condition.Contains("=="))
-            {
                 op = "==";
-                split = condition.Split(op[0]);
-            }
             else if (condition.Contains("!="))
-            {
                 op = "!=";
-                split = condition.Split(op[0]);
-            }
+            else return null;
 
             if (split.Length != 2) return null;
 
@@ -115,43 +144,26 @@ namespace DynamicDocsWPF.Windows
                 case "!=": return () => Math.Abs(firstValue - secondValue) > 0.000000001;
                 default: return null;
             }
-
-            return null;
         }
 
         private void Next_OnClick(object sender, RoutedEventArgs e)
         {
-            if (_dialogEnumerable.Current?.Elements != null)
+            if (_dialogEnumerable.Current?.Elements == null)
+                return;
+            if (_dialogEnumerable.Current.Elements.Any(baseInputElement => !IsInputValueValid(baseInputElement)))
+                return;
+
+            if (_dialogEnumerable.MoveNext())
             {
-                if (_dialogEnumerable.Current.Elements.Any(baseInputElement => !IsInputValueValid(baseInputElement)))
-                {
-                    return;
-                }
-            }
-            else return;
-            
-            if (!_dialogEnumerable.MoveNext())
-            {
-                var sendPopup = new InfoPopup(MessageBoxButton.YesNo, "Sollen die eingegebenen Daten abgeschickt werden?");
-
-                sendPopup.ShowDialog();
-
-                if (sendPopup.DialogResult == true)
-                {
-                    SendData();
-                }
-                else
-                {
-                    var ensurePopup = new InfoPopup(MessageBoxButton.YesNo, "Sind sie sicher ?");
-
-                    ensurePopup.ShowDialog();
-                    
-                    if (ensurePopup.DialogResult == false) SendData();
-                }
+                ViewHolder.Content = _dialogEnumerable.Current.GetStackPanel();
             }
             else
-            {  
-                ViewCreator.FillViewHolder(ViewHolder, _dialogEnumerable.Current);    
+            {
+                var sendPopup = new InfoPopup(MessageBoxButton.YesNo,
+                    "Sollen die eingegebenen Daten abgeschickt werden?");
+                
+                if (sendPopup.ShowDialog() == true)
+                    SendData();
             }
         }
         
@@ -159,7 +171,7 @@ namespace DynamicDocsWPF.Windows
         {
             if (_dialogEnumerable.MoveBack())
             {
-                ViewCreator.FillViewHolder(ViewHolder, _dialogEnumerable.Current);
+                ViewHolder.Content = _dialogEnumerable.Current.GetStackPanel();
             }
         }
 

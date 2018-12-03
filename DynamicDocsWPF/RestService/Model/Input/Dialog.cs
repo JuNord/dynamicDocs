@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Windows.Controls;
 using RestService.Model.Base;
 
 namespace RestService.Model.Input
@@ -6,12 +7,24 @@ namespace RestService.Model.Input
     public class Dialog : Tag
     {
         private readonly List<BaseInputElement> _elements;
+        private StackPanel _stackPanel;
+        
+        public CustomEnumerable<BaseInputElement> Elements { get; }
 
-        public IEnumerable<BaseInputElement> Elements => _elements;
+        public StackPanel GetStackPanel()
+        {
+            if (_stackPanel == null)
+            {
+                _stackPanel = StackPanelFactory.CreatePanel(this);
+            }
+
+            return _stackPanel;
+        }
         
         public Dialog(Tag parent) : base(parent)
         {
             _elements = new List<BaseInputElement>();
+            Elements = new CustomEnumerable<BaseInputElement>(_elements);
         }
 
         public int ElementCount => _elements?.Count ?? 0;
