@@ -1,3 +1,5 @@
+using System;
+
 namespace RestService.Model.Database
 {
     public class ProcessInstance
@@ -9,5 +11,8 @@ namespace RestService.Model.Database
         public bool Declined { get; set; }
         public bool Archived { get; set; }
         public bool Locked { get; set; }
+        public string Created { get; set; }
+        public string Changed { get; set; }
+        public string Subject { get; set; }
     }
 }

@@ -103,11 +103,8 @@
     <Compile Include="Windows\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ValidationPopup.xaml.cs">
-      <DependentUpon>ValidationPopup.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\ViewAllInstances.xaml.cs">
-      <DependentUpon>ViewAllInstances.xaml</DependentUpon>
+      <DependentUpon>ViewOwnInstances.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ViewPendingInstances.xaml.cs">
       <DependentUpon>ViewPendingInstances.xaml</DependentUpon>
@@ -131,8 +128,7 @@
     <Page Include="Windows\ManageUserPermissions.xaml" />
     <Page Include="Windows\ProcessSelect.xaml" />
     <Page Include="Windows\Register.xaml" />
-    <Page Include="Windows\ValidationPopup.xaml" />
-    <Page Include="Windows\ViewAllInstances.xaml" />
+    <Page Include="Windows\ViewOwnInstances.xaml" />
     <Page Include="Windows\ViewPendingInstances.xaml" />
   </ItemGroup>
   <ItemGroup>

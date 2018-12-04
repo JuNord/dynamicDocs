@@ -9,12 +9,21 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock x:Name="InfoBlock" HorizontalAlignment="Center" Text="Hallo" FontSize="28"
                    FontFamily="Segoe UI Light" Margin="20" />
-        <Border Grid.Row="1" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="50,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Betreff" FontSize="18" Margin="0,0,10,0" Width="Auto"/>
+            <TextBox Name="Subject" Grid.Column="1" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Background="Transparent" BorderBrush="White"/>
+        </Grid>
+        <Border Grid.Row="2" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
             <Border.Effect>
                 <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
@@ -24,14 +33,14 @@
                                   Margin="40,20" MaxWidth="700"/>
             </ScrollViewer>
         </Border>
-        <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
             <Button Click="Back_OnClick"  Content="Zurück" Width="100" Height="35"
                     Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
                 <Button.Effect>
                     <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
                 </Button.Effect>
             </Button>
-            <Button Click="Next_OnClick"  Content="Weiter" Width="100" Height="35"
+            <Button Click="Next_OnClick" Content="Weiter" Width="100" Height="35"
                     Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
                 <Button.Effect>
                     <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />

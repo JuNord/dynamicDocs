@@ -63,3 +63,4 @@ C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\b
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\WebServerWPF.exe.config
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\MySql.Data.xml
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\Google.Protobuf.xml
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\XmlProcessor\bin\Debug\Windows\Resources\officebg1.jpg

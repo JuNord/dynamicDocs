@@ -40,7 +40,6 @@ namespace DynamicDocsWPF
                     {
                         case 0:
                             MainMenu_BtnUploadProcess.Visibility = Visibility.Collapsed;
-                            MainMenu_BtnViewResponsibilities.Visibility = Visibility.Collapsed;
                             MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
                             break;
                         case 1:
@@ -60,6 +59,9 @@ namespace DynamicDocsWPF
                 login.Close();
                 Close();
             }
+
+            OwnInstances.Content = new ViewOwnInstances(_networkHelper);
+            ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
         } 
 
         private void HandleUploadResult(UploadResult result)
@@ -84,29 +86,7 @@ namespace DynamicDocsWPF
             }
         }
 
-        private void MainMenu_BtnNewProcessInstance_OnClick(object sender, RoutedEventArgs e)
-        {
-            ProcessSelect processSelect = null;
-            try
-            {
-                processSelect = new ProcessSelect(_networkHelper);
-                processSelect.ShowDialog();
-
-                if (processSelect.DialogResult == true)
-                {
-                    var file = _networkHelper.GetProcessTemplate(processSelect.SelectedProcessTemplate.Id);
-                    var process = XmlHelper.ReadXMLFromString(file);
-                    var newInstance = new CreateProcessInstance(process, _networkHelper);
-                    newInstance.ShowDialog();
-                }
-            }
-            catch (WebException)
-            {
-                new InfoPopup(MessageBoxButton.OK ,"Der Server ist derzeit nicht erreichbar.").ShowDialog();
-                processSelect?.Close();
-                Close();
-            }
-        }
+        
 
         private void MainMenu_BtnUploadProcess_OnClick(object sender, RoutedEventArgs e)
         {
@@ -125,20 +105,10 @@ namespace DynamicDocsWPF
             }
         }
 
-        private void MainMenu_BtnViewResponsibilities_OnClick(object sender, RoutedEventArgs e)
+
+        private void ManagePermissionsClick(object sender, RoutedEventArgs e)
         {
-            ViewPendingInstances view = null;
-            try
-            {               
-                view = new ViewPendingInstances(_networkHelper);
-                view.ShowDialog();
-            }
-            catch (WebException)
-            {
-                new InfoPopup(MessageBoxButton.OK ,"Der Server ist derzeit nicht erreichbar.").ShowDialog();
-                view?.Close();
-                Close();
-            }
+            throw new NotImplementedException();
         }
     }
 }

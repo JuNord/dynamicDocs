@@ -156,18 +156,20 @@ namespace DynamicDocsWPF.HelperClasses
             return reply?.UploadResult ?? UploadResult.FAILED_OTHER;
         }
 
-        public ReplyPostProcessInstance CreateProcessInstance(string processTemplateId, string ownerId)
+        public ReplyPostProcessInstance CreateProcessInstance(string processTemplateId, string ownerId, string subject)
         {
-            var runningProcess = new ProcessInstance
+            var processInstance = new ProcessInstance
             {
                 Declined = false,
                 CurrentStep = 0,
                 OwnerId = ownerId,
-                TemplateId = processTemplateId
+                TemplateId = processTemplateId,
+                Subject = subject,
+                Created = DateTime.Now.ToShortDateString()
             };
             var request = new RequestPostProcessInstance()
             {
-                ProcessInstance = runningProcess
+                ProcessInstance = processInstance
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostProcessInstance>(
                  PostRequest(User,"ProcessCreate", JsonConvert.SerializeObject(request))

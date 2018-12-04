@@ -7,6 +7,33 @@
         xmlns:windows="clr-namespace:DynamicDocsWPF.Windows"
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="525" Background="#3CA4FF" Foreground="White">
+    <Window.Resources>
+        <Style TargetType="TabItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Border" BorderThickness="0,0,0,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="2,0">
+                            <ContentPresenter x:Name="ContentSite"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              ContentSource="Header"
+                                              Margin="10,2"/>
+                        </Border>
+                        <ControlTemplate.Triggers>  
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="LightSkyBlue" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="GhostWhite" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -14,45 +41,12 @@
         </Grid.RowDefinitions>
         <TextBlock x:Name="InfoBlock" HorizontalAlignment="Center" Text="Guten Tag!" FontSize="28"
                    FontFamily="Segoe UI Light" Margin="20" />
-        <TabControl Grid.Row="1" BorderThickness="0" >
+        <TabControl Grid.Row="1" BorderThickness="0" Padding="0,1,0,0" SelectedIndex="1">
             <TabItem TabIndex="0" Header="Meine Prozesse">
-            
-                <windows:ViewAllInstances Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-     
+                <ContentPresenter x:Name="OwnInstances" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </TabItem>
             <TabItem TabIndex="1" Header="Fremde Prozesse">
-                <Border  BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
-                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
-            </Border.Effect>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock HorizontalAlignment="Left" FontSize="21" Foreground="#3384D1" FontFamily="Segoe UI Light" Margin="10,5,0,0" >
-                    <Run Text="Hauptmenü"/>
-                </TextBlock>
-            <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                        Margin="40,20" MaxWidth="700">
-                <Button Name="MainMenu_BtnViewResponsibilities" Click="MainMenu_BtnViewResponsibilities_OnClick"
-                        Content="Verantwortlichkeiten ansehen" Width="250" Height="35"
-                        VerticalAlignment="Center" Margin="10" Background="#2196f3" Foreground="White" FontWeight="Black">
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
-                    </Button.Effect>
-                </Button>   
-                <TextBlock Name="NoPermissionTextResponsibilities" Visibility="Collapsed" FontSize="18" Foreground="DarkGray" TextWrapping="Wrap">
-                    <Run Text="Nichts zu sehen?"/>
-                    <LineBreak/>
-                    <Run Text="Vermutlich fehlen Ihnen Berechtigungen."/> 
-                    <LineBreak/>
-                    <Run Text="Bitte wenden Sie sich an einen Administrator."/>
-                    </TextBlock>
-            </StackPanel>
-           </Grid>
-        </Border>
+                <ContentPresenter x:Name="ForeignInstances" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </TabItem>
             <TabItem TabIndex="2" Header="Administration">
                 <Border  BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
@@ -77,7 +71,7 @@
                         <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
                     </Button.Effect>
                 </Button>       
-                <Button Name="MainMenu_BtnManagePermissions" Click="MainMenu_BtnNewProcessInstance_OnClick"
+                <Button Name="MainMenu_BtnManagePermissions" Click="ManagePermissionsClick"
                         Content="Berechtigungen verwalten" Width="250" Height="35"
                         VerticalAlignment="Center" Margin="10" Background="#2196f3" Foreground="White" FontWeight="Black">
                     <Button.Effect>

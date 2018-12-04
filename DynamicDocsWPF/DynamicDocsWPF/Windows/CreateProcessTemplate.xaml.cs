@@ -33,7 +33,9 @@ namespace DynamicDocsWPF.Windows
             if (_isOkay == true)
             {
                 var list = CheckDependencies();
-
+                
+                if (list == null) return;
+                
                 foreach (var element in list)
                 {
                     var docUploadResult = _networkHelper.UploadDocTemplate(element.Id, element.FilePath, true);
@@ -131,6 +133,7 @@ namespace DynamicDocsWPF.Windows
                         {
                             new InfoPopup(MessageBoxButton.OK, "Bitte überarbeiten Sie den Prozess.").ShowDialog();
                             Close();
+                            return;
                         }
                         else _isOkay = true;
                     }
@@ -170,6 +173,7 @@ namespace DynamicDocsWPF.Windows
                         {
                             new InfoPopup(MessageBoxButton.OK, "Ups. Da ist wohl etwas schief gelaufen. Die Datei konnte nicht gefunden werden.").ShowDialog();
                             Close();
+                            return null;
                         }
                     }
                     else
@@ -190,12 +194,14 @@ namespace DynamicDocsWPF.Windows
                             {
                                 new InfoPopup(MessageBoxButton.OK, "Ups. Da ist wohl etwas schief gelaufen. Die Datei konnte nicht gefunden werden.").ShowDialog();
                                 Close();
+                                return null;
                             }
                         }
                         else
                         {
                             new InfoPopup(MessageBoxButton.OK, "Bitte überarbeiten Sie den Prozess.").ShowDialog();
                             Close();
+                            return null;
                         }
                     }
                 }

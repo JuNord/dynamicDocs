@@ -159,11 +159,15 @@ namespace DynamicDocsWPF.Windows
             }
             else
             {
-                var sendPopup = new InfoPopup(MessageBoxButton.YesNo,
-                    "Sollen die eingegebenen Daten abgeschickt werden?");
-                
-                if (sendPopup.ShowDialog() == true)
-                    SendData();
+                if (!string.IsNullOrWhiteSpace(Subject.Text))
+                {
+                    var sendPopup = new InfoPopup(MessageBoxButton.YesNo,
+                        "Sollen die eingegebenen Daten abgeschickt werden?");
+
+                    if (sendPopup.ShowDialog() == true)
+                        SendData();
+                }
+                else InfoBlock.Text = "Bitte geben Sie einen Betreff an.";
             }
         }
         
@@ -210,9 +214,9 @@ namespace DynamicDocsWPF.Windows
             }
         }
 
-        private void SendData()
+        private bool SendData()
         {
-            var reply = _networkHelper.CreateProcessInstance(_processObject.Name, _networkHelper.User.Email);
+            var reply = _networkHelper.CreateProcessInstance(_processObject.Name, _networkHelper.User.Email, Subject.Text);
 
             _instanceId = reply.InstanceId;
 
@@ -234,7 +238,18 @@ namespace DynamicDocsWPF.Windows
                         _networkHelper.CreateEntry(entry);
                     }
                 }
+
+                return true;
             }
+
+            if (reply.UploadResult == UploadResult.FAILED_OTHER)
+            {
+                new InfoPopup(MessageBoxButton.OK,
+                        "Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator")
+                    .ShowDialog();
+            }
+
+            return false;
         }
     }
 }

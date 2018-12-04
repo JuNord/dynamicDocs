@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using DynamicDocsWPF.HelperClasses;
 using Microsoft.Office.Interop.Word;
 using RestService;
@@ -14,7 +17,7 @@ using Window = System.Windows.Window;
 
 namespace DynamicDocsWPF.Windows
 {
-    public partial class ViewAllInstances :UserControl
+    public partial class ViewOwnInstances :UserControl
     {
         private readonly NetworkHelper _networkHelper;
         private ProcessObject _currentProcessObject;
@@ -23,26 +26,47 @@ namespace DynamicDocsWPF.Windows
         
         private ProcessInstance SelectedInstance => ((ProcessInstance) InstanceList.SelectedItem);
 
-        public ViewAllInstances()
+        public ViewOwnInstances(NetworkHelper networkHelper)
         {
             InitializeComponent();
-        }
-        
-        public ViewAllInstances(NetworkHelper networkHelper)
-        {
             _networkHelper = networkHelper;
-            InitializeComponent();
-            InstanceList.ItemsSource = _networkHelper.GetProcessInstances();
+            InstanceList.ItemsSource = TryGetInstances();
         }
 
-        private void ViewAllInstances_Btn_Next_OnClick(object sender, RoutedEventArgs e)
+        private List<ProcessInstance> TryGetInstances()
+        {
+            try
+            {
+                var processInstances = _networkHelper.GetProcessInstances();
+
+                if (processInstances == null)
+                {
+                    new InfoPopup(MessageBoxButton.OK,
+                            "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
+                        .ShowDialog();
+
+                }
+
+                return processInstances;
+            }
+            catch (WebException)
+            {
+                new InfoPopup(MessageBoxButton.OK,
+                        "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
+                    .ShowDialog();
+            }
+
+            return null;
+        }
+        
+        private void Next_Click(object sender, RoutedEventArgs e)
         {
             if (TryShowNextDialog(_entries)) return;
 
             BtnNext.Content = "Änderungen Speichern";
         }
 
-        private void ViewAllInstances_Btn_Back_OnClick(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             if (((string)BtnNext.Content).Equals("Änderungen Speichern"))
             {
@@ -79,14 +103,72 @@ namespace DynamicDocsWPF.Windows
                 FillUiElement(entries, uiElement);
             }
         }
+        
+        private void NewInstance_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessSelect processSelect = null;
+            try
+            {
+                processSelect = new ProcessSelect(_networkHelper);
+                processSelect.ShowDialog();
+
+                if (processSelect.DialogResult == true)
+                {
+                    var file = _networkHelper.GetProcessTemplate(processSelect.SelectedProcessTemplate.Id);
+                    var process = XmlHelper.ReadXMLFromString(file);
+                    var newInstance = new CreateProcessInstance(process, _networkHelper);
+                    newInstance.ShowDialog();
+                    InstanceList.ItemsSource = TryGetInstances();
+                }
+            }
+            catch (WebException)
+            {
+                new InfoPopup(MessageBoxButton.OK ,"Der Server ist derzeit nicht erreichbar.").ShowDialog();
+                processSelect?.Close();
+            }
+        }
 
         private void InstanceList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (InstanceList.SelectedIndex == -1) 
+                Overlay.Visibility = Visibility.Visible;
+            else Overlay.Visibility = Visibility.Collapsed;
+            
             var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
             _currentProcessObject = XmlHelper.ReadXMLFromString(processText);
             _dialogs = _currentProcessObject.GetStepAtIndex(0).Dialogs;
             _entries = _networkHelper.GetEntries(SelectedInstance.Id);
             TryShowNextDialog(_entries);
+
+            for (int i = 0; i < _currentProcessObject.ProcessStepCount; i++)
+            {
+                Color color = Colors.Transparent;
+                int width = 10;
+
+                if (i < SelectedInstance.CurrentStep)
+                {
+                    color = Colors.Green;
+                }
+                else if (i == SelectedInstance.CurrentStep)
+                {
+                    color = Colors.White;
+                    width = 15;
+                }
+                else if (i > SelectedInstance.CurrentStep)
+                {
+                    color = Colors.LightGray;
+                }
+                
+                ProgressPanel.Children.Add(new Ellipse()
+                {
+                    Width = width,
+                    Height = width,
+                    Fill = new SolidColorBrush(color),
+                    Margin = new Thickness(10,0,10,0)
+                });
+
+                StepDescription.Text = _currentProcessObject.GetStepAtIndex(SelectedInstance.CurrentStep).Description;
+            }
         }
 
         private void FillUiElement(List<Entry> entries, BaseInputElement uiElement)

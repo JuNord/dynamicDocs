@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
+using MySql.Data.Types;
 using RestService;
 using RestService.Model.Database;
 using RestService.Model.Process;
@@ -17,16 +18,23 @@ namespace WebServerWPF
                                                   "DATABASE=processmanagement;" +
                                                   "UID=root;"
             //"PASSWORD=;"                  
-            ;
+        ;
 
         private readonly MySqlConnection connection;
 
+        /// <summary>
+        /// Provides project specific methods to access the database
+        /// </summary>
         public DatabaseHelper()
         {
             connection = new MySqlConnection(MyConnectionString);
             connection.Open();
         }
 
+        /// <summary>
+        /// Returns a list of process template objects including a template ID, description and local path to the template file
+        /// </summary>
+        /// <returns></returns>
         public List<ProcessTemplate> GetProcessTemplates()
         {
             var templates = new List<ProcessTemplate>();
@@ -48,6 +56,11 @@ namespace WebServerWPF
             return templates;
         }
 
+        /// <summary>
+        /// Returns the process object according to the id, including a description text and a path
+        /// </summary>
+        /// <param name="id">The id (e.g. vacation) of the template</param>
+        /// <returns></returns>
         public ProcessTemplate GetProcessTemplateById(string id)
         {
             var cmd = connection.CreateCommand();
@@ -67,6 +80,10 @@ namespace WebServerWPF
             return null;
         }
 
+        /// <summary>
+        /// Allows to register a new processtemplate in the database to track its path and return it on request
+        /// </summary>
+        /// <param name="template"></param>
         public void AddProcessTemplate(ProcessTemplate template)
         {
             var cmd = connection.CreateCommand();
@@ -75,9 +92,11 @@ namespace WebServerWPF
             cmd.ExecuteNonQuery();
         }
 
-        //Dat wat Julius jemacht hat
-
-        //SELECT * FROM RUNNING PROCESS
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public List<ProcessInstance> GetProcessInstances(User user)
         {
             var processInstances = new List<ProcessInstance>();
@@ -95,7 +114,10 @@ namespace WebServerWPF
                         CurrentStep = reader.GetInt32(3),
                         Declined = reader.GetBoolean(4),
                         Archived = reader.GetBoolean(5),
-                        Locked = reader.GetBoolean(6)
+                        Locked = reader.GetBoolean(6),
+                        Created = reader.GetMySqlDateTime(7).GetDateTime().ToShortDateString(),
+                        Changed = reader.GetMySqlDateTime(8).GetDateTime().ToShortDateString(),
+                        Subject = reader.GetString(9)
                     });
             }
 
@@ -119,7 +141,10 @@ namespace WebServerWPF
                         CurrentStep = reader.GetInt32(3),
                         Declined = reader.GetBoolean(4),
                         Archived = reader.GetBoolean(5),
-                        Locked = reader.GetBoolean(6)
+                        Locked = reader.GetBoolean(6),
+                        Created = reader.GetMySqlDateTime(7).GetDateTime().ToShortDateString(),
+                        Changed = reader.GetMySqlDateTime(8).GetDateTime().ToShortDateString(),
+                        Subject = reader.GetString(9)
                     };
             }
 
@@ -131,13 +156,16 @@ namespace WebServerWPF
         {
             var cmd = connection.CreateCommand();
             cmd.CommandText =
-                "INSERT INTO processinstance (TEMPLATE_ID,OWNER_ID,CURRENTSTEP,DECLINED,ARCHIVED,LOCKED) VALUES (" +
+                "INSERT INTO processinstance (TEMPLATE_ID,OWNER_ID,CURRENTSTEP,DECLINED,ARCHIVED,LOCKED,CREATED,CHANGED,SUBJECT) VALUES (" +
                 $"\"{processInstance.TemplateId}\", " +
                 $"\"{processInstance.OwnerId}\", " +
                 $"{processInstance.CurrentStep}, " +
                 $"{processInstance.Declined}," +
                 $"{processInstance.Archived}," +
-                $"{processInstance.Locked});";
+                $"{processInstance.Locked}," +
+                $"\"{DateTime.Parse(processInstance.Created):yyyy-MM-dd}\"," +
+                $"\"{DateTime.Parse(processInstance.Created):yyyy-MM-dd}\"," +
+                $"\"{processInstance.Subject}\");";
             cmd.ExecuteNonQuery();
 
             int instanceId = (int) cmd.LastInsertedId;
@@ -177,7 +205,7 @@ namespace WebServerWPF
                     var processObject = XmlHelper.ReadXMLFromPath(template.FilePath);
                     
                     
-                    if (processInstance.CurrentStep + 1 >= processObject.ProcessStepCount)
+                    if (processInstance.CurrentStep + 1 > processObject.ProcessStepCount)
                     {
                         ArchiveProcessinstance(id);
                     }
@@ -194,13 +222,6 @@ namespace WebServerWPF
             User nextResponsibleUser;
             var entries = GetEntries(id);
             var processStep = processObject.GetStepAtIndex(processinstance.CurrentStep+1);
-            
-            if (processStep == null)
-            {
-                RemoveAllPendings(id);
-                return;
-            }
-
             if (IsPlaceHolder(processStep.Target))
             {
                 var mail = GetStringValueFromEntryList(entries, processStep.Target.Substring(1, processStep.Target.Length - 2));
@@ -261,7 +282,7 @@ namespace WebServerWPF
         private void RemoveAllPendings(int id)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"DELETE FROM pendinginstance WHERE instance_id = {id};";
+            cmd.CommandText = $"DELETE pendinginstance WHERE id = {id};";
             cmd.ExecuteNonQuery();
         }
         

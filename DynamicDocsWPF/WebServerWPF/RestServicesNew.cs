@@ -518,6 +518,8 @@ namespace WebServerWPF
                 {
                     reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
                 }
+
+                reply.UploadResult = UploadResult.FAILED_OTHER;
                 PrintException(e);
             }
             catch (XmlException e)
@@ -563,6 +565,10 @@ namespace WebServerWPF
                 if (e.Message.Contains("Duplicate entry"))
                 {
                     reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
+                }
+                else if (e.Message.Contains("foreign key constraint fails"))
+                {
+                    reply.UploadResult = UploadResult.MISSING_LINK;
                 }
                 PrintException(e);
             }

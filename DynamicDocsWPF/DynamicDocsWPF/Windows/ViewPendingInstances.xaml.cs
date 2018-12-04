@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using DynamicDocsWPF.HelperClasses;
@@ -12,7 +13,7 @@ using RestService.Model.Process;
 
 namespace DynamicDocsWPF.Windows
 {
-    public partial class ViewPendingInstances : Window
+    public partial class ViewPendingInstances
     {
         private readonly NetworkHelper _networkHelper;
         private ProcessObject _currentProcessObject;
@@ -22,14 +23,41 @@ namespace DynamicDocsWPF.Windows
         
         private ProcessInstance SelectedInstance { get; set; }
 
+        
         public ViewPendingInstances(NetworkHelper networkHelper)
         {
-            _networkHelper = networkHelper;
             InitializeComponent();
-            InstanceList.ItemsSource = _networkHelper.GetResponsibilities();
+            _networkHelper = networkHelper;
+            InstanceList.ItemsSource = TryGetResponsibilities();
         }
 
-        private void ViewAllInstances_Btn_Next_OnClick(object sender, RoutedEventArgs e)
+        private List<PendingInstance> TryGetResponsibilities()
+        {
+            try
+            {
+                var responsibilities = _networkHelper.GetResponsibilities();
+
+                if (responsibilities == null)
+                {
+                    new InfoPopup(MessageBoxButton.OK,
+                            "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
+                        .ShowDialog();
+
+                }
+
+                return responsibilities;
+            }
+            catch (WebException)
+            {
+                new InfoPopup(MessageBoxButton.OK,
+                        "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
+                    .ShowDialog();
+            }
+
+            return null;
+        }
+        
+        private void Next_Click(object sender, RoutedEventArgs e)
         {
             if (TryShowNextDialog(_entries)) return;
             if (!(_processSteps?.MoveNext() ?? false))
@@ -59,8 +87,8 @@ namespace DynamicDocsWPF.Windows
                     {
                         var validation = _processSteps.Current.GetValidationAtIndex(0);
                         _networkHelper.PostProcessUpdate(SelectedInstance.Id, true, validation.Locks);
-                        
-                        InstanceList.ItemsSource = _networkHelper.GetResponsibilities();
+
+                        InstanceList.ItemsSource = TryGetResponsibilities();
                     }
                 }
                 return;
@@ -70,7 +98,7 @@ namespace DynamicDocsWPF.Windows
             TryShowNextDialog(_entries);
         }
 
-        private void ViewAllInstances_Btn_Back_OnClick(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             if (TryShowLastDialog(_entries)) return;
             if (((string)BtnNext.Content).Equals("Änderungen Speichern"))
@@ -79,7 +107,7 @@ namespace DynamicDocsWPF.Windows
             }
             
             _dialogs = _processSteps.Current.Dialogs;
-            TryShowNextDialog(_entries);
+            TryShowLastDialog(_entries);
         }
 
         private bool TryShowNextDialog(List<Entry> entries)
@@ -91,7 +119,7 @@ namespace DynamicDocsWPF.Windows
         
         private bool TryShowLastDialog(List<Entry> entries)
         {
-            if (!(_dialogs?.MoveNext() ?? false)) return false;
+            if (!(_dialogs?.MoveBack() ?? false)) return false;
             ShowCurrentDialog(entries);
             return true;
         }

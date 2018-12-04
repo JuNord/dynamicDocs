@@ -1,14 +1,12 @@
 ﻿
 
-FC:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\MainWindow.xaml;;
-FC:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\CreateProcessInstance.xaml;;
-FC:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\CreateProcessTemplate.xaml;;
-FC:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\Login.xaml;;
-FC:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\InfoPopup.xaml;;
-FC:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\ProcessSelect.xaml;;
-FC:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\Register.xaml;;
-FC:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\ValidationPopup.xaml;;
-FC:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\ViewAllInstances.xaml;;
-FC:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\ViewPendingInstances.xaml;;
-FC:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\ManageUserPermissions.xaml;;
+FC:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\MainWindow.xaml;;
+FC:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\CreateProcessInstance.xaml;;
+FC:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\CreateProcessTemplate.xaml;;
+FC:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\Login.xaml;;
+FC:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\InfoPopup.xaml;;
+FC:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\ManageUserPermissions.xaml;;
+FC:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\ProcessSelect.xaml;;
+FC:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\Register.xaml;;
+FC:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\Windows\ViewOwnInstances.xaml;;
 

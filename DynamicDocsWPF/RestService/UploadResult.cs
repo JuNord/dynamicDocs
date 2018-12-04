@@ -9,6 +9,7 @@ namespace RestService
         FAILED_OTHER,
         USER_EXISTS,
         NO_PERMISSION,
-        INVALID_LOGIN
+        INVALID_LOGIN,
+        MISSING_LINK
     }
 }

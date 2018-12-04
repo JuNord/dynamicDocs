@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:DynamicDocsWPF"
         mc:Ignorable="d"
-        Title="Login" Height="450" Width="500"
+        Title="Login" Height="400" Width="500"
         Background="#3CA4FF"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
@@ -16,12 +16,10 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock x:Name="Login_InfoText" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="28" FontFamily="Segoe UI Light" Foreground="White" Margin="50,20,20,20" >
+        <TextBlock x:Name="Login_InfoText" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="28" FontFamily="Segoe UI Light" Foreground="White" Margin="50,20,20,10" >
             <Run Text="Willkommen." />
-            <LineBreak/>
-            <Run Text="Bitte melden Sie sich an." />
             </TextBlock>
-        <Border Grid.Row="1" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
+        <Border Grid.Row="1" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5" 
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
             <Border.Effect>
                 <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
