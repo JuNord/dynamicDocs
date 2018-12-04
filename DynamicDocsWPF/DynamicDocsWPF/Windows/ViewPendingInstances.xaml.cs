@@ -161,6 +161,8 @@ namespace DynamicDocsWPF.Windows
 
         private void InstanceList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Overlay.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Visible : Visibility.Collapsed;
+            
             SelectedInstance = _networkHelper.GetProcessInstanceById(((PendingInstance) InstanceList.SelectedItem).InstanceId);
             _entries = _networkHelper.GetEntries(SelectedInstance.Id);
             

@@ -112,7 +112,6 @@ namespace DynamicDocsWPF.HelperClasses
             return reply?.ProcessInstance;
         }
         
-        //TODO: Implement Instancelist retrieval
         public List<ProcessInstance> GetProcessInstances()
         {
             var reply = JsonConvert.DeserializeObject<ReplyGetProcessInstanceList>(
@@ -120,6 +119,15 @@ namespace DynamicDocsWPF.HelperClasses
             );
 
             return reply?.ProcessInstances;
+        }
+
+        public List<User> GetUsers()
+        {
+            var reply = JsonConvert.DeserializeObject<ReplyGetUserList>(
+                GetRequest(User, "UserList")
+            );
+
+            return reply?.Users;
         }
 
         public List<Entry> GetEntries(int instanceId)
@@ -233,6 +241,19 @@ namespace DynamicDocsWPF.HelperClasses
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostProcessUpdate>(
                 PostRequest(User, "ProcessUpdate", JsonConvert.SerializeObject(request))
+            );
+            return reply?.UploadResult ?? UploadResult.FAILED_OTHER;
+        }
+        
+        public UploadResult PostPermissionChange(string email, int permissionLevel)
+        {
+            var request = new RequestPermissionChange()
+            {
+                Email = email,
+                PermissionLevel = permissionLevel
+            };
+            var reply = JsonConvert.DeserializeObject<ReplyPostProcessUpdate>(
+                PostRequest(User, "Level", JsonConvert.SerializeObject(request))
             );
             return reply?.UploadResult ?? UploadResult.FAILED_OTHER;
         }

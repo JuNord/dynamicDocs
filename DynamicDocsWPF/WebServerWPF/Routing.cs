@@ -16,7 +16,9 @@
         public const string GetProcessInstance = "/ProcessInstance/{message}";
         public const string GetProcessInstanceList = "/ProcessInstanceList";
         public const string GetResponsibilityList = "/ResponsibilityList";
+        public const string GetUserList = "/UserList";
         public const string PostEntry = "/Entry";
+        public const string PostPermissionChange = "/Level";
         public const string PostUser = "/User";
     }
 }

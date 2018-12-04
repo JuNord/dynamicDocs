@@ -11,7 +11,7 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <ListView Background="#3CA4FF" Foreground="White" BorderBrush="Transparent" Name="InstanceList" SelectionChanged="InstanceList_OnSelectionChanged">
+        <ListView Background="#7ed5ff" Foreground="White" BorderBrush="Transparent" Name="InstanceList" SelectionChanged="InstanceList_OnSelectionChanged">
             <!--ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -58,6 +58,7 @@
                     </Button.Effect>
                 </Button>
             </StackPanel>
-    </Grid>
+        </Grid>
+        <Rectangle Visibility="Visible" Name="Overlay" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#3CA4FF" Opacity="1"/>
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.ServiceModel;
@@ -266,6 +267,40 @@ namespace WebServerWPF
             return null;
         }
 
+        public ReplyGetUserList GetUserList()
+        {
+            try
+            {
+                if (IsPermitted(GetAuthUser(),3) == AuthorizationResult.PERMITTED)
+                {
+                    var users = Database.GetUsers();
+                    var safeList = new List<User>();
+
+                    foreach (var user in users)
+                    {
+                        safeList.Add(new User
+                        {
+                            Email = user.Email,
+                            PermissionLevel = user.PermissionLevel
+                        });
+                    }
+                    
+                    var reply = new ReplyGetUserList()
+                    {
+                        Users = safeList
+                    };
+
+                    return reply;
+                }
+            }
+            catch (Exception e)
+            {
+                PrintException(e);
+            }
+
+            return null;
+        }
+
         public ReplyGetAuthenticationResult CheckAuthentication()
         {
             return new ReplyGetAuthenticationResult()
@@ -344,6 +379,48 @@ namespace WebServerWPF
                         reply.UploadResult = UploadResult.INVALID_LOGIN;
                         break;
                 }         
+            }
+            catch (MySqlException e)
+            {
+                if (e.Message.Contains("Duplicate entry"))
+                {
+                    reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
+                }
+                PrintException(e);
+            }
+            catch (XmlException e)
+            {
+                PrintException(e);
+                reply.UploadResult = UploadResult.FAILED_FILE_OR_TYPE_INVALID;
+            }
+            catch (Exception e)
+            {
+                PrintException(e);
+                reply.UploadResult = UploadResult.FAILED_OTHER;
+            }
+
+            reply.UploadResult = UploadResult.SUCCESS;
+            return reply;
+        }
+
+        public ReplyPermissionChange ChangePermission(RequestPermissionChange request)
+        {
+            var reply = new ReplyPermissionChange();
+            try
+            {
+                var auth = IsPermitted(GetAuthUser(),3);
+                switch (auth)
+                {
+                    case AuthorizationResult.PERMITTED:
+                        Database.UpdateUserPermission(request);
+                        break;
+                    case AuthorizationResult.NO_PERMISSION: 
+                        reply.UploadResult = UploadResult.NO_PERMISSION;                            
+                        break;                      
+                    case AuthorizationResult.INVALID_LOGIN:
+                        reply.UploadResult = UploadResult.INVALID_LOGIN;
+                        break;
+                }
             }
             catch (MySqlException e)
             {

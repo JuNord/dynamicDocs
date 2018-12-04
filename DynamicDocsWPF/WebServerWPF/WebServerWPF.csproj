@@ -75,6 +75,8 @@
     <Compile Include="RestDTOs\ReplyGetProcessTemplate.cs" />
     <Compile Include="RestDTOs\ReplyGetProcessTemplateList.cs" />
     <Compile Include="RestDTOs\ReplyGetResponsibilityList.cs" />
+    <Compile Include="RestDTOs\ReplyGetUserList.cs" />
+    <Compile Include="RestDTOs\ReplyPermissionChange.cs" />
     <Compile Include="RestDTOs\ReplyPostDocTemplate .cs" />
     <Compile Include="RestDTOs\ReplyPostEntry.cs" />
     <Compile Include="RestDTOs\ReplyPostProcessInstance.cs" />
@@ -83,6 +85,7 @@
     <Compile Include="RestDTOs\ReplyPostUser.cs" />
     <Compile Include="RestDTOs\RequestGetProcessInstance.cs" />
     <Compile Include="RestDTOs\RequestGetPermissionLevel.cs" />
+    <Compile Include="RestDTOs\RequestPermissionChange.cs" />
     <Compile Include="RestDTOs\RequestPostEntry.cs" />
     <Compile Include="RestDTOs\RequestPostProcessInstance.cs" />
     <Compile Include="RestDTOs\RequestGetDocTemplate.cs" />

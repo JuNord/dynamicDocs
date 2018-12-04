@@ -39,17 +39,27 @@ namespace DynamicDocsWPF
                     switch (level)
                     {
                         case 0:
-                            MainMenu_BtnUploadProcess.Visibility = Visibility.Collapsed;
-                            MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
+                            Administration.Visibility = Visibility.Collapsed;
+                            MyProcesses.Visibility = Visibility.Collapsed;
+                            ForeignProcesses.Visibility = Visibility.Collapsed;
+                            NoPermissionText.Visibility = Visibility.Visible;
                             break;
                         case 1:
-                            MainMenu_BtnUploadProcess.Visibility = Visibility.Collapsed;
-                            MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
+                            Administration.Visibility = Visibility.Collapsed;
+                            OwnInstances.Content = new ViewOwnInstances(_networkHelper);
+                            ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
                             break;
                         case 2:
-                            MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
+                            OwnInstances.Content = new ViewOwnInstances(_networkHelper);
+                            ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
+                            break;
+                        case 3:
+                            OwnInstances.Content = new ViewOwnInstances(_networkHelper);
+                            ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
+                            AdministrationContent.Content = new ManageUserPermissions(_networkHelper);
                             break;
                     }
+                    
                 }
                 else Close();
             }
@@ -60,8 +70,7 @@ namespace DynamicDocsWPF
                 Close();
             }
 
-            OwnInstances.Content = new ViewOwnInstances(_networkHelper);
-            ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
+            
         } 
 
         private void HandleUploadResult(UploadResult result)

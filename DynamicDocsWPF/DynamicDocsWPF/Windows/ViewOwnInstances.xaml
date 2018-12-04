@@ -17,7 +17,10 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <ListView Background="#3CA4FF" Foreground="White" BorderBrush="Transparent" Name="InstanceList" SelectionChanged="InstanceList_OnSelectionChanged">
+            <ListView Grid.Row="0" Background="#7ed5ff" Foreground="White" BorderBrush="Transparent" Name="InstanceList" SelectionChanged="InstanceList_OnSelectionChanged">
+                <ListView.Effect>
+                    <DropShadowEffect Color="Black" Direction="-90" Opacity="0.5" ShadowDepth="6" BlurRadius="25" />
+                </ListView.Effect>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -31,9 +34,9 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Background="#3CA4FF">
-            <Button Click="NewInstance_Click" Width="40" Height="40" Foreground="White" FontSize="22" FontFamily="Segoe MDL2 Assets" Content="&#xE710;" Background="Transparent" BorderBrush="Transparent"/>
-        </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Background="#0076cb">
+                <Button Click="NewInstance_Click" Width="40" Height="40" Foreground="White" FontSize="22" FontFamily="Segoe MDL2 Assets" Content="&#xE710;" Background="Transparent" BorderBrush="Transparent"/>
+            </StackPanel>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>

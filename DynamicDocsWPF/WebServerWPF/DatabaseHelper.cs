@@ -9,6 +9,7 @@ using MySql.Data.Types;
 using RestService;
 using RestService.Model.Database;
 using RestService.Model.Process;
+using WebServerWPF.RestDTOs;
 
 namespace WebServerWPF
 {
@@ -354,6 +355,14 @@ namespace WebServerWPF
         {
             var cmd = connection.CreateCommand();
             cmd.CommandText = $"INSERT INTO User VALUES (\"{user.Email}\",\"{user.Password}\",0);";
+
+            cmd.ExecuteNonQuery();
+        }
+        
+        public void UpdateUserPermission(RequestPermissionChange request)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"UPDATE User SET permissionlevel = {request.PermissionLevel} WHERE email = \"{request.Email}\";";
 
             cmd.ExecuteNonQuery();
         }

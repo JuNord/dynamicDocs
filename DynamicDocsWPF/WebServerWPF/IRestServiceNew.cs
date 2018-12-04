@@ -49,6 +49,11 @@ namespace WebServer
         ReplyGetResponsibilityList GetResponsibilityList();
         
         [OperationContract]
+        [WebGet(UriTemplate = Routing.GetUserList, BodyStyle = WebMessageBodyStyle.Bare,
+            ResponseFormat = WebMessageFormat.Json)]
+        ReplyGetUserList GetUserList();
+        
+        [OperationContract]
         [WebGet(UriTemplate = Routing.GetEntryList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetEntryList GetEntryList(string message);
@@ -67,6 +72,11 @@ namespace WebServer
         [WebInvoke(Method = "POST", UriTemplate = Routing.PostProcessTemplate, RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyPostProcessTemplate PostProcessTemplate(RequestPostProcessTemplate request);
+        
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = Routing.PostPermissionChange, RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        ReplyPermissionChange ChangePermission(RequestPermissionChange request);
         
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = Routing.PostDocTemplate, RequestFormat = WebMessageFormat.Json,

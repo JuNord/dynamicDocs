@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\install-HUE\.Rider2018.2\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\install-HUE\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.1172674224.00" t="ExcludeRecursive" />
-    <e p="C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
+    <e p="C:\Users\sebas_qgewjv\.Rider2018.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\sebas_qgewjv\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.-1818023564.00" t="ExcludeRecursive" />
+    <e p="C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
       <e p="DynamicDocsWPF" t="IncludeRecursive">
         <e p="App.config" t="Include" />
         <e p="App.xaml" t="Include" />
@@ -106,6 +106,8 @@
             <e p="ProcessStep.cs" t="Include" />
             <e p="ReceiptElement.cs" t="Include" />
             <e p="ReceiptType.cs" t="Include" />
+            <e p="ValidationAccepted.cs" t="Include" />
+            <e p="ValidationDeclined.cs" t="Include" />
             <e p="ValidationElement.cs" t="Include" />
           </e>
           <e p="Wording.cs" t="Include" />
@@ -145,6 +147,8 @@
           <e p="ReplyGetProcessTemplate.cs" t="Include" />
           <e p="ReplyGetProcessTemplateList.cs" t="Include" />
           <e p="ReplyGetResponsibilityList.cs" t="Include" />
+          <e p="ReplyGetUserList.cs" t="Include" />
+          <e p="ReplyPermissionChange.cs" t="Include" />
           <e p="ReplyPostDocTemplate .cs" t="Include" />
           <e p="ReplyPostEntry.cs" t="Include" />
           <e p="ReplyPostProcessInstance.cs" t="Include" />
@@ -156,6 +160,7 @@
           <e p="RequestGetPermissionLevel.cs" t="Include" />
           <e p="RequestGetProcessInstance.cs" t="Include" />
           <e p="RequestGetProcessTemplate.cs" t="Include" />
+          <e p="RequestPermissionChange.cs" t="Include" />
           <e p="RequestPostDocTemplate.cs" t="Include" />
           <e p="RequestPostEntry.cs" t="Include" />
           <e p="RequestPostProcessInstance.cs" t="Include" />
@@ -175,6 +180,7 @@
           <e p="AssemblyInfo.cs" t="Include" />
         </e>
         <e p="XMLFile1.xml" t="Include" />
+        <e p="XMLFile2.xml" t="Include" />
         <e p="XmlProcessor.csproj" t="IncludeRecursive" />
       </e>
     </e>

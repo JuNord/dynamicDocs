@@ -130,9 +130,7 @@ namespace DynamicDocsWPF.Windows
 
         private void InstanceList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (InstanceList.SelectedIndex == -1) 
-                Overlay.Visibility = Visibility.Visible;
-            else Overlay.Visibility = Visibility.Collapsed;
+            Overlay.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Visible : Visibility.Collapsed;
             
             var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
             _currentProcessObject = XmlHelper.ReadXMLFromString(processText);
