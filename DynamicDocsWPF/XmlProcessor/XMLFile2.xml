@@ -1,0 +1,34 @@
+<process>
+    <process-step>
+        <dialog>
+            <text name="Antragssteller" description="Antragssteller/in:"/>
+            <text name="Tätigkeitsart" description="Tätigkeitsart: "/>
+        </dialog>
+        <dialog>
+            <text name="Datum1" description="Datum"/>
+            <text name="Klasse1" description="Klasse"/>
+
+            <text name="Datum2" description="Datum"/>
+            <text name="Klasse2" description="Klasse"/>
+
+            <text name="Datum3" description="Datum"/>
+            <text name="Klasse3" description="Klasse"/>
+
+            <text name="Datum4" description="Datum"/>
+            <text name="Klasse4" description="Klasse"/>
+
+            <text name="Datum5" description="Datum"/>
+            <text name="Klasse5" description="Klasse"/>
+
+            <text name="Datum6" description="Datum"/>
+            <text name="Klasse6" description="Klasse"/>
+
+            <text name="Datum7" description="Datum"/>
+            <text name="Klasse7" description="Klasse"/>
+        </dialog>
+    </process-step>
+    <process-step name="Prüfung durch das Sekretariat" description="Genehmigung durch Sekretariat">
+        <validation locks="true"/>
+        <mailnotify target="teacher" text="Antrag wurde durch das Sekretariat bestätigt"/>
+    </process-step>
+</process>

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="XMLFile1.xml" />
+    <Content Include="XMLFile2.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DynamicDocsWPF\DynamicDocsWPF.csproj">
