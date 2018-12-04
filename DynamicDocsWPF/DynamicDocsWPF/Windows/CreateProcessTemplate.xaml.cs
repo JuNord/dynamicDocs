@@ -45,27 +45,27 @@ namespace DynamicDocsWPF.Windows
                         case UploadResult.FAILED_ID_EXISTS:
                             new InfoPopup(MessageBoxButton.OK,$"Eine Vorlage \"{element.Id}\" bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <receipt...>").ShowDialog();
                             Close();
-                            break;
+                            return;
                         case UploadResult.FAILED_FILEEXISTS:
                             new InfoPopup(MessageBoxButton.OK,$"Eine Vorlage \"{element.Id}\" bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <receipt...>").ShowDialog();
                             Close();
-                            break;
+                            return;
                         case UploadResult.FAILED_FILE_OR_TYPE_INVALID:
                             new InfoPopup(MessageBoxButton.OK,"Der Server hat die Vorlagedatei als fehlerhaft gemeldet. Bitte überprüfen Sie ihre Vorlage.").ShowDialog();
                             Close();
-                            break;
+                            return;
                         case UploadResult.FAILED_OTHER:
                             new InfoPopup(MessageBoxButton.OK,$"Ups da ist wohl etwas beim Upload der Vorlage \"{element.Id}\" schief gelaufen. Bitte wenden Sie sich an einen Administrator.").ShowDialog();
                             Close();
-                            break;
+                            return;
                         case UploadResult.NO_PERMISSION:
                             new InfoPopup(MessageBoxButton.OK,"Es tut uns leid, doch sie besitzen nicht die notwendigen Berechtigungen.").ShowDialog();
                             Close();
-                            break;
+                            return;
                         case UploadResult.INVALID_LOGIN:
                             new InfoPopup(MessageBoxButton.OK,"Irgendetwas scheint mit ihrem Konto nicht zu stimmen. Bitte starten sie das Programm neu.").ShowDialog();
                             Application.Current.Shutdown();
-                            break;
+                            return;
                     }
                 }
                 
@@ -79,23 +79,23 @@ namespace DynamicDocsWPF.Windows
                     case UploadResult.FAILED_ID_EXISTS:
                         new InfoPopup(MessageBoxButton.OK,"Ein Prozess mit diesem technischen Namen bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <process...>").ShowDialog();
                         Close();
-                        break;
+                        return;
                     case UploadResult.FAILED_FILE_OR_TYPE_INVALID:
                         new InfoPopup(MessageBoxButton.OK,"Der Server hat die Prozessdatei als fehlerhaft gemeldet. Bitte überarbeiten Sie den Prozess.").ShowDialog();
                         Close();
-                        break;
+                        return;
                     case UploadResult.FAILED_OTHER:
                         new InfoPopup(MessageBoxButton.OK,"Ups da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator.").ShowDialog();
                         Close();
-                        break;
+                        return;
                     case UploadResult.NO_PERMISSION:
                         new InfoPopup(MessageBoxButton.OK,"Es tut uns leid, doch sie besitzen nicht die notwendigen Berechtigungen.").ShowDialog();
                         Close();
-                        break;
+                        return;
                     case UploadResult.INVALID_LOGIN:
                         new InfoPopup(MessageBoxButton.OK,"Irgendetwas scheint mit ihrem Konto nicht zu stimmen. Bitte starten sie das Programm neu.").ShowDialog();
                         Application.Current.Shutdown();
-                        break;
+                        return;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -141,7 +141,7 @@ namespace DynamicDocsWPF.Windows
                 }
                 catch (ArgumentOutOfRangeException e3)
                 {
-                    var value = e3.ActualValue as string;
+                    var value = e3.ActualValue.ToString();
                     InfoText.Text = $"Die XML beinhaltet einen unbekannten Tag \"{value}\"";
                 }
             }
@@ -157,7 +157,7 @@ namespace DynamicDocsWPF.Windows
                     var onlineTemplate = _networkHelper.GetDocTemplate(receipt.DraftName);
                     if (onlineTemplate == null)
                     {
-                        new InfoPopup(MessageBoxButton.OK, "Der Prozess erfordert eine Vorlage \"{receipt.DraftName}\". Bitte wählen Sie eine Datei aus.").ShowDialog();
+                        new InfoPopup(MessageBoxButton.OK, $"Der Prozess erfordert eine Vorlage \"{receipt.DraftName}\". Bitte wählen Sie eine Datei aus.").ShowDialog();
                         var dialog = new OpenFileDialog();
                         dialog.Filter = "Draft Files (*.docx)|*.docx";
                         dialog.ShowDialog();

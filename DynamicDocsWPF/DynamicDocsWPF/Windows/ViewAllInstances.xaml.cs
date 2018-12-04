@@ -14,7 +14,7 @@ using Window = System.Windows.Window;
 
 namespace DynamicDocsWPF.Windows
 {
-    public partial class ViewAllInstances
+    public partial class ViewAllInstances :UserControl
     {
         private readonly NetworkHelper _networkHelper;
         private ProcessObject _currentProcessObject;
@@ -23,6 +23,11 @@ namespace DynamicDocsWPF.Windows
         
         private ProcessInstance SelectedInstance => ((ProcessInstance) InstanceList.SelectedItem);
 
+        public ViewAllInstances()
+        {
+            InitializeComponent();
+        }
+        
         public ViewAllInstances(NetworkHelper networkHelper)
         {
             _networkHelper = networkHelper;

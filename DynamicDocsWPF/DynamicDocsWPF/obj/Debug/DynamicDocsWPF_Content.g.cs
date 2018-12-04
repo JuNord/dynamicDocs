@@ -14,5 +14,6 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("plantuml/network.txt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("plantuml/uml.txt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("plantuml/webserver.txt")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("windows/resources/officebg1.jpg")]
 
 

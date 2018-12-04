@@ -37,7 +37,9 @@ namespace RestService.Model.Process
 
         public ProcessStep GetStepAtIndex(int index)
         {
-            return _steps?[index];
+            if (index < _steps.Count)
+                return _steps?[index];
+            else return null;
         }
         
 
