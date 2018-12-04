@@ -88,6 +88,8 @@
     <Compile Include="Model\Process\ProcessStep.cs" />
     <Compile Include="Model\Process\ReceiptElement.cs" />
     <Compile Include="Model\Process\ReceiptType.cs" />
+    <Compile Include="Model\Process\ValidationAccepted.cs" />
+    <Compile Include="Model\Process\ValidationDeclined.cs" />
     <Compile Include="Model\Process\ValidationElement.cs" />
     <Compile Include="Model\Wording.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

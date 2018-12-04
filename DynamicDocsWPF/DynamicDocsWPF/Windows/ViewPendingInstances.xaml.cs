@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using DynamicDocsWPF.HelperClasses;
@@ -65,6 +67,7 @@ namespace DynamicDocsWPF.Windows
                 var initialPopup = new InfoPopup(MessageBoxButton.YesNo,
                     "Möchten Sie diesen Schritt genehmigen? Weitere Instanzen werden gegebenenfalls über die Genehmigung in Kenntnis gesetzt.");
 
+                var validationElement = _processSteps.Current.GetValidationAtIndex(0);
                 if (initialPopup.ShowDialog() == true)
                 {
                     var acceptPopup = new InfoPopup(MessageBoxButton.YesNo,
@@ -88,6 +91,24 @@ namespace DynamicDocsWPF.Windows
                         var validation = _processSteps.Current.GetValidationAtIndex(0);
                         _networkHelper.PostProcessUpdate(SelectedInstance.Id, true, validation.Locks);
 
+                        if (validationElement?.Declined != null)
+                        {
+                            foreach (var receipt in validationElement.Declined.Receipts)
+                            {
+                                var fileName = $"{receipt.DraftName}_{DateTime.Now.ToShortDateString()}.docx";
+                                var documentTemplate = _networkHelper.GetDocTemplate(receipt.DraftName);
+                                File.WriteAllBytes(fileName ,Encoding.Default.GetBytes(documentTemplate.Content));
+
+                                var replacements = new List<KeyValuePair<string, string>>();
+
+                                foreach (var entry in _entries)
+                                {
+                                    replacements.Add(new KeyValuePair<string, string>($"[{entry.FieldName}]", entry.Data));
+                                }
+                                WordReceiptHelper.OpenDocument(fileName, replacements.ToArray());
+                                
+                            }
+                        }
                         InstanceList.ItemsSource = TryGetResponsibilities();
                     }
                 }

@@ -179,7 +179,7 @@ namespace DynamicDocsWPF.HelperClasses
 
         public UploadResult UploadProcessTemplate(string filePath, bool forceOverwrite)
         {
-            var process = XmlHelper.ReadXMLFromPath(filePath);
+            var process = XmlHelper.ReadXmlFromPath(filePath);
             var request = new RequestPostProcessTemplate()
             {
                 Id = process.Name,

@@ -116,7 +116,7 @@ namespace DynamicDocsWPF.Windows
                 // handling code you have defined.
                 try
                 {
-                    _processObject = XmlHelper.ReadXMLFromPath(dialog.FileName);
+                    _processObject = XmlHelper.ReadXmlFromPath(dialog.FileName);
                     var bla = _networkHelper.GetProcessTemplate(_processObject.Name);
 
                     if (bla == null)
@@ -153,11 +153,39 @@ namespace DynamicDocsWPF.Windows
         private List<DocTemplate> CheckDependencies()
         {
             var list = new List<DocTemplate>();
-            foreach(var step in _processObject.Steps)
+            var stepEnum = _processObject.Steps;
+            
+            while(stepEnum.MoveNext())
             {
-                foreach(var receipt in step.Receipts)
+                foreach(var receipt in stepEnum.Current.Receipts)
                 {
-                    var onlineTemplate = _networkHelper.GetDocTemplate(receipt.DraftName);
+                    CheckReceipt(receipt);
+                }
+
+                var validation = stepEnum.Current.GetValidationAtIndex(0);
+
+                if (validation != null)
+                {
+                    if(validation.Accepted != null)
+                        foreach (var receipt in validation.Accepted.Receipts)
+                        {
+                            CheckReceipt(receipt);
+                        }
+                    
+                    if(validation.Accepted != null)
+                        foreach (var receipt in validation.Declined.Receipts)
+                        {
+                            CheckReceipt(receipt);
+                        }
+                }
+            }
+
+            return list;
+        }
+
+        private DocTemplate CheckReceipt(ReceiptElement receipt)
+        {
+            var onlineTemplate = _networkHelper.GetDocTemplate(receipt.DraftName);
                     if (onlineTemplate == null)
                     {
                         new InfoPopup(MessageBoxButton.OK, $"Der Prozess erfordert eine Vorlage \"{receipt.DraftName}\". Bitte wählen Sie eine Datei aus.").ShowDialog();
@@ -167,7 +195,7 @@ namespace DynamicDocsWPF.Windows
 
                         if (File.Exists(dialog.FileName))
                         {                          
-                            list.Add(new DocTemplate(){Id = receipt.DraftName, FilePath = dialog.FileName});
+                            return new DocTemplate(){Id = receipt.DraftName, FilePath = dialog.FileName};
                         }
                         else
                         {
@@ -188,7 +216,7 @@ namespace DynamicDocsWPF.Windows
 
                             if (File.Exists(dialog.FileName))
                             {
-                                list.Add(new DocTemplate(){Id = receipt.DraftName, FilePath = dialog.FileName});
+                                return new DocTemplate(){Id = receipt.DraftName, FilePath = dialog.FileName};
                             }
                             else
                             {
@@ -204,10 +232,6 @@ namespace DynamicDocsWPF.Windows
                             return null;
                         }
                     }
-                }
-            }
-
-            return list;
         }
     }
 }

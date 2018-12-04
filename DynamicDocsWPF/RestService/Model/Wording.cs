@@ -15,5 +15,7 @@ namespace DynamicDocsWPF.Model
         public const string MailNotification = "mailnotify";
         public const string Receipt = "receipt";
         public const string Validation = "validation";
+        public const string ValidationAccepted = "validation.accepted";
+        public const string ValidationDeclined = "validation.declined";
     }
 }

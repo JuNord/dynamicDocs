@@ -4,9 +4,9 @@ using Microsoft.Office.Interop.Word;
 
 namespace DynamicDocsWPF.HelperClasses
 {
-    public class ReceiptHelper
+    public class WordReceiptHelper
     {
-        public void OpenDocument(string documentPath, params KeyValuePair<string, string>[] replacements)
+        public static void OpenDocument(string documentPath, params KeyValuePair<string, string>[] replacements)
         {
             var wordApp = new ApplicationClass();
             // File Path
@@ -42,7 +42,7 @@ namespace DynamicDocsWPF.HelperClasses
             wordApp.Quit(ref objNull, ref objNull, ref objNull);
         }
 
-        private void FindAndReplaceMethods(_Application doc, object findText, object replaceWithText)
+        private static void FindAndReplaceMethods(_Application doc, object findText, object replaceWithText)
         {
             //Find and Replace Options
             object matchCase = false;

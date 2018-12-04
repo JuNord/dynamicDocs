@@ -58,22 +58,30 @@ namespace RestService.Model.Process
 
         public Dialog GetDialogAtIndex(int index)
         {
-            return _dialogs?[index];
+            if (index < DialogCount)
+                return _dialogs?[index];
+            return null;
         }
         
         public ReceiptElement GetReceiptAtIndex(int index)
         {
-            return _receipts?[index];
+            if (index < ReceiptCount)
+                return _receipts?[index];
+            return null;
         }
         
         public ValidationElement GetValidationAtIndex(int index)
         {
-            return _validations?[index];
+            if (index < ValidationCount)
+                return _validations?[index];
+            return null;
         }
         
         public INotificationElement GetNotificationAtIndex(int index)
         {
-            return _notifications?[index];
+            if (index < NotificationCount)
+                return _notifications?[index];
+            return null;
         }
     }
 }

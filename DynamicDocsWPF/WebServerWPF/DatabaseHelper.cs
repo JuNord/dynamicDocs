@@ -202,7 +202,7 @@ namespace WebServerWPF
                 var template = GetProcessTemplateById(processInstance.TemplateId);
                 if (template != null)
                 {
-                    var processObject = XmlHelper.ReadXMLFromPath(template.FilePath);
+                    var processObject = XmlHelper.ReadXmlFromPath(template.FilePath);
                     
                     
                     if (processInstance.CurrentStep + 1 > processObject.ProcessStepCount)
