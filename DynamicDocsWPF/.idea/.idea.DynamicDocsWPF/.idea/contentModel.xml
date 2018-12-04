@@ -42,10 +42,15 @@
           <e p="InfoPopup.xaml.cs" t="Include" />
           <e p="Login.xaml" t="Include" />
           <e p="Login.xaml.cs" t="Include" />
+          <e p="ManageUserPermissions.xaml" t="Include" />
+          <e p="ManageUserPermissions.xaml.cs" t="Include" />
           <e p="ProcessSelect.xaml" t="Include" />
           <e p="ProcessSelect.xaml.cs" t="Include" />
           <e p="Register.xaml" t="Include" />
           <e p="Register.xaml.cs" t="Include" />
+          <e p="Resources" t="Include">
+            <e p="officebg1.jpg" t="Include" />
+          </e>
           <e p="ValidationPopup.xaml" t="Include" />
           <e p="ValidationPopup.xaml.cs" t="Include" />
           <e p="ViewAllInstances.xaml" t="Include" />

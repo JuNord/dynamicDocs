@@ -177,7 +177,7 @@ namespace WebServerWPF
                     var processObject = XmlHelper.ReadXMLFromPath(template.FilePath);
                     
                     
-                    if (processInstance.CurrentStep + 1 > processObject.ProcessStepCount)
+                    if (processInstance.CurrentStep + 1 >= processObject.ProcessStepCount)
                     {
                         ArchiveProcessinstance(id);
                     }
@@ -194,6 +194,13 @@ namespace WebServerWPF
             User nextResponsibleUser;
             var entries = GetEntries(id);
             var processStep = processObject.GetStepAtIndex(processinstance.CurrentStep+1);
+            
+            if (processStep == null)
+            {
+                RemoveAllPendings(id);
+                return;
+            }
+
             if (IsPlaceHolder(processStep.Target))
             {
                 var mail = GetStringValueFromEntryList(entries, processStep.Target.Substring(1, processStep.Target.Length - 2));
@@ -235,15 +242,17 @@ namespace WebServerWPF
         {
             var responsibilities = new List<PendingInstance>();
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT * FROM pendinginstance WHERE responsible_User_Id = {user.Email};";
-            var reader = cmd.ExecuteReader();
-            while (reader.Read())
+            cmd.CommandText = $"SELECT * FROM pendinginstance WHERE responsible_User_Id = \"{user.Email}\";";
+            using (var reader = cmd.ExecuteReader())
             {
-                responsibilities.Add(new PendingInstance()
+                while (reader.Read())
                 {
-                    InstanceId = reader.GetInt32(0),
-                    ResponsibleUserId = reader.GetString(1)
-                });
+                    responsibilities.Add(new PendingInstance()
+                    {
+                        InstanceId = reader.GetInt32(0),
+                        ResponsibleUserId = reader.GetString(1)
+                    });
+                }
             }
 
             return responsibilities;
@@ -252,14 +261,14 @@ namespace WebServerWPF
         private void RemoveAllPendings(int id)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"DELETE pendinginstance WHERE id = {id};";
+            cmd.CommandText = $"DELETE FROM pendinginstance WHERE instance_id = {id};";
             cmd.ExecuteNonQuery();
         }
         
         private void SetNewResponsibleUser(int id, User user)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO TABLE processinstance VALUES({id},\"{user.Email}\");";
+            cmd.CommandText = $"INSERT INTO pendinginstance VALUES({id},\"{user.Email}\");";
             cmd.ExecuteNonQuery();
         }
         

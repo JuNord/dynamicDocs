@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +20,7 @@ namespace DynamicDocsWPF.Windows
         private CustomEnumerable<Dialog> _dialogs;
         private List<Entry> _entries;
         
-        private ProcessInstance SelectedInstance => ((ProcessInstance) InstanceList.SelectedItem);
+        private ProcessInstance SelectedInstance { get; set; }
 
         public ViewPendingInstances(NetworkHelper networkHelper)
         {
@@ -33,7 +34,35 @@ namespace DynamicDocsWPF.Windows
             if (TryShowNextDialog(_entries)) return;
             if (!(_processSteps?.MoveNext() ?? false))
             {
-                BtnNext.Content = "Änderungen Speichern";
+                var initialPopup = new InfoPopup(MessageBoxButton.YesNo,
+                    "Möchten Sie diesen Schritt genehmigen? Weitere Instanzen werden gegebenenfalls über die Genehmigung in Kenntnis gesetzt.");
+
+                if (initialPopup.ShowDialog() == true)
+                {
+                    var acceptPopup = new InfoPopup(MessageBoxButton.YesNo,
+                        "Möchten Sie wirklich zustimmen? Dieser Schritt kann nicht rückgängig gemacht werden! Wählen Sie nein um die Daten erneut zu prüfen.");
+
+                    if (acceptPopup.ShowDialog() == true)
+                    {
+                        var validation = _processSteps.Current.GetValidationAtIndex(0);
+                        _networkHelper.PostProcessUpdate(SelectedInstance.Id, false, validation.Locks);
+                        
+                        InstanceList.ItemsSource = _networkHelper.GetResponsibilities();
+                    }
+                }
+                else
+                {
+                    var declinePopup = new InfoPopup(MessageBoxButton.YesNo,
+                        "Möchten Sie wirklich ablehnen? Dieser Schritt kann nicht rückgängig gemacht werden! Wählen Sie nein um die Daten erneut zu prüfen.");
+
+                    if (declinePopup.ShowDialog() == true)
+                    {
+                        var validation = _processSteps.Current.GetValidationAtIndex(0);
+                        _networkHelper.PostProcessUpdate(SelectedInstance.Id, true, validation.Locks);
+                        
+                        InstanceList.ItemsSource = _networkHelper.GetResponsibilities();
+                    }
+                }
                 return;
             };
             
@@ -83,6 +112,7 @@ namespace DynamicDocsWPF.Windows
 
         private void InstanceList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            SelectedInstance = _networkHelper.GetProcessInstanceById(((PendingInstance) InstanceList.SelectedItem).InstanceId);
             _entries = _networkHelper.GetEntries(SelectedInstance.Id);
             
             var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
@@ -94,6 +124,7 @@ namespace DynamicDocsWPF.Windows
                 _dialogs = _processSteps.Current.Dialogs;
                 TryShowNextDialog(_entries);
             }
+            
         }
 
         private void FillUiElement(List<Entry> entries, BaseInputElement uiElement)

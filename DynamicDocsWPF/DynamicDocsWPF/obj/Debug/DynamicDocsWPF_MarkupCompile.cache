@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\
+C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\
 DynamicDocsWPF
 none
 false
 DEBUG;TRACE
-C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\App.xaml
-10-1319690458
-61357605830
-17-1129440891
-26-314168713
-MainWindow.xaml;Windows\CreateProcessInstance.xaml;Windows\CreateProcessTemplate.xaml;Windows\Login.xaml;Windows\InfoPopup.xaml;Windows\ProcessSelect.xaml;Windows\Register.xaml;Windows\ValidationPopup.xaml;Windows\ViewAllInstances.xaml;Windows\ViewPendingInstances.xaml;
+C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\App.xaml
+11-72718310
+7607065270
+18-1534507604
+261952234482
+MainWindow.xaml;Windows\CreateProcessInstance.xaml;Windows\CreateProcessTemplate.xaml;Windows\Login.xaml;Windows\InfoPopup.xaml;Windows\ManageUserPermissions.xaml;Windows\ProcessSelect.xaml;Windows\Register.xaml;Windows\ValidationPopup.xaml;Windows\ViewAllInstances.xaml;Windows\ViewPendingInstances.xaml;
 
 False
 

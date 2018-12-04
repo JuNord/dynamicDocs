@@ -39,9 +39,6 @@ namespace DynamicDocsWPF
                     switch (level)
                     {
                         case 0:
-                            NoPermissionText.Visibility = Visibility.Visible;
-                            MainMenu_BtnNewProcessInstance.Visibility = Visibility.Collapsed;
-                            MainMenu_BtnViewInstances.Visibility = Visibility.Collapsed;
                             MainMenu_BtnUploadProcess.Visibility = Visibility.Collapsed;
                             MainMenu_BtnViewResponsibilities.Visibility = Visibility.Collapsed;
                             MainMenu_BtnManagePermissions.Visibility = Visibility.Collapsed;
@@ -89,34 +86,59 @@ namespace DynamicDocsWPF
 
         private void MainMenu_BtnNewProcessInstance_OnClick(object sender, RoutedEventArgs e)
         {
-            var processSelect = new ProcessSelect(_networkHelper);
-            processSelect.ShowDialog();
-
-            if (processSelect.DialogResult == true)
+            ProcessSelect processSelect = null;
+            try
             {
-                var file = _networkHelper.GetProcessTemplate(processSelect.SelectedProcessTemplate.Id);
-                var process = XmlHelper.ReadXMLFromString(file);
-                var newInstance = new CreateProcessInstance(process, _networkHelper);
-                newInstance.ShowDialog();
+                processSelect = new ProcessSelect(_networkHelper);
+                processSelect.ShowDialog();
+
+                if (processSelect.DialogResult == true)
+                {
+                    var file = _networkHelper.GetProcessTemplate(processSelect.SelectedProcessTemplate.Id);
+                    var process = XmlHelper.ReadXMLFromString(file);
+                    var newInstance = new CreateProcessInstance(process, _networkHelper);
+                    newInstance.ShowDialog();
+                }
+            }
+            catch (WebException)
+            {
+                new InfoPopup(MessageBoxButton.OK ,"Der Server ist derzeit nicht erreichbar.").ShowDialog();
+                processSelect?.Close();
+                Close();
             }
         }
 
         private void MainMenu_BtnUploadProcess_OnClick(object sender, RoutedEventArgs e)
         {
-            var create = new CreateProcessTemplate(_networkHelper);
-            create.ShowDialog();
-        }
-
-        private void MainMenu_BtnViewInstances_OnClick(object sender, RoutedEventArgs e)
-        {
-            var view = new ViewAllInstances(_networkHelper);
-            view.ShowDialog();
+            CreateProcessTemplate create = null;
+            
+            try
+            {
+                create = new CreateProcessTemplate(_networkHelper);
+                create.ShowDialog();
+            }
+            catch (WebException)
+            {
+                new InfoPopup(MessageBoxButton.OK ,"Der Server ist derzeit nicht erreichbar.").ShowDialog();
+                create?.Close();
+                Close();
+            }
         }
 
         private void MainMenu_BtnViewResponsibilities_OnClick(object sender, RoutedEventArgs e)
         {
-            var view = new ViewPendingInstances(_networkHelper);
-            view.ShowDialog();
+            ViewPendingInstances view = null;
+            try
+            {               
+                view = new ViewPendingInstances(_networkHelper);
+                view.ShowDialog();
+            }
+            catch (WebException)
+            {
+                new InfoPopup(MessageBoxButton.OK ,"Der Server ist derzeit nicht erreichbar.").ShowDialog();
+                view?.Close();
+                Close();
+            }
         }
     }
 }

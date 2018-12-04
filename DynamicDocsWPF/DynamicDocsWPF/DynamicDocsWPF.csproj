@@ -94,6 +94,9 @@
     <Compile Include="Windows\InfoPopup.xaml.cs">
       <DependentUpon>InfoPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ManageUserPermissions.xaml.cs">
+      <DependentUpon>ManageUserPermissions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ProcessSelect.xaml.cs">
       <DependentUpon>ProcessSelect.xaml</DependentUpon>
     </Compile>
@@ -125,6 +128,7 @@
     <Page Include="Windows\CreateProcessTemplate.xaml" />
     <Page Include="Windows\Login.xaml" />
     <Page Include="Windows\InfoPopup.xaml" />
+    <Page Include="Windows\ManageUserPermissions.xaml" />
     <Page Include="Windows\ProcessSelect.xaml" />
     <Page Include="Windows\Register.xaml" />
     <Page Include="Windows\ValidationPopup.xaml" />
@@ -156,6 +160,9 @@
     <Content Include="PlantUML\Network.txt" />
     <Content Include="PlantUML\UML.txt" />
     <Content Include="PlantUML\WebServer.txt" />
+    <Content Include="Windows\Resources\officebg1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestService\RestService.csproj">
