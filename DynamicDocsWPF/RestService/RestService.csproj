@@ -58,6 +58,7 @@
     <Compile Include="FileRequest.cs" />
     <Compile Include="FileType.cs" />
     <Compile Include="HashHelper.cs" />
+    <Compile Include="MailHelper.cs" />
     <Compile Include="MissingValueInterpretationException.cs" />
     <Compile Include="Model\AuthorizationResult.cs" />
     <Compile Include="Model\Base\NamedTag.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="UploadResult.cs" />
     <Compile Include="StackPanelFactory.cs" />
     <Compile Include="XMLHelper.cs" />
+    <Compile Include="XmlState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

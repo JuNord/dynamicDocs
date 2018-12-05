@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DynamicDocsWPF"
         xmlns:windows="clr-namespace:DynamicDocsWPF.Windows"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="525" Background="#3CA4FF" Foreground="White">
+        Title="A.u.F.E.T. v 1.0" Height="400" Width="525" Background="#3CA4FF" Foreground="White">
     <Window.Resources>
         <Style TargetType="TabItem">
             <Setter Property="Template">
@@ -39,9 +39,9 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock x:Name="InfoBlock" HorizontalAlignment="Center" Text="Guten Tag!" FontSize="28"
+        <TextBlock x:Name="InfoBlock" HorizontalAlignment="Center" Text="Willkommen zu Ihrem A.u.F.E.T.!" FontSize="28"
                    FontFamily="Segoe UI Light" Margin="20" />
-        <TabControl Background="#3CA4FF"  Grid.Row="1" BorderThickness="0" Padding="0,1,0,0" SelectedIndex="2">
+        <TabControl Background="#3CA4FF"  Grid.Row="1" BorderThickness="0" Padding="0,1,0,0" SelectedIndex="0">
             <TabItem Name="MyProcesses" TabIndex="0" Header="Meine Prozesse">
                 <ContentPresenter x:Name="OwnInstances" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </TabItem>
@@ -49,7 +49,19 @@
                 <ContentPresenter x:Name="ForeignInstances" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </TabItem>
             <TabItem Name="Administration" TabIndex="2" Header="Administration">
-                <ContentPresenter x:Name="AdministrationContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter x:Name="AdministrationContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                    <Button Name="Accept" Click="MainMenu_BtnUploadProcess_OnClick" Grid.Column="1" Content="Neuen Prozess Anlegen" Width="150" Height="35"
+                            VerticalAlignment="Bottom" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                        <Button.Effect>
+                            <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                        </Button.Effect>
+                    </Button>
+                </Grid>
             </TabItem>
         </TabControl>
         <TextBlock Grid.Row="1" FontWeight="Light" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Name="NoPermissionText" Visibility="Collapsed" FontSize="18" Foreground="White" TextWrapping="Wrap">
@@ -58,6 +70,11 @@
             <Run Text="Vermutlich fehlen Ihnen Berechtigungen."/> 
             <LineBreak/>
             <Run Text="Bitte wenden Sie sich an einen Administrator."/>
+        </TextBlock>
+        <TextBlock Grid.Row="1" FontWeight="Light" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Name="NoDataText" Visibility="Collapsed" FontSize="18" Foreground="White" TextWrapping="Wrap">
+            <Run Text="Nichts zu sehen?"/>
+            <LineBreak/><LineBreak/>
+            <Run Text="Es stehen wohl noch keine Datensätze bereit."/>
         </TextBlock>
     </Grid>
 </Window>

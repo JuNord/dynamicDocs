@@ -352,7 +352,7 @@ namespace WebServerWPF
                                 Directory.CreateDirectory(dir);
                             
                             MainWindow.PostToLog("Received Processfile...");
-                            var process = XmlHelper.ReadXMLFromString(request.Text);
+                            var process = XmlHelper.ReadXmlFromString(request.Text);
                             var processTemplate = new ProcessTemplate
                             {
                                 Id = process.Name,

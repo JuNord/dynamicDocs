@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:DynamicDocsWPF"
         mc:Ignorable="d"
-        Title="ValidationPopup" Height="Auto" Width="450" MaxHeight="350"
+        Title="Information" Height="Auto" Width="450" MaxHeight="350"
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True"

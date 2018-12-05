@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Windows;
 using DynamicDocsWPF.HelperClasses;
 using RestService;
@@ -17,6 +18,9 @@ namespace DynamicDocsWPF.Windows
 
         private void Register_OnClick(object sender, RoutedEventArgs e)
         {
+            Regex regex;
+            regex = new Regex("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$");
+
             if (string.IsNullOrWhiteSpace(Email))
             {
                 Register_InfoText.Text = "Bitte geben Sie eine Email-Adresse ein.";
@@ -24,6 +28,10 @@ namespace DynamicDocsWPF.Windows
             else if (string.IsNullOrWhiteSpace(Password))
             {
                 Register_InfoText.Text = "Bitte geben Sie ein Passwort ein.";
+            }
+            else if (!regex.IsMatch(Email))
+            {
+                Register_InfoText.Text = "Das ist keine gültige Email-Adresse.";
             }
             else
             {

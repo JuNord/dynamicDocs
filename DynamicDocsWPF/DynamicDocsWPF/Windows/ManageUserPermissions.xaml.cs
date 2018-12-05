@@ -29,8 +29,9 @@ namespace DynamicDocsWPF.Windows
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(UserList.SelectedIndex != -1)
+            if (UserList.SelectedIndex != -1)
                 _networkHelper.PostPermissionChange(SelectedUser.Email, UserList.SelectedIndex);
+            else new InfoPopup(MessageBoxButton.OK, "");
         }
     }
 }

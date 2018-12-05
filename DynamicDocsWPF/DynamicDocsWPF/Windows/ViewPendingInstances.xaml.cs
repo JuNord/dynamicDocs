@@ -167,7 +167,7 @@ namespace DynamicDocsWPF.Windows
             _entries = _networkHelper.GetEntries(SelectedInstance.Id);
             
             var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
-            _currentProcessObject = XmlHelper.ReadXMLFromString(processText);
+            _currentProcessObject = XmlHelper.ReadXmlFromString(processText);
             _processSteps = _currentProcessObject.Steps;
 
             if (_processSteps?.MoveNext() ?? false)

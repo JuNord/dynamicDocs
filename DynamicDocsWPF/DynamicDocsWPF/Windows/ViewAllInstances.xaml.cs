@@ -115,7 +115,7 @@ namespace DynamicDocsWPF.Windows
                 if (processSelect.DialogResult == true)
                 {
                     var file = _networkHelper.GetProcessTemplate(processSelect.SelectedProcessTemplate.Id);
-                    var process = XmlHelper.ReadXMLFromString(file);
+                    var process = XmlHelper.ReadXmlFromString(file);
                     var newInstance = new CreateProcessInstance(process, _networkHelper);
                     newInstance.ShowDialog();
                     InstanceList.ItemsSource = TryGetInstances();
@@ -133,7 +133,7 @@ namespace DynamicDocsWPF.Windows
             Overlay.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Visible : Visibility.Collapsed;
             
             var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
-            _currentProcessObject = XmlHelper.ReadXMLFromString(processText);
+            _currentProcessObject = XmlHelper.ReadXmlFromString(processText);
             _dialogs = _currentProcessObject.GetStepAtIndex(0).Dialogs;
             _entries = _networkHelper.GetEntries(SelectedInstance.Id);
             TryShowNextDialog(_entries);

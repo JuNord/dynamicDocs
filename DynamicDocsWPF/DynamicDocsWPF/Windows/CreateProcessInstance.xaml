@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DynamicDocsWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="Auto" MaxHeight="750" Width="525" Background="#3CA4FF" Foreground="White" WindowStartupLocation="CenterScreen">
+        Title="Neue Instanz" Height="Auto" MaxHeight="750" Width="525" Background="#3CA4FF" Foreground="White" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

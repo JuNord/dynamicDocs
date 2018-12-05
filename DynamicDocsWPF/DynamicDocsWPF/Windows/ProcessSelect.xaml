@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:DynamicDocsWPF.Windows"
         mc:Ignorable="d"
-        Title="ProcessSelect" Background="#3CA4FF" Height="350" Width="500"
+        Title="Prozessauswahl" Background="#3CA4FF" Height="350" Width="500"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>

@@ -5,12 +5,14 @@ namespace RestService.Model.Process
 {
     public class MailNotificationElement : Tag, INotificationElement
     {
-        public MailNotificationElement(Tag parent) : base(parent)
+        public MailNotificationElement(Tag parent, string target, string text) : base(parent)
         {
+            Target = target;
+            Text = text;
         }
 
-        public string Target { get; set; }
-        public string Text { get; set; }
+        public string Target { get; }
+        public string Text { get; }
 
         public void Send()
         {

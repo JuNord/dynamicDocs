@@ -110,37 +110,47 @@ namespace DynamicDocsWPF.Windows
             dialog.Filter = "Process Files (*.xml)|*.xml";
             dialog.ShowDialog();
 
-            if (!dialog.FileName.Equals(""))
+            if (!string.IsNullOrWhiteSpace(dialog.FileName))
             {
-                // Assuming you have one file that you care about, pass it off to whatever
-                // handling code you have defined.
                 try
                 {
-                    _processObject = XmlHelper.ReadXmlFromPath(dialog.FileName);
-                    var bla = _networkHelper.GetProcessTemplate(_processObject.Name);
+                    var xmlState = XmlHelper.TryReadXmlFromPath(dialog.FileName, out _processObject);
 
-                    if (bla == null)
+                    switch (xmlState)
                     {
-                        InfoText.Text = "Super! Die Datei scheint korrekt zu sein.";
-                        _filePath = dialog.FileName;
-                        _isOkay = true;
+                        case XmlState.VALID:
+                            var processTemplate = _networkHelper.GetProcessTemplate(_processObject.Name);
+
+                            if (processTemplate != null)
+                            {
+                                var info = new InfoPopup(MessageBoxButton.YesNo, $"Der Prozess \"{_processObject.Name}\", existiert bereits. Möchten Sie ihn ersetzen?");
+                                info.ShowDialog();
+                                if (DialogResult == false)
+                                {
+                                    new InfoPopup(MessageBoxButton.OK, "Bitte überarbeiten Sie den Prozess.").ShowDialog();
+                                    Close();
+                                    return;
+                                }   
+                            }
+
+                            InfoText.Text = "Super! Die Datei scheint korrekt zu sein.";
+                            _filePath = dialog.FileName;
+                            _isOkay = true;
+                            
+                            break;
+                        case XmlState.MISSINGATTRIBUTE:
+                            new InfoPopup(MessageBoxButton.OK, "Einem der Tags scheint ein Attribut zu fehlen. Bitte prüfen Sie ihre Datei.").ShowDialog();
+                            break;
+                        case XmlState.MISSINGPARENTTAG:
+                            new InfoPopup(MessageBoxButton.OK, "Einer der Tags befindet sich nicht in seinem Parenttag. Bitte prüfen Sie ihre Datei.").ShowDialog();
+                            break;
+                        case XmlState.INVALID:
+                            new InfoPopup(MessageBoxButton.OK, "Die Datei weist einen nicht eindeutigen Fehler auf. Fehlen Klammern, Tags oder Anführungszeichen? Bitte prüfen Sie ihre Datei.").ShowDialog();
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
-                    else
-                    {
-                        var info = new InfoPopup(MessageBoxButton.YesNo, $"Der Prozess \"{_processObject.Name}\", existiert bereits. Möchten Sie ihn ersetzen?");
-                        info.ShowDialog();
-                        if (DialogResult == false)
-                        {
-                            new InfoPopup(MessageBoxButton.OK, "Bitte überarbeiten Sie den Prozess.").ShowDialog();
-                            Close();
-                            return;
-                        }
-                        else _isOkay = true;
-                    }
-                }
-                catch (XmlException)
-                {
-                    InfoText.Text = "Die XML ist fehlerhaft. Sind alle Tags geschlossen?";
+                    
                 }
                 catch (ArgumentOutOfRangeException e3)
                 {

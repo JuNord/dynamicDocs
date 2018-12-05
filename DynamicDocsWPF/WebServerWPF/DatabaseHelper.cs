@@ -172,7 +172,7 @@ namespace WebServerWPF
             int instanceId = (int) cmd.LastInsertedId;
             
             var processTemplate = GetProcessTemplateById(processInstance.TemplateId);
-            var processObject = XmlHelper.ReadXMLFromString(File.ReadAllText(processTemplate.FilePath));
+            var processObject = XmlHelper.ReadXmlFromString(File.ReadAllText(processTemplate.FilePath));
             
             PushToNextUser(instanceId, processObject, GetProcessInstanceById(instanceId));
             
