@@ -8,12 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("backupvalidationoverview.txt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("designstuff.xml")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("plantuml/database.txt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("plantuml/network.txt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("plantuml/uml.txt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("plantuml/webserver.txt")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("windows/resources/officebg1.jpg")]
 
 

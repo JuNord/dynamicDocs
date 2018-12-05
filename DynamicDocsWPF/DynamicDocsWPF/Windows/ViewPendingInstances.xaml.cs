@@ -205,11 +205,9 @@ namespace DynamicDocsWPF.Windows
                     var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
                     _currentProcessObject = XmlHelper.ReadXmlFromString(processText);
                     _processSteps = _currentProcessObject.Steps;
-                    _processSteps.Reset();
                     if (_processSteps?.MoveNext() ?? false)
                     {
                         _dialogs = _processSteps.Current.Dialogs;
-                        _dialogs.Reset();
                         TryShowNextDialog(_entries);
                     }
                 }

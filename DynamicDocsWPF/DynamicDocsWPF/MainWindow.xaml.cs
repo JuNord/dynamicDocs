@@ -18,16 +18,32 @@ namespace DynamicDocsWPF
     /// </summary>
     public partial class MainWindow
     {
-        private readonly NetworkHelper _networkHelper;
-        private readonly User _user;
+        private NetworkHelper _networkHelper;
+        private User _user;
+        
+        public static string MoTD
+        {
+            get
+            {
+                if (DateTime.Now.Hour < 12) return "Guten Morgen!";
+                if (DateTime.Now.Hour < 17) return "Guten Tag!";
+                if (DateTime.Now.Hour < 7 || DateTime.Now.Hour >= 17) return "Guten Abend!";
+                return "Hallo";
+            }
+        }
 
         public MainWindow()
         {
             InitializeComponent();
+            Connect();
+            DisplayInfo(MoTD);
+        }
+
+        private void Connect()
+        {
             var login = new Login();
             try
             {
-                
                 login.ShowDialog();
 
                 if (login.DialogResult == true)
@@ -35,7 +51,12 @@ namespace DynamicDocsWPF
                     _user = new User(login.Email, login.Password);
                     _networkHelper = new NetworkHelper("http://localhost:8000/Service", _user);
                     int level = _networkHelper.GetPermissionLevel();
-
+                 
+                    NoPermissionText.Visibility = Visibility.Collapsed;
+                    Administration.Visibility = Visibility.Visible;
+                    MyProcesses.Visibility = Visibility.Visible;
+                    ForeignProcesses.Visibility = Visibility.Visible;
+                    
                     switch (level)
                     {
                         case 0:
@@ -46,15 +67,16 @@ namespace DynamicDocsWPF
                             break;
                         case 1:
                             Administration.Visibility = Visibility.Collapsed;
-                            OwnInstances.Content = new ViewOwnInstances(_networkHelper);
+                            OwnInstances.Content = new ViewOwnInstances(this,_networkHelper);
                             ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
                             break;
                         case 2:
-                            OwnInstances.Content = new ViewOwnInstances(_networkHelper);
+                            OwnInstances.Content = new ViewOwnInstances(this,_networkHelper);
                             ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
+
                             break;
                         case 3:
-                            OwnInstances.Content = new ViewOwnInstances(_networkHelper);
+                            OwnInstances.Content = new ViewOwnInstances(this,_networkHelper);
                             ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
                             AdministrationContent.Content = new ManageUserPermissions(_networkHelper);
                             break;
@@ -71,31 +93,12 @@ namespace DynamicDocsWPF
             }
 
             
-        } 
-
-        private void HandleUploadResult(UploadResult result)
-        {
-            switch (result)
-            {
-                case UploadResult.FAILED_FILEEXISTS:
-                    MessageBox.Show(this, "Filename already taken.");
-                    break;
-                case UploadResult.FAILED_ID_EXISTS:
-                    MessageBox.Show(this, "ID already taken.");
-                    break;
-                case UploadResult.FAILED_OTHER:
-                    MessageBox.Show(this, "Something went wrong.");
-                    break;
-                case UploadResult.INVALID_LOGIN:
-                    MessageBox.Show(this, "Username or password was wrong.");
-                    break;
-                case UploadResult.NO_PERMISSION:
-                    MessageBox.Show(this, "You are not permitted.");
-                    break;
-            }
         }
 
-        
+        public void DisplayInfo(string text)
+        {
+            InfoBlock.Text = text;
+        }
 
         private void MainMenu_BtnUploadProcess_OnClick(object sender, RoutedEventArgs e)
         {
@@ -114,10 +117,9 @@ namespace DynamicDocsWPF
             }
         }
 
-
-        private void ManagePermissionsClick(object sender, RoutedEventArgs e)
+        private void Reload_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Connect();
         }
     }
 }

@@ -179,13 +179,13 @@ namespace DynamicDocsWPF.Windows
                     if(validation.Accepted != null)
                         foreach (var receipt in validation.Accepted.Receipts)
                         {
-                            CheckReceipt(receipt);
+                            list.Add(CheckReceipt(receipt));
                         }
                     
-                    if(validation.Accepted != null)
+                    if(validation.Declined != null)
                         foreach (var receipt in validation.Declined.Receipts)
                         {
-                            CheckReceipt(receipt);
+                            list.Add(CheckReceipt(receipt));
                         }
                 }
             }

@@ -17,7 +17,7 @@ namespace RestService
         
         public void Dispose()
         {
-            
+            Reset();
         }
 
         public bool HasNext()

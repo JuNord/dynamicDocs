@@ -6,12 +6,12 @@ namespace RestService.Model.Input
 {
     public abstract class BaseInputElement : NamedTag
     {
-        protected BaseInputElement(Tag parent, string name, string description, bool obligatory, Control control, DataType dataType) :
+        protected BaseInputElement(Tag parent, string name, string description, bool obligatory, string calculation, Control control) :
             base(parent, name, description)
         {
             BaseControl = control;
             Obligatory = obligatory;
-            dataType = DataType;
+            Calculation = calculation;
             SetStartValue();
         }
 
@@ -19,6 +19,7 @@ namespace RestService.Model.Input
         public bool Obligatory { get; }
         public string ProcessErrorMsg { get; set; }
         public string ControlErrorMsg { get; protected set; }
+        public string Calculation { get; }
 
         public DataType DataType { get; set; }
         public Func<bool> ProcessValidityCheck { private get; set; }
@@ -68,6 +69,15 @@ namespace RestService.Model.Input
         /// </summary>
         /// <param name="value"></param>
         public abstract void SetValueFromString(string value);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value1"></param>
+        /// <param name="value2"></param>
+        /// <param name="operand"></param>
+        /// <returns></returns>
+        public abstract bool Calculate(string value1, string value2, char operand);
 
         /// <summary>
         /// Returns the underlying UI Controls value formatted as a string

@@ -5,18 +5,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:DynamicDocsWPF"
         mc:Ignorable="d"
-        Title="Registrierung" Height="470" Width="500"
+        Title="Registrierung" Height="440" Width="500"
         Background="#3CA4FF"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
-    <ScrollViewer>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock x:Name="Register_InfoText" HorizontalAlignment="Left" FontSize="28" FontFamily="Segoe UI Light" Foreground="White" Margin="50,20,20,20" >
+        <TextBlock x:Name="Register_InfoText" HorizontalAlignment="Left" FontSize="28" FontFamily="Segoe UI Light" Foreground="White" Margin="50,20,20,20" TextWrapping="Wrap">
             <Run Text="Hier können Sie sich registrieren." />
             </TextBlock>
         <Border Grid.Row="1" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"

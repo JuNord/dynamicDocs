@@ -19,6 +19,7 @@ namespace DynamicDocsWPF.Windows
 {
     public partial class ViewOwnInstances :UserControl
     {
+        private readonly MainWindow _mainWindow;
         private readonly NetworkHelper _networkHelper;
         private ProcessObject _currentProcessObject;
         private CustomEnumerable<Dialog> _dialogs;
@@ -26,9 +27,10 @@ namespace DynamicDocsWPF.Windows
         
         private ProcessInstance SelectedInstance => ((ProcessInstance) InstanceList.SelectedItem);
 
-        public ViewOwnInstances(NetworkHelper networkHelper)
+        public ViewOwnInstances(MainWindow mainWindow, NetworkHelper networkHelper)
         {
             InitializeComponent();
+            _mainWindow = mainWindow;
             _networkHelper = networkHelper;
             InstanceList.ItemsSource = TryGetInstances();
         }
@@ -38,7 +40,6 @@ namespace DynamicDocsWPF.Windows
             try
             {
                 var processInstances = _networkHelper.GetProcessInstances();
-
                 if (processInstances == null)
                 {
                     new InfoPopup(MessageBoxButton.OK,
@@ -61,9 +62,22 @@ namespace DynamicDocsWPF.Windows
         
         private void Next_Click(object sender, RoutedEventArgs e)
         {
+            if (_dialogs.Current.Elements.Any(baseInputElement => !IsInputValueValid(baseInputElement)))
+                return;
             if (TryShowNextDialog(_entries)) return;
 
-            BtnNext.Content = "Änderungen Speichern";
+            if (!SelectedInstance.Locked)
+            {
+                var sendPopup = new InfoPopup(MessageBoxButton.YesNo,
+                    "Haben Sie Änderungen vorgenommen die gespeichert werden sollen?");
+
+                if (sendPopup.ShowDialog() == true)
+                {
+                    SendData();
+                    new InfoPopup(MessageBoxButton.OK, "Änderungen gespeichert.").ShowDialog();
+                    LoadAndShowSelection();
+                }
+            }
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -130,46 +144,89 @@ namespace DynamicDocsWPF.Windows
 
         private void InstanceList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Overlay.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Visible : Visibility.Collapsed;
-            
-            var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
-            _currentProcessObject = XmlHelper.ReadXmlFromString(processText);
-            _dialogs = _currentProcessObject.GetStepAtIndex(0).Dialogs;
-            _dialogs.Reset();
-            _entries = _networkHelper.GetEntries(SelectedInstance.Id);
-            TryShowNextDialog(_entries);
+            LoadAndShowSelection();
+        }
 
-            for (int i = 0; i < _currentProcessObject.ProcessStepCount; i++)
+        private bool IsInputValueValid(BaseInputElement baseInputElement)
+        {
+            if (baseInputElement.FulfillsObligatoryConditions())
             {
-                Color color = Colors.Transparent;
-                int width = 10;
+                if (!baseInputElement.FulfillsProcessConditions())
+                {
+                   _mainWindow.DisplayInfo(baseInputElement.ProcessErrorMsg);
+                    baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
+                    baseInputElement.BaseControl.BorderThickness = new Thickness(2);
+                    return false;
+                }
 
-                if (i < SelectedInstance.CurrentStep)
+                if (!baseInputElement.FulfillsControlConditions())
                 {
-                    color = Colors.Green;
+                    _mainWindow.DisplayInfo(baseInputElement.ControlErrorMsg);
+                    baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
+                    baseInputElement.BaseControl.BorderThickness = new Thickness(2);
+                    return false;
                 }
-                else if (i == SelectedInstance.CurrentStep)
-                {
-                    color = Colors.White;
-                    width = 15;
-                }
-                else if (i > SelectedInstance.CurrentStep)
-                {
-                    color = Colors.LightGray;
-                }
-                
-                ProgressPanel.Children.Add(new Ellipse()
-                {
-                    Width = width,
-                    Height = width,
-                    Fill = new SolidColorBrush(color),
-                    Margin = new Thickness(10,0,10,0)
-                });
 
-                if(SelectedInstance.CurrentStep < _currentProcessObject.ProcessStepCount)
-                    StepDescription.Text = _currentProcessObject.GetStepAtIndex(SelectedInstance.CurrentStep)?.Description;
-                else
-                    StepDescription.Text = SelectedInstance.Declined ? "Abgelehnt" : "Genehmigt";
+                _mainWindow.DisplayInfo(MainWindow.MoTD);
+                baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Colors.Gray);
+                baseInputElement.BaseControl.BorderThickness = new Thickness(1);
+                return true;
+
+            }
+            else
+            {
+                _mainWindow.DisplayInfo("Bitte füllen Sie alle Muss Felder aus.");
+                baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
+                baseInputElement.BaseControl.BorderThickness = new Thickness(2);
+                return false;
+            }
+        }
+        
+        private void LoadAndShowSelection()
+        {
+            Overlay.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Visible : Visibility.Collapsed;
+
+            if (SelectedInstance != null)
+            {
+                var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
+                _currentProcessObject = XmlHelper.ReadXmlFromString(processText);
+                _dialogs = _currentProcessObject.GetStepAtIndex(0).Dialogs;
+                _entries = _networkHelper.GetEntries(SelectedInstance.Id);
+                TryShowNextDialog(_entries);
+
+                for (int i = 0; i < _currentProcessObject.ProcessStepCount; i++)
+                {
+                    Color color = Colors.Transparent;
+                    int width = 10;
+
+                    if (i < SelectedInstance.CurrentStep)
+                    {
+                        color = Colors.Green;
+                    }
+                    else if (i == SelectedInstance.CurrentStep)
+                    {
+                        color = Colors.White;
+                        width = 15;
+                    }
+                    else if (i > SelectedInstance.CurrentStep)
+                    {
+                        color = Colors.LightGray;
+                    }
+
+                    ProgressPanel.Children.Add(new Ellipse()
+                    {
+                        Width = width,
+                        Height = width,
+                        Fill = new SolidColorBrush(color),
+                        Margin = new Thickness(10, 0, 10, 0)
+                    });
+
+                    if (SelectedInstance.CurrentStep < _currentProcessObject.ProcessStepCount)
+                        StepDescription.Text = _currentProcessObject.GetStepAtIndex(SelectedInstance.CurrentStep)
+                            ?.Description;
+                    else
+                        StepDescription.Text = SelectedInstance.Declined ? "Abgelehnt" : "Genehmigt";
+                }
             }
         }
 
@@ -185,6 +242,33 @@ namespace DynamicDocsWPF.Windows
             {
                 new InfoPopup(MessageBoxButton.OK,
                         $"The process contained an element called \"{uiElement.Name}\" that couldnt be found.")
+                    .ShowDialog();
+            }
+        }
+        
+        private void SendData()
+        {
+            try
+            {
+                _dialogs.Reset();
+                foreach (var dialog in _dialogs)
+                {
+                    foreach (var element in dialog.Elements)
+                    {
+                        var entry = _entries.First(e => e.FieldName == element.Name);
+                        var dataOld = entry.Data;
+                        if (!dataOld.Equals(element.GetFormattedValue()))
+                        {
+                            entry.Data = element.GetFormattedValue();
+                            _networkHelper.PostEntryUpdate(entry);
+                        }
+                    }
+                }             
+            }
+            catch (NullReferenceException e)
+            {
+                new InfoPopup(MessageBoxButton.OK,
+                        "Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator")
                     .ShowDialog();
             }
         }

@@ -14,9 +14,10 @@ namespace RestService.Model.Input
         /// <param name="obligatory">If true, a check function will be supplied to the base class to check if the control is empty</param>
         /// <param name="parent"></param>
         /// <param name="name"></param>
-        public NumberInputBox(Tag parent, string name, string description, bool obligatory = false) : base(parent, name,
-            description, obligatory, new TextBox(), DataType.Int)
+        public NumberInputBox(Tag parent, string name, string description, bool obligatory, string calculation) : base(parent, name,
+            description, obligatory, calculation, new TextBox(), DataType.Int)
         {
+            if (!string.IsNullOrWhiteSpace(calculation)) BaseControl.IsEnabled = false;
             ObligatoryCheck = () => !string.IsNullOrEmpty(ElevatedControl.Text);
 
             ControlErrorMsg = "Bitte nur Zahlen eingeben.";
@@ -29,13 +30,14 @@ namespace RestService.Model.Input
 
                 return valid;
             };
+            ElevatedControl.TextChanged += delegate { ((Dialog) parent).PerformCalculations(); };
         }
 
         public override int GetValue()
         {
             try
             {
-                return int.Parse(ElevatedControl.Text);
+                return string.IsNullOrWhiteSpace(ElevatedControl.Text) ? 0 : int.Parse(ElevatedControl.Text);
             }
             catch (FormatException)
             {
@@ -56,6 +58,40 @@ namespace RestService.Model.Input
         public override void SetValueFromString(string value)
         {
             ElevatedControl.Text = value;
+        }
+
+        public override bool Calculate(string value1, string value2, char operand)
+        {
+            double value1Double = 0;
+            double value2Double = 0;
+            bool isValue1Date = DateTime.TryParse(value1, out var value1Date);
+            bool isValue2Date = DateTime.TryParse(value2, out var value2Date);
+            bool isValue1Number = !isValue1Date && double.TryParse(value1, out value1Double);
+            bool isValue2Number = !isValue2Date && double.TryParse(value2, out value2Double);
+            
+
+            if (isValue1Number && isValue2Number)
+            {
+                double result;
+                switch (operand)
+                {
+                    case '+': result = value1Double + value2Double; break;
+                    case '-': result = value1Double - value2Double; break;
+                    case '*': result = value1Double * value2Double; break;
+                    case '/': result = value1Double / value2Double; break;
+                    default: return false;
+                }
+                ElevatedControl.Text = $"{result}";    
+                return true;
+            }
+            else if (isValue1Date && isValue2Date && value1Date > value2Date)
+            {
+                double result = (value1Date - value2Date).TotalDays;
+                ElevatedControl.Text = $"{result}";
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -13,8 +13,8 @@ namespace RestService.Model.Input
         /// <param name="obligatory">If true, a check function will be supplied to the base class to check if the control is empty</param>
         /// <param name="parent"></param>
         /// <param name="name"></param>
-        public ClassDropDown(Tag parent, string name, string description, bool obligatory = false) : base(parent, name,
-            description, obligatory, new ComboBox(), DataType.String)
+        public ClassDropDown(Tag parent, string name, string description, bool obligatory) : base(parent, name,
+            description, obligatory, null, new ComboBox(), DataType.String)
         {
             ObligatoryCheck = () => ElevatedControl.SelectedIndex > -1;    
         }
@@ -33,6 +33,11 @@ namespace RestService.Model.Input
         public override void SetValueFromString(string value)
         {
             ElevatedControl.SelectedValue = value;
+        }
+
+        public override bool Calculate(string value1, string value2, char operand)
+        {
+            return false;
         }
 
         public override string GetValue()

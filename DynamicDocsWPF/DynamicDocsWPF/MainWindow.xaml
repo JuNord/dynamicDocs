@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DynamicDocsWPF"
         xmlns:windows="clr-namespace:DynamicDocsWPF.Windows"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="A.u.F.E.T. v 1.0" Height="400" Width="525" Background="#3CA4FF" Foreground="White">
     <Window.Resources>
@@ -64,17 +65,24 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <TextBlock Grid.Row="1" FontWeight="Light" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Name="NoPermissionText" Visibility="Collapsed" FontSize="18" Foreground="White" TextWrapping="Wrap">
-            <Run Text="Nichts zu sehen?"/>
-            <LineBreak/><LineBreak/>
-            <Run Text="Vermutlich fehlen Ihnen Berechtigungen."/> 
-            <LineBreak/>
-            <Run Text="Bitte wenden Sie sich an einen Administrator."/>
-        </TextBlock>
-        <TextBlock Grid.Row="1" FontWeight="Light" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Name="NoDataText" Visibility="Collapsed" FontSize="18" Foreground="White" TextWrapping="Wrap">
-            <Run Text="Nichts zu sehen?"/>
-            <LineBreak/><LineBreak/>
-            <Run Text="Es stehen wohl noch keine Datensätze bereit."/>
-        </TextBlock>
+        <Grid Background="#3CA4FF" Grid.Row="1" Name="NoPermissionText" Visibility="Collapsed" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" FontWeight="Light" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18" Foreground="White" TextWrapping="Wrap">
+                <Run Text="Nichts zu sehen?"/>
+                <LineBreak/><LineBreak/>
+                <Run Text="Vermutlich fehlen Ihnen Berechtigungen."/> 
+                <LineBreak/>
+                <Run Text="Bitte wenden Sie sich an einen Administrator."/>
+            </TextBlock>
+            <Button Name="Reload" Grid.Row="1" Click="Reload_Click" FontFamily="Segoe MDL2 Assets" FontSize="25" Content="&#xE72C;" Width="50" Height="50"
+                    VerticalAlignment="Bottom" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                </Button.Effect>
+            </Button>
+        </Grid>
     </Grid>
 </Window>

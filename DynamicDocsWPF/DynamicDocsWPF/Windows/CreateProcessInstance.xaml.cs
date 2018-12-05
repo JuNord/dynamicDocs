@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
@@ -37,10 +39,11 @@ namespace DynamicDocsWPF.Windows
             _networkHelper = networkHelper;
             _processStep = processObject.GetStepAtIndex(0);
 
+            Heading.Text = processObject.Description;
+            
             if (_processStep != null)
             {
                 _dialogEnumerable = _processStep?.Dialogs;
-
                 if (_dialogEnumerable != null)
                 {
                     _dialogEnumerable?.MoveNext();
@@ -79,8 +82,8 @@ namespace DynamicDocsWPF.Windows
             else if (linkRegex.IsMatch(split[0]))
             {
                 var linkText = split[0].Substring(1, split[0].Length - 2);
-                
-                
+
+                var list = new List<BaseInputElement>();
             }
 
             if (numberRegex.IsMatch(split[1])) 
@@ -165,7 +168,10 @@ namespace DynamicDocsWPF.Windows
                         "Sollen die eingegebenen Daten abgeschickt werden?");
 
                     if (sendPopup.ShowDialog() == true)
+                    {
                         SendData();
+                        Close();
+                    }
                 }
                 else InfoBlock.Text = "Bitte geben Sie einen Betreff an.";
             }
@@ -214,42 +220,47 @@ namespace DynamicDocsWPF.Windows
             }
         }
 
-        private bool SendData()
+        private void SendData()
         {
-            var reply = _networkHelper.CreateProcessInstance(_processObject.Name, _networkHelper.User.Email, Subject.Text);
-
-            _instanceId = reply.InstanceId;
-
-            if (reply.UploadResult == UploadResult.SUCCESS)
+            try
             {
-                for (var i = 0; i < _processStep.DialogCount; i++)
-                {
-                    var dialog = _processStep.GetDialogAtIndex(i);
-                    for (var j = 0; j < dialog.ElementCount; j++)
-                    {
-                        var element = dialog.GetElementAtIndex(j);
-                        var entry = new Entry()
-                        {
-                            InstanceId = _instanceId,
-                            FieldName = element.Name,
-                            Data = element.GetFormattedValue()
-                        };
+                var reply = _networkHelper.CreateProcessInstance(_processObject.Name, _networkHelper.User.Email,
+                    Subject.Text);
 
-                        _networkHelper.CreateEntry(entry);
+                _instanceId = reply.InstanceId;
+
+                if (reply.UploadResult == UploadResult.SUCCESS)
+                {
+                    _dialogEnumerable.Reset();
+                    foreach (var dialog in _dialogEnumerable)
+                    {
+                        foreach (var element in dialog.Elements)
+                        {
+                            var entry = new Entry()
+                            {
+                                InstanceId = _instanceId,
+                                FieldName = element.Name,
+                                Data = element.GetFormattedValue()
+                            };
+
+                            _networkHelper.CreateEntry(entry);
+                        }
                     }
                 }
 
-                return true;
+                if (reply.UploadResult == UploadResult.FAILED_OTHER)
+                {
+                    new InfoPopup(MessageBoxButton.OK,
+                            "Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator")
+                        .ShowDialog();
+                }
             }
-
-            if (reply.UploadResult == UploadResult.FAILED_OTHER)
+            catch (NullReferenceException e)
             {
                 new InfoPopup(MessageBoxButton.OK,
                         "Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator")
                     .ShowDialog();
             }
-
-            return false;
         }
     }
 }

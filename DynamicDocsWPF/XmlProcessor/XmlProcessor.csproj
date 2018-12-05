@@ -42,6 +42,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="File1 - Calc.xml" />
+    <Content Include="File1 - CalcDate.xml" />
+    <Content Include="File1.xml" />
     <Content Include="XMLFile1.xml" />
     <Content Include="XMLFile2.xml" />
   </ItemGroup>

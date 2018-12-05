@@ -150,15 +150,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="backupValidationOverview.txt" />
     <Content Include="Designstuff.xml" />
     <Content Include="PlantUML\Database.txt" />
     <Content Include="PlantUML\Network.txt" />
     <Content Include="PlantUML\UML.txt" />
     <Content Include="PlantUML\WebServer.txt" />
-    <Content Include="Windows\Resources\officebg1.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestService\RestService.csproj">

@@ -65,6 +65,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IRestServiceNew.cs" />
+    <Compile Include="RestDTOs\ReplyPostEntryUpdate.cs" />
     <Compile Include="RestDTOs\ReplyGetAuthenticationResult.cs" />
     <Compile Include="RestDTOs\ReplyGetDocTemplate.cs" />
     <Compile Include="RestDTOs\ReplyGetDocTemplateList.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="RestDTOs\ReplyPostProcessTemplate.cs" />
     <Compile Include="RestDTOs\ReplyPostProcessUpdate.cs" />
     <Compile Include="RestDTOs\ReplyPostUser.cs" />
+    <Compile Include="RestDTOs\RequestPostEntryUpdate.cs" />
     <Compile Include="RestDTOs\RequestGetProcessInstance.cs" />
     <Compile Include="RestDTOs\RequestGetPermissionLevel.cs" />
     <Compile Include="RestDTOs\RequestPermissionChange.cs" />

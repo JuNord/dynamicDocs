@@ -529,5 +529,14 @@ namespace WebServerWPF
                               $"\"{entry.Data}\");";
             cmd.ExecuteNonQuery();
         }
+        
+        public void UpdateEntry(Entry entry)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = "UPDATE Entry SET " +
+                              $"data =\"{entry.Data}\" " +
+                              $"WHERE id = {entry.EntryId};";
+            cmd.ExecuteNonQuery();
+        }
     }
 }

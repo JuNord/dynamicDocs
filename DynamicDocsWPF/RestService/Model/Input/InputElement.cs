@@ -5,9 +5,9 @@ namespace RestService.Model.Input
 {
     public abstract class InputElement<TControl, TValue> : BaseInputElement where TControl : Control
     {
-        protected InputElement(Tag parent, string name, string description, bool obligatory, TControl control,
+        protected InputElement(Tag parent, string name, string description, bool obligatory, string calculation, TControl control,
             DataType dataType) : base(
-            parent, name, description, obligatory, control, dataType)
+            parent, name, description, obligatory, calculation, control)
         {
         }
 

@@ -231,6 +231,18 @@ namespace DynamicDocsWPF.HelperClasses
 
         #region UPDATE
 
+        public UploadResult PostEntryUpdate(Entry entry)
+        {
+            var request = new RequestPostEntryUpdate()
+            {
+                Entry = entry
+            };
+            var reply = JsonConvert.DeserializeObject<ReplyPostEntryUpdate>(
+                PostRequest(User, "EntryUpdate", JsonConvert.SerializeObject(request))
+            );
+            return reply?.UploadResult ?? UploadResult.FAILED_OTHER;
+        }
+        
         public UploadResult PostProcessUpdate(int id, bool declined, bool locks)
         {
             var request = new RequestPostProcessUpdate()

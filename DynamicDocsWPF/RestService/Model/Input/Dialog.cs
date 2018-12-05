@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using Microsoft.VisualBasic;
 using RestService.Model.Base;
+using RestService.Model.Process;
 
 namespace RestService.Model.Input
 {
@@ -46,6 +49,60 @@ namespace RestService.Model.Input
                     return element;
 
             return null;
+        }
+
+        public void PerformCalculations()
+        {
+            foreach (var element in _elements)
+            {
+                if (!string.IsNullOrWhiteSpace(element.Calculation))
+                {
+                    var calculation = element.Calculation;
+                    string[] split = new string[0];
+                    var op = ' ';
+                    if (calculation.Contains("+"))
+                        op = '+';
+                    else if (calculation.Contains("-"))
+                        op = '-';
+                    else if (calculation.Contains("*"))
+                        op = '*';
+                    else if (calculation.Contains("/"))
+                        op = '/';
+                    else return;
+
+                    split = calculation.Split(op);
+
+
+                    if (split.Length != 2) return;
+
+                    var numberRegex = new Regex("^\\d{1,*}$");
+                    var linkRegex = new Regex("^\\[(.*?)\\]$");
+                    var firstValue = "";
+                    var secondValue = "";
+
+                    if (numberRegex.IsMatch(split[0]))
+                        firstValue = split[0];
+                    else if (linkRegex.IsMatch(split[0]))
+                    {
+                        var linkText = split[0].Substring(1, split[0].Length - 2);
+
+                        var processObject = (ProcessObject) ((ProcessStep) Parent).Parent;
+                        firstValue = processObject.GetElementValue(linkText);
+                    }
+
+                    if (numberRegex.IsMatch(split[1]))
+                        secondValue = split[1];
+                    else if (linkRegex.IsMatch(split[1]))
+                    {
+                        var linkText = split[1].Substring(1, split[1].Length - 2);
+
+                        var processObject = (ProcessObject) ((ProcessStep) Parent).Parent;
+                        secondValue = processObject.GetElementValue(linkText);
+                    }
+
+                    element.Calculate(firstValue, secondValue, op);
+                }
+            }
         }
     }
 }

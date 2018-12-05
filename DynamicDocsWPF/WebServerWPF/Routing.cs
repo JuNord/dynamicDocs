@@ -18,6 +18,7 @@
         public const string GetResponsibilityList = "/ResponsibilityList";
         public const string GetUserList = "/UserList";
         public const string PostEntry = "/Entry";
+        public const string PostEntryUpdate = "/EntryUpdate";
         public const string PostPermissionChange = "/Level";
         public const string PostUser = "/User";
     }

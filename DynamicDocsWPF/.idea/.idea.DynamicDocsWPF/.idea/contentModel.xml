@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\sebastian.bauer\.Rider2018.2\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\sebastian.bauer\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.1172674224.00" t="ExcludeRecursive" />
-    <e p="C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
+    <e p="C:\Users\sebas_qgewjv\.Rider2018.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\sebas_qgewjv\.Rider2018.2\system\resharper-host\local\Transient\ReSharperHost\v182\SolutionCaches\_DynamicDocsWPF.-1818023564.00" t="ExcludeRecursive" />
+    <e p="C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF" t="IncludeFlat">
       <e p="DynamicDocsWPF" t="IncludeRecursive">
         <e p="App.config" t="Include" />
         <e p="App.xaml" t="Include" />
         <e p="App.xaml.cs" t="Include" />
-        <e p="backupValidationOverview.txt" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="Designstuff.xml" t="Include" />
         <e p="DynamicDocsWPF.csproj" t="IncludeRecursive" />
@@ -48,9 +47,6 @@
           <e p="ProcessSelect.xaml.cs" t="Include" />
           <e p="Register.xaml" t="Include" />
           <e p="Register.xaml.cs" t="Include" />
-          <e p="Resources" t="Include">
-            <e p="officebg1.jpg" t="Include" />
-          </e>
           <e p="ViewOwnInstances.xaml" t="Include" />
           <e p="ViewOwnInstances.xaml.cs" t="Include" />
           <e p="ViewPendingInstances.xaml" t="Include" />
@@ -153,6 +149,7 @@
           <e p="ReplyPermissionChange.cs" t="Include" />
           <e p="ReplyPostDocTemplate .cs" t="Include" />
           <e p="ReplyPostEntry.cs" t="Include" />
+          <e p="ReplyPostEntryUpdate.cs" t="Include" />
           <e p="ReplyPostProcessInstance.cs" t="Include" />
           <e p="ReplyPostProcessTemplate.cs" t="Include" />
           <e p="ReplyPostProcessUpdate.cs" t="Include" />
@@ -165,6 +162,7 @@
           <e p="RequestPermissionChange.cs" t="Include" />
           <e p="RequestPostDocTemplate.cs" t="Include" />
           <e p="RequestPostEntry.cs" t="Include" />
+          <e p="RequestPostEntryUpdate.cs" t="Include" />
           <e p="RequestPostProcessInstance.cs" t="Include" />
           <e p="RequestPostProcessTemplate.cs" t="Include" />
           <e p="RequestPostProcessUpdate.cs" t="Include" />
@@ -176,6 +174,9 @@
       </e>
       <e p="XmlProcessor" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
+        <e p="File1 - Calc.xml" t="Include" />
+        <e p="File1 - CalcDate.xml" t="Include" />
+        <e p="File1.xml" t="Include" />
         <e p="obj" t="ExcludeRecursive" />
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">

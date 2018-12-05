@@ -41,6 +41,7 @@ namespace RestService
                             var draftname = reader.GetAttribute("draftname");
                             var filepath = reader.GetAttribute("filepath");
                             var obligatory = reader.GetAttribute("obligatory");
+                            var calculation = reader.GetAttribute("calculation");
 
                             //Vergleiche, erzeuge und weise Objekte zu
 
@@ -88,7 +89,7 @@ namespace RestService
                                     if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.MISSINGATTRIBUTE;
                                     if (dialog == null || processStep == null || processObject == null) return XmlState.MISSINGPARENTTAG;
                                     var numberInputBox =
-                                        new NumberInputBox(dialog, name, description, ToBool(obligatory));
+                                        new NumberInputBox(dialog, name, description, ToBool(obligatory), calculation);
                                     dialog.AddElement(numberInputBox);
                                     break;
 
@@ -110,7 +111,7 @@ namespace RestService
                                 case Wording.DateDropdown:
                                     if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.MISSINGATTRIBUTE;
                                     if (dialog == null || processStep == null || processObject == null) return XmlState.MISSINGPARENTTAG;
-                                    var dateDropdown = new DateDropdown(dialog, name, description, ToBool(obligatory));
+                                    var dateDropdown = new DateDropdown(dialog, name, description, ToBool(obligatory), calculation);
                                     dialog.AddElement(dateDropdown);
                                     break;
                                 case
@@ -218,7 +219,7 @@ namespace RestService
 
         private static bool AnyStringNullOrWhiteSpace(params string[] values)
         {
-            return values.All(value => string.IsNullOrWhiteSpace(value));
+            return values.All(string.IsNullOrWhiteSpace);
         }
         
         private static bool IsValidProcess(ProcessObject processObject)
@@ -232,7 +233,6 @@ namespace RestService
                     if (dialog.ElementCount < 1) return false;
                 }
             }
-
             return true;
         }
 

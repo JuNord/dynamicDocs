@@ -89,6 +89,11 @@ namespace WebServer
         ReplyPostProcessUpdate PostProcessUpdate(RequestPostProcessUpdate request);
         
         [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = Routing.PostEntryUpdate, RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        ReplyPostEntryUpdate PostEntryUpdate(RequestPostEntryUpdate requestPost);
+        
+        [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = Routing.PostProcessInstance, RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyPostProcessInstance PostProcessInstance(RequestPostProcessInstance request);
