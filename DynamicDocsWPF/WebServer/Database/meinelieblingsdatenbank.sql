@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `entry` (
   PRIMARY KEY (`ID`),
   KEY `PROCESS_ID` (`PROCESS_ID`),
   CONSTRAINT `entry_ibfk_1` FOREIGN KEY (`PROCESS_ID`) REFERENCES `processinstance` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 -- Daten Export vom Benutzer nicht ausgewählt
 -- Exportiere Struktur von Tabelle processmanagement.pendinginstance
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `processinstance` (
   KEY `OWNER_ID` (`OWNER_ID`),
   CONSTRAINT `runningprocess_ibfk_1` FOREIGN KEY (`TEMPLATE_ID`) REFERENCES `processtemplate` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `runningprocess_ibfk_2` FOREIGN KEY (`OWNER_ID`) REFERENCES `user` (`EMAIL`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 -- Daten Export vom Benutzer nicht ausgewählt
 -- Exportiere Struktur von Tabelle processmanagement.processtemplate
@@ -103,6 +103,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `EMAIL` varchar(255) NOT NULL,
   `PASSWORD` varchar(255) DEFAULT NULL,
   `PERMISSIONLEVEL` int(11) DEFAULT NULL,
+  `ROLE` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`EMAIL`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
