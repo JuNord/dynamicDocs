@@ -22,6 +22,7 @@ namespace DynamicDocsWPF.Windows
         private CustomEnumerable<ProcessStep> _processSteps;
         private CustomEnumerable<Dialog> _dialogs;
         private List<Entry> _entries;
+        private int _currentStepIndex = 0;
         
         private ProcessInstance SelectedInstance { get; set; }
 
@@ -38,15 +39,6 @@ namespace DynamicDocsWPF.Windows
             try
             {
                 var responsibilities = _networkHelper.GetResponsibilities();
-
-                if (responsibilities == null)
-                {
-                    new InfoPopup(MessageBoxButton.OK,
-                            "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
-                        .ShowDialog();
-
-                }
-
                 return responsibilities;
             }
             catch (WebException)
@@ -62,61 +54,100 @@ namespace DynamicDocsWPF.Windows
         private void Next_Click(object sender, RoutedEventArgs e)
         {
             if (TryShowNextDialog(_entries)) return;
-            if (!(_processSteps?.MoveNext() ?? false))
+
+            if (_currentStepIndex + 1 <= SelectedInstance.CurrentStep)
             {
-                var initialPopup = new InfoPopup(MessageBoxButton.YesNo,
-                    "Möchten Sie diesen Schritt genehmigen? Weitere Instanzen werden gegebenenfalls über die Genehmigung in Kenntnis gesetzt.");
-
-                var validationElement = _processSteps.Current.GetValidationAtIndex(0);
-                if (initialPopup.ShowDialog() == true)
+                _currentStepIndex++;
+                _processSteps.MoveNext();
+            }
+            else if (_currentStepIndex + 1 > SelectedInstance.CurrentStep)
+            {
+                if (_processSteps.Current.DialogCount > 0)
                 {
-                    var acceptPopup = new InfoPopup(MessageBoxButton.YesNo,
-                        "Möchten Sie wirklich zustimmen? Dieser Schritt kann nicht rückgängig gemacht werden! Wählen Sie nein um die Daten erneut zu prüfen.");
-
-                    if (acceptPopup.ShowDialog() == true)
-                    {
-                        var validation = _processSteps.Current.GetValidationAtIndex(0);
-                        _networkHelper.PostProcessUpdate(SelectedInstance.Id, false, validation.Locks);
-                        
-                        InstanceList.ItemsSource = _networkHelper.GetResponsibilities();
-                    }
+                    SendData();
                 }
-                else
+                if (_processSteps.Current.ValidationCount > 0)
                 {
-                    var declinePopup = new InfoPopup(MessageBoxButton.YesNo,
-                        "Möchten Sie wirklich ablehnen? Dieser Schritt kann nicht rückgängig gemacht werden! Wählen Sie nein um die Daten erneut zu prüfen.");
+                    var initialPopup = new InfoPopup(MessageBoxButton.YesNo,
+                        "Möchten Sie diesen Schritt genehmigen? Weitere Instanzen werden gegebenenfalls über die Genehmigung in Kenntnis gesetzt.");
 
-                    if (declinePopup.ShowDialog() == true)
+                    var validationElement = _processSteps.Current.GetValidationAtIndex(0);
+                    if (initialPopup.ShowDialog() == true)
                     {
-                        var validation = _processSteps.Current.GetValidationAtIndex(0);
-                        _networkHelper.PostProcessUpdate(SelectedInstance.Id, true, validation.Locks);
+                        var acceptPopup = new InfoPopup(MessageBoxButton.YesNo,
+                            "Möchten Sie wirklich zustimmen? Dieser Schritt kann nicht rückgängig gemacht werden! Wählen Sie nein um die Daten erneut zu prüfen.");
 
-                        if (validationElement?.Declined != null)
+                        if (acceptPopup.ShowDialog() == true)
                         {
-                            foreach (var receipt in validationElement.Declined.Receipts)
-                            {
-                                var fileName = $"{receipt.DraftName}_{DateTime.Now.ToShortDateString()}.docx";
-                                var documentTemplate = _networkHelper.GetDocTemplate(receipt.DraftName);
-                                File.WriteAllBytes(fileName ,Encoding.Default.GetBytes(documentTemplate.Content));
+                            var validation = _processSteps.Current.GetValidationAtIndex(0);
+                            _networkHelper.PostProcessUpdate(SelectedInstance.Id, false, validation.Locks);
 
-                                var replacements = new List<KeyValuePair<string, string>>();
-
-                                foreach (var entry in _entries)
-                                {
-                                    replacements.Add(new KeyValuePair<string, string>($"[{entry.FieldName}]", entry.Data));
-                                }
-                                WordReceiptHelper.OpenDocument(fileName, replacements.ToArray());
-                                
-                            }
+                            InstanceList.ItemsSource = _networkHelper.GetResponsibilities();
                         }
-                        InstanceList.ItemsSource = TryGetResponsibilities();
                     }
+                    else
+                    {
+                        var declinePopup = new InfoPopup(MessageBoxButton.YesNo,
+                            "Möchten Sie wirklich ablehnen? Dieser Schritt kann nicht rückgängig gemacht werden! Wählen Sie nein um die Daten erneut zu prüfen.");
+
+                        if (declinePopup.ShowDialog() == true)
+                        {
+                            var validation = _processSteps.Current.GetValidationAtIndex(0);
+                            _networkHelper.PostProcessUpdate(SelectedInstance.Id, true, validation.Locks);
+
+                            if (validationElement?.Declined != null)
+                            {
+                                foreach (var receipt in validationElement.Declined.Receipts)
+                                {
+                                    var fileName = $"{receipt.DraftName}_{DateTime.Now.ToShortDateString()}.docx";
+                                    var documentTemplate = _networkHelper.GetDocTemplate(receipt.DraftName);
+                                    File.WriteAllBytes(fileName, Encoding.Default.GetBytes(documentTemplate.Content));
+
+                                    var replacements = new List<KeyValuePair<string, string>>();
+
+                                    foreach (var entry in _entries)
+                                    {
+                                        replacements.Add(
+                                            new KeyValuePair<string, string>($"[{entry.FieldName}]", entry.Data));
+                                    }
+
+                                    WordReceiptHelper.OpenDocument(fileName, replacements.ToArray());
+
+                                }
+                            }
+
+                            InstanceList.ItemsSource = TryGetResponsibilities();
+                        }
+                    }
+
+                    return;
                 }
-                return;
-            };
-            
+            }
+
             _dialogs = _processSteps.Current.Dialogs;
             TryShowNextDialog(_entries);
+        }
+        
+        private bool SendData()
+        {
+            for (var i = 0; i < _processSteps.Current.DialogCount; i++)
+            {
+                var dialog = _processSteps.Current.GetDialogAtIndex(i);
+                for (var j = 0; j < dialog.ElementCount; j++)
+                {
+                    var element = dialog.GetElementAtIndex(j);
+                    var entry = new Entry()
+                    {
+                        InstanceId = SelectedInstance.Id,
+                        FieldName = element.Name,
+                        Data = element.GetFormattedValue()
+                    };
+
+                    _networkHelper.CreateEntry(entry);
+                }
+            }
+
+            return true;          
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -161,21 +192,34 @@ namespace DynamicDocsWPF.Windows
 
         private void InstanceList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Overlay.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Visible : Visibility.Collapsed;
-            
-            SelectedInstance = _networkHelper.GetProcessInstanceById(((PendingInstance) InstanceList.SelectedItem).InstanceId);
-            _entries = _networkHelper.GetEntries(SelectedInstance.Id);
-            
-            var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
-            _currentProcessObject = XmlHelper.ReadXmlFromString(processText);
-            _processSteps = _currentProcessObject.Steps;
-
-            if (_processSteps?.MoveNext() ?? false)
+            try
             {
-                _dialogs = _processSteps.Current.Dialogs;
-                TryShowNextDialog(_entries);
+                if (InstanceList.SelectedIndex != -1)
+                {
+                    Overlay.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Visible : Visibility.Collapsed;
+
+                    SelectedInstance =
+                        _networkHelper.GetProcessInstanceById(((PendingInstance) InstanceList.SelectedItem).InstanceId);
+                    _entries = _networkHelper.GetEntries(SelectedInstance.Id);
+
+                    var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
+                    _currentProcessObject = XmlHelper.ReadXmlFromString(processText);
+                    _processSteps = _currentProcessObject.Steps;
+                    _processSteps.Reset();
+                    if (_processSteps?.MoveNext() ?? false)
+                    {
+                        _dialogs = _processSteps.Current.Dialogs;
+                        _dialogs.Reset();
+                        TryShowNextDialog(_entries);
+                    }
+                }
             }
-            
+            catch (NullReferenceException)
+            {
+                new InfoPopup(MessageBoxButton.OK,
+                        "Leider konnte der gewählte Prozess nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
+                    .ShowDialog();
+            }
         }
 
         private void FillUiElement(List<Entry> entries, BaseInputElement uiElement)

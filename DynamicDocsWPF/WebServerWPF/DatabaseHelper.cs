@@ -205,8 +205,8 @@ namespace WebServerWPF
                 {
                     var processObject = XmlHelper.ReadXmlFromPath(template.FilePath);
                     
-                    
-                    if (processInstance.CurrentStep + 1 > processObject.ProcessStepCount)
+                    IncrementProcessInstance(id);
+                    if (processInstance.CurrentStep + 1 >= processObject.ProcessStepCount)
                     {
                         ArchiveProcessinstance(id);
                     }
@@ -220,22 +220,28 @@ namespace WebServerWPF
 
         private void PushToNextUser(int id, ProcessObject processObject, ProcessInstance processinstance)
         {
-            User nextResponsibleUser;
+            User nextResponsibleUser = null;
             var entries = GetEntries(id);
             var processStep = processObject.GetStepAtIndex(processinstance.CurrentStep+1);
-            if (IsPlaceHolder(processStep.Target))
+            RemoveAllPendings(id);
+            if (processStep != null)
             {
-                var mail = GetStringValueFromEntryList(entries, processStep.Target.Substring(1, processStep.Target.Length - 2));
-                nextResponsibleUser = GetUserByMail(mail);
+                if (IsPlaceHolder(processStep.Target))
+                {
+                    var mail = GetStringValueFromEntryList(entries,
+                        processStep.Target.Substring(1, processStep.Target.Length - 2));
+                    nextResponsibleUser = GetUserByMail(mail);
+                }
+                else
+                {
+                    nextResponsibleUser =
+                        GetUserByRole(processStep.Target.ToLower()) ?? GetUserByMail(processStep.Target);
+                }
             }
-            else
-            {
-                nextResponsibleUser = GetUserByMail(processStep.Target);
-            }
-                        
+            
+            IncrementProcessInstance(id);
             if (nextResponsibleUser != null)
-            {
-                IncrementProcessInstance(id);
+            {   
                 SetNewResponsibleUser(id, nextResponsibleUser);
             }
             
@@ -283,7 +289,7 @@ namespace WebServerWPF
         private void RemoveAllPendings(int id)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"DELETE pendinginstance WHERE id = {id};";
+            cmd.CommandText = $"DELETE FROM pendinginstance WHERE instance_id = {id};";
             cmd.ExecuteNonQuery();
         }
         
@@ -330,6 +336,26 @@ namespace WebServerWPF
             return users;
         }
 
+        public User GetUserByRole(string role)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"SELECT * FROM user WHERE role = \"{role}\";";
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    return new User()
+                    {
+                        Email = reader.GetString(0),
+                        Password = reader.GetString(1),
+                        PermissionLevel = reader.GetInt32(2)
+                    };
+                }
+                return null;
+            }
+        }
+        
         public User GetUserByMail(string email)
         {
             var cmd = connection.CreateCommand();

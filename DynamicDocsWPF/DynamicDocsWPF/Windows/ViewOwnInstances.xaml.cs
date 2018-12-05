@@ -135,6 +135,7 @@ namespace DynamicDocsWPF.Windows
             var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
             _currentProcessObject = XmlHelper.ReadXmlFromString(processText);
             _dialogs = _currentProcessObject.GetStepAtIndex(0).Dialogs;
+            _dialogs.Reset();
             _entries = _networkHelper.GetEntries(SelectedInstance.Id);
             TryShowNextDialog(_entries);
 
@@ -165,7 +166,10 @@ namespace DynamicDocsWPF.Windows
                     Margin = new Thickness(10,0,10,0)
                 });
 
-                StepDescription.Text = _currentProcessObject.GetStepAtIndex(SelectedInstance.CurrentStep).Description;
+                if(SelectedInstance.CurrentStep < _currentProcessObject.ProcessStepCount)
+                    StepDescription.Text = _currentProcessObject.GetStepAtIndex(SelectedInstance.CurrentStep)?.Description;
+                else
+                    StepDescription.Text = SelectedInstance.Declined ? "Abgelehnt" : "Genehmigt";
             }
         }
 

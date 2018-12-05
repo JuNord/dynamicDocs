@@ -8,7 +8,7 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <ScrollViewer>
-            <TextBlock x:Name="Log" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontWeight="Bold" Background="Black" Foreground="LightGreen"/>
+            <TextBlock x:Name="Log" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontWeight="Bold" Background="Black" Foreground="LightGreen" TextWrapping="Wrap"/>
         </ScrollViewer>
     </Grid>
 </Window>

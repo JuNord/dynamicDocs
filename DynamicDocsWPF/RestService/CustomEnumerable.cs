@@ -20,6 +20,11 @@ namespace RestService
             
         }
 
+        public bool HasNext()
+        {
+            return _index < _elements.Count - 1;
+        }
+        
         public bool MoveNext()
         {
             if (_index + 1 < _elements.Count)

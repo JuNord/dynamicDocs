@@ -103,7 +103,7 @@
     <Compile Include="Windows\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ViewAllInstances.xaml.cs">
+    <Compile Include="Windows\ViewOwnInstances.xaml.cs">
       <DependentUpon>ViewOwnInstances.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ViewPendingInstances.xaml.cs">

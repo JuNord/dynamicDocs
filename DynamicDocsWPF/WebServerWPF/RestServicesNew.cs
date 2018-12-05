@@ -52,7 +52,7 @@ namespace WebServerWPF
 
             try
             {
-                if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
                 {
                     var reply = new ReplyGetProcessInstance()
                     {
@@ -129,7 +129,7 @@ namespace WebServerWPF
 
             try
             {
-                if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
                 {
                     var template = Database.GetProcessTemplateById(request.Id);
                     var text = File.ReadAllText(template.FilePath);
@@ -157,7 +157,7 @@ namespace WebServerWPF
 
             try
             {
-                if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
                 {
                     var template = Database.GetDocTemplateById(request.Id);
                     var reply = new ReplyGetDocTemplate()
@@ -183,7 +183,7 @@ namespace WebServerWPF
         {
             try
             {
-                if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
                 {
                     var reply = new ReplyGetProcessTemplateList()
                     {
@@ -205,7 +205,7 @@ namespace WebServerWPF
         {
             try
             {
-                if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
                 {
                     var reply = new ReplyGetDocTemplateList()
                     {
@@ -315,7 +315,7 @@ namespace WebServerWPF
 
             try
             {
-                if (IsPermitted(GetAuthUser(), 2) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
                 {
                     var reply = new ReplyGetEntryList()
                     {
@@ -518,7 +518,7 @@ namespace WebServerWPF
             var reply = new ReplyPostProcessUpdate();
             try
             {
-                var auth = IsPermitted(GetAuthUser(),2);
+                var auth = IsPermitted(GetAuthUser(),1);
                 switch (auth)
                 {
                     case AuthorizationResult.PERMITTED:
@@ -572,7 +572,7 @@ namespace WebServerWPF
             var reply = new ReplyPostProcessInstance();
             try
             {
-                var auth = IsPermitted(GetAuthUser(),2);
+                var auth = IsPermitted(GetAuthUser(),1);
                 switch (auth)
                 {
                     case AuthorizationResult.PERMITTED:
@@ -619,7 +619,7 @@ namespace WebServerWPF
             var reply = new ReplyPostEntry();
             try
             {
-                var auth = IsPermitted(GetAuthUser(),2);
+                var auth = IsPermitted(GetAuthUser(),1);
                 switch (auth)
                 {
                     case AuthorizationResult.PERMITTED:
