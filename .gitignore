@@ -2,3 +2,17 @@
 DynamicDocsWPF/DynamicDocsWPF/obj/Debug/DynamicDocsWPF\.csprojAssemblyReference\.cache
 
 DynamicDocsWPF/\.idea/\.idea\.DynamicDocsWPF/\.idea/
+
+DynamicDocsWPF/\.idea/
+
+DynamicDocsWPF/DynamicDocsWPF/bin/
+
+DynamicDocsWPF/DynamicDocsWPF/obj/
+
+DynamicDocsWPF/RestService/bin/
+
+DynamicDocsWPF/RestService/obj/
+
+DynamicDocsWPF/WebServerWPF/bin/
+
+DynamicDocsWPF/WebServerWPF/obj/
