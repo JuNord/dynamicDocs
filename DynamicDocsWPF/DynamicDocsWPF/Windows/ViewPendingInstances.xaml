@@ -12,6 +12,9 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <ListView Background="#7ed5ff" Foreground="White" BorderBrush="Transparent" Name="InstanceList" SelectionChanged="InstanceList_OnSelectionChanged">
+            <ListView.Effect>
+                <DropShadowEffect Color="Black" Direction="-90" Opacity="0.5" ShadowDepth="6" BlurRadius="25" />
+            </ListView.Effect>
             <!--ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -25,40 +28,40 @@
                 </DataTemplate>
             </ListView.ItemTemplate-->
         </ListView>
-        <Grid Grid.Column="1">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Border Grid.Row="1" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
-                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
-            </Border.Effect>
-            <Grid>
-                <ScrollViewer>
-                    <ContentPresenter Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                      Margin="40,20" MaxWidth="700"/>
-                </ScrollViewer>
-                <Rectangle Visibility="Visible" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="Aqua" Opacity="0"/>
+        <Grid Name="ContentSection" Visibility="Collapsed" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="1" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
+                </Border.Effect>
+                <Grid>
+                    <ScrollViewer>
+                        <ContentPresenter Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                          Margin="40,20" MaxWidth="700"/>
+                    </ScrollViewer>
+                    <Rectangle Visibility="Visible" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="Aqua" Opacity="0"/>
+                </Grid>
+            </Border>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                    <Button Click="Back_Click" Content="Zurück" Width="100" Height="35"
+                            VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                        <Button.Effect>
+                            <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                        </Button.Effect>
+                    </Button>
+                    <Button Name="BtnNext" Click="Next_Click" Content="Weiter" Width="100" Height="35"
+                            VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                        <Button.Effect>
+                            <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                        </Button.Effect>
+                    </Button>
+                </StackPanel>
             </Grid>
-        </Border>
-            <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                <Button Click="Back_Click" Content="Zurück" Width="100" Height="35"
-                        VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
-                    </Button.Effect>
-                </Button>
-                <Button Name="BtnNext" Click="Next_Click" Content="Weiter" Width="100" Height="35"
-                        VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
-                    </Button.Effect>
-                </Button>
-            </StackPanel>
+            
         </Grid>
-        <Rectangle Visibility="Visible" Name="Overlay" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#3CA4FF" Opacity="1"/>
-    </Grid>
 </UserControl>

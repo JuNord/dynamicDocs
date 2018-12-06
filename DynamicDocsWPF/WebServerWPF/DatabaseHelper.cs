@@ -239,7 +239,6 @@ namespace WebServerWPF
                 }
             }
             
-            IncrementProcessInstance(id);
             if (nextResponsibleUser != null)
             {   
                 SetNewResponsibleUser(id, nextResponsibleUser);

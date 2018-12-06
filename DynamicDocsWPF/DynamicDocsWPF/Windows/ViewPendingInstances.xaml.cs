@@ -196,7 +196,7 @@ namespace DynamicDocsWPF.Windows
             {
                 if (InstanceList.SelectedIndex != -1)
                 {
-                    Overlay.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Visible : Visibility.Collapsed;
+                    ContentSection.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Collapsed : Visibility.Visible;
 
                     SelectedInstance =
                         _networkHelper.GetProcessInstanceById(((PendingInstance) InstanceList.SelectedItem).InstanceId);

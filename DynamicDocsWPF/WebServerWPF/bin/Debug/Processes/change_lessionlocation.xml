@@ -11,7 +11,7 @@
       <text name="first_lessonlocation" description="Ort des Unterrichtsbeginns bei 1. Unterrichtsstunde: "/>
     </dialog>
     <dialog>
-      <text name="reason" description="Begr�ndung/F�cherbezug" obigatory="true"/>
+      <text name="reason" description="Begründung/Fächerbezug" obigatory="true"/>
     </dialog>
   </process-step>
   <process-step name="validationBySecretary" description="Genehmigung durch Sekretariat" target="secretary">

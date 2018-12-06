@@ -184,7 +184,7 @@ namespace DynamicDocsWPF.Windows
         
         private void LoadAndShowSelection()
         {
-            Overlay.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Visible : Visibility.Collapsed;
+            ContentSection.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Collapsed : Visibility.Visible;
 
             if (SelectedInstance != null)
             {
@@ -194,6 +194,7 @@ namespace DynamicDocsWPF.Windows
                 _entries = _networkHelper.GetEntries(SelectedInstance.Id);
                 TryShowNextDialog(_entries);
 
+                ProgressPanel.Children.Clear();
                 for (int i = 0; i < _currentProcessObject.ProcessStepCount; i++)
                 {
                     Color color = Colors.Transparent;
@@ -212,7 +213,7 @@ namespace DynamicDocsWPF.Windows
                     {
                         color = Colors.LightGray;
                     }
-
+                    
                     ProgressPanel.Children.Add(new Ellipse()
                     {
                         Width = width,

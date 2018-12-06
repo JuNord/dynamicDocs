@@ -13,9 +13,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock x:Name="ProcessSelect_InfoText" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="28" FontFamily="Segoe UI Light" Foreground="White" Margin="50,20,20,20" >
-            <Run Text="Welchen Prozess wollen Sie anstoßen?" />
-            </TextBlock>
+        <TextBlock Text="Welchen Prozess wollen Sie starten?" Name="ProcessSelect_InfoText" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="28" FontFamily="Segoe UI Light" Foreground="White" Margin="50,20,20,20"/>
         <Border Grid.Row="1" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
             <Border.Effect>
@@ -24,19 +22,15 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock HorizontalAlignment="Left" FontSize="21" Foreground="#3384D1" FontFamily="Segoe UI Light" Margin="10,5,0,0" >
                     <Run Text="Prozessauswahl"/>
                 </TextBlock>
-                <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,0,20,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Label FontSize="13" Grid.Column="0" Content="Prozess:" HorizontalAlignment="Left" Width="70" />
-                    <ComboBox x:Name="ProcessCombobox"  Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0"/>
-                </Grid>
+
+                    
+                <ComboBox Grid.Row="1" x:Name="ProcessCombobox" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="20,0,20,0"/>
+
             </Grid>
             
         </Border>

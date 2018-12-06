@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Threading;
@@ -49,9 +50,14 @@ namespace WebServerWPF
         {
             mainWindow = this;
             InitializeComponent();
+
             try
             {
                 RunService();
+            }
+            catch (TargetInvocationException)
+            {
+                PostToLog("Der Datenbankserver ist nicht erreichbar.");
             }
             catch (Exception e)
             {

@@ -34,11 +34,11 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Background="#0076cb">
-                <Button Click="NewInstance_Click" Width="40" Height="40" Foreground="White" FontSize="22" FontFamily="Segoe MDL2 Assets" Content="&#xE710;" Background="Transparent" BorderBrush="Transparent"/>
-            </StackPanel>
+            <Grid Grid.Row="1">
+                <Button Click="NewInstance_Click" HorizontalAlignment="Right" Width="40" Height="40" Foreground="White" FontSize="22" FontFamily="Segoe MDL2 Assets" Content="&#xE710;" Background="Transparent" BorderBrush="Transparent"/>
+            </Grid>
         </Grid>
-        <Grid Grid.Column="1">
+        <Grid Name="ContentSection" Visibility="Collapsed" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -72,6 +72,6 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <Rectangle Visibility="Visible" Name="Overlay" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#3CA4FF" Opacity="1"/>
+        
     </Grid>
 </UserControl>

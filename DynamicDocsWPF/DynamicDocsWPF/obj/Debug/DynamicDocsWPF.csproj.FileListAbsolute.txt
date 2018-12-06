@@ -161,7 +161,6 @@ C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\sebas\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ManageUserPermissions.baml
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ManageUserPermissions.g.cs
-C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\bin\Debug\Windows\Resources\officebg1.jpg
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ManageUserPermissions.baml
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ViewOwnInstances.g.cs
 C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ViewOwnInstances.baml
@@ -171,3 +170,4 @@ C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\ob
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ViewPendingInstances.g.cs
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ManageUserPermissions.baml
 C:\Users\sebas_qgewjv\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\Windows\ViewOwnInstances.baml
+C:\Users\sebastian.bauer\RiderProjects\dynamicDocs\DynamicDocsWPF\DynamicDocsWPF\obj\Debug\App.baml

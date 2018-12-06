@@ -7,12 +7,14 @@
         xmlns:windows="clr-namespace:DynamicDocsWPF.Windows"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="A.u.F.E.T. v 1.0" Height="400" Width="525" Background="#3CA4FF" Foreground="White">
+        Title="A.u.F.E.T. v 1.0" Height="400" Width="525" Background="#3CA4FF" Foreground="White"
+        WindowState="Maximized">
     <Window.Resources>
         <Style TargetType="TabItem">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
+                        
                         <Border Name="Border" BorderThickness="0,0,0,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="2,0">
                             <ContentPresenter x:Name="ContentSite"
                                               VerticalAlignment="Center"
@@ -43,6 +45,9 @@
         <TextBlock x:Name="InfoBlock" HorizontalAlignment="Center" Text="Willkommen zu Ihrem A.u.F.E.T.!" FontSize="28"
                    FontFamily="Segoe UI Light" Margin="20" />
         <TabControl Background="#3CA4FF"  Grid.Row="1" BorderThickness="0" Padding="0,1,0,0" SelectedIndex="0">
+            <TabControl.Effect>
+                <DropShadowEffect Color="Black" Direction="-90" Opacity="0.5" ShadowDepth="6" BlurRadius="25" />
+            </TabControl.Effect>
             <TabItem Name="MyProcesses" TabIndex="0" Header="Meine Prozesse">
                 <ContentPresenter x:Name="OwnInstances" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </TabItem>

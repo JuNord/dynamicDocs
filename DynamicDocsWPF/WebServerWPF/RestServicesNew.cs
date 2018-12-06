@@ -360,10 +360,20 @@ namespace WebServerWPF
                                 Description = process.Description,
                                 FilePath = path
                             };
-                            MainWindow.PostToLog("Registering in Database...");
-                            Database.AddProcessTemplate(processTemplate);
-                            MainWindow.PostToLog("Done!");
+                            try{
+                                MainWindow.PostToLog("Registering in Database...");
+                                Database.AddProcessTemplate(processTemplate);
+                                MainWindow.PostToLog("Done!");
+                            }
+                            catch (MySqlException e)
+                            {
+                                if (e.Message.Contains("Duplicate entry"))
+                                {
+                                    reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
+                                }
 
+                                PrintException(e);
+                            }
                             File.WriteAllText(path, request.Text);
                         }
                         else
@@ -381,15 +391,7 @@ namespace WebServerWPF
                         break;
                 }
             }
-            catch (MySqlException e)
-            {
-                if (e.Message.Contains("Duplicate entry"))
-                {
-                    reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
-                }
-
-                PrintException(e);
-            }
+            
             catch (XmlException e)
             {
                 PrintException(e);

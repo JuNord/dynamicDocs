@@ -1,4 +1,4 @@
-<process name="change_lessionlocation_calc" description="[Calc] Antrag auf Verlegung des Unterrichtsortes">
+<process name="change_lessionlocation" description="Antrag auf Verlegung des Unterrichtsortes">
   <process-step name="Initialisation" description="Erstellung des Antrages">
     <dialog>
       <teacher-dropdown name="teacher" description="Lehrer/in: "/>
@@ -6,9 +6,7 @@
     </dialog>
     <dialog>
       <date-dropdown name="date" description="Datum: "/>
-      <number name="lastlesson" description="Letzte Stunde: " obligatory="true"/>
-      <number name="firstlesson" description="Erste Stunde: " obligatory="true"/>
-      <number name="difference" description="Differenz: " calculation="[lastlesson]-[firstlesson]"/>
+      <number name="lessons" description="Unterrichtsstunden: " obligatory="true"/>
       <text name="new_lessonlocation" description="Neuer Unterrichtsort: " obligatory="true"/>
       <text name="first_lessonlocation" description="Ort des Unterrichtsbeginns bei 1. Unterrichtsstunde: "/>
     </dialog>
