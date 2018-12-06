@@ -223,7 +223,7 @@ namespace WebServerWPF
         {
             User nextResponsibleUser = null;
             var entries = GetEntries(id);
-            var processStep = processObject.GetStepAtIndex(processinstance.CurrentStep+1);
+            var processStep = processObject.GetStepAtIndex(processinstance.CurrentStep);
             RemoveAllPendings(id);
             if (processStep != null)
             {
