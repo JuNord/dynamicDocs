@@ -35,7 +35,7 @@ namespace DynamicDocsWPF.Windows
             }
             else
             {
-                var result = new NetworkHelper("http://localhost:8000/Service",User).Register();
+                var result = new NetworkHelper(ConfigurationManager.GetInstance().Url,User).Register();
                 switch (result)
                 {
                     case UploadResult.USER_EXISTS:

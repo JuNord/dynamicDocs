@@ -44,8 +44,6 @@
   <ItemGroup>
     <Content Include="ChangeLocation.xml" />
     <Content Include="Training.xml" />
-    <Content Include="XMLFile1.xml" />
-    <Content Include="XMLFile2.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DynamicDocsWPF\DynamicDocsWPF.csproj">

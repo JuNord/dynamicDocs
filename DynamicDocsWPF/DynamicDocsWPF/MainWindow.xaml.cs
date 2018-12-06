@@ -49,7 +49,7 @@ namespace DynamicDocsWPF
                 if (login.DialogResult == true)
                 {
                     _user = new User(login.Email, login.Password);
-                    _networkHelper = new NetworkHelper("http://localhost:8000/Service", _user);
+                    _networkHelper = new NetworkHelper(ConfigurationManager.GetInstance().Url, _user);
                     int level = _networkHelper.GetPermissionLevel();
                  
                     NoPermissionText.Visibility = Visibility.Collapsed;

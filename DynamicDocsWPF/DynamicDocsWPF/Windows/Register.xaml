@@ -9,6 +9,50 @@
         Background="#3CA4FF"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ControlTemplate x:Key="TBcontroltemplate" TargetType="{x:Type TextBoxBase}">
+            <Border Background="{TemplateBinding Background}" 
+                    x:Name="Bd"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" 
+                    CornerRadius="14"> 
+                <ScrollViewer x:Name="PART_ContentHost"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" TargetName="Bd"/>
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="Width" Value="Auto">
+                    <Setter Property="MinWidth" Value="100"/>
+                </Trigger>
+                <Trigger Property="Height" Value="Auto">
+                    <Setter Property="MinHeight" Value="20"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="PBControltemplate" TargetType="{x:Type PasswordBox}">
+            <Border Background="{TemplateBinding Background}" 
+                    x:Name="Bd"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" 
+                    CornerRadius="14"> 
+                <ScrollViewer x:Name="PART_ContentHost"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" TargetName="Bd"/>
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="Width" Value="Auto">
+                    <Setter Property="MinWidth" Value="100"/>
+                </Trigger>
+                <Trigger Property="Height" Value="Auto">
+                    <Setter Property="MinHeight" Value="20"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
     <Grid>
         <Grid.RowDefinitions>
@@ -40,7 +84,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Label FontSize="13" Grid.Column="0" Content="Email:" HorizontalAlignment="Left" Width="70" />
-                        <TextBox VerticalContentAlignment="Center" x:Name="EmailBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0"/>
+                        <TextBox Template="{StaticResource TBcontroltemplate}" VerticalContentAlignment="Center" x:Name="EmailBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0"/>
                     </Grid>
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20">
                         <Grid.ColumnDefinitions>
@@ -48,7 +92,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Label FontSize="13" Grid.Column="0" Content="Passwort:" HorizontalAlignment="Left" Width="70" />
-                        <PasswordBox VerticalContentAlignment="Center" x:Name="PasswordBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0" Width="200"/>
+                        <PasswordBox Template="{StaticResource PBControltemplate}" VerticalContentAlignment="Center" x:Name="PasswordBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0" Width="200"/>
                     </Grid>
                 </StackPanel>
             </Grid>

@@ -4,6 +4,7 @@ using DynamicDocsWPF.HelperClasses;
 using DynamicDocsWPF.Model;
 using RestService;
 using RestService.Model.Database;
+using ConfigurationManager = DynamicDocsWPF.HelperClasses.ConfigurationManager;
 using Window = System.Windows.Window;
 
 namespace DynamicDocsWPF.Windows
@@ -30,7 +31,7 @@ namespace DynamicDocsWPF.Windows
             }
             else
             {
-                if (new NetworkHelper("http://localhost:8000/Service",User).CheckAuthorization() ==
+                if (new NetworkHelper(ConfigurationManager.GetInstance().Url,User).CheckAuthorization() ==
                     AuthorizationResult.AUTHORIZED)
                 {
                     DialogResult = true;
