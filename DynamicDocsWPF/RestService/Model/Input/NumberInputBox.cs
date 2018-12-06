@@ -1,6 +1,7 @@
 using System;
 using System.CodeDom;
 using System.Windows.Controls;
+using DynamicDocsWPF.Model;
 using RestService.Model.Base;
 
 namespace RestService.Model.Input
@@ -86,12 +87,14 @@ namespace RestService.Model.Input
             }
             else if (isValue1Date && isValue2Date && value1Date > value2Date)
             {
-                double result = (value1Date - value2Date).TotalDays;
+                double result = value2Date.BusinessDaysUntil(value1Date);
                 ElevatedControl.Text = $"{result}";
                 return true;
             }
 
             return false;
         }
+        
+       
     }
 }

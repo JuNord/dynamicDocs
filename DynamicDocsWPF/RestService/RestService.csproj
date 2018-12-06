@@ -73,6 +73,7 @@
     <Compile Include="Model\Database\Roles.cs" />
     <Compile Include="Model\Database\ProcessInstance.cs" />
     <Compile Include="Model\Database\User.cs" />
+    <Compile Include="Model\DateExtension.cs" />
     <Compile Include="Model\Input\BaseInputElement.cs" />
     <Compile Include="Model\Input\ClassDropDown.cs" />
     <Compile Include="Model\Input\DateDropdown.cs" />

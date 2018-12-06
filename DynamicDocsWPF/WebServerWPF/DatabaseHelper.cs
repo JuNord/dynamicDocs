@@ -174,6 +174,7 @@ namespace WebServerWPF
             var processTemplate = GetProcessTemplateById(processInstance.TemplateId);
             var processObject = XmlHelper.ReadXmlFromString(File.ReadAllText(processTemplate.FilePath));
             
+            IncrementProcessInstance(instanceId);
             PushToNextUser(instanceId, processObject, GetProcessInstanceById(instanceId));
             
             return instanceId;  
@@ -379,7 +380,7 @@ namespace WebServerWPF
         public void AddUser(User user)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO User VALUES (\"{user.Email}\",\"{user.Password}\",0);";
+            cmd.CommandText = $"INSERT INTO User VALUES (\"{user.Email}\",\"{user.Password}\",0 , \"\");";
 
             cmd.ExecuteNonQuery();
         }

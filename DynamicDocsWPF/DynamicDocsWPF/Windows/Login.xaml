@@ -49,7 +49,6 @@
                         </Grid.ColumnDefinitions>
                         <Label FontSize="13" Grid.Column="0" Content="Passwort:" HorizontalAlignment="Left" Width="70" />
                         <PasswordBox Padding="10,0" VerticalContentAlignment="Center" x:Name="PasswordBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0" Width="200"/>
-                        <DatePicker Grid.Column="1" SelectedDate="05.10.2019"></DatePicker>
                     </Grid>
                 </StackPanel>
             </Grid>

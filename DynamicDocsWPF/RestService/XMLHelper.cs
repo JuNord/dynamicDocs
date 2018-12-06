@@ -50,7 +50,7 @@ namespace RestService
                                 #region SurroundingTags
 
                                 case Wording.Process:
-                                    if(AnyStringNullOrWhiteSpace(name, description)) return XmlState.MISSINGATTRIBUTE;
+                                    if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.MISSINGATTRIBUTE;
                                     processObject = new ProcessObject(name, description);
                                     break;
                                 case Wording.ProcessStep:
@@ -64,7 +64,8 @@ namespace RestService
                                     {
                                         if (AnyStringNullOrWhiteSpace(name, description))
                                             return XmlState.MISSINGATTRIBUTE;
-                                    }                                 
+                                    }
+
                                     processStep = new ProcessStep(processObject, name, description, target);
                                     processObject.AddStep(processStep);
                                     break;
@@ -80,14 +81,16 @@ namespace RestService
 
                                 case Wording.TextInputBox:
                                     if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.MISSINGATTRIBUTE;
-                                    if (dialog == null || processStep == null || processObject == null) return XmlState.MISSINGPARENTTAG;
+                                    if (dialog == null || processStep == null || processObject == null)
+                                        return XmlState.MISSINGPARENTTAG;
                                     var textInputBox = new TextInputBox(dialog, name, description, ToBool(obligatory));
                                     dialog.AddElement(textInputBox);
                                     break;
 
                                 case Wording.NumberInputBox:
                                     if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.MISSINGATTRIBUTE;
-                                    if (dialog == null || processStep == null || processObject == null) return XmlState.MISSINGPARENTTAG;
+                                    if (dialog == null || processStep == null || processObject == null)
+                                        return XmlState.MISSINGPARENTTAG;
                                     var numberInputBox =
                                         new NumberInputBox(dialog, name, description, ToBool(obligatory), calculation);
                                     dialog.AddElement(numberInputBox);
@@ -95,7 +98,8 @@ namespace RestService
 
                                 case Wording.TeacherDropdown:
                                     if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.MISSINGATTRIBUTE;
-                                    if (dialog == null || processStep == null || processObject == null) return XmlState.MISSINGPARENTTAG;
+                                    if (dialog == null || processStep == null || processObject == null)
+                                        return XmlState.MISSINGPARENTTAG;
                                     var teacherDropdown =
                                         new TeacherDropdown(dialog, name, description, ToBool(obligatory));
                                     dialog.AddElement(teacherDropdown);
@@ -103,21 +107,25 @@ namespace RestService
 
                                 case Wording.StudentDropdown:
                                     if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.MISSINGATTRIBUTE;
-                                    if (dialog == null || processStep == null || processObject == null) return XmlState.MISSINGPARENTTAG;
+                                    if (dialog == null || processStep == null || processObject == null)
+                                        return XmlState.MISSINGPARENTTAG;
                                     var studentDropdown =
                                         new StudentDropdown(dialog, name, description, ToBool(obligatory));
                                     dialog.AddElement(studentDropdown);
                                     break;
                                 case Wording.DateDropdown:
                                     if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.MISSINGATTRIBUTE;
-                                    if (dialog == null || processStep == null || processObject == null) return XmlState.MISSINGPARENTTAG;
-                                    var dateDropdown = new DateDropdown(dialog, name, description, ToBool(obligatory), calculation);
+                                    if (dialog == null || processStep == null || processObject == null)
+                                        return XmlState.MISSINGPARENTTAG;
+                                    var dateDropdown = new DateDropdown(dialog, name, description, ToBool(obligatory),
+                                        calculation);
                                     dialog.AddElement(dateDropdown);
                                     break;
                                 case
                                     Wording.ClassDropdown:
                                     if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.MISSINGATTRIBUTE;
-                                    if (dialog == null || processStep == null || processObject == null) return XmlState.MISSINGPARENTTAG;
+                                    if (dialog == null || processStep == null || processObject == null)
+                                        return XmlState.MISSINGPARENTTAG;
                                     var classDropdown =
                                         new ClassDropDown(dialog, name, description, ToBool(obligatory));
                                     dialog.AddElement(classDropdown);
@@ -126,6 +134,7 @@ namespace RestService
                                 #endregion
 
                                 #region ProcessTags              
+
                                 case Wording.ArchivePermission:
                                     if (AnyStringNullOrWhiteSpace(target)) return XmlState.MISSINGATTRIBUTE;
                                     if (processObject == null) return XmlState.MISSINGPARENTTAG;
@@ -143,7 +152,8 @@ namespace RestService
                                     else processStep.AddNotification(mailNotification);
                                     break;
                                 case Wording.Receipt:
-                                    if (AnyStringNullOrWhiteSpace(draftname, filepath)) return XmlState.MISSINGATTRIBUTE;
+                                    if (AnyStringNullOrWhiteSpace(draftname, filepath))
+                                        return XmlState.MISSINGATTRIBUTE;
                                     if (processStep == null || processObject == null) return XmlState.MISSINGPARENTTAG;
                                     var receipt = new ReceiptElement(processStep, draftname, filepath,
                                         ReceiptType.WORD);
@@ -159,14 +169,16 @@ namespace RestService
                                     processStep.AddValidation(validation);
                                     break;
                                 case Wording.ValidationAccepted:
-                                    if (validation == null || processStep == null || processObject == null) return XmlState.MISSINGPARENTTAG;
-                                    
+                                    if (validation == null || processStep == null || processObject == null)
+                                        return XmlState.MISSINGPARENTTAG;
+
                                     validation.Accepted = new ValidationAccepted(validation);
-                                    
+
                                     break;
                                 case Wording.ValidationDeclined:
-                                    if (validation == null || processStep == null || processObject == null) return XmlState.MISSINGPARENTTAG;
-                                    
+                                    if (validation == null || processStep == null || processObject == null)
+                                        return XmlState.MISSINGPARENTTAG;
+
                                     validation.Declined = new ValidationDeclined(validation);
                                     break;
 
@@ -195,8 +207,13 @@ namespace RestService
                             }
                         }
 
-                   
+
                 }
+            }
+            catch (XmlException)
+            {
+                processObject = null;
+                return XmlState.INVALID;
             }
             catch (NullReferenceException)
             {
@@ -219,7 +236,7 @@ namespace RestService
 
         private static bool AnyStringNullOrWhiteSpace(params string[] values)
         {
-            return values.All(string.IsNullOrWhiteSpace);
+            return values.Any(e => string.IsNullOrWhiteSpace(e));
         }
         
         private static bool IsValidProcess(ProcessObject processObject)
