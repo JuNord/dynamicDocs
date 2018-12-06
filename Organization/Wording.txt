@@ -1,0 +1,35 @@
+process - Äußerer Tag zur Festlegung eines neuen Prozesses
+process-step - Ein einzelner Prozessschritt mit einem genauen Ziel
+dialog - Eine einzelne Ansicht mit Eingabefeldern
+
+Eingabe Attribute:
+name : string - Der technische Name der Eingabemethode. Datenbanktabellen und Platzhalter in Formularen werden an diesem Namen erkannt.
+description : string - Der in der UI erscheinende Bezeichner.
+obligatory : bool - Erlaubt leere Eingaben ?
+
+Syntax-Beispiel: <number name="[left_vac_days]" description="Resturlaubstage" obligatory="true"/>
+
+Textboxes:
+number - Erlaubt ganzzahlige Eingaben
+decimal - Erlaubt dezimale Eingaben
+text - Erlaubt beliebige Eingaben
+
+Dropdownmenus:
+teacher-dropdown: Lädt eine Liste von Lehrern aus der Datenbank und gibt standardmäßig Vor- und Nachname zurück
+student-dropdown: Lädt eine Liste von Schülern aus der Datenbank und gibt standardmäßig Vor- und Nachname zurück
+
+Other input types:
+date-picker: Zeigt eine Datumsauswahl an und gibt ein Datum im Format DD.MM.JJJJ zurück
+
+Process Elements:
+validation - Zeigt einen Button zur Genehmigung des aktuellen Standes an
+mailnotify - Sendet eine Benachrichtigungsemail
+
+Attribute:
+target - Muss vom Typ teacher oder ein Standardtyp sein (z.B. secretary) und gibt das Ziel an das die Email erhalten soll
+text - Der Inhalt der Email. Darf Platzhalter beinhalten.
+
+receipt - Erzeugt beim aktuellen Bearbeitenden einen Beleg nach der gegebenen Vorlage
+
+Attribute:
+filename = Name der Vorlage

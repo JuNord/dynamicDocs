@@ -1,0 +1,19 @@
+<process name="change_lessionlocation" description="Antrag auf Verlegung des Unterrichtsortes">
+  <process-step name="Initialisation" description="Erstellung des Antrages">
+    <dialog>
+      <teacher-dropdown name="teacher" description="Lehrer/in: "/>
+      <class-dropdown name="class" description="Klasse: "/>
+      <date-dropdown name="date" description="Datum: "/>
+      <number name="lessions" description="Unterrichtsstunden: " obligatory="true"/>
+      <text name="new_lessionlocation" description="Neuer Unterrichtsort: " obigatory="true"/>
+      <text name="firstlessionlocation" description="Ort des Unterrichtsbeginns bei 1. Unterrichtsstunde: "/>
+      <text name="reason" description="Begründung/Fächerbezug" obigatory="true"/>
+    </dialog>
+  </process-step>
+  <process-step name="validationBySecretary" description="Genehmigung durch Sekretariat" target="secretary">
+    <validation locks="true"/>
+    <mailnotify target="teacher" text="Antrag wurde durch das Sekretariat bestätigt"/>
+  </process-step>
+</process>
+
+
