@@ -256,13 +256,26 @@ namespace DynamicDocsWPF.Windows
                 {
                     foreach (var element in dialog.Elements)
                     {
-                        var entry = _entries.First(e => e.FieldName == element.Name);
-                        var dataOld = entry.Data;
-                        if (!dataOld.Equals(element.GetFormattedValue()))
+                        var entry = _entries.FirstOrDefault(e => e.FieldName == element.Name);
+
+                        if (entry != null)
                         {
+                            var dataOld = entry.Data;
+                            if (dataOld.Equals(element.GetFormattedValue())) continue;
                             entry.Data = element.GetFormattedValue();
                             _networkHelper.PostEntryUpdate(entry);
                         }
+                        else
+                        {
+                            entry = new Entry()
+                            {
+                                InstanceId = SelectedInstance.Id,
+                                FieldName = element.Name,
+                                Data = element.GetFormattedValue()
+                            };
+                            _networkHelper.CreateEntry(entry);
+                        }
+
                     }
                 }             
             }

@@ -155,6 +155,8 @@
     <Content Include="Designstuff.xml" />
     <Content Include="PlantUML\Database.txt" />
     <Content Include="PlantUML\Network.txt" />
+    <Content Include="PlantUML\UML - Copy - Copy.txt" />
+    <Content Include="PlantUML\UML - Copy.txt" />
     <Content Include="PlantUML\UML.txt" />
     <Content Include="PlantUML\WebServer.txt" />
   </ItemGroup>

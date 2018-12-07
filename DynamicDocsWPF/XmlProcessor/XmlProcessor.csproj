@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ChangeLocation.xml" />
+    <Content Include="Studienfahrt.xml" />
     <Content Include="Training.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -6,52 +6,49 @@
 hide methods
 hide stereotypes
 
-User ||--o{ RunningProcess
-ProcessTemplate ||--o{ RunningProcess
-User ||--o{ ArchivedProcess
-ProcessTemplate ||--o{ ArchivedProcess
+User ||--o{ ProcessInstance
+ProcessTemplate ||--o{ ProcessInstance
 User ||--o{ ArchivePermission
-ArchivedProcess ||--o{ ArchivePermission
-RunningProcess ||--|{ Entry
-Roles ||--|| User
+ProcessInstance ||--o{ ArchivePermission
+ProcessInstance ||--|{ Entry
+PendingInstance ||--|| ProcessInstance
+PendingInstance ||--|| User
 
 
 table(User) {
-    primary_key(User_ID : int)
+    primary_key(Email : string)
     Password_Hash : string
     PermissionLevel : int
+    Role : string
 }
 
 table(DocTemplate){
-    primary_key(DocTemplate_ID : string)
+    primary_key(Id : string)
     File_Path : string
 }
 
 table(ProcessTemplate) {
-    primary_key(Process_ID : string)
-    File_Path : string
+    primary_key(Id : string)
+    FilePath : string
     Description : string
 }
 
-table(RunningProcess){
-    primary_key(CurrentProcess_ID : int)
-    foreign_key(ProcessTemplate_ID : string)
+table(PendingInstance){
+    primforeign_key(Instance_Id : Int)
+    primforeign_key(Responsible_user_id : string)
+}
+
+table(ProcessInstance){
+    primary_key(Id : int)
+    foreign_key(Template_ID : string)
     foreign_key(Owner_ID : int)
     CurrentStep : int
     Declined : bool
-}
-
-table(Roles){
-    primary_key(Role_ID : string)
-    foreign_key(User_ID : int)
-}
-
-table(ArchivedProcess){
-    primary_key(CurrentProcess_ID : int)
-    foreign_key(ProcessTemplate_ID : string)
-    foreign_key(Owner_ID : int)
-    CurrentStep : int
-    Declined : bool
+    Archived : bool
+    Locked : bool
+    Created : DateTime
+    Changed : TimeStamp
+    Subject : string
 }
 
 table(ArchivePermission){
@@ -63,8 +60,6 @@ table(Entry){
     primary_key(Entry_ID : int)
     foreign_key(Process_ID : int)
     FieldName : string
-    DataType : string
     Data : string   
-    PermissionLevel : int
 }
 @enduml
