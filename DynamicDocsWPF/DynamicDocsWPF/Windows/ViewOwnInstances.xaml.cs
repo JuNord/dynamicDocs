@@ -206,13 +206,15 @@ namespace DynamicDocsWPF.Windows
                     }
                     else if (i == SelectedInstance.CurrentStep)
                     {
-                        color = Colors.White;
+                        color = SelectedInstance.Declined ? Colors.Red : Colors.White;
                         width = 15;
                     }
                     else if (i > SelectedInstance.CurrentStep)
                     {
                         color = Colors.LightGray;
                     }
+
+
                     
                     ProgressPanel.Children.Add(new Ellipse()
                     {
@@ -221,12 +223,16 @@ namespace DynamicDocsWPF.Windows
                         Fill = new SolidColorBrush(color),
                         Margin = new Thickness(10, 0, 10, 0)
                     });
-
+                  
                     if (SelectedInstance.CurrentStep < _currentProcessObject.ProcessStepCount)
+                    {
                         StepDescription.Text = _currentProcessObject.GetStepAtIndex(SelectedInstance.CurrentStep)
                             ?.Description;
-                    else
-                        StepDescription.Text = SelectedInstance.Declined ? "Abgelehnt" : "Genehmigt";
+
+                        if (SelectedInstance.Declined)
+                            StepDescription.Text += " - Abgelehnt";
+                    }
+                    else StepDescription.Text = "Genehmigt.";
                 }
             }
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Net;
 using System.Text;
 using System.Windows;
@@ -34,12 +35,23 @@ namespace DynamicDocsWPF.Windows
             InstanceList.ItemsSource = TryGetResponsibilities();
         }
 
-        private List<PendingInstance> TryGetResponsibilities()
+        private List<ProcessInstance> TryGetResponsibilities()
         {
             try
             {
                 var responsibilities = _networkHelper.GetResponsibilities();
-                return responsibilities;
+                var instances = new List<ProcessInstance>();
+                
+                foreach (var responsibility in responsibilities)
+                {
+                    var instance = _networkHelper.GetProcessInstanceById(responsibility.InstanceId);
+                    if (instance != null)
+                    {
+                        instances.Add(instance);
+                    }
+                }
+                
+                return instances;
             }
             catch (WebException)
             {
@@ -196,10 +208,11 @@ namespace DynamicDocsWPF.Windows
             {
                 if (InstanceList.SelectedIndex != -1)
                 {
-                    ContentSection.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Collapsed : Visibility.Visible;
+                    ContentSection.Visibility =
+                        InstanceList.SelectedIndex == -1 ? Visibility.Collapsed : Visibility.Visible;
 
                     SelectedInstance =
-                        _networkHelper.GetProcessInstanceById(((PendingInstance) InstanceList.SelectedItem).InstanceId);
+                        _networkHelper.GetProcessInstanceById(((ProcessInstance) InstanceList.SelectedItem).Id);
                     _entries = _networkHelper.GetEntries(SelectedInstance.Id);
 
                     var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
@@ -213,6 +226,12 @@ namespace DynamicDocsWPF.Windows
                 }
             }
             catch (NullReferenceException)
+            {
+                new InfoPopup(MessageBoxButton.OK,
+                        "Leider konnte der gewählte Prozess nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
+                    .ShowDialog();
+            }
+            catch (Exception)
             {
                 new InfoPopup(MessageBoxButton.OK,
                         "Leider konnte der gewählte Prozess nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Threading;
@@ -23,7 +24,7 @@ namespace WebServerWPF
         private static void RunService()
         {
             _serviceHost = new WebServiceHost(typeof(RestServiceNew));
-            var httpBinding = new WebHttpBinding();
+            var httpBinding = new WSHttpBinding();
             var readerQuotas = new XmlDictionaryReaderQuotas
             {
                 MaxStringContentLength = MaxRequestSize,
@@ -34,11 +35,12 @@ namespace WebServerWPF
             };
 
             httpBinding.GetType().GetProperty("ReaderQuotas")?.SetValue(httpBinding, readerQuotas, null);
-            httpBinding.MaxBufferSize = MaxRequestSize;
             httpBinding.MaxReceivedMessageSize = MaxRequestSize;
             
             _serviceHost.AddServiceEndpoint(typeof(IRestServiceNew), httpBinding, new Uri(BaseUrl));
 
+            _serviceHost.Credentials.ServiceCertificate.SetCertificate(StoreLocation.LocalMachine, StoreName.My, X509FindType.FindBySubjectName, "atiw.de");
+            
             _serviceHost.Open();
 
             PostToLog("Server Running");

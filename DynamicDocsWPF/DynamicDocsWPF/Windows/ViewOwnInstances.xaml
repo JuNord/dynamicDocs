@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:h="clr-namespace:DynamicDocsWPF.HelperClasses"
         xmlns:local="clr-namespace:DynamicDocsWPF.Windows"
         mc:Ignorable="d"
         Background="#3CA4FF"
         Foreground="White">
+    <UserControl.Resources>
+        <h:BoolToColorConverter x:Key="BoolToColorConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -28,7 +32,7 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding Subject}" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding Subject}" FontSize="14" FontWeight="Bold" Foreground="{Binding Declined, Converter = {StaticResource BoolToColorConverter}}"/>
                             <TextBlock Grid.Row="1" Text="{Binding OwnerId}" FontSize="12" FontWeight="Light"/>
                         </Grid>
                     </DataTemplate>

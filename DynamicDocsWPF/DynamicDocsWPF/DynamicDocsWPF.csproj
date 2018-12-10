@@ -78,6 +78,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="HelperClasses\BoolToColorConverter.cs" />
     <Compile Include="HelperClasses\Configuration.cs" />
     <Compile Include="HelperClasses\ConfigurationManager.cs" />
     <Compile Include="HelperClasses\IReceiptHelper.cs" />
