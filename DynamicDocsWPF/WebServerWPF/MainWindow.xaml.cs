@@ -24,7 +24,7 @@ namespace WebServerWPF
         private static void RunService()
         {
             _serviceHost = new WebServiceHost(typeof(RestServiceNew));
-            var httpBinding = new BasicHttpBinding();
+            var httpBinding = new WebHttpBinding();
             var readerQuotas = new XmlDictionaryReaderQuotas
             {
                 MaxStringContentLength = MaxRequestSize,
@@ -37,13 +37,13 @@ namespace WebServerWPF
             httpBinding.GetType().GetProperty("ReaderQuotas")?.SetValue(httpBinding, readerQuotas, null);
             httpBinding.MaxReceivedMessageSize = MaxRequestSize;
             httpBinding.MaxBufferSize = MaxRequestSize;
-            
-            _serviceHost.AddServiceEndpoint(typeof(IRestServiceNew), httpBinding, new Uri(ConfigurationManager.GetInstance().Url));
+
+            var url = ConfigurationManager.GetInstance().Url;
+            PostToLog(url);
+            _serviceHost.AddServiceEndpoint(typeof(IRestServiceNew), httpBinding, new Uri(url));
             _serviceHost.Open();
 
             PostToLog("Server Running");
-            
-            
         }
         
         public MainWindow()
@@ -74,9 +74,7 @@ namespace WebServerWPF
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            PostToLog("Server stopping...");
             base.OnClosing(e);            
-            Thread.Sleep(500);
             _serviceHost.Close();
         }
     }

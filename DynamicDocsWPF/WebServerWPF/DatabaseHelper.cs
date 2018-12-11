@@ -346,7 +346,7 @@ namespace WebServerWPF
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
-                    users.Add(new User(reader.GetString(0), reader.GetString(1), int.Parse(reader.GetString(2))));
+                    users.Add(new User(reader.GetString(0), reader.GetString(1), reader.GetInt32(2)));
             }
 
             return users;

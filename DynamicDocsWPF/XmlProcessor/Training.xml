@@ -1,4 +1,4 @@
-<process name="visit_training" description="Antrag zum Besuch einer Fortbildungsveranstaltung">
+﻿<process name="visit_training" description="Antrag zum Besuch einer Fortbildungsveranstaltung">
   <process-step name="Initialisation" description="Erstellung des Antrages">
     <dialog>
       <teacher-dropdown name="teacher" description="Antragsteller: " obligatory="true"/>
