@@ -1,8 +1,7 @@
 using System.IO;
-using System.Net;
 using Newtonsoft.Json;
 
-namespace DynamicDocsWPF.HelperClasses
+namespace RestService
 {
     public class ConfigurationManager
     {

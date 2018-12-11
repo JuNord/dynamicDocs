@@ -221,39 +221,33 @@ namespace WebServerWPF
 
         private void PushToNextUser(int id, ProcessObject processObject, ProcessInstance processinstance)
         {
-            User nextResponsibleUser = null;
-            var entries = GetEntries(id);
+            var regex = new Regex("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$");
             var processStep = processObject.GetStepAtIndex(processinstance.CurrentStep);
-            RemoveAllPendings(id);
-            if (processStep != null)
+            
+            if (processStep == null) return;
+            
+            /*if (IsPlaceHolder(processStep.Target))
             {
-                if (IsPlaceHolder(processStep.Target))
-                {
-                    var mail = GetStringValueFromEntryList(entries,
-                        processStep.Target.Substring(1, processStep.Target.Length - 2));
-                    nextResponsibleUser = GetUserByMail(mail);
-                }
-                else
-                {
-                    nextResponsibleUser =
-                        GetUserByRole(processStep.Target.ToLower()) ?? GetUserByMail(processStep.Target);
-                }
+                var fieldName = GetStringValueFromEntryList(entries,
+                    processStep.Target.Substring(1, processStep.Target.Length - 2));
+
+                var value = GetStringValueFromEntryList(entries, fieldName);
+                    
+                SetNewResponsibleUser(id, GetUserByMail(value).Email);
             }
-            
-            if (nextResponsibleUser != null)
-            {   
-                SetNewResponsibleUser(id, nextResponsibleUser);
-            }
-            
-            //TODO: HANDLE MISSING NEXT USER
+            else*/
+            if(regex.IsMatch(processStep.Target))
+                SetNewResponsibleUser(id, processStep.Target);
+            else
+                SetNewResponsibleUser(id, "", processStep.Target);
         }
 
-        private string GetStringValueFromEntryList(List<Entry> entries, string fieldName)
+        private static string GetStringValueFromEntryList(IEnumerable<Entry> entries, string fieldName)
         {
-            return entries.First(entry => entry.FieldName.Equals(fieldName)).Data;
+            return entries.FirstOrDefault(entry => entry.FieldName.Equals(fieldName))?.Data;
         }
 
-        private bool IsPlaceHolder(string value)
+        private static bool IsPlaceHolder(string value)
         {
             try
             {
@@ -269,8 +263,29 @@ namespace WebServerWPF
         public List<PendingInstance> GetResponsibilities(User user)
         {
             var responsibilities = new List<PendingInstance>();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT * FROM pendinginstance WHERE responsible_User_Id = \"{user.Email}\";";
+            var roles = GetRolesByMail(user.Email);
+
+            MySqlCommand cmd;
+            
+            foreach (var role in roles)
+            {
+                cmd = connection.CreateCommand();
+                cmd.CommandText = $"SELECT * FROM pendinginstance WHERE role = \"{role.Role}\";";
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        responsibilities.Add(new PendingInstance()
+                        {
+                            InstanceId = reader.GetInt32(0),
+                            ResponsibleUserId = reader.GetString(1)
+                        });
+                    }
+                }
+            }
+
+            cmd = connection.CreateCommand();  
+            cmd.CommandText = $"SELECT * FROM pendinginstance WHERE mail = \"{user.Email}\";";
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
@@ -293,10 +308,11 @@ namespace WebServerWPF
             cmd.ExecuteNonQuery();
         }
         
-        private void SetNewResponsibleUser(int id, User user)
+        private void SetNewResponsibleUser(int id, string mail, string role="")
         {
+            RemoveAllPendings(id);
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO pendinginstance VALUES({id},\"{user.Email}\");";
+            cmd.CommandText = $"INSERT INTO pendinginstance VALUES({id},\"{mail}\",\"{role}\");";
             cmd.ExecuteNonQuery();
         }
         
@@ -335,7 +351,7 @@ namespace WebServerWPF
 
             return users;
         }
-
+        
         public User GetUserByRole(string role)
         {
             var cmd = connection.CreateCommand();
@@ -380,7 +396,7 @@ namespace WebServerWPF
         public void AddUser(User user)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO User VALUES (\"{user.Email}\",\"{user.Password}\",0 , \"\");";
+            cmd.CommandText = $"INSERT INTO User VALUES (\"{user.Email}\",\"{user.Password}\",0);";
 
             cmd.ExecuteNonQuery();
         }
@@ -393,6 +409,25 @@ namespace WebServerWPF
             cmd.ExecuteNonQuery();
         }
 
+        public List<Roles> GetRolesByMail(string mail)
+        {
+            var roles = new List<Roles>();
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"SELECT * FROM roles WHERE mail = \"{mail}\";";
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                    roles.Add(new Roles
+                    {
+                        Role = reader.GetString(0),
+                        Mail = reader.GetString(1)
+                    });
+            }
+
+            return roles;
+        }
+        
         //SELECT * FROM ROLES
         public List<Roles> GetRoles()
         {
@@ -405,8 +440,8 @@ namespace WebServerWPF
                 while (reader.Read())
                     roles.Add(new Roles
                     {
-                        Id = reader.GetString(0),
-                        User_ID = reader.GetString(1)
+                        Role = reader.GetString(0),
+                        Mail = reader.GetString(1)
                     });
             }
 
@@ -417,7 +452,7 @@ namespace WebServerWPF
         public void AddRoles(Roles roles)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO Roles VALUES (\"{roles.Id}\",\"{roles.User_ID}\");";
+            cmd.CommandText = $"INSERT INTO Roles VALUES (\"{roles.Role}\",\"{roles.Mail}\");";
             cmd.ExecuteNonQuery();
         }
         

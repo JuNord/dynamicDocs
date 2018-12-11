@@ -21,6 +21,7 @@ namespace DynamicDocsWPF
     {
         private NetworkHelper _networkHelper;
         private User _user;
+        private int _lastPermission = -1;
         
         public static string MoTD
         {
@@ -38,31 +39,41 @@ namespace DynamicDocsWPF
             InitializeComponent();
             Connect();
             DisplayInfo(MoTD);
-            new Thread(() =>
+            new Thread(AuthCheck){IsBackground = true}.Start();
+        
+
+            new Thread(Idle){IsBackground = true}.Start();
+        }
+
+        private void AuthCheck()
+        {
+            while (true)
             {
                 Dispatcher.Invoke(HandlePermissionLevel);
                 Thread.Sleep(100);
-            })
-            {
-                IsBackground = true
-            }.Start();
-        
-
-            new Thread(Idle)
-            {
-                IsBackground = true
-            }.Start();
+            }
         }
-
+        
         private void Idle()
         {
-            var foreign = ForeignInstances.Content as ViewPendingInstances;
-            var own = OwnInstances.Content as ViewOwnInstances;
-            var admin = AdministrationContent.Content as ManageUserPermissions;
-            foreign?.Dispatcher.Invoke(() => foreign.Refresh());
-            own?.Dispatcher.Invoke(() => own.Refresh());
-            admin?.Dispatcher.Invoke(() => admin.Refresh());
-            Thread.Sleep(1000);
+            while (true)
+            {
+                if (_lastPermission > -1)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        var foreign = ForeignInstances.Content as ViewPendingInstances;
+                        var own = OwnInstances.Content as ViewOwnInstances;
+                        var admin = AdministrationContent.Content as ManageUserPermissions;
+                        foreign?.Refresh();
+                        own?.Refresh();
+                        admin?.Refresh();
+                    });
+                }
+
+                Thread.Sleep(1000);
+              
+            }
         }
 
         private void Connect()
@@ -94,10 +105,11 @@ namespace DynamicDocsWPF
         private void HandlePermissionLevel()
         {
             var level = _networkHelper?.GetPermissionLevel();
-            if (level == null) return;
+            if (level == null || level == _lastPermission) return;
 
             if (level > -1)
             {
+                _lastPermission = (int) level;
                 NoPermissionText.Visibility = Visibility.Collapsed;
                 Administration.Visibility = Visibility.Visible;
                 MyProcesses.Visibility = Visibility.Visible;
@@ -113,18 +125,41 @@ namespace DynamicDocsWPF
                         break;
                     case 1:
                         Administration.Visibility = Visibility.Collapsed;
-                        OwnInstances.Content = new ViewOwnInstances(this, _networkHelper);
-                        ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
+                        if (OwnInstances?.Content == null)
+                            OwnInstances.Content = new ViewOwnInstances(this, _networkHelper);
+                        else OwnInstances.Visibility = Visibility.Visible;
+                        if (ForeignInstances?.Content == null)
+                            ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
+                        else ForeignInstances.Visibility = Visibility.Visible;
                         break;
                     case 2:
-                        OwnInstances.Content = new ViewOwnInstances(this, _networkHelper);
-                        ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
-
+                        if (OwnInstances?.Content == null)
+                            OwnInstances.Content = new ViewOwnInstances(this, _networkHelper);
+                        else OwnInstances.Visibility = Visibility.Visible;
+                        if (ForeignInstances?.Content == null)
+                            ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
+                        else ForeignInstances.Visibility = Visibility.Visible;
+                        if (AdministrationContent?.Content == null)
+                            AdministrationContent.Content = new ManageUserPermissions(_networkHelper);
+                        else AdministrationContent.Visibility = Visibility.Visible;
+                        ((ManageUserPermissions) AdministrationContent.Content).UserList.Visibility =
+                            Visibility.Collapsed;
                         break;
                     case 3:
-                        OwnInstances.Content = new ViewOwnInstances(this, _networkHelper);
-                        ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
-                        AdministrationContent.Content = new ManageUserPermissions(_networkHelper);
+                        if (OwnInstances?.Content == null)
+                            OwnInstances.Content = new ViewOwnInstances(this, _networkHelper);
+                        else OwnInstances.Visibility = Visibility.Visible;
+                        if (ForeignInstances?.Content == null)
+                            ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
+                        else ForeignInstances.Visibility = Visibility.Visible;
+                        if (OwnInstances?.Content == null)
+                            OwnInstances.Content = new ViewOwnInstances(this, _networkHelper);
+                        else OwnInstances.Visibility = Visibility.Visible;
+                        if (AdministrationContent?.Content == null)
+                            AdministrationContent.Content = new ManageUserPermissions(_networkHelper);
+                        else AdministrationContent.Visibility = Visibility.Visible;
+                        ((ManageUserPermissions) AdministrationContent.Content).UserList.Visibility =
+                            Visibility.Visible;
                         break;
                 }
             }

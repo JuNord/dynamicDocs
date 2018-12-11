@@ -1,4 +1,4 @@
-namespace DynamicDocsWPF.HelperClasses
+namespace RestService
 {
     public class Configuration
     {

@@ -4,7 +4,7 @@ using DynamicDocsWPF.HelperClasses;
 using DynamicDocsWPF.Model;
 using RestService;
 using RestService.Model.Database;
-using ConfigurationManager = DynamicDocsWPF.HelperClasses.ConfigurationManager;
+using ConfigurationManager = RestService.ConfigurationManager;
 using Window = System.Windows.Window;
 
 namespace DynamicDocsWPF.Windows

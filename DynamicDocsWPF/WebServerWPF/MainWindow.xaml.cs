@@ -7,6 +7,7 @@ using System.ServiceModel.Web;
 using System.Threading;
 using System.Xml;
 using MySql.Data.MySqlClient;
+using RestService;
 using WebServer;
 
 namespace WebServerWPF
@@ -16,15 +17,14 @@ namespace WebServerWPF
     /// </summary>
     public partial class MainWindow
     {
-        public static MainWindow mainWindow;
-        private const string BaseUrl = "http://localhost:8000/Service";
+        private static MainWindow mainWindow;
         private const int MaxRequestSize = 2147483647;
         private static WebServiceHost _serviceHost;
 
         private static void RunService()
         {
             _serviceHost = new WebServiceHost(typeof(RestServiceNew));
-            var httpBinding = new WSHttpBinding();
+            var httpBinding = new BasicHttpBinding();
             var readerQuotas = new XmlDictionaryReaderQuotas
             {
                 MaxStringContentLength = MaxRequestSize,
@@ -36,11 +36,9 @@ namespace WebServerWPF
 
             httpBinding.GetType().GetProperty("ReaderQuotas")?.SetValue(httpBinding, readerQuotas, null);
             httpBinding.MaxReceivedMessageSize = MaxRequestSize;
+            httpBinding.MaxBufferSize = MaxRequestSize;
             
-            _serviceHost.AddServiceEndpoint(typeof(IRestServiceNew), httpBinding, new Uri(BaseUrl));
-
-            _serviceHost.Credentials.ServiceCertificate.SetCertificate(StoreLocation.LocalMachine, StoreName.My, X509FindType.FindBySubjectName, "atiw.de");
-            
+            _serviceHost.AddServiceEndpoint(typeof(IRestServiceNew), httpBinding, new Uri(ConfigurationManager.GetInstance().Url));
             _serviceHost.Open();
 
             PostToLog("Server Running");

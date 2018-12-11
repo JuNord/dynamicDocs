@@ -41,7 +41,6 @@ namespace DynamicDocsWPF.Windows
         {
             if (UserList.SelectedIndex != -1)
                 _networkHelper.PostPermissionChange(SelectedUser.Email, SelectedUser.PermissionLevel);
-            else InfoPopup.ShowOk("Bitte klicken Sie den zu bearbeitenden User vorher an.");
         }
 
     }

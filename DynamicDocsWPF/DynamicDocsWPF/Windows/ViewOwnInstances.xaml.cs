@@ -37,7 +37,13 @@ namespace DynamicDocsWPF.Windows
 
         public void Refresh()
         {
-            InstanceList.ItemsSource = TryGetInstances();
+            var list = TryGetInstances();
+            if (InstanceList?.ItemsSource != null)
+            {
+                if (list.SequenceEqual((List<ProcessInstance>)InstanceList.ItemsSource)) return;
+            }
+
+            InstanceList.ItemsSource = list;
         }
         
         private List<ProcessInstance> TryGetInstances()
