@@ -4,7 +4,7 @@ namespace DynamicDocsWPF.Windows
 {
     public partial class InfoPopup : Window
     {
-        public InfoPopup(MessageBoxButton buttons, string text)
+        private InfoPopup(MessageBoxButton buttons, string text)
         {
             InitializeComponent();
             if (buttons == MessageBoxButton.OK)
@@ -27,5 +27,8 @@ namespace DynamicDocsWPF.Windows
             DialogResult = false;
             Close();
         }
+
+        public static bool ShowOk(string message) => new InfoPopup(MessageBoxButton.OK, message).ShowDialog() ?? false;
+        public static bool ShowYesNo(string message) => new InfoPopup(MessageBoxButton.YesNo, message).ShowDialog() ?? false;
     }
 }

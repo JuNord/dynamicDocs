@@ -29,6 +29,11 @@ namespace DynamicDocsWPF.Windows
         {
             _networkHelper = networkHelper;
             InitializeComponent();
+            Refresh();
+        }
+
+        public void Refresh()
+        {
             UserList.ItemsSource = _networkHelper.GetUsers();
         }
 
@@ -36,7 +41,7 @@ namespace DynamicDocsWPF.Windows
         {
             if (UserList.SelectedIndex != -1)
                 _networkHelper.PostPermissionChange(SelectedUser.Email, SelectedUser.PermissionLevel);
-            else new InfoPopup(MessageBoxButton.OK, "Bitte klicken Sie den zu bearbeitenden User vorher an.");
+            else InfoPopup.ShowOk("Bitte klicken Sie den zu bearbeitenden User vorher an.");
         }
 
     }

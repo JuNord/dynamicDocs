@@ -32,9 +32,14 @@ namespace DynamicDocsWPF.Windows
         {
             InitializeComponent();
             _networkHelper = networkHelper;
-            InstanceList.ItemsSource = TryGetResponsibilities();
+            Refresh();
         }
 
+        public void Refresh()
+        {
+            InstanceList.ItemsSource = TryGetResponsibilities();
+        }
+        
         private List<ProcessInstance> TryGetResponsibilities()
         {
             try
@@ -55,9 +60,8 @@ namespace DynamicDocsWPF.Windows
             }
             catch (WebException)
             {
-                new InfoPopup(MessageBoxButton.OK,
-                        "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
-                    .ShowDialog();
+                InfoPopup.ShowOk(
+                        "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.");
             }
 
             return null;
@@ -80,29 +84,29 @@ namespace DynamicDocsWPF.Windows
                 }
                 if (_processSteps.Current.ValidationCount > 0)
                 {
-                    var initialPopup = new InfoPopup(MessageBoxButton.YesNo,
+                    var initialPopup = InfoPopup.ShowOk(
                         "Möchten Sie diesen Schritt genehmigen? Weitere Instanzen werden gegebenenfalls über die Genehmigung in Kenntnis gesetzt.");
 
                     var validationElement = _processSteps.Current.GetValidationAtIndex(0);
-                    if (initialPopup.ShowDialog() == true)
+                    if (initialPopup == true)
                     {
-                        var acceptPopup = new InfoPopup(MessageBoxButton.YesNo,
+                        var acceptPopup = InfoPopup.ShowOk(
                             "Möchten Sie wirklich zustimmen? Dieser Schritt kann nicht rückgängig gemacht werden! Wählen Sie nein um die Daten erneut zu prüfen.");
 
-                        if (acceptPopup.ShowDialog() == true)
+                        if (acceptPopup)
                         {
                             var validation = _processSteps.Current.GetValidationAtIndex(0);
                             _networkHelper.PostProcessUpdate(SelectedInstance.Id, false, validation.Locks);
 
-                            InstanceList.ItemsSource = _networkHelper.GetResponsibilities();
+                            Refresh();
                         }
                     }
                     else
                     {
-                        var declinePopup = new InfoPopup(MessageBoxButton.YesNo,
+                        var declinePopup = InfoPopup.ShowOk(
                             "Möchten Sie wirklich ablehnen? Dieser Schritt kann nicht rückgängig gemacht werden! Wählen Sie nein um die Daten erneut zu prüfen.");
 
-                        if (declinePopup.ShowDialog() == true)
+                        if (declinePopup)
                         {
                             var validation = _processSteps.Current.GetValidationAtIndex(0);
                             _networkHelper.PostProcessUpdate(SelectedInstance.Id, true, validation.Locks);
@@ -128,7 +132,7 @@ namespace DynamicDocsWPF.Windows
                                 }
                             }
 
-                            InstanceList.ItemsSource = TryGetResponsibilities();
+                            Refresh();
                         }
                     }
 
@@ -227,15 +231,13 @@ namespace DynamicDocsWPF.Windows
             }
             catch (NullReferenceException)
             {
-                new InfoPopup(MessageBoxButton.OK,
-                        "Leider konnte der gewählte Prozess nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
-                    .ShowDialog();
+                InfoPopup.ShowOk(
+                    "Leider konnte der gewählte Prozess nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.");
             }
             catch (Exception)
             {
-                new InfoPopup(MessageBoxButton.OK,
-                        "Leider konnte der gewählte Prozess nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
-                    .ShowDialog();
+                InfoPopup.ShowOk(
+                    "Leider konnte der gewählte Prozess nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.");
             }
         }
 
@@ -249,9 +251,8 @@ namespace DynamicDocsWPF.Windows
             }
             catch (Exception)
             {
-                new InfoPopup(MessageBoxButton.OK,
-                        $"The process contained an element called \"{uiElement.Name}\" that couldnt be found.")
-                    .ShowDialog();
+                InfoPopup.ShowOk(
+                    $"The process contained an element called \"{uiElement.Name}\" that couldnt be found.");
             }
         }
     }

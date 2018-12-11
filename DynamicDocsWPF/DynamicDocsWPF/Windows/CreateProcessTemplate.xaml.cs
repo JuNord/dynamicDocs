@@ -14,12 +14,12 @@ using Window = System.Windows.Window;
 
 namespace DynamicDocsWPF.Windows
 {
-    public partial class CreateProcessTemplate : Window
+    public partial class CreateProcessTemplate
     {
-        private bool _isOkay = false;
+        private bool _isOkay;
         private ProcessObject _processObject;
-        private NetworkHelper _networkHelper;
-        private string _filePath = null;
+        private readonly NetworkHelper _networkHelper;
+        private string _filePath;
         public CreateProcessTemplate(NetworkHelper networkHelper)
         {
             _networkHelper = networkHelper;
@@ -30,7 +30,7 @@ namespace DynamicDocsWPF.Windows
 
         private void CreateProcessTemplate_OnClick(object sender, RoutedEventArgs e)
         {
-            if (_isOkay == true)
+            if (_isOkay)
             {
                 var list = CheckDependencies();
                 
@@ -45,27 +45,28 @@ namespace DynamicDocsWPF.Windows
                         case UploadResult.SUCCESS:
                             break;
                         case UploadResult.FAILED_ID_EXISTS:
-                            new InfoPopup(MessageBoxButton.OK,$"Eine Vorlage \"{element.Id}\" bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <receipt...>").ShowDialog();
+                            InfoPopup.ShowOk(
+                                $"Eine Vorlage \"{element.Id}\" bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <receipt...>");
                             Close();
                             return;
                         case UploadResult.FAILED_FILEEXISTS:
-                            new InfoPopup(MessageBoxButton.OK,$"Eine Vorlage \"{element.Id}\" bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <receipt...>").ShowDialog();
+                            InfoPopup.ShowOk($"Eine Vorlage \"{element.Id}\" bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <receipt...>");
                             Close();
                             return;
                         case UploadResult.FAILED_FILE_OR_TYPE_INVALID:
-                            new InfoPopup(MessageBoxButton.OK,"Der Server hat die Vorlagedatei als fehlerhaft gemeldet. Bitte überprüfen Sie ihre Vorlage.").ShowDialog();
+                            InfoPopup.ShowOk("Der Server hat die Vorlagedatei als fehlerhaft gemeldet. Bitte überprüfen Sie ihre Vorlage.");
                             Close();
                             return;
                         case UploadResult.FAILED_OTHER:
-                            new InfoPopup(MessageBoxButton.OK,$"Ups da ist wohl etwas beim Upload der Vorlage \"{element.Id}\" schief gelaufen. Bitte wenden Sie sich an einen Administrator.").ShowDialog();
+                            InfoPopup.ShowOk($"Ups da ist wohl etwas beim Upload der Vorlage \"{element.Id}\" schief gelaufen. Bitte wenden Sie sich an einen Administrator.");
                             Close();
                             return;
                         case UploadResult.NO_PERMISSION:
-                            new InfoPopup(MessageBoxButton.OK,"Es tut uns leid, doch sie besitzen nicht die notwendigen Berechtigungen.").ShowDialog();
+                            InfoPopup.ShowOk("Es tut uns leid, doch sie besitzen nicht die notwendigen Berechtigungen.");
                             Close();
                             return;
                         case UploadResult.INVALID_LOGIN:
-                            new InfoPopup(MessageBoxButton.OK,"Irgendetwas scheint mit ihrem Konto nicht zu stimmen. Bitte starten sie das Programm neu.").ShowDialog();
+                            InfoPopup.ShowOk("Irgendetwas scheint mit ihrem Konto nicht zu stimmen. Bitte starten sie das Programm neu.");
                             Application.Current.Shutdown();
                             return;
                     }
@@ -75,27 +76,27 @@ namespace DynamicDocsWPF.Windows
                 switch (processUploadResult)
                 {
                     case UploadResult.SUCCESS:
-                        new InfoPopup(MessageBoxButton.OK,"Vorlage erfolgreich angelegt.").ShowDialog();
+                        InfoPopup.ShowOk("Vorlage erfolgreich angelegt.");
                         Close();
                         break;
                     case UploadResult.FAILED_ID_EXISTS:
-                        new InfoPopup(MessageBoxButton.OK,"Ein Prozess mit diesem technischen Namen bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <process...>").ShowDialog();
+                        InfoPopup.ShowOk("Ein Prozess mit diesem technischen Namen bestand bereits und konnte nicht überschrieben werden. Tipp: Ändern sie den Namen in <process...>");
                         Close();
                         return;
                     case UploadResult.FAILED_FILE_OR_TYPE_INVALID:
-                        new InfoPopup(MessageBoxButton.OK,"Der Server hat die Prozessdatei als fehlerhaft gemeldet. Bitte überarbeiten Sie den Prozess.").ShowDialog();
+                        InfoPopup.ShowOk("Der Server hat die Prozessdatei als fehlerhaft gemeldet. Bitte überarbeiten Sie den Prozess.");
                         Close();
                         return;
                     case UploadResult.FAILED_OTHER:
-                        new InfoPopup(MessageBoxButton.OK,"Ups da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator.").ShowDialog();
+                        InfoPopup.ShowOk("Ups da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator.");
                         Close();
                         return;
                     case UploadResult.NO_PERMISSION:
-                        new InfoPopup(MessageBoxButton.OK,"Es tut uns leid, doch sie besitzen nicht die notwendigen Berechtigungen.").ShowDialog();
+                        InfoPopup.ShowOk("Es tut uns leid, doch sie besitzen nicht die notwendigen Berechtigungen.");
                         Close();
                         return;
                     case UploadResult.INVALID_LOGIN:
-                        new InfoPopup(MessageBoxButton.OK,"Irgendetwas scheint mit ihrem Konto nicht zu stimmen. Bitte starten sie das Programm neu.").ShowDialog();
+                        InfoPopup.ShowOk("Irgendetwas scheint mit ihrem Konto nicht zu stimmen. Bitte starten sie das Programm neu.");
                         Application.Current.Shutdown();
                         return;
                     default:
@@ -123,11 +124,11 @@ namespace DynamicDocsWPF.Windows
 
                             if (processTemplate != null)
                             {
-                                var info = new InfoPopup(MessageBoxButton.YesNo, $"Der Prozess \"{_processObject.Name}\", existiert bereits. Möchten Sie ihn ersetzen?");
-                                info.ShowDialog();
-                                if (DialogResult == false)
+                                var info = InfoPopup.ShowYesNo($"Der Prozess \"{_processObject.Name}\", existiert bereits. Möchten Sie ihn ersetzen?");
+ 
+                                if (info == false)
                                 {
-                                    new InfoPopup(MessageBoxButton.OK, "Bitte überarbeiten Sie den Prozess.").ShowDialog();
+                                    InfoPopup.ShowOk( "Bitte überarbeiten Sie den Prozess.");
                                     Close();
                                     return;
                                 }   
@@ -139,13 +140,13 @@ namespace DynamicDocsWPF.Windows
                             
                             break;
                         case XmlState.MISSINGATTRIBUTE:
-                            new InfoPopup(MessageBoxButton.OK, "Einem der Tags scheint ein Attribut zu fehlen. Bitte prüfen Sie ihre Datei.").ShowDialog();
+                            InfoPopup.ShowOk( "Einem der Tags scheint ein Attribut zu fehlen. Bitte prüfen Sie ihre Datei.");
                             break;
                         case XmlState.MISSINGPARENTTAG:
-                            new InfoPopup(MessageBoxButton.OK, "Einer der Tags befindet sich nicht in seinem Parenttag. Bitte prüfen Sie ihre Datei.").ShowDialog();
+                            InfoPopup.ShowOk( "Einer der Tags befindet sich nicht in seinem Parenttag. Bitte prüfen Sie ihre Datei.");
                             break;
                         case XmlState.INVALID:
-                            new InfoPopup(MessageBoxButton.OK, "Die Datei weist einen nicht eindeutigen Fehler auf. Fehlen Klammern, Tags oder Anführungszeichen? Bitte prüfen Sie ihre Datei.").ShowDialog();
+                            InfoPopup.ShowOk( "Die Datei weist einen nicht eindeutigen Fehler auf. Fehlen Klammern, Tags oder Anführungszeichen? Bitte prüfen Sie ihre Datei.");
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -198,7 +199,7 @@ namespace DynamicDocsWPF.Windows
             var onlineTemplate = _networkHelper.GetDocTemplate(receipt.DraftName);
                     if (onlineTemplate == null)
                     {
-                        new InfoPopup(MessageBoxButton.OK, $"Der Prozess erfordert eine Vorlage \"{receipt.DraftName}\". Bitte wählen Sie eine Datei aus.").ShowDialog();
+                        InfoPopup.ShowOk( $"Der Prozess erfordert eine Vorlage \"{receipt.DraftName}\". Bitte wählen Sie eine Datei aus.");
                         var dialog = new OpenFileDialog();
                         dialog.Filter = "Draft Files (*.docx)|*.docx";
                         dialog.ShowDialog();
@@ -209,19 +210,18 @@ namespace DynamicDocsWPF.Windows
                         }
                         else
                         {
-                            new InfoPopup(MessageBoxButton.OK, "Ups. Da ist wohl etwas schief gelaufen. Die Datei konnte nicht gefunden werden.").ShowDialog();
+                            InfoPopup.ShowOk( "Ups. Da ist wohl etwas schief gelaufen. Die Datei konnte nicht gefunden werden.");
                             Close();
                             return null;
                         }
                     }
                     else
                     {
-                        var info = new InfoPopup(MessageBoxButton.YesNo, $"Der Prozess erfordert eine Vorlage \"{receipt.DraftName}\", die bereits auf dem Server existiert. Möchten Sie sie ersetzen?");
-                        info.ShowDialog();
-                        if (info.DialogResult == true)
+                        var info = InfoPopup.ShowYesNo($"Der Prozess erfordert eine Vorlage \"{receipt.DraftName}\", die bereits auf dem Server existiert. Möchten Sie sie ersetzen?");
+                        
+                        if (info == true)
                         {
-                            var dialog = new OpenFileDialog();
-                            dialog.Filter = "Draft Files (*.docx)|*.docx";
+                            var dialog = new OpenFileDialog {Filter = "Draft Files (*.docx)|*.docx"};
                             dialog.ShowDialog();
 
                             if (File.Exists(dialog.FileName))
@@ -230,14 +230,14 @@ namespace DynamicDocsWPF.Windows
                             }
                             else
                             {
-                                new InfoPopup(MessageBoxButton.OK, "Ups. Da ist wohl etwas schief gelaufen. Die Datei konnte nicht gefunden werden.").ShowDialog();
+                                InfoPopup.ShowOk( "Ups. Da ist wohl etwas schief gelaufen. Die Datei konnte nicht gefunden werden.");
                                 Close();
                                 return null;
                             }
                         }
                         else
                         {
-                            new InfoPopup(MessageBoxButton.OK, "Bitte überarbeiten Sie den Prozess.").ShowDialog();
+                            InfoPopup.ShowOk( "Bitte überarbeiten Sie den Prozess.");
                             Close();
                             return null;
                         }

@@ -18,10 +18,9 @@ namespace DynamicDocsWPF.Windows
         private int _instanceId = -1;
         private readonly ProcessObject _processObject;
         private readonly NetworkHelper _networkHelper;
-        private readonly ProcessStep _processStep;
         private readonly CustomEnumerable<Dialog> _dialogEnumerable;
         
-        private static string MoTD
+        private static string MoTd
         {
             get
             {
@@ -37,25 +36,23 @@ namespace DynamicDocsWPF.Windows
             InitializeComponent();
             _processObject = processObject;
             _networkHelper = networkHelper;
-            _processStep = processObject.GetStepAtIndex(0);
+            var processStep = processObject.GetStepAtIndex(0);
 
             Heading.Text = processObject.Description;
+
+            if (processStep == null) return;
             
-            if (_processStep != null)
-            {
-                _dialogEnumerable = _processStep?.Dialogs;
-                if (_dialogEnumerable != null)
-                {
-                    _dialogEnumerable?.MoveNext();
-                    ViewHolder.Content = _dialogEnumerable.Current.GetStackPanel();
-                }
-            }
+            _dialogEnumerable = processStep?.Dialogs;
+            
+            if (_dialogEnumerable == null) return;
+            
+            _dialogEnumerable?.MoveNext();
+            ViewHolder.Content = _dialogEnumerable.Current.GetStackPanel();
         }
 
         private Func<double> StringToCalculation(ProcessObject processObject, string calculation)
         {
-            string[] split = new string[0];
-            var op = "";
+            string op;
             if (calculation.Contains("+")) 
                 op = "+";
             else if (calculation.Contains("-"))
@@ -66,7 +63,7 @@ namespace DynamicDocsWPF.Windows
                 op = "/";
             else return null;
 
-            split = calculation.Split(op[0]);
+            var split = calculation.Split(op[0]);
             
             
             if (split.Length != 2) return null;
@@ -164,10 +161,10 @@ namespace DynamicDocsWPF.Windows
             {
                 if (!string.IsNullOrWhiteSpace(Subject.Text))
                 {
-                    var sendPopup = new InfoPopup(MessageBoxButton.YesNo,
+                    var sendPopup = InfoPopup.ShowYesNo(
                         "Sollen die eingegebenen Daten abgeschickt werden?");
 
-                    if (sendPopup.ShowDialog() == true)
+                    if (sendPopup)
                     {
                         SendData();
                         Close();
@@ -205,7 +202,7 @@ namespace DynamicDocsWPF.Windows
                     return false;
                 }
 
-                InfoBlock.Text = MoTD;
+                InfoBlock.Text = MoTd;
                 baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Colors.Gray);
                 baseInputElement.BaseControl.BorderThickness = new Thickness(1);
                 return true;
@@ -246,21 +243,14 @@ namespace DynamicDocsWPF.Windows
                             _networkHelper.CreateEntry(entry);
                         }
                     }
-                }
 
-                if (reply.UploadResult == UploadResult.FAILED_OTHER)
-                {
-                    new InfoPopup(MessageBoxButton.OK,
-                            "Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator")
-                        .ShowDialog();
+                    return;
                 }
             }
             catch (NullReferenceException e)
             {
-                new InfoPopup(MessageBoxButton.OK,
-                        "Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator")
-                    .ShowDialog();
             }
+            InfoPopup.ShowOk("Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator");
         }
     }
 }

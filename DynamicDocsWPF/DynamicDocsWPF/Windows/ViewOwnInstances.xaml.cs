@@ -32,9 +32,14 @@ namespace DynamicDocsWPF.Windows
             InitializeComponent();
             _mainWindow = mainWindow;
             _networkHelper = networkHelper;
-            InstanceList.ItemsSource = TryGetInstances();
+            Refresh();
         }
 
+        public void Refresh()
+        {
+            InstanceList.ItemsSource = TryGetInstances();
+        }
+        
         private List<ProcessInstance> TryGetInstances()
         {
             try
@@ -42,9 +47,8 @@ namespace DynamicDocsWPF.Windows
                 var processInstances = _networkHelper.GetProcessInstances();
                 if (processInstances == null)
                 {
-                    new InfoPopup(MessageBoxButton.OK,
-                            "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
-                        .ShowDialog();
+                    InfoPopup.ShowOk(
+                        "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.");
 
                 }
 
@@ -52,9 +56,8 @@ namespace DynamicDocsWPF.Windows
             }
             catch (WebException)
             {
-                new InfoPopup(MessageBoxButton.OK,
-                        "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.")
-                    .ShowDialog();
+                InfoPopup.ShowOk(
+                        "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.");
             }
 
             return null;
@@ -68,15 +71,14 @@ namespace DynamicDocsWPF.Windows
 
             if (!SelectedInstance.Locked)
             {
-                var sendPopup = new InfoPopup(MessageBoxButton.YesNo,
-                    "Haben Sie Änderungen vorgenommen die gespeichert werden sollen?");
+                var sendPopup = InfoPopup.ShowYesNo("Haben Sie Änderungen vorgenommen die gespeichert werden sollen?");
 
-                if (sendPopup.ShowDialog() == true)
-                {
-                    SendData();
-                    new InfoPopup(MessageBoxButton.OK, "Änderungen gespeichert.").ShowDialog();
-                    LoadAndShowSelection();
-                }
+                if (!sendPopup) return;
+                
+                SendData();
+                InfoPopup.ShowOk("Änderungen gespeichert.");
+                Refresh();
+                LoadAndShowSelection();
             }
         }
 
@@ -124,20 +126,18 @@ namespace DynamicDocsWPF.Windows
             try
             {
                 processSelect = new ProcessSelect(_networkHelper);
-                processSelect.ShowDialog();
 
-                if (processSelect.DialogResult == true)
-                {
-                    var file = _networkHelper.GetProcessTemplate(processSelect.SelectedProcessTemplate.Id);
-                    var process = XmlHelper.ReadXmlFromString(file);
-                    var newInstance = new CreateProcessInstance(process, _networkHelper);
-                    newInstance.ShowDialog();
-                    InstanceList.ItemsSource = TryGetInstances();
-                }
+                if (processSelect.ShowDialog() == false) return;
+                
+                var file = _networkHelper.GetProcessTemplate(processSelect.SelectedProcessTemplate.Id);
+                var process = XmlHelper.ReadXmlFromString(file);
+                var newInstance = new CreateProcessInstance(process, _networkHelper);
+                newInstance.ShowDialog();
+                Refresh();
             }
             catch (WebException)
             {
-                new InfoPopup(MessageBoxButton.OK ,"Der Server ist derzeit nicht erreichbar.").ShowDialog();
+                InfoPopup.ShowOk("Der Server ist derzeit nicht erreichbar.");
                 processSelect?.Close();
             }
         }
@@ -247,9 +247,7 @@ namespace DynamicDocsWPF.Windows
             }
             catch (Exception)
             {
-                new InfoPopup(MessageBoxButton.OK,
-                        $"The process contained an element called \"{uiElement.Name}\" that couldnt be found.")
-                    .ShowDialog();
+                InfoPopup.ShowOk($"The process contained an element called \"{uiElement.Name}\" that couldnt be found.");
             }
         }
         
@@ -287,9 +285,7 @@ namespace DynamicDocsWPF.Windows
             }
             catch (NullReferenceException e)
             {
-                new InfoPopup(MessageBoxButton.OK,
-                        "Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator")
-                    .ShowDialog();
+                InfoPopup.ShowOk("Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator.");
             }
         }
     }
