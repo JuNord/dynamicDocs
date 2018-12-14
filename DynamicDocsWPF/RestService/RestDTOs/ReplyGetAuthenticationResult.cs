@@ -1,4 +1,5 @@
 using DynamicDocsWPF.Model;
+using RestService.Model;
 
 namespace RestService.RestDTOs
 {

@@ -8,16 +8,17 @@
         Background="#3CA4FF"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
-   <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock x:Name="RegisterInfoText" HorizontalAlignment="Left" FontSize="28" FontFamily="Segoe UI Light" Foreground="White" Margin="50,20,20,20" TextWrapping="Wrap">
+            <TextBlock x:Name="RegisterInfoText" HorizontalAlignment="Left" FontSize="28" FontFamily="Segoe UI Light"
+                       Foreground="White" Margin="50,20,20,20" TextWrapping="Wrap">
                 <Run Text="Hier können Sie sich registrieren." />
-                </TextBlock>
+            </TextBlock>
             <Border Grid.Row="1" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
                 <Border.Effect>
@@ -25,11 +26,12 @@
                 </Border.Effect>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock HorizontalAlignment="Left" FontSize="21" Foreground="#3384D1" FontFamily="Segoe UI Light" Margin="10,5,0,0" >
-                        <Run Text="Registrierung"/>
+                    <TextBlock HorizontalAlignment="Left" FontSize="21" Foreground="#3384D1"
+                               FontFamily="Segoe UI Light" Margin="10,5,0,0">
+                        <Run Text="Registrierung" />
                     </TextBlock>
                     <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Stretch"
                                 Margin="10,20" MaxWidth="700">
@@ -39,27 +41,32 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Label FontSize="13" Grid.Column="0" Content="Email:" HorizontalAlignment="Left" Width="70" />
-                            <TextBox VerticalContentAlignment="Center" x:Name="EmailBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0"/>
+                            <TextBox VerticalContentAlignment="Center" x:Name="EmailBox" Grid.Column="1"
+                                     HorizontalAlignment="Stretch" Margin="10,0,20,0" />
                         </Grid>
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Label FontSize="13" Grid.Column="0" Content="Passwort:" HorizontalAlignment="Left" Width="70" />
-                            <PasswordBox VerticalContentAlignment="Center" x:Name="PasswordBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,20,0" Width="200"/>
+                            <Label FontSize="13" Grid.Column="0" Content="Passwort:" HorizontalAlignment="Left"
+                                   Width="70" />
+                            <PasswordBox VerticalContentAlignment="Center" x:Name="PasswordBox" Grid.Column="1"
+                                         HorizontalAlignment="Stretch" Margin="10,0,20,0" Width="200" />
                         </Grid>
                     </StackPanel>
-                </Grid>      
+                </Grid>
             </Border>
-            <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,0,0,20" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,0,0,20" HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
                 <Button Click="Register_OnClick" Content="Registrieren" Width="100" Height="35"
-                        VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                        VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White"
+                        FontWeight="Black">
                     <Button.Effect>
                         <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
                     </Button.Effect>
                 </Button>
-            </StackPanel>  
+            </StackPanel>
         </Grid>
     </ScrollViewer>
 </Window>

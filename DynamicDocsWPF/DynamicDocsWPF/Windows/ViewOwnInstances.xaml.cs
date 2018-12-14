@@ -7,25 +7,20 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using DynamicDocsWPF.HelperClasses;
-using Microsoft.Office.Interop.Word;
 using RestService;
 using RestService.Model.Database;
 using RestService.Model.Input;
 using RestService.Model.Process;
-using Dialog = RestService.Model.Input.Dialog;
-using Window = System.Windows.Window;
 
 namespace DynamicDocsWPF.Windows
 {
-    public partial class ViewOwnInstances :UserControl
+    public partial class ViewOwnInstances : UserControl
     {
         private readonly MainWindow _mainWindow;
         private readonly NetworkHelper _networkHelper;
         private ProcessObject _currentProcessObject;
         private CustomEnumerable<Dialog> _dialogs;
         private List<Entry> _entries;
-        
-        private ProcessInstance SelectedInstance => ((ProcessInstance) InstanceList.SelectedItem);
 
         public ViewOwnInstances(MainWindow mainWindow, NetworkHelper networkHelper)
         {
@@ -35,24 +30,25 @@ namespace DynamicDocsWPF.Windows
             Refresh();
         }
 
+        private ProcessInstance SelectedInstance => (ProcessInstance) InstanceList.SelectedItem;
+
         public void Refresh()
         {
             var list = TryGetInstances();
             if (list != null)
             {
                 if (InstanceList?.ItemsSource != null)
-                {
-                    if (list.SequenceEqual((List<ProcessInstance>) InstanceList.ItemsSource)) return;
-                }
+                    if (list.SequenceEqual((List<ProcessInstance>) InstanceList.ItemsSource))
+                        return;
 
                 var toShow = new List<ProcessInstance>(
                     Running.IsChecked == true
                         ? list.Where(e => e.Archived == false)
-                        : list.Where(e => e.Archived == true));
+                        : list.Where(e => e.Archived));
                 InstanceList.ItemsSource = toShow;
             }
         }
-        
+
         private List<ProcessInstance> TryGetInstances()
         {
             try
@@ -64,12 +60,12 @@ namespace DynamicDocsWPF.Windows
             catch (WebException)
             {
                 InfoPopup.ShowOk(
-                        "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.");
+                    "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.");
             }
 
             return null;
         }
-        
+
         private void Next_Click(object sender, RoutedEventArgs e)
         {
             if (_dialogs.Current.Elements.Any(baseInputElement => !IsInputValueValid(baseInputElement)))
@@ -81,7 +77,7 @@ namespace DynamicDocsWPF.Windows
                 var sendPopup = InfoPopup.ShowYesNo("Haben Sie Änderungen vorgenommen die gespeichert werden sollen?");
 
                 if (!sendPopup) return;
-                
+
                 SendData();
                 InfoPopup.ShowOk("Änderungen gespeichert.");
                 Refresh();
@@ -91,10 +87,7 @@ namespace DynamicDocsWPF.Windows
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            if (((string)BtnNext.Content).Equals("Änderungen Speichern"))
-            {
-                BtnNext.Content = "Weiter";
-            }
+            if (((string) BtnNext.Content).Equals("Änderungen Speichern")) BtnNext.Content = "Weiter";
 
             TryShowLastDialog(_entries);
         }
@@ -105,28 +98,25 @@ namespace DynamicDocsWPF.Windows
             ShowCurrentDialog(entries);
             return true;
         }
-        
+
         private bool TryShowLastDialog(List<Entry> entries)
         {
             if (!(_dialogs?.MoveBack() ?? false)) return false;
             ShowCurrentDialog(entries);
             return true;
         }
-        
+
         private void ShowCurrentDialog(List<Entry> entries)
         {
             FillElements(entries, _dialogs.Current.Elements);
             ViewHolder.Content = _dialogs.Current.GetStackPanel();
         }
-        
+
         private void FillElements(List<Entry> entries, CustomEnumerable<BaseInputElement> elements)
         {
-            foreach (var uiElement in elements)
-            {
-                FillUiElement(entries, uiElement);
-            }
+            foreach (var uiElement in elements) FillUiElement(entries, uiElement);
         }
-        
+
         private void NewInstance_Click(object sender, RoutedEventArgs e)
         {
             ProcessSelect processSelect = null;
@@ -135,7 +125,7 @@ namespace DynamicDocsWPF.Windows
                 processSelect = new ProcessSelect(_networkHelper);
 
                 if (processSelect.ShowDialog() == false) return;
-                
+
                 var file = _networkHelper.GetProcessTemplate(processSelect.SelectedProcessTemplate.Id);
                 var process = XmlHelper.ReadXmlFromString(file);
                 var newInstance = new CreateProcessInstance(process, _networkHelper);
@@ -160,7 +150,7 @@ namespace DynamicDocsWPF.Windows
             {
                 if (!baseInputElement.FulfillsProcessConditions())
                 {
-                   _mainWindow.DisplayInfo(baseInputElement.ProcessErrorMsg);
+                    _mainWindow.DisplayInfo(baseInputElement.ProcessErrorMsg);
                     baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
                     baseInputElement.BaseControl.BorderThickness = new Thickness(2);
                     return false;
@@ -178,17 +168,14 @@ namespace DynamicDocsWPF.Windows
                 baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Colors.Gray);
                 baseInputElement.BaseControl.BorderThickness = new Thickness(1);
                 return true;
+            }
 
-            }
-            else
-            {
-                _mainWindow.DisplayInfo("Bitte füllen Sie alle Muss Felder aus.");
-                baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
-                baseInputElement.BaseControl.BorderThickness = new Thickness(2);
-                return false;
-            }
+            _mainWindow.DisplayInfo("Bitte füllen Sie alle Muss Felder aus.");
+            baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
+            baseInputElement.BaseControl.BorderThickness = new Thickness(2);
+            return false;
         }
-        
+
         private void LoadAndShowSelection()
         {
             ContentSection.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Collapsed : Visibility.Visible;
@@ -202,10 +189,10 @@ namespace DynamicDocsWPF.Windows
                 TryShowNextDialog(_entries);
 
                 ProgressPanel.Children.Clear();
-                for (int i = 0; i < _currentProcessObject.StepCount; i++)
+                for (var i = 0; i < _currentProcessObject.StepCount; i++)
                 {
-                    Color color = Colors.Transparent;
-                    int width = 10;
+                    var color = Colors.Transparent;
+                    var width = 10;
 
                     if (i < SelectedInstance.CurrentStep)
                     {
@@ -222,15 +209,14 @@ namespace DynamicDocsWPF.Windows
                     }
 
 
-                    
-                    ProgressPanel.Children.Add(new Ellipse()
+                    ProgressPanel.Children.Add(new Ellipse
                     {
                         Width = width,
                         Height = width,
                         Fill = new SolidColorBrush(color),
                         Margin = new Thickness(10, 0, 10, 0)
                     });
-                  
+
                     if (SelectedInstance.CurrentStep < _currentProcessObject.StepCount)
                     {
                         StepDescription.Text = _currentProcessObject.GetStepAtIndex(SelectedInstance.CurrentStep)
@@ -239,7 +225,10 @@ namespace DynamicDocsWPF.Windows
                         if (SelectedInstance.Declined)
                             StepDescription.Text += " - Abgelehnt";
                     }
-                    else StepDescription.Text = "Genehmigt.";
+                    else
+                    {
+                        StepDescription.Text = "Genehmigt.";
+                    }
                 }
             }
         }
@@ -254,45 +243,44 @@ namespace DynamicDocsWPF.Windows
             }
             catch (Exception)
             {
-                InfoPopup.ShowOk($"The process contained an element called \"{uiElement.Name}\" that couldnt be found.");
+                InfoPopup.ShowOk(
+                    $"The process contained an element called \"{uiElement.Name}\" that couldnt be found.");
             }
         }
-        
+
         private void SendData()
         {
             try
             {
                 _dialogs.Reset();
                 foreach (var dialog in _dialogs)
+                foreach (var element in dialog.Elements)
                 {
-                    foreach (var element in dialog.Elements)
+                    var entry = _entries.FirstOrDefault(e => e.FieldName == element.Name);
+
+                    if (entry != null)
                     {
-                        var entry = _entries.FirstOrDefault(e => e.FieldName == element.Name);
-
-                        if (entry != null)
-                        {
-                            var dataOld = entry.Data;
-                            if (dataOld.Equals(element.GetFormattedValue())) continue;
-                            entry.Data = element.GetFormattedValue();
-                            _networkHelper.PostEntryUpdate(entry);
-                        }
-                        else
-                        {
-                            entry = new Entry()
-                            {
-                                InstanceId = SelectedInstance.Id,
-                                FieldName = element.Name,
-                                Data = element.GetFormattedValue()
-                            };
-                            _networkHelper.CreateEntry(entry);
-                        }
-
+                        var dataOld = entry.Data;
+                        if (dataOld.Equals(element.GetFormattedValue())) continue;
+                        entry.Data = element.GetFormattedValue();
+                        _networkHelper.PostEntryUpdate(entry);
                     }
-                }             
+                    else
+                    {
+                        entry = new Entry
+                        {
+                            InstanceId = SelectedInstance.Id,
+                            FieldName = element.Name,
+                            Data = element.GetFormattedValue()
+                        };
+                        _networkHelper.CreateEntry(entry);
+                    }
+                }
             }
             catch (NullReferenceException e)
             {
-                InfoPopup.ShowOk("Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator.");
+                InfoPopup.ShowOk(
+                    "Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator.");
             }
         }
 

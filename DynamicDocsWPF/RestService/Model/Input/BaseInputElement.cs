@@ -6,7 +6,8 @@ namespace RestService.Model.Input
 {
     public abstract class BaseInputElement : NamedTag
     {
-        protected BaseInputElement(Tag parent, string name, string description, bool obligatory, string calculation, Control control) :
+        protected BaseInputElement(Tag parent, string name, string description, bool obligatory, string calculation,
+            Control control) :
             base(parent, name, description)
         {
             BaseControl = control;
@@ -65,13 +66,12 @@ namespace RestService.Model.Input
         }
 
         /// <summary>
-        /// Specifies how the underlying UI Controls value can be Parsed from a string
+        ///     Specifies how the underlying UI Controls value can be Parsed from a string
         /// </summary>
         /// <param name="value"></param>
         public abstract void SetValueFromString(string value);
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="value1"></param>
         /// <param name="value2"></param>
@@ -80,7 +80,7 @@ namespace RestService.Model.Input
         public abstract bool Calculate(string value1, string value2, char operand);
 
         /// <summary>
-        /// Returns the underlying UI Controls value formatted as a string
+        ///     Returns the underlying UI Controls value formatted as a string
         /// </summary>
         /// <returns></returns>
         public abstract string GetFormattedValue();

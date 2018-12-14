@@ -14,7 +14,8 @@ namespace RestService.Model.Input
         /// <param name="parent"></param>
         /// <param name="name"></param>
         /// <param name="hasCalculation"></param>
-        public DateDropdown(Tag parent, string name, string description, bool obligatory, string calculation) : base(parent, name,
+        public DateDropdown(Tag parent, string name, string description, bool obligatory, string calculation) : base(
+            parent, name,
             description, obligatory, calculation, new DatePicker(), DataType.DateTime)
         {
             if (!string.IsNullOrWhiteSpace(calculation)) BaseControl.IsEnabled = false;
@@ -45,29 +46,36 @@ namespace RestService.Model.Input
 
         public override bool Calculate(string value1, string value2, char operand)
         {
-            bool isValue1Number = double.TryParse(value1, out var value1Double);
-            bool isValue2Number = double.TryParse(value2, out var value2Double);
-            bool isValue1Date = DateTime.TryParse(value1, out var value1Date);
-            bool isValue2Date = DateTime.TryParse(value2, out var value2Date);
+            var isValue1Number = double.TryParse(value1, out var value1Double);
+            var isValue2Number = double.TryParse(value2, out var value2Double);
+            var isValue1Date = DateTime.TryParse(value1, out var value1Date);
+            var isValue2Date = DateTime.TryParse(value2, out var value2Date);
 
             int factor;
             switch (operand)
             {
-                case '+': factor = 1; break;
-                case '-': factor = -1; break;
+                case '+':
+                    factor = 1;
+                    break;
+                case '-':
+                    factor = -1;
+                    break;
                 default: return false;
             }
-            
+
             if (isValue1Date && isValue2Number)
             {
                 value1Date = value1Date.AddDays(value2Double * factor);
                 ElevatedControl.SelectedDate = value1Date;
                 return true;
             }
-            
+
             return false;
         }
 
-        public override string GetFormattedValue() => GetValue()?.ToShortDateString();
+        public override string GetFormattedValue()
+        {
+            return GetValue()?.ToShortDateString();
+        }
     }
 }

@@ -1,45 +1,50 @@
 <UserControl x:Class="DynamicDocsWPF.Windows.ViewOwnInstances"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:h="clr-namespace:DynamicDocsWPF.HelperClasses"
-        xmlns:local="clr-namespace:DynamicDocsWPF.Windows"
-        mc:Ignorable="d"
-        Background="#3CA4FF"
-        Foreground="White">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:h="clr-namespace:DynamicDocsWPF.HelperClasses"
+             xmlns:database="clr-namespace:RestService.Model.Database;assembly=RestService"
+             mc:Ignorable="d"
+             Background="#3CA4FF"
+             Foreground="White">
     <UserControl.Resources>
-        <h:BoolToColorConverter x:Key="BoolToColorConverter"/>
-        <h:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <h:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <ListView Grid.Row="0" Background="#7ed5ff" Foreground="White" BorderBrush="Transparent" Name="InstanceList" SelectionChanged="InstanceList_OnSelectionChanged">
+            <ListView Grid.Row="0" Background="#7ed5ff" Foreground="White" BorderBrush="Transparent"
+                      Name="InstanceList" SelectionChanged="InstanceList_OnSelectionChanged">
                 <ListView.Effect>
                     <DropShadowEffect Color="Black" Direction="-90" Opacity="0.5" ShadowDepth="6" BlurRadius="25" />
                 </ListView.Effect>
                 <ListView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate DataType="database:ProcessInstance">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
+                                <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="1" Text="{Binding Subject}" FontSize="14" FontWeight="Bold" />
-                            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding OwnerId}" FontSize="12" FontWeight="Light"/>
-                            <TextBlock FontSize="20" Visibility="{Binding Declined, Converter={StaticResource BoolToVisibilityConverter}}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="&#xE711;" Foreground="Red" Margin="5"/>
+                            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding OwnerId}" FontSize="12"
+                                       FontWeight="Light" />
+                            <TextBlock FontSize="20"
+                                       Visibility="{Binding Declined, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="&#xE711;"
+                                       Foreground="Red" Margin="5" />
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -47,29 +52,38 @@
             <Grid Grid.Row="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Margin="10">
-                        <RadioButton Checked="Archived_OnChecked" Name="Archived" GroupName="ProcessTypes" Content="Archivierte" Foreground="White" VerticalAlignment="Center" Margin="2"/>
-                        <RadioButton Checked="Running_OnChecked" Name="Running" GroupName="ProcessTypes" IsChecked="True" Content="Laufende" Foreground="White" VerticalAlignment="Center" Margin="2"/>
+                        <RadioButton Checked="Archived_OnChecked" GroupName="ProcessTypes"
+                                     Content="Archivierte" Foreground="White" VerticalAlignment="Center" Margin="2" />
+                        <RadioButton Checked="Running_OnChecked" Name="Running" GroupName="ProcessTypes"
+                                     IsChecked="True" Content="Laufende" Foreground="White" VerticalAlignment="Center"
+                                     Margin="2" />
                     </StackPanel>
-                    
-                    <Button Grid.Column="1" Click="ButtonBase_OnClick" HorizontalAlignment="Right" Width="40" Height="40" Foreground="White" FontSize="22" FontFamily="Segoe MDL2 Assets" Content="&#xE711;" Background="Transparent" BorderBrush="Transparent"/>
-                    <Button Grid.Column="2" Click="NewInstance_Click" HorizontalAlignment="Right" Width="40" Height="40" Foreground="White" FontSize="22" FontFamily="Segoe MDL2 Assets" Content="&#xE710;" Background="Transparent" BorderBrush="Transparent"/>
+
+                    <Button Grid.Column="1" Click="ButtonBase_OnClick" HorizontalAlignment="Right" Width="40"
+                            Height="40" Foreground="White" FontSize="22" FontFamily="Segoe MDL2 Assets"
+                            Content="&#xE711;" Background="Transparent" BorderBrush="Transparent" />
+                    <Button Grid.Column="2" Click="NewInstance_Click" HorizontalAlignment="Right" Width="40"
+                            Height="40" Foreground="White" FontSize="22" FontFamily="Segoe MDL2 Assets"
+                            Content="&#xE710;" Background="Transparent" BorderBrush="Transparent" />
                 </Grid>
             </Grid>
         </Grid>
         <Grid Name="ContentSection" Visibility="Collapsed" Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Name="StepDescription" Text="ProcessStepDescription" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10" FontSize="18"/>
-            <StackPanel Grid.Row="1"  Name="ProgressPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="23" Margin="20"/>
+            <TextBlock Name="StepDescription" Text="ProcessStepDescription" VerticalAlignment="Center"
+                       HorizontalAlignment="Center" Margin="10" FontSize="18" />
+            <StackPanel Grid.Row="1" Name="ProgressPanel" Orientation="Horizontal" HorizontalAlignment="Center"
+                        VerticalAlignment="Center" Height="23" Margin="20" />
             <Border Grid.Row="2" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
                 <Border.Effect>
@@ -77,24 +91,26 @@
                 </Border.Effect>
                 <ScrollViewer>
                     <ContentPresenter Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                Margin="40,20" MaxWidth="700"/>
+                                      Margin="40,20" MaxWidth="700" />
                 </ScrollViewer>
             </Border>
             <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
                 <Button Click="Back_Click" Content="Zurück" Width="100" Height="35"
-                        VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                        VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White"
+                        FontWeight="Black">
                     <Button.Effect>
                         <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
                     </Button.Effect>
                 </Button>
                 <Button Name="BtnNext" Click="Next_Click" Content="Weiter" Width="100" Height="35"
-                        VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                        VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White"
+                        FontWeight="Black">
                     <Button.Effect>
                         <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
                     </Button.Effect>
                 </Button>
             </StackPanel>
         </Grid>
-        
+
     </Grid>
 </UserControl>

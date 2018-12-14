@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
@@ -12,6 +11,7 @@ using DynamicDocsWPF.Model;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using RestService;
+using RestService.Model;
 using RestService.Model.Database;
 using RestService.RestDTOs;
 using WebServer;
@@ -25,23 +25,21 @@ namespace WebServerWPF
     {
         private const string DocPath = "./Docs/";
         private const string ProcessPath = "./Processes/";
-        private HttpContext _httpContext = HttpContext.Current;
         private static readonly DatabaseHelper Database = new DatabaseHelper();
+        private HttpContext _httpContext = HttpContext.Current;
 
         public ReplyGetPermissionLevel GetPermissionLevel(string message)
         {
             var request = JsonConvert.DeserializeObject<RequestGetPermissionLevel>(message);
-            if (IsPermitted(GetAuthUser(), 3) == AuthorizationResult.PERMITTED ||
-                (IsAuthorized(GetAuthUser()) == AuthorizationResult.AUTHORIZED &&
-                 GetAuthUser().Email.Equals(request.Username)))
-            {
-                return new ReplyGetPermissionLevel()
+            if (IsPermitted(GetAuthUser(), 3) == AuthorizationResult.Permitted ||
+                IsAuthorized(GetAuthUser()) == AuthorizationResult.Authorized &&
+                GetAuthUser().Email.Equals(request.Username))
+                return new ReplyGetPermissionLevel
                 {
                     PermissionLevel = Database.GetUserByMail(request.Username).PermissionLevel
                 };
-            }
 
-            return new ReplyGetPermissionLevel()
+            return new ReplyGetPermissionLevel
             {
                 PermissionLevel = -1
             };
@@ -53,9 +51,9 @@ namespace WebServerWPF
 
             try
             {
-                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.Permitted)
                 {
-                    var reply = new ReplyGetProcessInstance()
+                    var reply = new ReplyGetProcessInstance
                     {
                         ProcessInstance = Database.GetProcessInstanceById(request.Id)
                     };
@@ -71,70 +69,17 @@ namespace WebServerWPF
             return null;
         }
 
-        public AuthorizationResult IsAuthorized(User user)
-        {
-            try
-            {
-                var dbUser = Database.GetUserByMail(user.Email);
-
-                if (dbUser == null) return AuthorizationResult.INVALID_LOGIN;
-
-                return HashHelper.CheckHash(user.Password, dbUser.Password)
-                    ? AuthorizationResult.AUTHORIZED
-                    : AuthorizationResult.INVALID_LOGIN;
-            }
-            catch (Exception)
-            {
-                return AuthorizationResult.INVALID_FORMAT;
-            }
-        }
-
-        public User GetAuthUser()
-        {
-            var authHeader = WebOperationContext.Current.IncomingRequest.Headers["Authorization"];
-
-            if (authHeader != null && authHeader.StartsWith("Basic"))
-            {
-                var encodedUsernamePassword = authHeader.Substring("Basic ".Length).Trim();
-                var encoding = Encoding.GetEncoding("iso-8859-1");
-                var usernamePassword = encoding.GetString(Convert.FromBase64String(encodedUsernamePassword));
-
-                var separatorIndex = usernamePassword.IndexOf(':');
-
-                var username = usernamePassword.Substring(0, separatorIndex);
-                var password = usernamePassword.Substring(separatorIndex + 1);
-
-                return new User(username, password);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        private AuthorizationResult IsPermitted(User user, int permissionLevel)
-        {
-            if (IsAuthorized(user) != AuthorizationResult.AUTHORIZED) return AuthorizationResult.INVALID_LOGIN;
-
-            var dbUser = Database.GetUserByMail(user.Email);
-
-            if (dbUser == null) return AuthorizationResult.NO_PERMISSION;
-            if (dbUser.PermissionLevel < permissionLevel) return AuthorizationResult.NO_PERMISSION;
-
-            return AuthorizationResult.PERMITTED;
-        }
-
         public ReplyGetProcessTemplate GetProcessTemplate(string message)
         {
             var request = JsonConvert.DeserializeObject<RequestGetProcessTemplate>(message);
 
             try
             {
-                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.Permitted)
                 {
                     var template = Database.GetProcessTemplateById(request.Id);
                     var text = File.ReadAllText(template.FilePath);
-                    var reply = new ReplyGetProcessTemplate()
+                    var reply = new ReplyGetProcessTemplate
                     {
                         Id = template.Id,
                         Description = template.Description,
@@ -158,10 +103,10 @@ namespace WebServerWPF
 
             try
             {
-                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.Permitted)
                 {
                     var template = Database.GetDocTemplateById(request.Id);
-                    var reply = new ReplyGetDocTemplate()
+                    var reply = new ReplyGetDocTemplate
                     {
                         Id = template.Id,
                         Content = Encoding.Default.GetString(File.ReadAllBytes(template.FilePath))
@@ -183,9 +128,9 @@ namespace WebServerWPF
         {
             try
             {
-                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.Permitted)
                 {
-                    var reply = new ReplyGetProcessTemplateList()
+                    var reply = new ReplyGetProcessTemplateList
                     {
                         ProcessTemplates = Database.GetProcessTemplates()
                     };
@@ -205,9 +150,9 @@ namespace WebServerWPF
         {
             try
             {
-                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.Permitted)
                 {
-                    var reply = new ReplyGetDocTemplateList()
+                    var reply = new ReplyGetDocTemplateList
                     {
                         DocTemplates = Database.GetDocTemplates()
                     };
@@ -227,9 +172,9 @@ namespace WebServerWPF
         {
             try
             {
-                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.Permitted)
                 {
-                    var reply = new ReplyGetProcessInstanceList()
+                    var reply = new ReplyGetProcessInstanceList
                     {
                         ProcessInstances = Database.GetProcessInstances(GetAuthUser())
                     };
@@ -249,9 +194,9 @@ namespace WebServerWPF
         {
             try
             {
-                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.Permitted)
                 {
-                    var reply = new ReplyGetResponsibilityList()
+                    var reply = new ReplyGetResponsibilityList
                     {
                         Responsibilities = Database.GetResponsibilities(GetAuthUser())
                     };
@@ -271,21 +216,19 @@ namespace WebServerWPF
         {
             try
             {
-                if (IsPermitted(GetAuthUser(), 3) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 3) == AuthorizationResult.Permitted)
                 {
                     var users = Database.GetUsers();
                     var safeList = new List<User>();
 
                     foreach (var user in users)
-                    {
                         safeList.Add(new User
                         {
                             Email = user.Email,
                             PermissionLevel = user.PermissionLevel
                         });
-                    }
 
-                    var reply = new ReplyGetUserList()
+                    var reply = new ReplyGetUserList
                     {
                         Users = safeList
                     };
@@ -303,7 +246,7 @@ namespace WebServerWPF
 
         public ReplyGetAuthenticationResult CheckAuthentication()
         {
-            return new ReplyGetAuthenticationResult()
+            return new ReplyGetAuthenticationResult
             {
                 AuthorizationResult = IsAuthorized(GetAuthUser())
             };
@@ -315,9 +258,9 @@ namespace WebServerWPF
 
             try
             {
-                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.PERMITTED)
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.Permitted)
                 {
-                    var reply = new ReplyGetEntryList()
+                    var reply = new ReplyGetEntryList
                     {
                         Entries = Database.GetEntries(request.InstanceId)
                     };
@@ -341,7 +284,7 @@ namespace WebServerWPF
                 var auth = IsPermitted(GetAuthUser(), 2);
                 switch (auth)
                 {
-                    case AuthorizationResult.PERMITTED:
+                    case AuthorizationResult.Permitted:
                     {
                         var path = $"{ProcessPath}{request.Id}.xml";
 
@@ -359,7 +302,8 @@ namespace WebServerWPF
                                 Description = process.Description,
                                 FilePath = path
                             };
-                            try{
+                            try
+                            {
                                 MainWindow.PostToLog("Registering in Database...");
                                 Database.AddProcessTemplate(processTemplate);
                                 MainWindow.PostToLog("Done!");
@@ -367,42 +311,41 @@ namespace WebServerWPF
                             catch (MySqlException e)
                             {
                                 if (e.Message.Contains("Duplicate entry"))
-                                {
-                                    reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
-                                }
+                                    reply.UploadResult = UploadResult.FailedIdExists;
 
                                 PrintException(e);
                             }
+
                             File.WriteAllText(path, request.Text);
                         }
                         else
                         {
-                            reply.UploadResult = UploadResult.FAILED_FILEEXISTS;
+                            reply.UploadResult = UploadResult.FailedFileexists;
                         }
 
                         break;
                     }
-                    case AuthorizationResult.AUTHORIZED:
-                        reply.UploadResult = UploadResult.NO_PERMISSION;
+                    case AuthorizationResult.Authorized:
+                        reply.UploadResult = UploadResult.NoPermission;
                         break;
                     default:
-                        reply.UploadResult = UploadResult.INVALID_LOGIN;
+                        reply.UploadResult = UploadResult.InvalidLogin;
                         break;
                 }
             }
-            
+
             catch (XmlException e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_FILE_OR_TYPE_INVALID;
+                reply.UploadResult = UploadResult.FailedFileOrTypeInvalid;
             }
             catch (Exception e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_OTHER;
+                reply.UploadResult = UploadResult.FailedOther;
             }
 
-            reply.UploadResult = UploadResult.SUCCESS;
+            reply.UploadResult = UploadResult.Success;
             return reply;
         }
 
@@ -414,38 +357,35 @@ namespace WebServerWPF
                 var auth = IsPermitted(GetAuthUser(), 3);
                 switch (auth)
                 {
-                    case AuthorizationResult.PERMITTED:
+                    case AuthorizationResult.Permitted:
                         Database.UpdateUserPermission(request);
                         break;
-                    case AuthorizationResult.NO_PERMISSION:
-                        reply.UploadResult = UploadResult.NO_PERMISSION;
+                    case AuthorizationResult.NoPermission:
+                        reply.UploadResult = UploadResult.NoPermission;
                         break;
-                    case AuthorizationResult.INVALID_LOGIN:
-                        reply.UploadResult = UploadResult.INVALID_LOGIN;
+                    case AuthorizationResult.InvalidLogin:
+                        reply.UploadResult = UploadResult.InvalidLogin;
                         break;
                 }
             }
             catch (MySqlException e)
             {
-                if (e.Message.Contains("Duplicate entry"))
-                {
-                    reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
-                }
+                if (e.Message.Contains("Duplicate entry")) reply.UploadResult = UploadResult.FailedIdExists;
 
                 PrintException(e);
             }
             catch (XmlException e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_FILE_OR_TYPE_INVALID;
+                reply.UploadResult = UploadResult.FailedFileOrTypeInvalid;
             }
             catch (Exception e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_OTHER;
+                reply.UploadResult = UploadResult.FailedOther;
             }
 
-            reply.UploadResult = UploadResult.SUCCESS;
+            reply.UploadResult = UploadResult.Success;
             return reply;
         }
 
@@ -457,7 +397,7 @@ namespace WebServerWPF
                 var auth = IsPermitted(GetAuthUser(), 2);
                 switch (auth)
                 {
-                    case AuthorizationResult.PERMITTED:
+                    case AuthorizationResult.Permitted:
                     {
                         var path = $"{DocPath}{request.Id}.docx";
 
@@ -468,7 +408,7 @@ namespace WebServerWPF
                                 Directory.CreateDirectory(dir);
 
                             MainWindow.PostToLog("Received Document...");
-                            var docTemplate = new DocTemplate()
+                            var docTemplate = new DocTemplate
                             {
                                 Id = request.Id,
                                 FilePath = path
@@ -481,40 +421,37 @@ namespace WebServerWPF
                         }
                         else
                         {
-                            reply.UploadResult = UploadResult.FAILED_FILEEXISTS;
+                            reply.UploadResult = UploadResult.FailedFileexists;
                         }
 
                         break;
                     }
-                    case AuthorizationResult.AUTHORIZED:
-                        reply.UploadResult = UploadResult.NO_PERMISSION;
+                    case AuthorizationResult.Authorized:
+                        reply.UploadResult = UploadResult.NoPermission;
                         break;
                     default:
-                        reply.UploadResult = UploadResult.INVALID_LOGIN;
+                        reply.UploadResult = UploadResult.InvalidLogin;
                         break;
                 }
             }
             catch (MySqlException e)
             {
-                if (e.Message.Contains("Duplicate entry"))
-                {
-                    reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
-                }
+                if (e.Message.Contains("Duplicate entry")) reply.UploadResult = UploadResult.FailedIdExists;
 
                 PrintException(e);
             }
             catch (XmlException e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_FILE_OR_TYPE_INVALID;
+                reply.UploadResult = UploadResult.FailedFileOrTypeInvalid;
             }
             catch (Exception e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_OTHER;
+                reply.UploadResult = UploadResult.FailedOther;
             }
 
-            reply.UploadResult = UploadResult.SUCCESS;
+            reply.UploadResult = UploadResult.Success;
             return reply;
         }
 
@@ -526,7 +463,7 @@ namespace WebServerWPF
                 var auth = IsPermitted(GetAuthUser(), 1);
                 switch (auth)
                 {
-                    case AuthorizationResult.PERMITTED:
+                    case AuthorizationResult.Permitted:
                         MainWindow.PostToLog("Received a process update.");
                         if (request.Declined)
                         {
@@ -542,35 +479,32 @@ namespace WebServerWPF
                         if (request.Locks)
                             Database.LockProcessInstance(request.Id);
                         break;
-                    case AuthorizationResult.NO_PERMISSION:
-                        reply.UploadResult = UploadResult.NO_PERMISSION;
+                    case AuthorizationResult.NoPermission:
+                        reply.UploadResult = UploadResult.NoPermission;
                         break;
-                    case AuthorizationResult.INVALID_LOGIN:
-                        reply.UploadResult = UploadResult.INVALID_LOGIN;
+                    case AuthorizationResult.InvalidLogin:
+                        reply.UploadResult = UploadResult.InvalidLogin;
                         break;
                 }
             }
             catch (MySqlException e)
             {
-                if (e.Message.Contains("Duplicate entry"))
-                {
-                    reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
-                }
+                if (e.Message.Contains("Duplicate entry")) reply.UploadResult = UploadResult.FailedIdExists;
 
                 PrintException(e);
             }
             catch (XmlException e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_FILE_OR_TYPE_INVALID;
+                reply.UploadResult = UploadResult.FailedFileOrTypeInvalid;
             }
             catch (Exception e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_OTHER;
+                reply.UploadResult = UploadResult.FailedOther;
             }
 
-            reply.UploadResult = UploadResult.SUCCESS;
+            reply.UploadResult = UploadResult.Success;
             return reply;
         }
 
@@ -582,47 +516,40 @@ namespace WebServerWPF
                 var auth = IsPermitted(GetAuthUser(), 1);
                 switch (auth)
                 {
-                    case AuthorizationResult.PERMITTED:
+                    case AuthorizationResult.Permitted:
                         MainWindow.PostToLog("Received an entry update.");
                         var instance = Database.GetProcessInstanceById(requestPost.Entry.InstanceId);
                         if (instance != null)
-                        {
                             if (!instance.Locked)
-                            {
                                 Database.UpdateEntry(requestPost.Entry);
-                            }
-                        }
 
                         break;
-                    case AuthorizationResult.NO_PERMISSION:
-                        reply.UploadResult = UploadResult.NO_PERMISSION;
+                    case AuthorizationResult.NoPermission:
+                        reply.UploadResult = UploadResult.NoPermission;
                         break;
-                    case AuthorizationResult.INVALID_LOGIN:
-                        reply.UploadResult = UploadResult.INVALID_LOGIN;
+                    case AuthorizationResult.InvalidLogin:
+                        reply.UploadResult = UploadResult.InvalidLogin;
                         break;
                 }
             }
             catch (MySqlException e)
             {
-                if (e.Message.Contains("Duplicate entry"))
-                {
-                    reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
-                }
+                if (e.Message.Contains("Duplicate entry")) reply.UploadResult = UploadResult.FailedIdExists;
 
                 PrintException(e);
             }
             catch (XmlException e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_FILE_OR_TYPE_INVALID;
+                reply.UploadResult = UploadResult.FailedFileOrTypeInvalid;
             }
             catch (Exception e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_OTHER;
+                reply.UploadResult = UploadResult.FailedOther;
             }
 
-            reply.UploadResult = UploadResult.SUCCESS;
+            reply.UploadResult = UploadResult.Success;
             return reply;
         }
 
@@ -634,41 +561,38 @@ namespace WebServerWPF
                 var auth = IsPermitted(GetAuthUser(), 1);
                 switch (auth)
                 {
-                    case AuthorizationResult.PERMITTED:
+                    case AuthorizationResult.Permitted:
                         MainWindow.PostToLog("Received request to create a new Process Instance.");
                         MainWindow.PostToLog("Registering in Database...");
-                        reply.InstanceId = (int) Database.AddProcessInstance(request.ProcessInstance);
+                        reply.InstanceId = (int) Database.InsertProcessInstance(request.ProcessInstance);
                         MainWindow.PostToLog("Done");
                         break;
-                    case AuthorizationResult.NO_PERMISSION:
-                        reply.UploadResult = UploadResult.NO_PERMISSION;
+                    case AuthorizationResult.NoPermission:
+                        reply.UploadResult = UploadResult.NoPermission;
                         break;
-                    case AuthorizationResult.INVALID_LOGIN:
-                        reply.UploadResult = UploadResult.INVALID_LOGIN;
+                    case AuthorizationResult.InvalidLogin:
+                        reply.UploadResult = UploadResult.InvalidLogin;
                         break;
                 }
-                
-                reply.UploadResult = UploadResult.SUCCESS;
+
+                reply.UploadResult = UploadResult.Success;
             }
             catch (MySqlException e)
             {
-                if (e.Message.Contains("Duplicate entry"))
-                {
-                    reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
-                }
-                
-                reply.UploadResult = UploadResult.FAILED_OTHER;
+                if (e.Message.Contains("Duplicate entry")) reply.UploadResult = UploadResult.FailedIdExists;
+
+                reply.UploadResult = UploadResult.FailedOther;
                 PrintException(e);
             }
             catch (XmlException e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_FILE_OR_TYPE_INVALID;
+                reply.UploadResult = UploadResult.FailedFileOrTypeInvalid;
             }
             catch (Exception e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_OTHER;
+                reply.UploadResult = UploadResult.FailedOther;
             }
 
             return reply;
@@ -682,46 +606,42 @@ namespace WebServerWPF
                 var auth = IsPermitted(GetAuthUser(), 1);
                 switch (auth)
                 {
-                    case AuthorizationResult.PERMITTED:
+                    case AuthorizationResult.Permitted:
                         MainWindow.PostToLog("Received request to add a new Entry.");
                         var entry = request.Entry;
                         MainWindow.PostToLog("Registering in Database...");
                         Database.AddEntry(entry);
                         MainWindow.PostToLog("Done!");
                         break;
-                    case AuthorizationResult.NO_PERMISSION:
-                        reply.UploadResult = UploadResult.NO_PERMISSION;
+                    case AuthorizationResult.NoPermission:
+                        reply.UploadResult = UploadResult.NoPermission;
                         break;
-                    case AuthorizationResult.INVALID_LOGIN:
-                        reply.UploadResult = UploadResult.INVALID_LOGIN;
+                    case AuthorizationResult.InvalidLogin:
+                        reply.UploadResult = UploadResult.InvalidLogin;
                         break;
                 }
             }
             catch (MySqlException e)
             {
                 if (e.Message.Contains("Duplicate entry"))
-                {
-                    reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
-                }
+                    reply.UploadResult = UploadResult.FailedIdExists;
                 else if (e.Message.Contains("foreign key constraint fails"))
-                {
-                    reply.UploadResult = UploadResult.MISSING_LINK;
-                }
+                    reply.UploadResult = UploadResult.MissingLink;
 
                 PrintException(e);
             }
             catch (XmlException e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_FILE_OR_TYPE_INVALID;
+                reply.UploadResult = UploadResult.FailedFileOrTypeInvalid;
             }
             catch (Exception e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_OTHER;
+                reply.UploadResult = UploadResult.FailedOther;
             }
 
-            reply.UploadResult = UploadResult.SUCCESS;
+            reply.UploadResult = UploadResult.Success;
             return reply;
         }
 
@@ -740,7 +660,7 @@ namespace WebServerWPF
                 if (e.Message.Contains("Duplicate entry"))
                 {
                     MainWindow.PostToLog("User already exists.");
-                    reply.UploadResult = UploadResult.USER_EXISTS;
+                    reply.UploadResult = UploadResult.UserExists;
                 }
 
                 PrintException(e);
@@ -748,11 +668,62 @@ namespace WebServerWPF
             catch (Exception e)
             {
                 PrintException(e);
-                reply.UploadResult = UploadResult.FAILED_OTHER;
+                reply.UploadResult = UploadResult.FailedOther;
             }
 
-            reply.UploadResult = UploadResult.SUCCESS;
+            reply.UploadResult = UploadResult.Success;
             return reply;
+        }
+
+        public AuthorizationResult IsAuthorized(User user)
+        {
+            try
+            {
+                var dbUser = Database.GetUserByMail(user.Email);
+
+                if (dbUser == null) return AuthorizationResult.InvalidLogin;
+
+                return HashHelper.CheckHash(user.Password, dbUser.Password)
+                    ? AuthorizationResult.Authorized
+                    : AuthorizationResult.InvalidLogin;
+            }
+            catch (Exception)
+            {
+                return AuthorizationResult.InvalidFormat;
+            }
+        }
+
+        public User GetAuthUser()
+        {
+            var authHeader = WebOperationContext.Current.IncomingRequest.Headers["Authorization"];
+
+            if (authHeader != null && authHeader.StartsWith("Basic"))
+            {
+                var encodedUsernamePassword = authHeader.Substring("Basic ".Length).Trim();
+                var encoding = Encoding.GetEncoding("iso-8859-1");
+                var usernamePassword = encoding.GetString(Convert.FromBase64String(encodedUsernamePassword));
+
+                var separatorIndex = usernamePassword.IndexOf(':');
+
+                var username = usernamePassword.Substring(0, separatorIndex);
+                var password = usernamePassword.Substring(separatorIndex + 1);
+
+                return new User(username, password);
+            }
+
+            return null;
+        }
+
+        private AuthorizationResult IsPermitted(User user, int permissionLevel)
+        {
+            if (IsAuthorized(user) != AuthorizationResult.Authorized) return AuthorizationResult.InvalidLogin;
+
+            var dbUser = Database.GetUserByMail(user.Email);
+
+            if (dbUser == null) return AuthorizationResult.NoPermission;
+            if (dbUser.PermissionLevel < permissionLevel) return AuthorizationResult.NoPermission;
+
+            return AuthorizationResult.Permitted;
         }
 
         private static void PrintException(Exception e)

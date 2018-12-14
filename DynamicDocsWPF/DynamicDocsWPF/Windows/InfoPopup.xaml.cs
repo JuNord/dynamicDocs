@@ -28,7 +28,14 @@ namespace DynamicDocsWPF.Windows
             Close();
         }
 
-        public static bool ShowOk(string message) => new InfoPopup(MessageBoxButton.OK, message).ShowDialog() ?? false;
-        public static bool ShowYesNo(string message) => new InfoPopup(MessageBoxButton.YesNo, message).ShowDialog() ?? false;
+        public static bool ShowOk(string message)
+        {
+            return new InfoPopup(MessageBoxButton.OK, message).ShowDialog() ?? false;
+        }
+
+        public static bool ShowYesNo(string message)
+        {
+            return new InfoPopup(MessageBoxButton.YesNo, message).ShowDialog() ?? false;
+        }
     }
 }

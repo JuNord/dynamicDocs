@@ -8,13 +8,14 @@ namespace DynamicDocsWPF.Windows
 {
     public partial class Register : Window
     {
-        public string Email => EmailBox.Text;
-        public string Password => PasswordBox.Password;
-        public User User => new User(Email, Password);
         public Register()
         {
             InitializeComponent();
         }
+
+        public string Email => EmailBox.Text;
+        public string Password => PasswordBox.Password;
+        public User User => new User(Email, Password);
 
         private void Register_OnClick(object sender, RoutedEventArgs e)
         {
@@ -35,18 +36,19 @@ namespace DynamicDocsWPF.Windows
             }
             else
             {
-                var result = new NetworkHelper(ConfigurationManager.GetInstance().Url,User).Register();
+                var result = new NetworkHelper(ConfigurationManager.GetInstance().Url, User).Register();
                 switch (result)
                 {
-                    case UploadResult.USER_EXISTS:
+                    case UploadResult.UserExists:
                         RegisterInfoText.Text = "Ein Nutzer mit dieser Email Adresse existiert bereits.";
                         break;
-                    case UploadResult.SUCCESS:
+                    case UploadResult.Success:
                         DialogResult = true;
                         Close();
                         break;
                     default:
-                        RegisterInfoText.Text = "Etwas ist schiefgelaufen. Prüfen Sie Ihre Eingaben oder kontaktieren Sie den Administrator.";
+                        RegisterInfoText.Text =
+                            "Etwas ist schiefgelaufen. Prüfen Sie Ihre Eingaben oder kontaktieren Sie den Administrator.";
                         break;
                 }
             }

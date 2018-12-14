@@ -14,15 +14,16 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
-                        
-                        <Border Name="Border" BorderThickness="0,0,0,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="2,0">
+
+                        <Border Name="Border" BorderThickness="0,0,0,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0"
+                                Margin="2,0">
                             <ContentPresenter x:Name="ContentSite"
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Center"
                                               ContentSource="Header"
-                                              Margin="10,2"/>
+                                              Margin="10,2" />
                         </Border>
-                        <ControlTemplate.Triggers>  
+                        <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="Border" Property="Background" Value="LightSkyBlue" />
                             </Trigger>
@@ -34,50 +35,52 @@
                 </Setter.Value>
             </Setter>
         </Style>
-<ControlTemplate x:Key="TBcontroltemplate" TargetType="{x:Type TextBoxBase}">
-            <Border Background="{TemplateBinding Background}" 
+        <ControlTemplate x:Key="TBcontroltemplate" TargetType="{x:Type TextBoxBase}">
+            <Border Background="{TemplateBinding Background}"
                     x:Name="Bd"
                     BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}" 
-                    CornerRadius="14"> 
-                <ScrollViewer x:Name="PART_ContentHost"/>
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="14">
+                <ScrollViewer x:Name="PART_ContentHost" />
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" TargetName="Bd"/>
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+                            TargetName="Bd" />
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
                 </Trigger>
                 <Trigger Property="Width" Value="Auto">
-                    <Setter Property="MinWidth" Value="100"/>
+                    <Setter Property="MinWidth" Value="100" />
                 </Trigger>
                 <Trigger Property="Height" Value="Auto">
-                    <Setter Property="MinHeight" Value="20"/>
+                    <Setter Property="MinHeight" Value="20" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
         <ControlTemplate x:Key="PBControltemplate" TargetType="{x:Type PasswordBox}">
-            <Border Background="{TemplateBinding Background}" 
+            <Border Background="{TemplateBinding Background}"
                     x:Name="Bd"
                     BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}" 
-                    CornerRadius="14"> 
-                <ScrollViewer x:Name="PART_ContentHost"/>
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="14">
+                <ScrollViewer x:Name="PART_ContentHost" />
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" TargetName="Bd"/>
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+                            TargetName="Bd" />
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
                 </Trigger>
                 <Trigger Property="Width" Value="Auto">
-                    <Setter Property="MinWidth" Value="100"/>
+                    <Setter Property="MinWidth" Value="100" />
                 </Trigger>
                 <Trigger Property="Height" Value="Auto">
-                    <Setter Property="MinHeight" Value="20"/>
+                    <Setter Property="MinHeight" Value="20" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -85,7 +88,7 @@
         </Grid.RowDefinitions>
         <TextBlock x:Name="InfoBlock" HorizontalAlignment="Center" Text="Willkommen zu Ihrem A.u.F.E.T.!" FontSize="28"
                    FontFamily="Segoe UI Light" Margin="20" />
-        <TabControl Background="#3CA4FF"  Grid.Row="1" BorderThickness="0" Padding="0,1,0,0" SelectedIndex="0">
+        <TabControl Background="#3CA4FF" Grid.Row="1" BorderThickness="0" Padding="0,1,0,0" SelectedIndex="0">
             <TabControl.Effect>
                 <DropShadowEffect Color="Black" Direction="-90" Opacity="0.5" ShadowDepth="6" BlurRadius="25" />
             </TabControl.Effect>
@@ -98,32 +101,39 @@
             <TabItem Name="Administration" TabIndex="2" Header="Administration">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <ContentPresenter x:Name="AdministrationContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                    <Button Name="Accept" Click="NewProcess_Click" Grid.Column="1" Content="Neuen Prozess Anlegen" Width="150" Height="35"
-                            VerticalAlignment="Bottom" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
+                    <ContentPresenter x:Name="AdministrationContent" HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch" />
+                    <Button Name="Accept" Click="NewProcess_Click" Grid.Column="1" Content="Neuen Prozess Anlegen"
+                            Width="150" Height="35"
+                            VerticalAlignment="Bottom" Margin="20" Background="#2196f3" Foreground="White"
+                            FontWeight="Black">
                         <Button.Effect>
-                            <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                            <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3"
+                                              BlurRadius="5" />
                         </Button.Effect>
                     </Button>
                 </Grid>
             </TabItem>
         </TabControl>
-        <Grid Background="#3CA4FF" Grid.Row="1" Name="NoPermissionText" Visibility="Collapsed" VerticalAlignment="Stretch">
+        <Grid Background="#3CA4FF" Grid.Row="1" Name="NoPermissionText" Visibility="Collapsed"
+              VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" FontWeight="Light" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="18" Foreground="White" TextWrapping="Wrap">
-                <Run Text="Nichts zu sehen?"/>
-                <LineBreak/><LineBreak/>
-                <Run Text="Vermutlich fehlen Ihnen Berechtigungen."/> 
-                <LineBreak/>
-                <Run Text="Bitte wenden Sie sich an einen Administrator."/>
+            <TextBlock Grid.Row="0" FontWeight="Light" VerticalAlignment="Center" HorizontalAlignment="Center"
+                       TextAlignment="Center" FontSize="18" Foreground="White" TextWrapping="Wrap">
+                <Run Text="Nichts zu sehen?" />
+                <LineBreak /><LineBreak />
+                <Run Text="Vermutlich fehlen Ihnen Berechtigungen." />
+                <LineBreak />
+                <Run Text="Bitte wenden Sie sich an einen Administrator." />
             </TextBlock>
-            <Button Name="Reload" Grid.Row="1" Click="Reload_Click" FontFamily="Segoe MDL2 Assets" FontSize="25" Content="&#xE72C;" Width="50" Height="50"
+            <Button Name="Reload" Grid.Row="1" Click="Reload_Click" FontFamily="Segoe MDL2 Assets" FontSize="25"
+                    Content="&#xE72C;" Width="50" Height="50"
                     VerticalAlignment="Bottom" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
                 <Button.Effect>
                     <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />

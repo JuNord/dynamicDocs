@@ -8,9 +8,6 @@ namespace RestService.Model.Process
         private readonly List<ArchivePermissionElement> _archivePermissions;
         private readonly List<ProcessStep> _steps;
 
-        public CustomEnumerable<ProcessStep> Steps { get; }
-        public CustomEnumerable<ArchivePermissionElement> ArchivePermissions { get; }
-
         public ProcessObject(string name, string description) : base(null, name, description)
         {
             _steps = new List<ProcessStep>();
@@ -18,6 +15,9 @@ namespace RestService.Model.Process
             _archivePermissions = new List<ArchivePermissionElement>();
             ArchivePermissions = new CustomEnumerable<ArchivePermissionElement>(_archivePermissions);
         }
+
+        public CustomEnumerable<ProcessStep> Steps { get; }
+        public CustomEnumerable<ArchivePermissionElement> ArchivePermissions { get; }
 
         public int CurrentStep { get; set; }
 
@@ -39,9 +39,9 @@ namespace RestService.Model.Process
         {
             if (index < _steps.Count)
                 return _steps?[index];
-            else return null;
+            return null;
         }
-        
+
 
         public string GetElementValue(string name)
         {

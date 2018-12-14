@@ -38,7 +38,7 @@ namespace RestService.Model.Input
                 "Manfred Ziebell"
             };
         }
-        
+
         public override void SetValueFromString(string value)
         {
             ElevatedControl.SelectedValue = value;

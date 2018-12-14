@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Web.UI.WebControls;
 using System.Windows;
-using System.Windows.Media;
 using DynamicDocsWPF.HelperClasses;
 using DynamicDocsWPF.Windows;
 using RestService;
 using RestService.Model.Database;
-using RestService.Model.Process;
-using Login = DynamicDocsWPF.Windows.Login;
 
 namespace DynamicDocsWPF
 {
@@ -19,10 +14,21 @@ namespace DynamicDocsWPF
     /// </summary>
     public partial class MainWindow
     {
+        private int _lastPermission = -1;
         private NetworkHelper _networkHelper;
         private User _user;
-        private int _lastPermission = -1;
-        
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            Connect();
+            DisplayInfo(MoTD);
+            new Thread(AuthCheck) {IsBackground = true}.Start();
+
+
+            new Thread(Idle) {IsBackground = true}.Start();
+        }
+
         public static string MoTD
         {
             get
@@ -34,17 +40,6 @@ namespace DynamicDocsWPF
             }
         }
 
-        public MainWindow()
-        {
-            InitializeComponent();
-            Connect();
-            DisplayInfo(MoTD);
-            new Thread(AuthCheck){IsBackground = true}.Start();
-        
-
-            new Thread(Idle){IsBackground = true}.Start();
-        }
-
         private void AuthCheck()
         {
             while (true)
@@ -53,13 +48,13 @@ namespace DynamicDocsWPF
                 Thread.Sleep(100);
             }
         }
-        
+
         private void Idle()
         {
             while (true)
             {
                 if (_lastPermission > -1)
-                { Dispatcher.Invoke(() =>
+                    Dispatcher.Invoke(() =>
                     {
                         var foreign = ForeignInstances.Content as ViewPendingInstances;
                         var own = OwnInstances.Content as ViewOwnInstances;
@@ -68,10 +63,8 @@ namespace DynamicDocsWPF
                         own?.Refresh();
                         admin?.Refresh();
                     });
-                }
 
                 Thread.Sleep(10000);
-              
             }
         }
 
@@ -89,7 +82,10 @@ namespace DynamicDocsWPF
 
                     HandlePermissionLevel();
                 }
-                else Close();
+                else
+                {
+                    Close();
+                }
             }
             catch (WebException)
             {
@@ -97,8 +93,6 @@ namespace DynamicDocsWPF
                 login.Close();
                 Close();
             }
-
-            
         }
 
         private void HandlePermissionLevel()
@@ -169,15 +163,21 @@ namespace DynamicDocsWPF
                     default: throw new ArgumentOutOfRangeException();
                 }
             }
-            else Connect();
+            else
+            {
+                Connect();
+            }
         }
-        
-        public void DisplayInfo(string text) => InfoBlock.Text = text;
+
+        public void DisplayInfo(string text)
+        {
+            InfoBlock.Text = text;
+        }
 
         private void NewProcess_Click(object sender, RoutedEventArgs e)
         {
             CreateProcessTemplate create = null;
-            
+
             try
             {
                 create = new CreateProcessTemplate(_networkHelper);

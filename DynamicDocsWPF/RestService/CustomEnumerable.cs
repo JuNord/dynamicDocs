@@ -5,8 +5,8 @@ namespace RestService
 {
     public class CustomEnumerable<T> : IEnumerator<T>, IEnumerable<T>
     {
-        private int _index;
         private readonly List<T> _elements;
+        private int _index;
 
 
         public CustomEnumerable(List<T> elements)
@@ -14,17 +14,22 @@ namespace RestService
             _elements = elements;
             _index = -1;
         }
-        
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         public void Dispose()
         {
             Reset();
         }
 
-        public bool HasNext()
-        {
-            return _index < _elements.Count - 1;
-        }
-        
         public bool MoveNext()
         {
             if (_index + 1 < _elements.Count)
@@ -32,17 +37,8 @@ namespace RestService
                 _index++;
                 return true;
             }
-            else return false;
-        }
 
-        public bool MoveBack()
-        {
-            if (_index - 1 >= 0)
-            {
-                _index--;
-                return true;
-            }
-            else return false;
+            return false;
         }
 
         public void Reset()
@@ -54,11 +50,20 @@ namespace RestService
 
         object IEnumerator.Current => Current;
 
-        public IEnumerator<T> GetEnumerator() => this;
-        
-        IEnumerator IEnumerable.GetEnumerator()
+        public bool HasNext()
         {
-            return GetEnumerator();
+            return _index < _elements.Count - 1;
+        }
+
+        public bool MoveBack()
+        {
+            if (_index - 1 >= 0)
+            {
+                _index--;
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.CodeDom;
 using System.Windows.Controls;
 using DynamicDocsWPF.Model;
 using RestService.Model.Base;
@@ -15,7 +14,8 @@ namespace RestService.Model.Input
         /// <param name="obligatory">If true, a check function will be supplied to the base class to check if the control is empty</param>
         /// <param name="parent"></param>
         /// <param name="name"></param>
-        public NumberInputBox(Tag parent, string name, string description, bool obligatory, string calculation) : base(parent, name,
+        public NumberInputBox(Tag parent, string name, string description, bool obligatory, string calculation) : base(
+            parent, name,
             description, obligatory, calculation, new TextBox(), DataType.Int)
         {
             if (!string.IsNullOrWhiteSpace(calculation)) BaseControl.IsEnabled = false;
@@ -65,27 +65,37 @@ namespace RestService.Model.Input
         {
             double value1Double = 0;
             double value2Double = 0;
-            bool isValue1Date = DateTime.TryParse(value1, out var value1Date);
-            bool isValue2Date = DateTime.TryParse(value2, out var value2Date);
-            bool isValue1Number = !isValue1Date && double.TryParse(value1, out value1Double);
-            bool isValue2Number = !isValue2Date && double.TryParse(value2, out value2Double);
-            
+            var isValue1Date = DateTime.TryParse(value1, out var value1Date);
+            var isValue2Date = DateTime.TryParse(value2, out var value2Date);
+            var isValue1Number = !isValue1Date && double.TryParse(value1, out value1Double);
+            var isValue2Number = !isValue2Date && double.TryParse(value2, out value2Double);
+
 
             if (isValue1Number && isValue2Number)
             {
                 double result;
                 switch (operand)
                 {
-                    case '+': result = value1Double + value2Double; break;
-                    case '-': result = value1Double - value2Double; break;
-                    case '*': result = value1Double * value2Double; break;
-                    case '/': result = value1Double / value2Double; break;
+                    case '+':
+                        result = value1Double + value2Double;
+                        break;
+                    case '-':
+                        result = value1Double - value2Double;
+                        break;
+                    case '*':
+                        result = value1Double * value2Double;
+                        break;
+                    case '/':
+                        result = value1Double / value2Double;
+                        break;
                     default: return false;
                 }
-                ElevatedControl.Text = $"{result}";    
+
+                ElevatedControl.Text = $"{result}";
                 return true;
             }
-            else if (isValue1Date && isValue2Date && value1Date > value2Date)
+
+            if (isValue1Date && isValue2Date && value1Date > value2Date)
             {
                 double result = value2Date.BusinessDaysUntil(value1Date);
                 ElevatedControl.Text = $"{result}";
@@ -94,7 +104,5 @@ namespace RestService.Model.Input
 
             return false;
         }
-        
-       
     }
 }

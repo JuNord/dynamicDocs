@@ -75,7 +75,6 @@
     <Compile Include="Model\Database\Entry.cs" />
     <Compile Include="Model\Database\PendingInstance.cs" />
     <Compile Include="Model\Database\ProcessTemplate.cs" />
-    <Compile Include="Model\Database\ProcessUpdate.cs" />
     <Compile Include="Model\Database\Roles.cs" />
     <Compile Include="Model\Database\ProcessInstance.cs" />
     <Compile Include="Model\Database\User.cs" />
@@ -101,7 +100,6 @@
     <Compile Include="Model\Process\ValidationElement.cs" />
     <Compile Include="Model\Wording.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FileMessage.cs" />
     <Compile Include="RestDTOs\ReplyGetAuthenticationResult.cs" />
     <Compile Include="RestDTOs\ReplyGetDocTemplate.cs" />
     <Compile Include="RestDTOs\ReplyGetDocTemplateList.cs" />

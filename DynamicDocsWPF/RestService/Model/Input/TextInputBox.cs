@@ -32,7 +32,7 @@ namespace RestService.Model.Input
         {
             return ElevatedControl.Text;
         }
-        
+
         public override void SetValueFromString(string value)
         {
             ElevatedControl.Text = value;

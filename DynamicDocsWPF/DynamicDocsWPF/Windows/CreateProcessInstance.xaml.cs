@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
@@ -13,13 +11,30 @@ using RestService.Model.Process;
 
 namespace DynamicDocsWPF.Windows
 {
-    public partial class CreateProcessInstance : Window
+    public partial class CreateProcessInstance
     {
-        private int _instanceId = -1;
-        private readonly ProcessObject _processObject;
-        private readonly NetworkHelper _networkHelper;
         private readonly CustomEnumerable<Dialog> _dialogEnumerable;
-        
+        private readonly NetworkHelper _networkHelper;
+        private readonly ProcessObject _processObject;
+        private int _instanceId = -1;
+
+        public CreateProcessInstance(ProcessObject processObject, NetworkHelper networkHelper)
+        {
+            InitializeComponent();
+            _processObject = processObject;
+            _networkHelper = networkHelper;
+            var processStep = processObject.GetStepAtIndex(0);
+
+            Heading.Text = processObject.Description;
+
+            _dialogEnumerable = processStep?.Dialogs;
+
+            if (_dialogEnumerable == null) return;
+
+            _dialogEnumerable?.MoveNext();
+            ViewHolder.Content = _dialogEnumerable.Current?.GetStackPanel();
+        }
+
         private static string MoTd
         {
             get
@@ -31,75 +46,12 @@ namespace DynamicDocsWPF.Windows
             }
         }
 
-        public CreateProcessInstance(ProcessObject processObject, NetworkHelper networkHelper)
-        {
-            InitializeComponent();
-            _processObject = processObject;
-            _networkHelper = networkHelper;
-            var processStep = processObject.GetStepAtIndex(0);
-
-            Heading.Text = processObject.Description;
-
-            if (processStep == null) return;
-            
-            _dialogEnumerable = processStep?.Dialogs;
-            
-            if (_dialogEnumerable == null) return;
-            
-            _dialogEnumerable?.MoveNext();
-            ViewHolder.Content = _dialogEnumerable.Current.GetStackPanel();
-        }
-
-        private Func<double> StringToCalculation(ProcessObject processObject, string calculation)
-        {
-            string op;
-            if (calculation.Contains("+")) 
-                op = "+";
-            else if (calculation.Contains("-"))
-                op = "-";
-            else if (calculation.Contains("*"))
-                op = "*";
-            else if (calculation.Contains("/"))
-                op = "/";
-            else return null;
-
-            var split = calculation.Split(op[0]);
-            
-            
-            if (split.Length != 2) return null;
-
-            var numberRegex = new Regex("^\\d{1,*}$");
-            var linkRegex = new Regex("^\\[(.*?)\\]$");
-            var firstValue = 0.0;
-            var secondValue = 0.0;
-
-            if (numberRegex.IsMatch(split[0]))
-                firstValue = double.Parse(split[0]);
-            
-            else if (linkRegex.IsMatch(split[0]))
-            {
-                var linkText = split[0].Substring(1, split[0].Length - 2);
-
-                var list = new List<BaseInputElement>();
-            }
-
-            if (numberRegex.IsMatch(split[1])) 
-                secondValue = double.Parse(split[1]);
-
-            switch (op)
-            {
-                case "+": return () => firstValue + secondValue;
-                case "-": return () => firstValue - secondValue;
-                case "*": return () => firstValue * secondValue;
-                case "/": return () => firstValue / secondValue;
-                default: return null;
-            }
-        }
-        
+        // ReSharper disable once UnusedMember.Local
+        // ReSharper disable once UnusedParameter.Local
         private Func<bool> StringToCondition(ProcessObject processObject, string condition)
         {
             var split = new string[0];
-            var op = "";
+            string op;
             if (condition.Contains("<"))
                 op = "<";
             else if (condition.Contains(">"))
@@ -127,8 +79,9 @@ namespace DynamicDocsWPF.Windows
             }
             else if (linkRegex.IsMatch(split[0]))
             {
+                //TODO: HANDLE CONDITIONS
+                // ReSharper disable once UnusedVariable
                 var linkText = split[0].Substring(1, split[0].Length - 2);
-                
                 
             }
 
@@ -155,7 +108,7 @@ namespace DynamicDocsWPF.Windows
 
             if (_dialogEnumerable.MoveNext())
             {
-                ViewHolder.Content = _dialogEnumerable.Current.GetStackPanel();
+                ViewHolder.Content = _dialogEnumerable.Current?.GetStackPanel();
             }
             else
             {
@@ -170,16 +123,16 @@ namespace DynamicDocsWPF.Windows
                         Close();
                     }
                 }
-                else InfoBlock.Text = "Bitte geben Sie einen Betreff an.";
+                else
+                {
+                    InfoBlock.Text = "Bitte geben Sie einen Betreff an.";
+                }
             }
         }
-        
+
         private void Back_OnClick(object sender, RoutedEventArgs e)
         {
-            if (_dialogEnumerable.MoveBack())
-            {
-                ViewHolder.Content = _dialogEnumerable.Current.GetStackPanel();
-            }
+            if (_dialogEnumerable.MoveBack()) ViewHolder.Content = _dialogEnumerable.Current?.GetStackPanel();
         }
 
         private bool IsInputValueValid(BaseInputElement baseInputElement)
@@ -206,15 +159,12 @@ namespace DynamicDocsWPF.Windows
                 baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Colors.Gray);
                 baseInputElement.BaseControl.BorderThickness = new Thickness(1);
                 return true;
+            }
 
-            }
-            else
-            {
-                InfoBlock.Text = "Bitte füllen Sie alle Muss Felder aus.";
-                baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
-                baseInputElement.BaseControl.BorderThickness = new Thickness(2);
-                return false;
-            }
+            InfoBlock.Text = "Bitte füllen Sie alle Muss Felder aus.";
+            baseInputElement.BaseControl.BorderBrush = new SolidColorBrush(Color.FromArgb(170, 255, 50, 50));
+            baseInputElement.BaseControl.BorderThickness = new Thickness(2);
+            return false;
         }
 
         private void SendData()
@@ -226,30 +176,29 @@ namespace DynamicDocsWPF.Windows
 
                 _instanceId = reply.InstanceId;
 
-                if (reply.UploadResult == UploadResult.SUCCESS)
+                if (reply.UploadResult == UploadResult.Success)
                 {
                     _dialogEnumerable.Reset();
                     foreach (var dialog in _dialogEnumerable)
+                    foreach (var element in dialog.Elements)
                     {
-                        foreach (var element in dialog.Elements)
+                        var entry = new Entry
                         {
-                            var entry = new Entry()
-                            {
-                                InstanceId = _instanceId,
-                                FieldName = element.Name,
-                                Data = element.GetFormattedValue()
-                            };
+                            InstanceId = _instanceId,
+                            FieldName = element.Name,
+                            Data = element.GetFormattedValue()
+                        };
 
-                            _networkHelper.CreateEntry(entry);
-                        }
+                        _networkHelper.CreateEntry(entry);
                     }
 
                     return;
                 }
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
             }
+
             InfoPopup.ShowOk("Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator");
         }
     }

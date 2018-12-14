@@ -2,9 +2,9 @@ namespace RestService
 {
     public enum XmlState
     {
-        VALID,
-        MISSINGATTRIBUTE,
-        MISSINGPARENTTAG,
-        INVALID
+        Valid,
+        Missingattribute,
+        Missingparenttag,
+        Invalid
     }
 }

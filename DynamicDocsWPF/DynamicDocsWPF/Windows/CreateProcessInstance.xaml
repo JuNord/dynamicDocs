@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DynamicDocsWPF"
         mc:Ignorable="d"
-        Title="Neue Instanz" Background="#3CA4FF" Foreground="White" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        Title="Neue Instanz" Background="#3CA4FF" Foreground="White" WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -17,32 +17,36 @@
                    FontFamily="Segoe UI Light" Margin="20" />
         <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="50,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Betreff" FontSize="18" Margin="0,0,10,0" Width="Auto"/>
-            <TextBox Name="Subject" Padding="5,0,0,0" Grid.Column="1" Height="27" VerticalContentAlignment="Center" Foreground="White" FontSize="16" HorizontalAlignment="Stretch" Background="Transparent" BorderBrush="White"/>
+            <TextBlock Text="Betreff" FontSize="18" Margin="0,0,10,0" Width="Auto" />
+            <TextBox Name="Subject" Padding="5,0,0,0" Grid.Column="1" Height="27" VerticalContentAlignment="Center"
+                     Foreground="White" FontSize="16" HorizontalAlignment="Stretch" Background="Transparent"
+                     BorderBrush="White" />
         </Grid>
         <Border Grid.Row="2" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
             <Border.Effect>
                 <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
             </Border.Effect>
-            
+
             <ScrollViewer>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock Name="Heading" HorizontalAlignment="Left" FontSize="21" Foreground="#3384D1" FontFamily="Segoe UI Light" Margin="10,5,0,0" />
-                    <ContentPresenter Grid.Row="1" Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                      Margin="40,20" MaxWidth="700"/>
+                    <TextBlock Name="Heading" HorizontalAlignment="Left" FontSize="21" Foreground="#3384D1"
+                               FontFamily="Segoe UI Light" Margin="10,5,0,0" />
+                    <ContentPresenter Grid.Row="1" Name="ViewHolder" HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      Margin="40,20" MaxWidth="700" />
                 </Grid>
             </ScrollViewer>
         </Border>
         <StackPanel Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Click="Back_OnClick"  Content="Zurück" Width="100" Height="35"
+            <Button Click="Back_OnClick" Content="Zurück" Width="100" Height="35"
                     Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
                 <Button.Effect>
                     <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />

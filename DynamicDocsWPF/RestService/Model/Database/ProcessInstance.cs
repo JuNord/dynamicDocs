@@ -1,5 +1,3 @@
-using System;
-
 namespace RestService.Model.Database
 {
     public class ProcessInstance
@@ -17,17 +15,18 @@ namespace RestService.Model.Database
 
         public override bool Equals(object obj)
         {
-            if (obj is ProcessInstance inst)
-            {
-                return Equals(inst);
-            }
+            if (obj is ProcessInstance inst) return Equals(inst);
 
             return false;
         }
 
         private bool Equals(ProcessInstance other)
         {
-            return Id == other.Id && string.Equals(TemplateId, other.TemplateId) && string.Equals(OwnerId, other.OwnerId) && CurrentStep == other.CurrentStep && Declined == other.Declined && Archived == other.Archived && Locked == other.Locked && string.Equals(Created, other.Created) && string.Equals(Changed, other.Changed) && string.Equals(Subject, other.Subject);
+            return Id == other.Id && string.Equals(TemplateId, other.TemplateId) &&
+                   string.Equals(OwnerId, other.OwnerId) && CurrentStep == other.CurrentStep &&
+                   Declined == other.Declined && Archived == other.Archived && Locked == other.Locked &&
+                   string.Equals(Created, other.Created) && string.Equals(Changed, other.Changed) &&
+                   string.Equals(Subject, other.Subject);
         }
 
         public override int GetHashCode()

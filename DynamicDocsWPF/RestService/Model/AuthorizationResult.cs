@@ -1,11 +1,11 @@
-namespace DynamicDocsWPF.Model
+namespace RestService.Model
 {
     public enum AuthorizationResult
     {
-        AUTHORIZED,
-        NO_PERMISSION,
-        INVALID_LOGIN,
-        PERMITTED,
-        INVALID_FORMAT
+        Authorized,
+        NoPermission,
+        InvalidLogin,
+        Permitted,
+        InvalidFormat
     }
 }

@@ -3,40 +3,44 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:DynamicDocsWPF"
         mc:Ignorable="d"
         Title="Neuer Prozess" Height="450" Width="500"
         Background="#3CA4FF"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
     <ScrollViewer>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <TextBlock x:Name="InfoText" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24" FontFamily="Segoe UI Light" Foreground="White" Margin="50,20,20,20" >
-            <Run Text="Klicken sie auf das Symbol und wählen Sie Ihre XML Datei."/>
-            <LineBreak/>
-            <Run Text="Wir erledigen alles Weitere."/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="InfoText" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="24"
+                       FontFamily="Segoe UI Light" Foreground="White" Margin="50,20,20,20">
+                <Run Text="Klicken sie auf das Symbol und wählen Sie Ihre XML Datei." />
+                <LineBreak />
+                <Run Text="Wir erledigen alles Weitere." />
             </TextBlock>
-        <Border Grid.Row="1" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
-                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
-            </Border.Effect>
-            <Button Click="SelectFileOnClick" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="65" Foreground="#3384D1" FontFamily="Segoe MDL2 Assets" Content="&#xE8E5;"/>
-        </Border>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,0,0,20" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Click="CreateProcessTemplate_OnClick" Grid.Row="2" Content="Erstellen" Width="100" Height="35"
-                    VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
-                <Button.Effect>
-                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
-                </Button.Effect>
-            </Button>
-        </StackPanel>
-        
-    </Grid>
-        </ScrollViewer>
+            <Border Grid.Row="1" BorderThickness="2" BorderBrush="White" Background="White" CornerRadius="5"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,20">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
+                </Border.Effect>
+                <Button Click="SelectFileOnClick" Background="Transparent" BorderThickness="0"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="65" Foreground="#3384D1"
+                        FontFamily="Segoe MDL2 Assets" Content="&#xE8E5;" />
+            </Border>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,0,0,20" HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <Button Click="CreateProcessTemplate_OnClick" Content="Erstellen" Width="100" Height="35"
+                        VerticalAlignment="Center" Margin="20" Background="#2196f3" Foreground="White"
+                        FontWeight="Black">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                    </Button.Effect>
+                </Button>
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
 </Window>

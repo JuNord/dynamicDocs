@@ -10,11 +10,6 @@ namespace RestService.Model.Process
         private readonly List<INotificationElement> _notifications;
         private readonly List<ReceiptElement> _receipts;
         private readonly List<ValidationElement> _validations;
-        
-        public CustomEnumerable<Dialog> Dialogs { get; }
-        public CustomEnumerable<INotificationElement> Notifications { get; }
-        public CustomEnumerable<ReceiptElement> Receipts { get; }
-        public CustomEnumerable<ValidationElement> Validations { get; }
 
         public ProcessStep(Tag parent, string name, string description, string target) : base(parent, name, description)
         {
@@ -28,6 +23,11 @@ namespace RestService.Model.Process
             Validations = new CustomEnumerable<ValidationElement>(_validations);
             Target = target;
         }
+
+        public CustomEnumerable<Dialog> Dialogs { get; }
+        public CustomEnumerable<INotificationElement> Notifications { get; }
+        public CustomEnumerable<ReceiptElement> Receipts { get; }
+        public CustomEnumerable<ValidationElement> Validations { get; }
 
         public string Target { get; set; }
 
@@ -62,21 +62,21 @@ namespace RestService.Model.Process
                 return _dialogs?[index];
             return null;
         }
-        
+
         public ReceiptElement GetReceiptAtIndex(int index)
         {
             if (index < ReceiptCount)
                 return _receipts?[index];
             return null;
         }
-        
+
         public ValidationElement GetValidationAtIndex(int index)
         {
             if (index < ValidationCount)
                 return _validations?[index];
             return null;
         }
-        
+
         public INotificationElement GetNotificationAtIndex(int index)
         {
             if (index < NotificationCount)

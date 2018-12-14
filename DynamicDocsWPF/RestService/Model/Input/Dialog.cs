@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
-using Microsoft.VisualBasic;
 using RestService.Model.Base;
 using RestService.Model.Process;
 
@@ -11,26 +10,23 @@ namespace RestService.Model.Input
     {
         private readonly List<BaseInputElement> _elements;
         private StackPanel _stackPanel;
-        
-        public CustomEnumerable<BaseInputElement> Elements { get; }
 
-        public StackPanel GetStackPanel()
-        {
-            if (_stackPanel == null)
-            {
-                _stackPanel = StackPanelFactory.CreatePanel(this);
-            }
-
-            return _stackPanel;
-        }
-        
         public Dialog(Tag parent) : base(parent)
         {
             _elements = new List<BaseInputElement>();
             Elements = new CustomEnumerable<BaseInputElement>(_elements);
         }
 
+        public CustomEnumerable<BaseInputElement> Elements { get; }
+
         public int ElementCount => _elements?.Count ?? 0;
+
+        public StackPanel GetStackPanel()
+        {
+            if (_stackPanel == null) _stackPanel = StackPanelFactory.CreatePanel(this);
+
+            return _stackPanel;
+        }
 
         public void AddElement(BaseInputElement element)
         {
@@ -54,11 +50,10 @@ namespace RestService.Model.Input
         public void PerformCalculations()
         {
             foreach (var element in _elements)
-            {
                 if (!string.IsNullOrWhiteSpace(element.Calculation))
                 {
                     var calculation = element.Calculation;
-                    string[] split = new string[0];
+                    var split = new string[0];
                     var op = ' ';
                     if (calculation.Contains("+"))
                         op = '+';
@@ -81,7 +76,9 @@ namespace RestService.Model.Input
                     var secondValue = "";
 
                     if (numberRegex.IsMatch(split[0]))
+                    {
                         firstValue = split[0];
+                    }
                     else if (linkRegex.IsMatch(split[0]))
                     {
                         var linkText = split[0].Substring(1, split[0].Length - 2);
@@ -91,7 +88,9 @@ namespace RestService.Model.Input
                     }
 
                     if (numberRegex.IsMatch(split[1]))
+                    {
                         secondValue = split[1];
+                    }
                     else if (linkRegex.IsMatch(split[1]))
                     {
                         var linkText = split[1].Substring(1, split[1].Length - 2);
@@ -102,7 +101,6 @@ namespace RestService.Model.Input
 
                     element.Calculate(firstValue, secondValue, op);
                 }
-            }
         }
     }
 }

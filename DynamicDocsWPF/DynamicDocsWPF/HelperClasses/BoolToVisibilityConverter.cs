@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace DynamicDocsWPF.HelperClasses
 {
@@ -12,8 +11,8 @@ namespace DynamicDocsWPF.HelperClasses
         {
             if (value is bool b)
                 return b ? Visibility.Visible : Visibility.Hidden;
-            
-            
+
+
             return Visibility.Hidden;
         }
 

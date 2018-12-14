@@ -5,7 +5,8 @@ namespace RestService.Model.Input
 {
     public abstract class InputElement<TControl, TValue> : BaseInputElement where TControl : Control
     {
-        protected InputElement(Tag parent, string name, string description, bool obligatory, string calculation, TControl control,
+        protected InputElement(Tag parent, string name, string description, bool obligatory, string calculation,
+            TControl control,
             DataType dataType) : base(
             parent, name, description, obligatory, calculation, control)
         {
@@ -20,11 +21,13 @@ namespace RestService.Model.Input
 
         /// <inheritdoc />
         /// <summary>
-        ///  Returns the value of the underlying UI Control, formatted as a string.
-        ///  When not overridden, tries to safely cast the value to string and throws Exception on failure
+        ///     Returns the value of the underlying UI Control, formatted as a string.
+        ///     When not overridden, tries to safely cast the value to string and throws Exception on failure
         /// </summary>
         /// <returns></returns>
-        public override string GetFormattedValue() =>
-            GetValue().ToString() ?? throw new MissingValueInterpretationException();
+        public override string GetFormattedValue()
+        {
+            return GetValue().ToString() ?? throw new MissingValueInterpretationException();
+        }
     }
 }
