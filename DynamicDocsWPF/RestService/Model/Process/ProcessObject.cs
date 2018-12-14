@@ -21,7 +21,7 @@ namespace RestService.Model.Process
 
         public int CurrentStep { get; set; }
 
-        public int ProcessStepCount => _steps?.Count ?? 0;
+        public int StepCount => _steps?.Count ?? 0;
 
         public void AddStep(ProcessStep step)
         {

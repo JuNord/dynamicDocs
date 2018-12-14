@@ -216,11 +216,10 @@ namespace DynamicDocsWPF.Windows
         {
             try
             {
+                ContentSection.Visibility =
+                    InstanceList.SelectedIndex == -1 ? Visibility.Collapsed : Visibility.Visible;
                 if (InstanceList.SelectedIndex != -1)
-                {
-                    ContentSection.Visibility =
-                        InstanceList.SelectedIndex == -1 ? Visibility.Collapsed : Visibility.Visible;
-
+                {                 
                     SelectedInstance =
                         _networkHelper.GetProcessInstanceById(((ProcessInstance) InstanceList.SelectedItem).Id);
                     _entries = _networkHelper.GetEntries(SelectedInstance.Id);

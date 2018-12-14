@@ -10,10 +10,10 @@ namespace DynamicDocsWPF.HelperClasses
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool b)
-                return b ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.White);
+                return b ? new SolidColorBrush(Color.FromRgb(183, 183, 183)) : new SolidColorBrush(Colors.Transparent);
             
             
-            return new SolidColorBrush(Colors.White);
+            return new SolidColorBrush(Colors.Transparent);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

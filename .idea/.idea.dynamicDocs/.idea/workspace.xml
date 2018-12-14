@@ -2,7 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="047c57fd-1244-4efd-9898-b6db55d8791c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/.idea/.idea.DynamicDocsWPF/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/.idea/.idea.DynamicDocsWPF/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/DynamicDocsWPF/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/DynamicDocsWPF/MainWindow.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/DynamicDocsWPF.exe" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/DynamicDocsWPF.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/DynamicDocsWPF.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/DynamicDocsWPF.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/RestService.dll" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/RestService.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/RestService.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/RestService.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/WebServerWPF.exe" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/WebServerWPF.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/WebServerWPF.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/WebServerWPF.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/XmlProcessor.exe" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/XmlProcessor.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/XmlProcessor.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicDocsWPF/XmlProcessor/bin/Debug/XmlProcessor.pdb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,11 +22,11 @@
     <session id="2010727245">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="4" />
+          <entry key="project.closed" value="5" />
           <entry key="project.open.time.2" value="2" />
           <entry key="project.open.time.3" value="1" />
-          <entry key="project.open.time.4" value="1" />
-          <entry key="project.opened" value="4" />
+          <entry key="project.open.time.4" value="2" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -123,11 +131,12 @@
       <workItem from="1542269205663" duration="109000" />
       <workItem from="1542269350341" duration="27000" />
       <workItem from="1543927230532" duration="14000" />
+      <workItem from="1544598437609" duration="4000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="393000" />
+    <option name="totallyTimeSpent" value="397000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -141,7 +150,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25485438" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2588997" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />

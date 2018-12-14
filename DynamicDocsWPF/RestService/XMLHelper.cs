@@ -55,7 +55,7 @@ namespace RestService
                                     break;
                                 case Wording.ProcessStep:
                                     if (processObject == null) return XmlState.MISSINGPARENTTAG;
-                                    if (processObject?.ProcessStepCount > 0)
+                                    if (processObject?.StepCount > 0)
                                     {
                                         if (AnyStringNullOrWhiteSpace(name, description, target))
                                             return XmlState.MISSINGATTRIBUTE;

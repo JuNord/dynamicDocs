@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32bit>true</Prefer32bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -65,38 +66,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IRestServiceNew.cs" />
-    <Compile Include="RestDTOs\ReplyPostEntryUpdate.cs" />
-    <Compile Include="RestDTOs\ReplyGetAuthenticationResult.cs" />
-    <Compile Include="RestDTOs\ReplyGetDocTemplate.cs" />
-    <Compile Include="RestDTOs\ReplyGetDocTemplateList.cs" />
-    <Compile Include="RestDTOs\ReplyGetEntryList.cs" />
-    <Compile Include="RestDTOs\ReplyGetProcessInstanceList.cs" />
-    <Compile Include="RestDTOs\ReplyGetProcessInstance.cs" />
-    <Compile Include="RestDTOs\ReplyGetPermissionLevel.cs" />
-    <Compile Include="RestDTOs\ReplyGetProcessTemplate.cs" />
-    <Compile Include="RestDTOs\ReplyGetProcessTemplateList.cs" />
-    <Compile Include="RestDTOs\ReplyGetResponsibilityList.cs" />
-    <Compile Include="RestDTOs\ReplyGetUserList.cs" />
-    <Compile Include="RestDTOs\ReplyPermissionChange.cs" />
-    <Compile Include="RestDTOs\ReplyPostDocTemplate .cs" />
-    <Compile Include="RestDTOs\ReplyPostEntry.cs" />
-    <Compile Include="RestDTOs\ReplyPostProcessInstance.cs" />
-    <Compile Include="RestDTOs\ReplyPostProcessTemplate.cs" />
-    <Compile Include="RestDTOs\ReplyPostProcessUpdate.cs" />
-    <Compile Include="RestDTOs\ReplyPostUser.cs" />
-    <Compile Include="RestDTOs\RequestPostEntryUpdate.cs" />
-    <Compile Include="RestDTOs\RequestGetProcessInstance.cs" />
-    <Compile Include="RestDTOs\RequestGetPermissionLevel.cs" />
-    <Compile Include="RestDTOs\RequestPermissionChange.cs" />
-    <Compile Include="RestDTOs\RequestPostEntry.cs" />
-    <Compile Include="RestDTOs\RequestPostProcessInstance.cs" />
-    <Compile Include="RestDTOs\RequestGetDocTemplate.cs" />
-    <Compile Include="RestDTOs\RequestGetEntryList.cs" />
-    <Compile Include="RestDTOs\RequestGetProcessTemplate.cs" />
-    <Compile Include="RestDTOs\RequestPostDocTemplate.cs" />
-    <Compile Include="RestDTOs\RequestPostProcessTemplate.cs" />
-    <Compile Include="RestDTOs\RequestPostProcessUpdate.cs" />
-    <Compile Include="RestDTOs\RequestPostUser.cs" />
     <Compile Include="RestServicesNew.cs" />
     <Compile Include="Routing.cs" />
     <Page Include="MainWindow.xaml">

@@ -59,8 +59,7 @@ namespace DynamicDocsWPF
             while (true)
             {
                 if (_lastPermission > -1)
-                {
-                    Dispatcher.Invoke(() =>
+                { Dispatcher.Invoke(() =>
                     {
                         var foreign = ForeignInstances.Content as ViewPendingInstances;
                         var own = OwnInstances.Content as ViewOwnInstances;
@@ -71,7 +70,7 @@ namespace DynamicDocsWPF
                     });
                 }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(10000);
               
             }
         }
@@ -124,6 +123,7 @@ namespace DynamicDocsWPF
                         NoPermissionText.Visibility = Visibility.Visible;
                         break;
                     case 1:
+                    {
                         Administration.Visibility = Visibility.Collapsed;
                         if (OwnInstances?.Content == null)
                             OwnInstances.Content = new ViewOwnInstances(this, _networkHelper);
@@ -132,7 +132,9 @@ namespace DynamicDocsWPF
                             ForeignInstances.Content = new ViewPendingInstances(_networkHelper);
                         else ForeignInstances.Visibility = Visibility.Visible;
                         break;
+                    }
                     case 2:
+                    {
                         if (OwnInstances?.Content == null)
                             OwnInstances.Content = new ViewOwnInstances(this, _networkHelper);
                         else OwnInstances.Visibility = Visibility.Visible;
@@ -145,7 +147,9 @@ namespace DynamicDocsWPF
                         ((ManageUserPermissions) AdministrationContent.Content).UserList.Visibility =
                             Visibility.Collapsed;
                         break;
+                    }
                     case 3:
+                    {
                         if (OwnInstances?.Content == null)
                             OwnInstances.Content = new ViewOwnInstances(this, _networkHelper);
                         else OwnInstances.Visibility = Visibility.Visible;
@@ -161,20 +165,16 @@ namespace DynamicDocsWPF
                         ((ManageUserPermissions) AdministrationContent.Content).UserList.Visibility =
                             Visibility.Visible;
                         break;
+                    }
+                    default: throw new ArgumentOutOfRangeException();
                 }
             }
-            else
-            {
-                Connect();
-            }
+            else Connect();
         }
         
-        public void DisplayInfo(string text)
-        {
-            InfoBlock.Text = text;
-        }
+        public void DisplayInfo(string text) => InfoBlock.Text = text;
 
-        private void MainMenu_BtnUploadProcess_OnClick(object sender, RoutedEventArgs e)
+        private void NewProcess_Click(object sender, RoutedEventArgs e)
         {
             CreateProcessTemplate create = null;
             

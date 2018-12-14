@@ -4,9 +4,8 @@ using System.ServiceModel.Web;
 using DynamicDocsWPF.Model;
 using RestService;
 using RestService.Model.Database;
+using RestService.RestDTOs;
 using WebServerWPF;
-using WebServerWPF.RestDots;
-using WebServerWPF.RestDTOs;
 
 namespace WebServer
 {

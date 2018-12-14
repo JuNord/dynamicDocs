@@ -35,10 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604">
-      <HintPath>..\packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4797.1003\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
@@ -79,6 +75,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="HelperClasses\BoolToColorConverter.cs" />
+    <Compile Include="HelperClasses\BoolToVisibilityConverter.cs" />
     <Compile Include="HelperClasses\IReceiptHelper.cs" />
     <Compile Include="HelperClasses\NetworkBase.cs" />
     <Compile Include="HelperClasses\NetworkHelper.cs" />
@@ -152,21 +149,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Designstuff.xml" />
-    <Content Include="PlantUML\Database.txt" />
-    <Content Include="PlantUML\Network.txt" />
-    <Content Include="PlantUML\UML - Copy - Copy.txt" />
-    <Content Include="PlantUML\UML - Copy.txt" />
-    <Content Include="PlantUML\UML.txt" />
-    <Content Include="PlantUML\WebServer.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestService\RestService.csproj">
       <Project>{9c8cf696-190c-4b16-ac4f-7046840a0ec0}</Project>
       <Name>RestService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WebServerWPF\WebServerWPF.csproj">
-      <Project>{60b3376c-bec4-4302-bbdb-6e2be0a83346}</Project>
-      <Name>WebServerWPF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

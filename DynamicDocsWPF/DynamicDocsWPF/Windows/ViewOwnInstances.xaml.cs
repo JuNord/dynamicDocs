@@ -38,25 +38,26 @@ namespace DynamicDocsWPF.Windows
         public void Refresh()
         {
             var list = TryGetInstances();
-            if (InstanceList?.ItemsSource != null)
+            if (list != null)
             {
-                if (list.SequenceEqual((List<ProcessInstance>)InstanceList.ItemsSource)) return;
-            }
+                if (InstanceList?.ItemsSource != null)
+                {
+                    if (list.SequenceEqual((List<ProcessInstance>) InstanceList.ItemsSource)) return;
+                }
 
-            InstanceList.ItemsSource = list;
+                var toShow = new List<ProcessInstance>(
+                    Running.IsChecked == true
+                        ? list.Where(e => e.Archived == false)
+                        : list.Where(e => e.Archived == true));
+                InstanceList.ItemsSource = toShow;
+            }
         }
         
         private List<ProcessInstance> TryGetInstances()
         {
             try
             {
-                var processInstances = _networkHelper.GetProcessInstances();
-                if (processInstances == null)
-                {
-                    InfoPopup.ShowOk(
-                        "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.");
-
-                }
+                var processInstances = _networkHelper?.GetProcessInstances();
 
                 return processInstances;
             }
@@ -201,7 +202,7 @@ namespace DynamicDocsWPF.Windows
                 TryShowNextDialog(_entries);
 
                 ProgressPanel.Children.Clear();
-                for (int i = 0; i < _currentProcessObject.ProcessStepCount; i++)
+                for (int i = 0; i < _currentProcessObject.StepCount; i++)
                 {
                     Color color = Colors.Transparent;
                     int width = 10;
@@ -230,7 +231,7 @@ namespace DynamicDocsWPF.Windows
                         Margin = new Thickness(10, 0, 10, 0)
                     });
                   
-                    if (SelectedInstance.CurrentStep < _currentProcessObject.ProcessStepCount)
+                    if (SelectedInstance.CurrentStep < _currentProcessObject.StepCount)
                     {
                         StepDescription.Text = _currentProcessObject.GetStepAtIndex(SelectedInstance.CurrentStep)
                             ?.Description;
@@ -292,6 +293,25 @@ namespace DynamicDocsWPF.Windows
             catch (NullReferenceException e)
             {
                 InfoPopup.ShowOk("Ups, da ist wohl etwas schief gelaufen. Bitte wenden Sie sich an einen Administrator.");
+            }
+        }
+
+        private void Archived_OnChecked(object sender, RoutedEventArgs e)
+        {
+            Refresh();
+        }
+
+        private void Running_OnChecked(object sender, RoutedEventArgs e)
+        {
+            Refresh();
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (SelectedInstance != null)
+            {
+                _networkHelper.PostProcessUpdate(SelectedInstance.Id, true, true);
+                Refresh();
             }
         }
     }

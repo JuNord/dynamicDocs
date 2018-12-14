@@ -9,8 +9,7 @@ using DynamicDocsWPF.Model;
 using Newtonsoft.Json;
 using RestService;
 using RestService.Model.Database;
-using WebServerWPF.RestDots;
-using WebServerWPF.RestDTOs;
+using RestService.RestDTOs;
 
 namespace DynamicDocsWPF.HelperClasses
 {

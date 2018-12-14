@@ -9,7 +9,7 @@ using MySql.Data.Types;
 using RestService;
 using RestService.Model.Database;
 using RestService.Model.Process;
-using WebServerWPF.RestDTOs;
+using RestService.RestDTOs;
 
 namespace WebServerWPF
 {
@@ -22,7 +22,6 @@ namespace WebServerWPF
         ;
 
         private readonly MySqlConnection connection;
-
         /// <summary>
         /// Provides project specific methods to access the database
         /// </summary>
@@ -32,6 +31,21 @@ namespace WebServerWPF
             connection.Open();
         }
 
+        private MySqlCommand Execute(string cmdText)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = cmdText;
+            cmd.ExecuteNonQuery();
+            return cmd;
+        }
+        
+        private MySqlDataReader Read(string cmdText)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = cmdText;
+            return cmd.ExecuteReader();
+        }
+
         /// <summary>
         /// Returns a list of process template objects including a template ID, description and local path to the template file
         /// </summary>
@@ -39,11 +53,8 @@ namespace WebServerWPF
         public List<ProcessTemplate> GetProcessTemplates()
         {
             var templates = new List<ProcessTemplate>();
-
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT * FROM PROCESSTEMPLATE;";
-
-            using (var reader = cmd.ExecuteReader())
+            
+            using (var reader = Read("SELECT * FROM PROCESSTEMPLATE;"))
             {
                 while (reader.Read())
                     templates.Add(new ProcessTemplate
@@ -64,10 +75,7 @@ namespace WebServerWPF
         /// <returns></returns>
         public ProcessTemplate GetProcessTemplateById(string id)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText =
-                $"SELECT * FROM ProcessTemplate WHERE id = \"{id}\";";
-            using (var reader = cmd.ExecuteReader())
+            using (var reader = Read($"SELECT * FROM ProcessTemplate WHERE id = \"{id}\";"))
             {
                 if (reader.Read())
                     return new ProcessTemplate
@@ -87,10 +95,7 @@ namespace WebServerWPF
         /// <param name="template"></param>
         public void AddProcessTemplate(ProcessTemplate template)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText =
-                $"INSERT INTO ProcessTemplate VALUES (\"{template.Id}\", \"{template.FilePath}\", \"{template.Description}\");";
-            cmd.ExecuteNonQuery();
+            Execute($"INSERT INTO ProcessTemplate VALUES (\"{template.Id}\", \"{template.FilePath}\", \"{template.Description}\");");
         }
 
         /// <summary>
@@ -101,10 +106,8 @@ namespace WebServerWPF
         public List<ProcessInstance> GetProcessInstances(User user)
         {
             var processInstances = new List<ProcessInstance>();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText =$"SELECT * FROM processinstance WHERE owner_id = \"{user.Email}\";";
 
-            using (var reader = cmd.ExecuteReader())
+            using (var reader = Read($"SELECT * FROM processinstance WHERE owner_id = \"{user.Email}\";"))
             {
                 while (reader.Read())
                     processInstances.Add(new ProcessInstance
@@ -128,10 +131,8 @@ namespace WebServerWPF
         public ProcessInstance GetProcessInstanceById(int instanceId)
         {
             ProcessInstance processinstance = null;
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT * FROM processinstance WHERE id = {instanceId};";
-
-            using (var reader = cmd.ExecuteReader())
+           
+            using (var reader = Read($"SELECT * FROM processinstance WHERE id = {instanceId};"))
             {
                 if (reader.Read())
                     processinstance = new ProcessInstance
@@ -155,8 +156,7 @@ namespace WebServerWPF
         //INSERT INTO processinstance
         public long AddProcessInstance(ProcessInstance processInstance)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText =
+            var instanceId = (int) Execute(
                 "INSERT INTO processinstance (TEMPLATE_ID,OWNER_ID,CURRENTSTEP,DECLINED,ARCHIVED,LOCKED,CREATED,CHANGED,SUBJECT) VALUES (" +
                 $"\"{processInstance.TemplateId}\", " +
                 $"\"{processInstance.OwnerId}\", " +
@@ -166,56 +166,46 @@ namespace WebServerWPF
                 $"{processInstance.Locked}," +
                 $"\"{DateTime.Parse(processInstance.Created):yyyy-MM-dd}\"," +
                 $"\"{DateTime.Parse(processInstance.Created):yyyy-MM-dd}\"," +
-                $"\"{processInstance.Subject}\");";
-            cmd.ExecuteNonQuery();
+                $"\"{processInstance.Subject}\");").LastInsertedId;
 
-            int instanceId = (int) cmd.LastInsertedId;
-            
             var processTemplate = GetProcessTemplateById(processInstance.TemplateId);
             var processObject = XmlHelper.ReadXmlFromString(File.ReadAllText(processTemplate.FilePath));
-            
+
             IncrementProcessInstance(instanceId);
             PushToNextUser(instanceId, processObject, GetProcessInstanceById(instanceId));
-            
-            return instanceId;  
+
+            return instanceId;
         }
 
         public void LockProcessInstance(int id)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"UPDATE processinstance SET locked = true WHERE id = {id};";
-            cmd.ExecuteNonQuery();
+            Execute($"UPDATE processinstance SET locked = true WHERE id = {id};");
         }
 
         public void DeclineProcessInstance(int id)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"UPDATE processinstance SET declined = true WHERE id = {id};";
-            cmd.ExecuteNonQuery();
-            ArchiveProcessinstance(id);
+            Execute($"UPDATE processinstance SET declined = true WHERE id = {id};");
+            ArchiveProcessInstance(id);
         }   
 
         public void ApproveProcessInstance(int id)
         {
-            var processInstance = GetProcessInstanceById(id);
+            var instance = GetProcessInstanceById(id);
+            var template = GetProcessTemplateById(instance?.TemplateId);
 
-            if (processInstance != null)
-            {
-                var template = GetProcessTemplateById(processInstance.TemplateId);
-                if (template != null)
-                {
-                    var processObject = XmlHelper.ReadXmlFromPath(template.FilePath);
+            if (template == null) return;
+            var processObject = XmlHelper.ReadXmlFromPath(template.FilePath);
                     
-                    IncrementProcessInstance(id);
-                    if (processInstance.CurrentStep + 1 >= processObject.ProcessStepCount)
-                    {
-                        ArchiveProcessinstance(id);
-                    }
-                    else
-                    {
-                        PushToNextUser(id, processObject, processInstance);   
-                    }
-                }
+            IncrementProcessInstance(id);
+            instance = GetProcessInstanceById(id);
+            
+            if (instance.CurrentStep >= processObject.StepCount)
+            {
+                ArchiveProcessInstance(id);
+            }
+            else
+            {
+                PushToNextUser(id, processObject, instance);   
             }
         }
 
@@ -266,13 +256,9 @@ namespace WebServerWPF
             var roles = GetRolesByMail(user.Email);
 
             MySqlCommand cmd;
-            
+
             foreach (var role in roles)
-            {
-                cmd = connection.CreateCommand();
-                cmd.CommandText = $"SELECT * FROM pendinginstance WHERE role = \"{role.Role}\";";
-                using (var reader = cmd.ExecuteReader())
-                {
+                using (var reader = Read($"SELECT * FROM pendinginstance WHERE role = \"{role.Role}\";"))
                     while (reader.Read())
                     {
                         responsibilities.Add(new PendingInstance()
@@ -281,13 +267,8 @@ namespace WebServerWPF
                             ResponsibleUserId = reader.GetString(1)
                         });
                     }
-                }
-            }
 
-            cmd = connection.CreateCommand();  
-            cmd.CommandText = $"SELECT * FROM pendinginstance WHERE mail = \"{user.Email}\";";
-            using (var reader = cmd.ExecuteReader())
-            {
+            using (var reader = Read($"SELECT * FROM pendinginstance WHERE mail = \"{user.Email}\";"))
                 while (reader.Read())
                 {
                     responsibilities.Add(new PendingInstance()
@@ -296,134 +277,100 @@ namespace WebServerWPF
                         ResponsibleUserId = reader.GetString(1)
                     });
                 }
-            }
 
             return responsibilities;
         }
         
-        private void RemoveAllPendings(int id)
+        private void RemoveAllPending(int id)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"DELETE FROM pendinginstance WHERE instance_id = {id};";
-            cmd.ExecuteNonQuery();
+            Execute($"DELETE FROM pendinginstance WHERE instance_id = {id};");
         }
         
         private void SetNewResponsibleUser(int id, string mail, string role="")
         {
-            RemoveAllPendings(id);
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO pendinginstance VALUES({id},\"{mail}\",\"{role}\");";
-            cmd.ExecuteNonQuery();
+            RemoveAllPending(id);
+            Execute($"INSERT INTO pendinginstance VALUES({id},\"{mail}\",\"{role}\");");
         }
         
         private void IncrementProcessInstance(int id)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"UPDATE processinstance SET CurrentStep = CurrentStep + 1 WHERE id = {id};";
-            cmd.ExecuteNonQuery();         
+            Execute($"UPDATE processinstance SET CurrentStep = CurrentStep + 1 WHERE id = {id};");
         }
 
-        private void ArchiveProcessinstance(int id)
+        private void ArchiveProcessInstance(int id)
         {
-            var processinstance = GetProcessInstanceById(id);
-            if (processinstance != null)
-            {
-                var cmd = connection.CreateCommand();
-                cmd.CommandText = $"UPDATE processinstance SET archived = true WHERE id = {id};" +
-                                  $"INSERT INTO ArchivePermission VALUES({id}, \"{processinstance.OwnerId}\");";
-                cmd.ExecuteNonQuery();
-                RemoveAllPendings(id);
-            }
+            var processInstance = GetProcessInstanceById(id);
+            if (processInstance == null) return;
+            
+            RemoveAllPending(id);
+            Execute($"UPDATE processinstance SET archived = true WHERE id = {id};");            
+            Execute($"INSERT INTO ArchivePermission VALUES({id}, \"{processInstance.OwnerId}\");");
         }
 
         //SELECT * FROM USER
-        public List<User> GetUsers()
+        public IEnumerable<User> GetUsers()
         {
             var users = new List<User>();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT * FROM USER;";
 
-            using (var reader = cmd.ExecuteReader())
-            {
+            using (var reader = Read("SELECT * FROM USER;"))
                 while (reader.Read())
+                {
                     users.Add(new User(reader.GetString(0), reader.GetString(1), reader.GetInt32(2)));
-            }
+                }
 
             return users;
         }
         
         public User GetUserByRole(string role)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT * FROM user WHERE role = \"{role}\";";
-
-            using (var reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
+            using (var reader = Read($"SELECT * FROM user WHERE role = \"{role}\";"))
+                if(reader.Read())
                     return new User()
                     {
                         Email = reader.GetString(0),
                         Password = reader.GetString(1),
                         PermissionLevel = reader.GetInt32(2)
                     };
-                }
-                return null;
-            }
+            return null;
         }
         
         public User GetUserByMail(string email)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT * FROM user WHERE email = \"{email}\";";
-
-            using (var reader = cmd.ExecuteReader())
+            using (var reader = Read($"SELECT * FROM user WHERE email = \"{email}\";"))
             {
-                if (reader.Read())
+                if (!reader.Read()) return null;
+                
+                return new User()
                 {
-                    return new User()
-                    {
-                        Email = reader.GetString(0),
-                        Password = reader.GetString(1),
-                        PermissionLevel = reader.GetInt32(2)
-                    };
-                }
-                return null;
+                    Email = reader.GetString(0),
+                    Password = reader.GetString(1),
+                    PermissionLevel = reader.GetInt32(2)
+                };
             }
         }
 
         //INSERT INTO USER
         public void AddUser(User user)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO User VALUES (\"{user.Email}\",\"{user.Password}\",0);";
-
-            cmd.ExecuteNonQuery();
+            Execute($"INSERT INTO User VALUES (\"{user.Email}\",\"{user.Password}\",0);");
         }
         
         public void UpdateUserPermission(RequestPermissionChange request)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"UPDATE User SET permissionlevel = {request.PermissionLevel} WHERE email = \"{request.Email}\";";
-
-            cmd.ExecuteNonQuery();
+            Execute($"UPDATE User SET permissionlevel = {request.PermissionLevel} WHERE email = \"{request.Email}\";");
         }
 
         public List<Roles> GetRolesByMail(string mail)
         {
             var roles = new List<Roles>();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT * FROM roles WHERE mail = \"{mail}\";";
 
-            using (var reader = cmd.ExecuteReader())
-            {
+            using (var reader = Read($"SELECT * FROM roles WHERE mail = \"{mail}\";"))
                 while (reader.Read())
                     roles.Add(new Roles
                     {
                         Role = reader.GetString(0),
                         Mail = reader.GetString(1)
                     });
-            }
 
             return roles;
         }
@@ -432,18 +379,14 @@ namespace WebServerWPF
         public List<Roles> GetRoles()
         {
             var roles = new List<Roles>();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT * FROM ROLES;";
 
-            using (var reader = cmd.ExecuteReader())
-            {
+            using (var reader = Read("SELECT * FROM ROLES;"))
                 while (reader.Read())
                     roles.Add(new Roles
                     {
                         Role = reader.GetString(0),
                         Mail = reader.GetString(1)
                     });
-            }
 
             return roles;
         }
@@ -451,45 +394,34 @@ namespace WebServerWPF
         //INSERT INTO ROLES
         public void AddRoles(Roles roles)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO Roles VALUES (\"{roles.Role}\",\"{roles.Mail}\");";
-            cmd.ExecuteNonQuery();
+            Execute($"INSERT INTO Roles VALUES (\"{roles.Role}\",\"{roles.Mail}\");");
         }
         
         //SELECT * FROM DOCTEMPLATES
         public List<DocTemplate> GetDocTemplates()
         {
             var doctemplates = new List<DocTemplate>();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT * FROM DocTemplate;";
 
-            using (var reader = cmd.ExecuteReader())
-            {
+            using (var reader = Read("SELECT * FROM DocTemplate;"))
                 while (reader.Read())
                     doctemplates.Add(new DocTemplate
                     {
                         Id = reader.GetString(0),
                         FilePath = reader.GetString(1)
                     });
-            }
 
             return doctemplates;
         }
         
         public DocTemplate GetDocTemplateById(string id)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText =
-                $"SELECT * FROM DocTemplate WHERE id = \"{id}\";";
-            using (var reader = cmd.ExecuteReader())
-            {
+            using (var reader = Read($"SELECT * FROM DocTemplate WHERE id = \"{id}\";"))
                 if (reader.Read())
                     return new DocTemplate()
                     {
                         Id = reader.GetString(0),
                         FilePath = reader.GetString(1)
                     };
-            }
 
             return null;
         }
@@ -498,49 +430,40 @@ namespace WebServerWPF
         //INSERT INTO DOCTEMPLATES
         public void AddDocTemplate(DocTemplate docTemplate)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO DocTemplate VALUES (\"{docTemplate.Id}\"," +
-                              $"\"{docTemplate.FilePath}\");";
-            cmd.ExecuteNonQuery();
+            Execute($"INSERT INTO DocTemplate VALUES (\"{docTemplate.Id}\",\"{docTemplate.FilePath}\");");
         }
 
         //SELECT * FROM ARCHIVEPERMISSION
-        public List<ArchivePermission> GetArchivePermisson()
+        public List<ArchivePermission> GetArchivePermission()
         {
-            var archivepermission = new List<ArchivePermission>();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT * FROM archivepermission;";
-            using (var reader = cmd.ExecuteReader())
-            {
+            var archivePermission = new List<ArchivePermission>();
+
+            using (var reader = Read("SELECT * FROM archivepermission;"))
                 while (reader.Read())
-                    archivepermission.Add(new ArchivePermission
+                    archivePermission.Add(new ArchivePermission
                     {
                         ArchivedProcess_ID = int.Parse(reader.GetString(0)),
                         AuthorizedUser_ID = reader.GetString(1)
                     });
-            }
 
-            return archivepermission;
+            return archivePermission;
         }
 
         //INSERT INTO ARCHIVEPERMISSION
         public void AddArchivePermission(ArchivePermission archivePermission)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"INSERT INTO ArchivePermission VALUES(" +
+            Execute($"INSERT INTO ArchivePermission VALUES(" +
                               $"{archivePermission.ArchivedProcess_ID}," +
-                              $"\"{archivePermission.AuthorizedUser_ID}\");";
-            cmd.ExecuteNonQuery();
+                              $"\"{archivePermission.AuthorizedUser_ID}\"" +
+                    $");");
         }
 
         //SELECT * FROM ENTRY
         public List<Entry> GetEntries(int instanceId)
         {
             var entries = new List<Entry>();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT * FROM entry WHERE process_id = {instanceId};";
-            using (var reader = cmd.ExecuteReader())
-            {
+
+            using (var reader = Read($"SELECT * FROM entry WHERE process_id = {instanceId};"))
                 while (reader.Read())
                     entries.Add(new Entry
                     {
@@ -549,7 +472,6 @@ namespace WebServerWPF
                         FieldName = reader.GetString(2),
                         Data = reader.GetString(3)
                     });
-            }
 
             return entries;
         }
@@ -557,21 +479,15 @@ namespace WebServerWPF
         //INSERT INTO Entry
         public void AddEntry(Entry entry)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "INSERT INTO Entry (PROCESS_ID,FIELDNAME,DATA) VALUES (" +
-                              $"{entry.InstanceId}," +
-                              $"\"{entry.FieldName}\"," +
-                              $"\"{entry.Data}\");";
-            cmd.ExecuteNonQuery();
+            Execute(
+                $"INSERT INTO Entry (PROCESS_ID,FIELDNAME,DATA) VALUES (" +
+                $"{entry.InstanceId},\"{entry.FieldName}\",\"{entry.Data}\"" +
+                $");");
         }
         
         public void UpdateEntry(Entry entry)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "UPDATE Entry SET " +
-                              $"data =\"{entry.Data}\" " +
-                              $"WHERE id = {entry.EntryId};";
-            cmd.ExecuteNonQuery();
+            Execute($"UPDATE Entry SET data =\"{entry.Data}\" WHERE id = {entry.EntryId};");
         }
     }
 }

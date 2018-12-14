@@ -23,15 +23,15 @@ namespace DynamicDocsWPF.Windows
 
             if (string.IsNullOrWhiteSpace(Email))
             {
-                Register_InfoText.Text = "Bitte geben Sie eine Email-Adresse ein.";
+                RegisterInfoText.Text = "Bitte geben Sie eine Email-Adresse ein.";
             }
             else if (string.IsNullOrWhiteSpace(Password))
             {
-                Register_InfoText.Text = "Bitte geben Sie ein Passwort ein.";
+                RegisterInfoText.Text = "Bitte geben Sie ein Passwort ein.";
             }
             else if (!regex.IsMatch(Email))
             {
-                Register_InfoText.Text = "Das ist keine gültige Email-Adresse.";
+                RegisterInfoText.Text = "Das ist keine gültige Email-Adresse.";
             }
             else
             {
@@ -39,14 +39,14 @@ namespace DynamicDocsWPF.Windows
                 switch (result)
                 {
                     case UploadResult.USER_EXISTS:
-                        Register_InfoText.Text = "Ein Nutzer mit dieser Email Adresse existiert bereits.";
+                        RegisterInfoText.Text = "Ein Nutzer mit dieser Email Adresse existiert bereits.";
                         break;
                     case UploadResult.SUCCESS:
                         DialogResult = true;
                         Close();
                         break;
                     default:
-                        Register_InfoText.Text = "Etwas ist schiefgelaufen. Prüfen Sie Ihre Eingaben oder kontaktieren Sie den Administrator.";
+                        RegisterInfoText.Text = "Etwas ist schiefgelaufen. Prüfen Sie Ihre Eingaben oder kontaktieren Sie den Administrator.";
                         break;
                 }
             }

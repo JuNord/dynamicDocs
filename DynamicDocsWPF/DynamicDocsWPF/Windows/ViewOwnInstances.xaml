@@ -10,6 +10,7 @@
         Foreground="White">
     <UserControl.Resources>
         <h:BoolToColorConverter x:Key="BoolToColorConverter"/>
+        <h:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -32,14 +33,32 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding Subject}" FontSize="14" FontWeight="Bold" Foreground="{Binding Declined, Converter = {StaticResource BoolToColorConverter}}"/>
-                            <TextBlock Grid.Row="1" Text="{Binding OwnerId}" FontSize="12" FontWeight="Light"/>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="1" Text="{Binding Subject}" FontSize="14" FontWeight="Bold" />
+                            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding OwnerId}" FontSize="12" FontWeight="Light"/>
+                            <TextBlock FontSize="20" Visibility="{Binding Declined, Converter={StaticResource BoolToVisibilityConverter}}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="&#xE711;" Foreground="Red" Margin="5"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
             <Grid Grid.Row="1">
-                <Button Click="NewInstance_Click" HorizontalAlignment="Right" Width="40" Height="40" Foreground="White" FontSize="22" FontFamily="Segoe MDL2 Assets" Content="&#xE710;" Background="Transparent" BorderBrush="Transparent"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="10">
+                        <RadioButton Checked="Archived_OnChecked" Name="Archived" GroupName="ProcessTypes" Content="Archivierte" Foreground="White" VerticalAlignment="Center" Margin="2"/>
+                        <RadioButton Checked="Running_OnChecked" Name="Running" GroupName="ProcessTypes" IsChecked="True" Content="Laufende" Foreground="White" VerticalAlignment="Center" Margin="2"/>
+                    </StackPanel>
+                    
+                    <Button Grid.Column="1" Click="ButtonBase_OnClick" HorizontalAlignment="Right" Width="40" Height="40" Foreground="White" FontSize="22" FontFamily="Segoe MDL2 Assets" Content="&#xE711;" Background="Transparent" BorderBrush="Transparent"/>
+                    <Button Grid.Column="2" Click="NewInstance_Click" HorizontalAlignment="Right" Width="40" Height="40" Foreground="White" FontSize="22" FontFamily="Segoe MDL2 Assets" Content="&#xE710;" Background="Transparent" BorderBrush="Transparent"/>
+                </Grid>
             </Grid>
         </Grid>
         <Grid Name="ContentSection" Visibility="Collapsed" Grid.Column="1">

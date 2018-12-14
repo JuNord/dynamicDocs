@@ -13,9 +13,8 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using RestService;
 using RestService.Model.Database;
+using RestService.RestDTOs;
 using WebServer;
-using WebServerWPF.RestDots;
-using WebServerWPF.RestDTOs;
 
 namespace WebServerWPF
 {
@@ -648,6 +647,8 @@ namespace WebServerWPF
                         reply.UploadResult = UploadResult.INVALID_LOGIN;
                         break;
                 }
+                
+                reply.UploadResult = UploadResult.SUCCESS;
             }
             catch (MySqlException e)
             {
@@ -655,7 +656,7 @@ namespace WebServerWPF
                 {
                     reply.UploadResult = UploadResult.FAILED_ID_EXISTS;
                 }
-
+                
                 reply.UploadResult = UploadResult.FAILED_OTHER;
                 PrintException(e);
             }
@@ -670,7 +671,6 @@ namespace WebServerWPF
                 reply.UploadResult = UploadResult.FAILED_OTHER;
             }
 
-            reply.UploadResult = UploadResult.SUCCESS;
             return reply;
         }
 

@@ -102,7 +102,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <ContentPresenter x:Name="AdministrationContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                    <Button Name="Accept" Click="MainMenu_BtnUploadProcess_OnClick" Grid.Column="1" Content="Neuen Prozess Anlegen" Width="150" Height="35"
+                    <Button Name="Accept" Click="NewProcess_Click" Grid.Column="1" Content="Neuen Prozess Anlegen" Width="150" Height="35"
                             VerticalAlignment="Bottom" Margin="20" Background="#2196f3" Foreground="White" FontWeight="Black">
                         <Button.Effect>
                             <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
