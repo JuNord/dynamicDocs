@@ -161,8 +161,8 @@ namespace DynamicDocsWPF.Windows
                 }
                 catch (ArgumentOutOfRangeException e3)
                 {
-                    var value = e3.ActualValue.ToString();
-                    InfoText.Text = $"Die XML beinhaltet einen unbekannten Tag \"{value}\"";
+                    if(InfoText?.Text != null)
+                        InfoText.Text = $"Die XML beinhaltet einen unbekannten Tag \"{e3.ActualValue}\".";
                 }
         }
 
