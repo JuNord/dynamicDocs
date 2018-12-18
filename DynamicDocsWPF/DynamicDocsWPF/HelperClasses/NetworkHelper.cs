@@ -18,9 +18,7 @@ namespace DynamicDocsWPF.HelperClasses
             User = user;
         }
 
-        public User User { get; set; }
-
-        private string BaseUrl { get; }
+        public User User { get; }
 
         #region GET
 
@@ -31,8 +29,10 @@ namespace DynamicDocsWPF.HelperClasses
                 Id = id
             };
 
+            var url = Routing.GetProcess.Replace("{message}", JsonConvert.SerializeObject(request));
+            
             var reply = JsonConvert.DeserializeObject<ReplyGetProcessTemplate>(
-                GetRequest(User, "ProcessTemplate", JsonConvert.SerializeObject(request))
+                GetRequest(User, url)
             );
 
             return reply?.Text;
@@ -44,9 +44,11 @@ namespace DynamicDocsWPF.HelperClasses
             {
                 Id = id
             };
+            
+            var url = Routing.GetDocTemplate.Replace("{message}", JsonConvert.SerializeObject(request));
 
             var reply = JsonConvert.DeserializeObject<ReplyGetDocTemplate>(
-                GetRequest(User, "DocumentTemplate", JsonConvert.SerializeObject(request))
+                GetRequest(User, url)
             );
 
             return reply;
@@ -54,7 +56,7 @@ namespace DynamicDocsWPF.HelperClasses
 
         public AuthorizationResult CheckAuthorization()
         {
-            var response = GetRequest(User, "AuthCheck");
+            var response = GetRequest(User, Routing.GetAuthorized);
             var reply = JsonConvert.DeserializeObject<ReplyGetAuthenticationResult>(
                 response
             );
@@ -69,8 +71,9 @@ namespace DynamicDocsWPF.HelperClasses
                 Username = User.Email
             };
 
+            var url = Routing.GetPermission.Replace("{message}", JsonConvert.SerializeObject(request));
             var reply = JsonConvert.DeserializeObject<ReplyGetPermissionLevel>(
-                GetRequest(User, "PermissionLevel", JsonConvert.SerializeObject(request))
+                GetRequest(User, url)
             );
 
             return reply?.PermissionLevel ?? -1;
@@ -78,21 +81,19 @@ namespace DynamicDocsWPF.HelperClasses
 
         public List<DocTemplate> GetDocTemplates()
         {
-            var reply = JsonConvert.DeserializeObject<ReplyGetDocTemplateList>(GetRequest(User, "DocTemplateList"));
+            var reply = JsonConvert.DeserializeObject<ReplyGetDocTemplateList>(GetRequest(User, Routing.GetReceipts));
             return reply?.DocTemplates;
         }
 
-        public List<ProcessTemplate> GetProcessTemplates()
+        public IEnumerable<ProcessTemplate> GetProcessTemplates()
         {
-            var reply = JsonConvert.DeserializeObject<ReplyGetProcessTemplateList>(GetRequest(User,
-                "ProcessTemplateList"));
+            var reply = JsonConvert.DeserializeObject<ReplyGetProcessTemplateList>(GetRequest(User, Routing.GetProcesses));
             return reply?.ProcessTemplates;
         }
 
-        public List<PendingInstance> GetResponsibilities()
+        public IEnumerable<PendingInstance> GetResponsibilities()
         {
-            var reply =
-                JsonConvert.DeserializeObject<ReplyGetResponsibilityList>(GetRequest(User, "ResponsibilityList"));
+            var reply = JsonConvert.DeserializeObject<ReplyGetResponsibilityList>(GetRequest(User, Routing.GetPending));
             return reply?.Responsibilities;
         }
 
@@ -102,9 +103,10 @@ namespace DynamicDocsWPF.HelperClasses
             {
                 Id = id
             };
-
+            var url = Routing.GetInstance.Replace("{message}", JsonConvert.SerializeObject(request));
+            
             var reply = JsonConvert.DeserializeObject<ReplyGetProcessInstance>(
-                GetRequest(User, "ProcessInstance", JsonConvert.SerializeObject(request))
+                GetRequest(User, url)
             );
 
             return reply?.ProcessInstance;
@@ -113,7 +115,7 @@ namespace DynamicDocsWPF.HelperClasses
         public List<ProcessInstance> GetProcessInstances()
         {
             var reply = JsonConvert.DeserializeObject<ReplyGetProcessInstanceList>(
-                GetRequest(User, "ProcessInstanceList")
+                GetRequest(User, Routing.GetInstances)
             );
 
             return reply?.ProcessInstances;
@@ -122,7 +124,7 @@ namespace DynamicDocsWPF.HelperClasses
         public List<User> GetUsers()
         {
             var reply = JsonConvert.DeserializeObject<ReplyGetUserList>(
-                GetRequest(User, "UserList")
+                GetRequest(User, Routing.GetUserList)
             );
 
             return reply?.Users;
@@ -135,8 +137,10 @@ namespace DynamicDocsWPF.HelperClasses
                 InstanceId = instanceId
             };
 
+            var url = Routing.GetEntryList.Replace("{message}", JsonConvert.SerializeObject(request));
+            
             var reply = JsonConvert.DeserializeObject<ReplyGetEntryList>(
-                GetRequest(User, "Entries", JsonConvert.SerializeObject(request))
+                GetRequest(User, url)
             );
 
             return reply?.Entries;
@@ -153,9 +157,9 @@ namespace DynamicDocsWPF.HelperClasses
                 Email = User.Email,
                 Password = User.Password
             };
-
+            
             var reply = JsonConvert.DeserializeObject<ReplyPostUser>(
-                PostRequest(null, "User", JsonConvert.SerializeObject(request))
+                PostRequest(null, Routing.Register, JsonConvert.SerializeObject(request))
             );
 
             return reply?.UploadResult ?? UploadResult.FailedOther;
@@ -177,7 +181,7 @@ namespace DynamicDocsWPF.HelperClasses
                 ProcessInstance = processInstance
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostProcessInstance>(
-                PostRequest(User, "ProcessCreate", JsonConvert.SerializeObject(request))
+                PostRequest(User, Routing.AddInstance, JsonConvert.SerializeObject(request))
             );
             return reply;
         }
@@ -193,7 +197,7 @@ namespace DynamicDocsWPF.HelperClasses
                 Text = File.ReadAllText(filePath)
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostProcessTemplate>(
-                PostRequest(User, "ProcessTemplate", JsonConvert.SerializeObject(request))
+                PostRequest(User, Routing.AddProcess, JsonConvert.SerializeObject(request))
             );
             return reply?.UploadResult ?? UploadResult.FailedOther;
         }
@@ -207,7 +211,7 @@ namespace DynamicDocsWPF.HelperClasses
                 Content = Encoding.Default.GetString(File.ReadAllBytes(filePath))
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostDocTemplate>(
-                PostRequest(User, "DocumentTemplate", JsonConvert.SerializeObject(request))
+                PostRequest(User, Routing.AddReceipt, JsonConvert.SerializeObject(request))
             );
             return reply?.UploadResult ?? UploadResult.FailedOther;
         }
@@ -219,7 +223,7 @@ namespace DynamicDocsWPF.HelperClasses
                 Entry = entry
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostEntry>(
-                PostRequest(User, "Entry", JsonConvert.SerializeObject(request))
+                PostRequest(User, Routing.AddEntry, JsonConvert.SerializeObject(request))
             );
             return reply?.UploadResult ?? UploadResult.FailedOther;
         }
@@ -235,7 +239,7 @@ namespace DynamicDocsWPF.HelperClasses
                 Entry = entry
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostEntryUpdate>(
-                PostRequest(User, "EntryUpdate", JsonConvert.SerializeObject(request))
+                PostRequest(User, Routing.UpdateEntry, JsonConvert.SerializeObject(request))
             );
             return reply?.UploadResult ?? UploadResult.FailedOther;
         }
@@ -256,7 +260,7 @@ namespace DynamicDocsWPF.HelperClasses
                 Locks = locks
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostProcessUpdate>(
-                PostRequest(User, "ProcessUpdate", JsonConvert.SerializeObject(request))
+                PostRequest(User, Routing.UpdateInstance, JsonConvert.SerializeObject(request))
             );
             return reply?.UploadResult ?? UploadResult.FailedOther;
         }
@@ -269,7 +273,7 @@ namespace DynamicDocsWPF.HelperClasses
                 PermissionLevel = permissionLevel
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostProcessUpdate>(
-                PostRequest(User, "Level", JsonConvert.SerializeObject(request))
+                PostRequest(User, Routing.UpdatePermission, JsonConvert.SerializeObject(request))
             );
             return reply?.UploadResult ?? UploadResult.FailedOther;
         }

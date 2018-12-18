@@ -27,7 +27,7 @@ namespace RestService.Model.Input
         /// <returns></returns>
         public override string GetFormattedValue()
         {
-            return GetValue().ToString() ?? throw new MissingValueInterpretationException();
+            return GetValue().ToString();
         }
     }
 }

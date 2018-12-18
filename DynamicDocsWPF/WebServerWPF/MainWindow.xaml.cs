@@ -31,7 +31,7 @@ namespace WebServerWPF
                 
                 new Thread(() =>
                 {
-                    DatabaseHelper helper = new DatabaseHelper();
+                    var helper = new DatabaseHelper();
                     
                     foreach (var template in helper.GetDocTemplates())
                     {
@@ -40,6 +40,16 @@ namespace WebServerWPF
                             helper.RemoveDocTemplate(template.Id);
                         }
                     }
+                    
+                    foreach (var template in helper.GetProcessTemplates())
+                    {
+                        if (!File.Exists(template.FilePath))
+                        {
+                            helper.RemoveProcessTemplate(template.Id);
+                        }
+                    }
+                    
+                    Thread.Sleep(60000);
                 })
                 {
                     IsBackground = true

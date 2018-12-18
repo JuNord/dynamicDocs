@@ -67,7 +67,6 @@
     </ApplicationDefinition>
     <Compile Include="IRestServiceNew.cs" />
     <Compile Include="RestServicesNew.cs" />
-    <Compile Include="Routing.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

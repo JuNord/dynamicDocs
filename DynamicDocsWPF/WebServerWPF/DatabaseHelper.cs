@@ -75,9 +75,9 @@ namespace WebServerWPF
             return templates;
         }
         
-        public void RemoveProcessTemplate(int id)
+        public void RemoveProcessTemplate(string id)
         {
-            Execute($"DELETE FROM DocTemplate WHERE id = \"{id}\";");
+            Execute($"DELETE FROM ProcessTemplate WHERE id = \"{id}\";");
         }
 
         /// <summary>
@@ -421,7 +421,6 @@ namespace WebServerWPF
         {
             Execute($"INSERT INTO Roles VALUES (\"{roles.Role}\",\"{roles.Mail}\");");
         }
-
         //SELECT * FROM DOCTEMPLATES
         public List<DocTemplate> GetDocTemplates()
         {

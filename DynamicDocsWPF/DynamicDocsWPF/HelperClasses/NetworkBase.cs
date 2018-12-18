@@ -16,14 +16,11 @@ namespace DynamicDocsWPF.HelperClasses
 
         private string BaseUrl { get; }
 
-        protected string GetRequest(User user, string url, string message = null)
+        protected string GetRequest(User user, string url)
         {
             try
             {
-                HttpWebRequest httpWebRequest;
-                if (!string.IsNullOrWhiteSpace(message))
-                    httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{url}/{message}");
-                else httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}/{url}");
+                var httpWebRequest = (HttpWebRequest) WebRequest.Create($"{BaseUrl}{url}");
                 httpWebRequest.Method = "GET";
                 var encoded = Convert.ToBase64String(
                     Encoding.GetEncoding("ISO-8859-1")
@@ -46,7 +43,7 @@ namespace DynamicDocsWPF.HelperClasses
             return null;
         }
 
-        protected string PostRequest(User user, string url, string message = null)
+        protected string PostRequest(User user, string url, string message)
         {
             if (message == null)
                 throw new ArgumentNullException();
@@ -54,7 +51,7 @@ namespace DynamicDocsWPF.HelperClasses
             {
                 var bytes = Encoding.UTF8.GetBytes(message);
 
-                var requestString = $"{BaseUrl}/{url}";
+                var requestString = $"{BaseUrl}{url}";
                 var httpWebRequest = (HttpWebRequest) WebRequest.Create(requestString);
                 httpWebRequest.Method = "POST";
                 httpWebRequest.ContentLength = bytes.Length;

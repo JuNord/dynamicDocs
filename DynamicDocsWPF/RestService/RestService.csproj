@@ -65,7 +65,6 @@
     <Compile Include="FileType.cs" />
     <Compile Include="HashHelper.cs" />
     <Compile Include="MailHelper.cs" />
-    <Compile Include="MissingValueInterpretationException.cs" />
     <Compile Include="Model\AuthorizationResult.cs" />
     <Compile Include="Model\Base\NamedTag.cs" />
     <Compile Include="Model\Base\Tag.cs" />
@@ -132,6 +131,7 @@
     <Compile Include="RestDTOs\RequestPostProcessTemplate.cs" />
     <Compile Include="RestDTOs\RequestPostProcessUpdate.cs" />
     <Compile Include="RestDTOs\RequestPostUser.cs" />
+    <Compile Include="Routing.cs" />
     <Compile Include="UploadResult.cs" />
     <Compile Include="StackPanelFactory.cs" />
     <Compile Include="XMLHelper.cs" />
