@@ -322,7 +322,6 @@ namespace WebServerWPF
 
             RemoveAllPending(id);
             Execute($"UPDATE processinstance SET archived = true WHERE id = {id};");
-            Execute($"INSERT INTO ArchivePermission VALUES({id}, \"{processInstance.OwnerId}\");");
         }
 
         //SELECT * FROM USER
@@ -468,21 +467,29 @@ namespace WebServerWPF
 
 
         //SELECT * FROM ARCHIVEPERMISSION
-        public List<ArchivePermission> GetArchivePermission()
+        public List<ProcessInstance> GetArchivePermissions(User user)
         {
-            var archivePermission = new List<ArchivePermission>();
+            var processInstances = new List<ProcessInstance>();
 
-            using (var reader = Read("SELECT * FROM archivepermission;"))
+            using (var reader = Read($"SELECT * FROM archivepermission JOIN processinstance USING(id) WHERE mail = \"{user.Email}\";"))
             {
                 while (reader.Read())
-                    archivePermission.Add(new ArchivePermission
+                    processInstances.Add(new ProcessInstance
                     {
-                        ArchivedProcessId = int.Parse(reader.GetString(0)),
-                        AuthorizedUserId = reader.GetString(1)
+                        Id = int.Parse(reader.GetString(0)),
+                        TemplateId = reader.GetString(2),
+                        OwnerId = reader.GetString(3),
+                        CurrentStepIndex = reader.GetInt32(4),
+                        Declined = reader.GetBoolean(5),
+                        Archived = reader.GetBoolean(6),
+                        Locked = reader.GetBoolean(7),
+                        Created = reader.GetMySqlDateTime(8).GetDateTime().ToShortDateString(),
+                        Changed = reader.GetMySqlDateTime(9).GetDateTime().ToShortDateString(),
+                        Subject = reader.GetString(10)
                     });
             }
 
-            return archivePermission;
+            return processInstances;
         }
 
         //INSERT INTO ARCHIVEPERMISSION
@@ -490,7 +497,7 @@ namespace WebServerWPF
         {
             Execute("INSERT INTO ArchivePermission VALUES(" +
                     $"{archivePermission.ArchivedProcessId}," +
-                    $"\"{archivePermission.AuthorizedUserId}\"" +
+                    $"\"{archivePermission.Email}\"" +
                     ");");
         }
 

@@ -56,24 +56,30 @@ namespace DynamicDocsWPF.Windows
         /// <returns></returns>
         private List<ProcessInstance> GetResponsibilities()
         {
-            try
+            if (_networkHelper != null)
             {
-                //Retrieve a list of pending instances from the server
-                var responsibilities = _networkHelper.GetResponsibilities();
-                var instances = new List<ProcessInstance>();
-
-                //Retrieve the process instance object of every pending instance
-                foreach (var responsibility in responsibilities)
+                try
                 {
-                    var instance = _networkHelper.GetProcessInstanceById(responsibility.InstanceId);
-                    if (instance != null) instances.Add(instance);
+                    if (Running.IsChecked == false) return _networkHelper.GetArchived();
+
+                    var responsibilities = _networkHelper.GetResponsibilities();
+                    //Retrieve a list of pending instances from the server
+                    var instances = new List<ProcessInstance>();
+
+                    //Retrieve the process instance object of every pending instance
+                    foreach (var responsibility in responsibilities)
+                    {
+                        var instance = _networkHelper.GetProcessInstanceById(responsibility.InstanceId);
+                        if (instance != null) instances.Add(instance);
+                    }
+
+                    return instances;
                 }
 
-                return instances;
-            }
-            catch (WebException)
-            {
-                InfoPopup.ShowOk(StringResources.LoadPendingError);
+                catch (WebException)
+                {
+                    InfoPopup.ShowOk(StringResources.LoadPendingError);
+                }
             }
 
             return null;
@@ -282,6 +288,18 @@ namespace DynamicDocsWPF.Windows
             {
                 InfoPopup.ShowOk(StringResources.LoadPendingError);
             }
+        }
+
+        private void Archived_OnChecked(object sender, RoutedEventArgs e)
+        {
+            InstanceList.ItemsSource = null;
+            Refresh();
+        }
+
+        private void Running_OnChecked(object sender, RoutedEventArgs e)
+        {
+            InstanceList.ItemsSource = null;
+            Refresh();
         }
     }
 }

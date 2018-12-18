@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
@@ -174,6 +175,28 @@ namespace WebServerWPF
                     var reply = new ReplyGetProcessInstanceList
                     {
                         ProcessInstances = Database.GetProcessInstances(GetAuthUser())
+                    };
+
+                    return reply;
+                }
+            }
+            catch (Exception e)
+            {
+                PrintException(e);
+            }
+
+            return null;
+        }
+
+        public ReplyGetArchivedInstanceList GetArchivedInstanceList()
+        {
+            try
+            {
+                if (IsPermitted(GetAuthUser(), 1) == AuthorizationResult.Permitted)
+                {
+                    var reply = new ReplyGetArchivedInstanceList
+                    {
+                        Instances = Database.GetArchivePermissions(GetAuthUser())
                     };
 
                     return reply;

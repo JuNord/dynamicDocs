@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using DynamicDocsWPF.Model;
@@ -95,6 +96,12 @@ namespace DynamicDocsWPF.HelperClasses
         {
             var reply = JsonConvert.DeserializeObject<ReplyGetResponsibilityList>(GetRequest(User, Routing.GetPending));
             return reply?.Responsibilities;
+        }
+        
+        public List<ProcessInstance> GetArchived()
+        {
+            var reply = JsonConvert.DeserializeObject<ReplyGetArchivedInstanceList>(GetRequest(User, Routing.GetArchived));
+            return reply?.Instances;
         }
 
         public ProcessInstance GetProcessInstanceById(int id)

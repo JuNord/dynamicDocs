@@ -12,7 +12,12 @@
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        <ListView Background="#7ed5ff" Foreground="White" BorderBrush="Transparent" Name="InstanceList"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ListView Background="#7ed5ff" Foreground="White" BorderBrush="Transparent" Name="InstanceList"
                   SelectionChanged="InstanceList_OnSelectionChanged">
             <ListView.Effect>
                 <DropShadowEffect Color="Black" Direction="-90" Opacity="0.5" ShadowDepth="6" BlurRadius="25" />
@@ -30,6 +35,16 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Grid Grid.Row="1">
+            <StackPanel Margin="10">
+                <RadioButton Checked="Archived_OnChecked" GroupName="ProcessTypes"
+                             Content="Archivierte" Foreground="White" VerticalAlignment="Center" Margin="2" />
+                <RadioButton Checked="Running_OnChecked" Name="Running" GroupName="ProcessTypes"
+                             IsChecked="True" Content="Laufende" Foreground="White" VerticalAlignment="Center"
+                             Margin="2" />
+            </StackPanel>
+        </Grid>
+        </Grid>
         <Grid Name="ContentSection" Visibility="Collapsed" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

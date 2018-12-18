@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
@@ -291,11 +292,13 @@ namespace DynamicDocsWPF.Windows
 
         private void Archived_OnChecked(object sender, RoutedEventArgs e)
         {
+            InstanceList.ItemsSource = null;
             Refresh();
         }
 
         private void Running_OnChecked(object sender, RoutedEventArgs e)
         {
+            InstanceList.ItemsSource = null;
             Refresh();
         }
 
