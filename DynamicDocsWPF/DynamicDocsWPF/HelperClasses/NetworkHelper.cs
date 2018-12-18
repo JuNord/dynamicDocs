@@ -166,7 +166,7 @@ namespace DynamicDocsWPF.HelperClasses
             var processInstance = new ProcessInstance
             {
                 Declined = false,
-                CurrentStep = 0,
+                CurrentStepIndex = 0,
                 OwnerId = ownerId,
                 TemplateId = processTemplateId,
                 Subject = subject,
@@ -240,6 +240,13 @@ namespace DynamicDocsWPF.HelperClasses
             return reply?.UploadResult ?? UploadResult.FailedOther;
         }
 
+        /// <summary>
+        /// Sends a process update, setting if it was declined and if input is locked after this step.
+        /// </summary>
+        /// <param name="id">The id of the instance to be updated</param>
+        /// <param name="declined">Is the instance declined now?</param>
+        /// <param name="locks">Locks input forms from now.</param>
+        /// <returns></returns>
         public UploadResult PostProcessUpdate(int id, bool declined, bool locks)
         {
             var request = new RequestPostProcessUpdate

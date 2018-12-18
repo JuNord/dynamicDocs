@@ -1,18 +1,24 @@
+using System.Data;
 using System.Windows;
 
 namespace DynamicDocsWPF.Windows
 {
     public partial class InfoPopup : Window
     {
-        private InfoPopup(MessageBoxButton buttons, string text)
+        
+        private InfoPopup(string text, string yesLabel)
         {
             InitializeComponent();
-            if (buttons == MessageBoxButton.OK)
-            {
-                Accept.Content = "OK";
-                Decline.Visibility = Visibility.Collapsed;
-            }
-
+            Accept.Content = yesLabel;
+            Decline.Visibility = Visibility.Collapsed;
+            InfoBlock.Text = text;
+        }
+        
+        private InfoPopup(string text, string yesLabel, string noLabel)
+        {
+            InitializeComponent();
+            Accept.Content = yesLabel;
+            Decline.Content = noLabel;
             InfoBlock.Text = text;
         }
 
@@ -30,12 +36,18 @@ namespace DynamicDocsWPF.Windows
 
         public static bool ShowOk(string message)
         {
-            return new InfoPopup(MessageBoxButton.OK, message).ShowDialog() ?? false;
+            return new InfoPopup(message, "OK").ShowDialog() ?? false;
         }
 
+        
+        public static bool ShowYesNo(string message, string yesLabel, string noLabel)
+        {
+            return new InfoPopup(message, yesLabel, noLabel).ShowDialog() ?? false;
+        }
+        
         public static bool ShowYesNo(string message)
         {
-            return new InfoPopup(MessageBoxButton.YesNo, message).ShowDialog() ?? false;
+            return new InfoPopup(message, "Bestätigen", "Ablehnen").ShowDialog() ?? false;
         }
     }
 }

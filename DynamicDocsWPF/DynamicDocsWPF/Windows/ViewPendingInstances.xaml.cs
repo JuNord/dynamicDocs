@@ -14,16 +14,21 @@ using RestService.Model.Process;
 
 namespace DynamicDocsWPF.Windows
 {
+    /// <summary>
+    /// A window with a list of instances that need to be approved aswell as controls to handle them
+    /// </summary>
     public partial class ViewPendingInstances
     {
         private readonly NetworkHelper _networkHelper;
-        private ProcessObject _currentProcessObject;
-        private int _currentStepIndex;
+        
+        private ProcessObject _curProcObj;
         private CustomEnumerable<Dialog> _dialogs;
+        private CustomEnumerable<ProcessStep> _steps;
         private List<Entry> _entries;
-        private CustomEnumerable<ProcessStep> _processSteps;
-
-
+        private int _curStepIndex;
+        
+        private ProcessInstance SelectedInstance { get; set; }
+        
         public ViewPendingInstances(NetworkHelper networkHelper)
         {
             InitializeComponent();
@@ -31,25 +36,33 @@ namespace DynamicDocsWPF.Windows
             Refresh();
         }
 
-        private ProcessInstance SelectedInstance { get; set; }
-
+        /// <summary>
+        /// Fill the list of Instances with instances the logged in User is responsible for
+        /// </summary>
         public void Refresh()
         {
-            var list = TryGetResponsibilities();
+            var list = GetResponsibilities();
             if (InstanceList?.ItemsSource != null)
                 if (list.SequenceEqual((List<ProcessInstance>) InstanceList.ItemsSource))
                     return;
 
-            InstanceList.ItemsSource = list;
+            if (InstanceList != null) 
+                InstanceList.ItemsSource = list;
         }
 
-        private List<ProcessInstance> TryGetResponsibilities()
+        /// <summary>
+        /// Retrieve the list of Instances, by receiving Pending Instances and matching them to their corresponding Process Instances
+        /// </summary>
+        /// <returns></returns>
+        private List<ProcessInstance> GetResponsibilities()
         {
             try
             {
+                //Retrieve a list of pending instances from the server
                 var responsibilities = _networkHelper.GetResponsibilities();
                 var instances = new List<ProcessInstance>();
 
+                //Retrieve the process instance object of every pending instance
                 foreach (var responsibility in responsibilities)
                 {
                     var instance = _networkHelper.GetProcessInstanceById(responsibility.InstanceId);
@@ -60,87 +73,120 @@ namespace DynamicDocsWPF.Windows
             }
             catch (WebException)
             {
-                InfoPopup.ShowOk(
-                    "Leider konnten die laufenden Prozesse nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.");
+                InfoPopup.ShowOk(StringResources.LoadPendingError);
             }
 
             return null;
         }
 
+        /// <summary>
+        /// Handles clicks on the next button.
+        /// <para>
+        /// Loads the next dialogs content from the server into the UI or requests to accept or decline a request,
+        /// if on the last dialog.
+        /// </para>
+        /// </summary>
         private void Next_Click(object sender, RoutedEventArgs e)
         {
+            //If there's a next dialog in the current step show it and return
             if (TryShowNextDialog(_entries)) return;
 
-            if (_currentStepIndex + 1 <= SelectedInstance.CurrentStep)
+            //If the last dialog is reached and there is another process-step, load its first dialog
+            if (_curStepIndex + 1 <= SelectedInstance.CurrentStepIndex)
             {
-                _currentStepIndex++;
-                _processSteps.MoveNext();
+                _curStepIndex++;
+                _steps.MoveNext();
+                _dialogs = _steps.Current?.Dialogs;
+                TryShowNextDialog(_entries);
             }
-            else if (_currentStepIndex + 1 > SelectedInstance.CurrentStep)
+            //If we reached the last dialog AND step, handle validations and additional input by the validator
+            else if (_curStepIndex + 1 > SelectedInstance.CurrentStepIndex)
             {
-                if (_processSteps.Current.DialogCount > 0) SendData();
-                if (_processSteps.Current.ValidationCount > 0)
+                //If in the current step we have any input forms, send their input
+                if ((_steps.Current?.DialogCount??0) > 0) SendData();
+
+                //If theres no validation tags these values are automatically accepted after reading
+                if ((_steps.Current?.ValidationCount ?? 0) <= 0)
                 {
-                    var initialPopup = InfoPopup.ShowOk(
-                        "Möchten Sie diesen Schritt genehmigen? Weitere Instanzen werden gegebenenfalls über die Genehmigung in Kenntnis gesetzt.");
-
-                    var validationElement = _processSteps.Current.GetValidationAtIndex(0);
-                    if (initialPopup)
-                    {
-                        var acceptPopup = InfoPopup.ShowOk(
-                            "Möchten Sie wirklich zustimmen? Dieser Schritt kann nicht rückgängig gemacht werden! Wählen Sie nein um die Daten erneut zu prüfen.");
-
-                        if (acceptPopup)
-                        {
-                            var validation = _processSteps.Current.GetValidationAtIndex(0);
-                            _networkHelper.PostProcessUpdate(SelectedInstance.Id, false, validation.Locks);
-
-                            Refresh();
-                        }
-                    }
-                    else
-                    {
-                        var declinePopup = InfoPopup.ShowOk(
-                            "Möchten Sie wirklich ablehnen? Dieser Schritt kann nicht rückgängig gemacht werden! Wählen Sie nein um die Daten erneut zu prüfen.");
-
-                        if (declinePopup)
-                        {
-                            var validation = _processSteps.Current.GetValidationAtIndex(0);
-                            _networkHelper.PostProcessUpdate(SelectedInstance.Id, true, validation.Locks);
-
-                            if (validationElement?.Declined != null)
-                                foreach (var receipt in validationElement.Declined.Receipts)
-                                {
-                                    var fileName = $"{receipt.DraftName}_{DateTime.Now.ToShortDateString()}.docx";
-                                    var documentTemplate = _networkHelper.GetDocTemplate(receipt.DraftName);
-                                    File.WriteAllBytes(fileName, Encoding.Default.GetBytes(documentTemplate.Content));
-
-                                    var replacements = new List<KeyValuePair<string, string>>();
-
-                                    foreach (var entry in _entries)
-                                        replacements.Add(
-                                            new KeyValuePair<string, string>($"[{entry.FieldName}]", entry.Data));
-
-                                    WordReceiptHelper.OpenDocument(fileName, replacements.ToArray());
-                                }
-
-                            Refresh();
-                        }
-                    }
-
+                    _networkHelper.PostProcessUpdate(SelectedInstance.Id, false, false);
+                    InfoPopup.ShowOk("Sie haben die Daten gelesen und somit bestätigt. Sie haben nun keinen Zugriff mehr.");
                     return;
                 }
-            }
+                
+                //Ask the user if he accepts or declines the submitted data, reassure his answer and send an update to the server if necessary
+                var validates = InfoPopup.ShowYesNo(StringResources.WantsToValidate, "Genehmigen", "Ablehnen");
+                if (InfoPopup.ShowYesNo(StringResources.ValidationSure) == false) return;
 
-            _dialogs = _processSteps.Current.Dialogs;
-            TryShowNextDialog(_entries);
+                if (_steps.Current != null)
+                {
+                    var validationElement = _steps.Current.GetValidationAtIndex(0);
+                    
+                    _networkHelper.PostProcessUpdate(SelectedInstance.Id, !validates, validationElement.Locks);
+
+                    HandleReceipts(validates
+                        ? validationElement.Accepted?.Receipts
+                        : validationElement.Declined?.Receipts);
+                }
+
+                Refresh();
+            } 
+        }
+        
+        /// <summary>
+        /// Handles clicks on the Back Button, trying to show the last dialog or elsewhise loading the last process-step.
+        /// </summary>
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            if (TryShowLastDialog(_entries)) return;
+            if (((string) BtnNext.Content).Equals("Änderungen Speichern")) BtnNext.Content = "Weiter";
+
+            if (_steps.Current != null) 
+                _dialogs = _steps.Current.Dialogs;
+            TryShowLastDialog(_entries);
         }
 
-        private bool SendData()
+        /// <summary>
+        /// Fill out a list of receipts (*.docx)  and save them to the disk
+        /// </summary>
+        /// <param name="receipts"></param>
+        private void HandleReceipts(IEnumerable<ReceiptElement> receipts)
         {
-            for (var i = 0; i < _processSteps.Current.DialogCount; i++)
+            if (receipts == null) return;
+            
+            foreach (var receipt in receipts)
+                HandleReceipt(receipt);
+        }
+        
+        /// <summary>
+        /// Retrieve the receipt from the Server, fill it with values for the current receipt and save it to the disk
+        /// </summary>
+        /// <param name="receipt"></param>
+        private void HandleReceipt(ReceiptElement receipt)
+        {
+            var fileName = $"{receipt.DraftName}_{DateTime.Now.ToShortDateString()}.docx";
+            var documentTemplate = _networkHelper.GetDocTemplate(receipt.DraftName);
+            File.WriteAllBytes(fileName, Encoding.Default.GetBytes(documentTemplate.Content));
+
+            var replacements = new List<KeyValuePair<string, string>>();
+
+            foreach (var entry in _entries)
+                replacements.Add(
+                    new KeyValuePair<string, string>($"[{entry.FieldName}]", entry.Data));
+
+            WordReceiptHelper.OpenDocument(fileName, replacements.ToArray());
+        }
+        
+        /// <summary>
+        /// Submits any Data in the current process-step to the server
+        /// </summary>
+        /// <returns></returns>
+        private void SendData()
+        {
+            if (_steps.Current == null) return;
+            
+            for (var i = 0; i < _steps.Current.DialogCount; i++)
             {
-                var dialog = _processSteps.Current.GetDialogAtIndex(i);
+                var dialog = _steps.Current.GetDialogAtIndex(i);
                 for (var j = 0; j < dialog.ElementCount; j++)
                 {
                     var element = dialog.GetElementAtIndex(j);
@@ -154,44 +200,62 @@ namespace DynamicDocsWPF.Windows
                     _networkHelper.CreateEntry(entry);
                 }
             }
-
-            return true;
         }
-
-        private void Back_Click(object sender, RoutedEventArgs e)
+        
+        /// <summary>
+        /// Returns whether showing the next dialog was a success
+        /// </summary>
+        /// <returns></returns>
+        private bool TryShowNextDialog(IReadOnlyCollection<Entry> entries)
         {
-            if (TryShowLastDialog(_entries)) return;
-            if (((string) BtnNext.Content).Equals("Änderungen Speichern")) BtnNext.Content = "Weiter";
-
-            _dialogs = _processSteps.Current.Dialogs;
-            TryShowLastDialog(_entries);
-        }
-
-        private bool TryShowNextDialog(List<Entry> entries)
-        {
-            if (!(_dialogs?.MoveNext() ?? false)) return false;
+            if (!_dialogs?.MoveNext() ?? true) return false;
             ShowCurrentDialog(entries);
             return true;
         }
 
-        private bool TryShowLastDialog(List<Entry> entries)
+        /// <summary>
+        /// Returns whether showing the last dialog was a success
+        /// </summary>
+        /// <returns></returns>
+        private bool TryShowLastDialog(IReadOnlyCollection<Entry> entries)
         {
-            if (!(_dialogs?.MoveBack() ?? false)) return false;
+            if (!_dialogs?.MoveBack() ?? true) return false;
             ShowCurrentDialog(entries);
             return true;
         }
 
-        private void ShowCurrentDialog(List<Entry> entries)
+        /// <summary>
+        /// Displays the current dialog with its entries (retrieved from the server) in the UI
+        /// </summary>
+        /// <param name="entries"></param>
+        private void ShowCurrentDialog(IReadOnlyCollection<Entry> entries)
         {
-            FillElements(entries, _dialogs.Current.Elements);
+            if (_dialogs.Current == null) return;
+            
+            foreach (var uiElement in _dialogs.Current.Elements)
+            {
+                try
+                {
+                    var result = entries.First(entry => entry.FieldName.Equals(uiElement.Name));
+                    uiElement.SetValueFromString(result.Data);
+                    uiElement.SetEnabled(!SelectedInstance.Locked);
+                }
+                catch (Exception)
+                {
+                    InfoPopup.ShowOk(
+                        $"Für das Element \"{uiElement.Name}\" konnte kein Wert gefunden werden. Das Formular ist möglicherweise beschädigt.");
+                }
+            }
+            
             ViewHolder.Content = _dialogs.Current.GetStackPanel();
         }
 
-        private void FillElements(List<Entry> entries, CustomEnumerable<BaseInputElement> elements)
-        {
-            foreach (var uiElement in elements) FillUiElement(entries, uiElement);
-        }
-
+        /// <summary>
+        /// Handless selection changes on the instance list, loading a new processobject from the server,
+        /// and showing the first dialog.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InstanceList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -205,39 +269,18 @@ namespace DynamicDocsWPF.Windows
                     _entries = _networkHelper.GetEntries(SelectedInstance.Id);
 
                     var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
-                    _currentProcessObject = XmlHelper.ReadXmlFromString(processText);
-                    _processSteps = _currentProcessObject.Steps;
-                    if (_processSteps?.MoveNext() ?? false)
+                    _curProcObj = XmlHelper.ReadXmlFromString(processText);
+                    _steps = _curProcObj.Steps;
+                    if (_steps?.MoveNext() ?? false)
                     {
-                        _dialogs = _processSteps.Current.Dialogs;
+                        _dialogs = _steps.Current?.Dialogs;
                         TryShowNextDialog(_entries);
                     }
                 }
             }
-            catch (NullReferenceException)
-            {
-                InfoPopup.ShowOk(
-                    "Leider konnte der gewählte Prozess nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.");
-            }
             catch (Exception)
             {
-                InfoPopup.ShowOk(
-                    "Leider konnte der gewählte Prozess nicht vom Server bezogen werden. Bitte melden Sie sich bei einem Administrator.");
-            }
-        }
-
-        private void FillUiElement(List<Entry> entries, BaseInputElement uiElement)
-        {
-            try
-            {
-                var result = entries.First(entry => entry.FieldName.Equals(uiElement.Name));
-                uiElement.SetValueFromString(result.Data);
-                uiElement.SetEnabled(!SelectedInstance.Locked);
-            }
-            catch (Exception)
-            {
-                InfoPopup.ShowOk(
-                    $"The process contained an element called \"{uiElement.Name}\" that couldnt be found.");
+                InfoPopup.ShowOk(StringResources.LoadPendingError);
             }
         }
     }

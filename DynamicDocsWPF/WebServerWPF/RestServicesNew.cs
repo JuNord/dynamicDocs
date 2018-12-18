@@ -5,9 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
 using System.Text;
-using System.Web;
 using System.Xml;
-using DynamicDocsWPF.Model;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using RestService;
@@ -26,7 +24,6 @@ namespace WebServerWPF
         private const string DocPath = "./Docs/";
         private const string ProcessPath = "./Processes/";
         private static readonly DatabaseHelper Database = new DatabaseHelper();
-        private HttpContext _httpContext = HttpContext.Current;
 
         public ReplyGetPermissionLevel GetPermissionLevel(string message)
         {
@@ -404,8 +401,9 @@ namespace WebServerWPF
                         if (!File.Exists(path) || request.ForceOverWrite)
                         {
                             var dir = Path.GetDirectoryName(path);
-                            if (!Directory.Exists(dir))
-                                Directory.CreateDirectory(dir);
+                            if (dir != null)
+                                if (!Directory.Exists(dir))
+                                    Directory.CreateDirectory(dir);
 
                             MainWindow.PostToLog("Received Document...");
                             var docTemplate = new DocTemplate
@@ -433,6 +431,7 @@ namespace WebServerWPF
                         reply.UploadResult = UploadResult.InvalidLogin;
                         break;
                 }
+                reply.UploadResult = UploadResult.Success;
             }
             catch (MySqlException e)
             {
@@ -451,7 +450,7 @@ namespace WebServerWPF
                 reply.UploadResult = UploadResult.FailedOther;
             }
 
-            reply.UploadResult = UploadResult.Success;
+            
             return reply;
         }
 
@@ -531,6 +530,8 @@ namespace WebServerWPF
                         reply.UploadResult = UploadResult.InvalidLogin;
                         break;
                 }
+
+                reply.UploadResult = UploadResult.Success;
             }
             catch (MySqlException e)
             {
@@ -548,8 +549,6 @@ namespace WebServerWPF
                 PrintException(e);
                 reply.UploadResult = UploadResult.FailedOther;
             }
-
-            reply.UploadResult = UploadResult.Success;
             return reply;
         }
 
@@ -620,6 +619,7 @@ namespace WebServerWPF
                         reply.UploadResult = UploadResult.InvalidLogin;
                         break;
                 }
+                reply.UploadResult = UploadResult.Success;
             }
             catch (MySqlException e)
             {
@@ -640,8 +640,6 @@ namespace WebServerWPF
                 PrintException(e);
                 reply.UploadResult = UploadResult.FailedOther;
             }
-
-            reply.UploadResult = UploadResult.Success;
             return reply;
         }
 
@@ -650,10 +648,13 @@ namespace WebServerWPF
             var reply = new ReplyPostUser();
             try
             {
+               
                 MainWindow.PostToLog("Received request to register a new user.");
                 MainWindow.PostToLog("Registering in Database...");
-                Database.AddUser(new User(request.Email, request.Password));
+                Database.AddUser(new User(request.Email, HashHelper.Hash(request.Password)));
                 MainWindow.PostToLog("Done!");
+                
+                reply.UploadResult = UploadResult.Success;
             }
             catch (MySqlException e)
             {
@@ -670,12 +671,10 @@ namespace WebServerWPF
                 PrintException(e);
                 reply.UploadResult = UploadResult.FailedOther;
             }
-
-            reply.UploadResult = UploadResult.Success;
             return reply;
         }
 
-        public AuthorizationResult IsAuthorized(User user)
+        private static AuthorizationResult IsAuthorized(User user)
         {
             try
             {
@@ -693,11 +692,11 @@ namespace WebServerWPF
             }
         }
 
-        public User GetAuthUser()
+        private static User GetAuthUser()
         {
-            var authHeader = WebOperationContext.Current.IncomingRequest.Headers["Authorization"];
+            var authHeader = WebOperationContext.Current?.IncomingRequest.Headers["Authorization"];
 
-            if (authHeader != null && authHeader.StartsWith("Basic"))
+            if (authHeader?.StartsWith("Basic")??false)
             {
                 var encodedUsernamePassword = authHeader.Substring("Basic ".Length).Trim();
                 var encoding = Encoding.GetEncoding("iso-8859-1");
@@ -714,7 +713,7 @@ namespace WebServerWPF
             return null;
         }
 
-        private AuthorizationResult IsPermitted(User user, int permissionLevel)
+        private static AuthorizationResult IsPermitted(User user, int permissionLevel)
         {
             if (IsAuthorized(user) != AuthorizationResult.Authorized) return AuthorizationResult.InvalidLogin;
 

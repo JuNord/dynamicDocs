@@ -79,6 +79,7 @@
     <Compile Include="HelperClasses\NetworkBase.cs" />
     <Compile Include="HelperClasses\NetworkHelper.cs" />
     <Compile Include="HelperClasses\WordReceiptHelper.cs" />
+    <Compile Include="StringResources.cs" />
     <Compile Include="Windows\CreateProcessInstance.xaml.cs">
       <DependentUpon>CreateProcessInstance.xaml</DependentUpon>
     </Compile>

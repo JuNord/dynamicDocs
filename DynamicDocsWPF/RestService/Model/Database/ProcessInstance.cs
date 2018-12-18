@@ -5,7 +5,7 @@ namespace RestService.Model.Database
         public int Id { get; set; }
         public string TemplateId { get; set; }
         public string OwnerId { get; set; }
-        public int CurrentStep { get; set; }
+        public int CurrentStepIndex { get; set; }
         public bool Declined { get; set; }
         public bool Archived { get; set; }
         public bool Locked { get; set; }
@@ -23,7 +23,7 @@ namespace RestService.Model.Database
         private bool Equals(ProcessInstance other)
         {
             return Id == other.Id && string.Equals(TemplateId, other.TemplateId) &&
-                   string.Equals(OwnerId, other.OwnerId) && CurrentStep == other.CurrentStep &&
+                   string.Equals(OwnerId, other.OwnerId) && CurrentStepIndex == other.CurrentStepIndex &&
                    Declined == other.Declined && Archived == other.Archived && Locked == other.Locked &&
                    string.Equals(Created, other.Created) && string.Equals(Changed, other.Changed) &&
                    string.Equals(Subject, other.Subject);
@@ -36,7 +36,7 @@ namespace RestService.Model.Database
                 var hashCode = Id;
                 hashCode = (hashCode * 397) ^ (TemplateId != null ? TemplateId.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (OwnerId != null ? OwnerId.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ CurrentStep;
+                hashCode = (hashCode * 397) ^ CurrentStepIndex;
                 hashCode = (hashCode * 397) ^ Declined.GetHashCode();
                 hashCode = (hashCode * 397) ^ Archived.GetHashCode();
                 hashCode = (hashCode * 397) ^ Locked.GetHashCode();

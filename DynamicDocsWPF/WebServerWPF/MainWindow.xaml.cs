@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using System.Threading;
 using System.Xml;
 using RestService;
 using WebServer;
@@ -26,6 +28,22 @@ namespace WebServerWPF
             try
             {
                 RunService();
+                
+                new Thread(() =>
+                {
+                    DatabaseHelper helper = new DatabaseHelper();
+                    
+                    foreach (var template in helper.GetDocTemplates())
+                    {
+                        if (!File.Exists(template.FilePath))
+                        {
+                            helper.RemoveDocTemplate(template.Id);
+                        }
+                    }
+                })
+                {
+                    IsBackground = true
+                }.Start();
             }
             catch (TargetInvocationException)
             {

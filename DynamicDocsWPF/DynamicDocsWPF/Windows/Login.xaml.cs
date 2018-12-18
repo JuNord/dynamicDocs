@@ -1,6 +1,6 @@
 using System.Windows;
-using DynamicDocsWPF.HelperClasses;
 using DynamicDocsWPF.Model;
+using DynamicDocsWPF.HelperClasses;
 using RestService;
 using RestService.Model;
 using RestService.Model.Database;

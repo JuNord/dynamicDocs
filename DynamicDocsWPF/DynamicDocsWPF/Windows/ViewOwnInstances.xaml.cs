@@ -137,6 +137,11 @@ namespace DynamicDocsWPF.Windows
                 InfoPopup.ShowOk("Der Server ist derzeit nicht erreichbar.");
                 processSelect?.Close();
             }
+            catch (ArgumentNullException)
+            {
+                InfoPopup.ShowOk("Der Server kann diese Prozessvorlage nicht mehr finden. Bitte wenden Sie sich an einen Administrator.");
+                processSelect?.Close();
+            }
         }
 
         private void InstanceList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -194,16 +199,16 @@ namespace DynamicDocsWPF.Windows
                     var color = Colors.Transparent;
                     var width = 10;
 
-                    if (i < SelectedInstance.CurrentStep)
+                    if (i < SelectedInstance.CurrentStepIndex)
                     {
                         color = Colors.Green;
                     }
-                    else if (i == SelectedInstance.CurrentStep)
+                    else if (i == SelectedInstance.CurrentStepIndex)
                     {
                         color = SelectedInstance.Declined ? Colors.Red : Colors.White;
                         width = 15;
                     }
-                    else if (i > SelectedInstance.CurrentStep)
+                    else if (i > SelectedInstance.CurrentStepIndex)
                     {
                         color = Colors.LightGray;
                     }
@@ -217,9 +222,9 @@ namespace DynamicDocsWPF.Windows
                         Margin = new Thickness(10, 0, 10, 0)
                     });
 
-                    if (SelectedInstance.CurrentStep < _currentProcessObject.StepCount)
+                    if (SelectedInstance.CurrentStepIndex < _currentProcessObject.StepCount)
                     {
-                        StepDescription.Text = _currentProcessObject.GetStepAtIndex(SelectedInstance.CurrentStep)
+                        StepDescription.Text = _currentProcessObject.GetStepAtIndex(SelectedInstance.CurrentStepIndex)
                             ?.Description;
 
                         if (SelectedInstance.Declined)

@@ -74,6 +74,11 @@ namespace WebServerWPF
 
             return templates;
         }
+        
+        public void RemoveProcessTemplate(int id)
+        {
+            Execute($"DELETE FROM DocTemplate WHERE id = \"{id}\";");
+        }
 
         /// <summary>
         ///  Returns the process object according to the id, including a description text and a path
@@ -123,7 +128,7 @@ namespace WebServerWPF
                         Id = int.Parse(reader.GetString(0)),
                         TemplateId = reader.GetString(1),
                         OwnerId = reader.GetString(2),
-                        CurrentStep = reader.GetInt32(3),
+                        CurrentStepIndex = reader.GetInt32(3),
                         Declined = reader.GetBoolean(4),
                         Archived = reader.GetBoolean(5),
                         Locked = reader.GetBoolean(6),
@@ -153,7 +158,7 @@ namespace WebServerWPF
                         Id = int.Parse(reader.GetString(0)),
                         TemplateId = reader.GetString(1),
                         OwnerId = reader.GetString(2),
-                        CurrentStep = reader.GetInt32(3),
+                        CurrentStepIndex = reader.GetInt32(3),
                         Declined = reader.GetBoolean(4),
                         Archived = reader.GetBoolean(5),
                         Locked = reader.GetBoolean(6),
@@ -177,7 +182,7 @@ namespace WebServerWPF
                 "INSERT INTO processinstance (TEMPLATE_ID,OWNER_ID,CURRENTSTEP,DECLINED,ARCHIVED,LOCKED,CREATED,CHANGED,SUBJECT) VALUES (" +
                 $"\"{processInstance.TemplateId}\", " +
                 $"\"{processInstance.OwnerId}\", " +
-                $"{processInstance.CurrentStep}, " +
+                $"{processInstance.CurrentStepIndex}, " +
                 $"{processInstance.Declined}," +
                 $"{processInstance.Archived}," +
                 $"{processInstance.Locked}," +
@@ -216,7 +221,7 @@ namespace WebServerWPF
             IncrementProcessInstance(id);
             instance = GetProcessInstanceById(id);
 
-            if (instance.CurrentStep >= processObject.StepCount)
+            if (instance.CurrentStepIndex >= processObject.StepCount)
                 ArchiveProcessInstance(id);
             else
                 PushToNextUser(id, processObject, instance);
@@ -225,7 +230,7 @@ namespace WebServerWPF
         private void PushToNextUser(int id, ProcessObject processObject, ProcessInstance processinstance)
         {
             var regex = new Regex("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$");
-            var processStep = processObject.GetStepAtIndex(processinstance.CurrentStep);
+            var processStep = processObject.GetStepAtIndex(processinstance.CurrentStepIndex);
 
             if (processStep == null) return;
 
@@ -456,6 +461,12 @@ namespace WebServerWPF
         {
             Execute($"INSERT INTO DocTemplate VALUES (\"{docTemplate.Id}\",\"{docTemplate.FilePath}\");");
         }
+        
+        public void RemoveDocTemplate(string id)
+        {
+            Execute($"DELETE FROM DocTemplate WHERE id = \"{id}\";");
+        }
+
 
         //SELECT * FROM ARCHIVEPERMISSION
         public List<ArchivePermission> GetArchivePermission()
