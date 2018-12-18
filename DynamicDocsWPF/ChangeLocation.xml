@@ -1,0 +1,25 @@
+﻿<process name="change_lessionlocation" description="Antrag auf Verlegung des Unterrichtsortes">
+  <process-step name="Initialisation" description="Erstellung des Antrages">
+    <dialog>
+      <teacher-dropdown name="teacher" description="Lehrer/in: "/>
+      <class-dropdown name="class" description="Klasse: "/>
+    </dialog>
+    <dialog>
+      <date-dropdown name="date" description="Datum: "/>
+      <number name="lessons" description="Unterrichtsstunden: " obligatory="true"/>
+      <text name="new_lessonlocation" description="Neuer Unterrichtsort: " obligatory="true"/>
+      <text name="first_lessonlocation" description="Ort des Unterrichtsbeginns bei 1. Unterrichtsstunde: "/>
+    </dialog>
+    <dialog>
+      <text name="reason" description="Begründung/Fächerbezug" obligatory="true"/>
+    </dialog>
+  </process-step>
+  <process-step name="validationBySecretary" description="Genehmigung durch Sekretariat" target="secretary">
+    <validation locks="true"/>
+    <validation.accepted>
+    	<receipt draftname="ChangeLocation" filepath="BLAR"/>
+    </validation.accepted>
+  </process-step>
+</process>
+
+
