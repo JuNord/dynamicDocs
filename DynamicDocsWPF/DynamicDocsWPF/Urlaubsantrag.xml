@@ -1,0 +1,40 @@
+<process name="Urlaubsantrag" description="Urlaubsantrag">
+	<process-step name="Initalisierung" description="Antrag erstellen">
+		<dialog name="Allgemeines" description="Allgemeines">
+			<text name="Vorname" description="Vorname: "/>
+			<text name="Nachname" description="Nachname: "/>
+			<date-dropdown name="Datum" description="Datum: "/>
+		</dialog>
+		<dialog name="Urlaubsdaten" description="Urlaubsdaten: ">
+			<number name="Resturlaubalt" description="Resturlaub (alt): "/>
+			<date-dropdown name="von" description="von: "/>
+			<date-dropdown name="bis" description="bis: "/>
+			<number name="UrlaubstageTotal" description="Tage gesamt: " calculation="[bis]-[von]"/>
+			<number name="Resturlaubneu" description="Resturlaub (neu): " calculation="[Resturlaubalt]-[UrlaubstageTotal]"/>
+		</dialog>
+	</process-step>
+	<process-step name="Genehmigung_Stundenplaner" description="Genehmigung durch den Stundenplaner" target="Stundenplaner">
+		<validation locks="true">
+			<validation.accepted>
+				<receipt draftname="UrlaubsBestaetigung"/>
+			</validation.accepted>
+
+			<validation.declined>
+				<mailnotify target="Antragssteller" text="Der Antrag wurde abgelehnt"/>
+			</validation.declined>
+		</validation>
+	</process-step>
+
+	<process-step name="Genehmigung_Schulleiter" description="Genehmigung durch den Schulleiter" target="Schulleiter">
+		<validation>
+			<validation.accepted>
+				<mailnotify target="Antragssteller" text="Der Antrag wurde akzeptiert"/>
+			</validation.accepted>
+
+			<validation.declined>
+				<mailnotify target="Antragssteller" text="Der Antrag wurde abgelehnt"/>
+			</validation.declined>
+		</validation>
+	</process-step>
+
+</process>
