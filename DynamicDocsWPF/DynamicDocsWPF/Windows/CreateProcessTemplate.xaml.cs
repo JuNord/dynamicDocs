@@ -29,7 +29,11 @@ namespace DynamicDocsWPF.Windows
             {
                 var list = CheckDependencies();
 
-                if (list == null) return;
+                if (list == null)
+                {
+                    Close();
+                    return;
+                }
 
                 foreach (var element in list)
                 {
@@ -118,78 +122,96 @@ namespace DynamicDocsWPF.Windows
             if (!string.IsNullOrWhiteSpace(dialog.FileName))
                 try
                 {
-                    var xmlState = XmlHelper.TryReadXmlFromPath(dialog.FileName, out _processObject);
+                    _processObject = XmlHelper.ReadXmlFromPath(dialog.FileName);
 
-                    switch (xmlState)
+
+                    var processTemplate = _networkHelper.GetProcessTemplate(_processObject.Name);
+
+                    if (processTemplate != null)
                     {
-                        case XmlState.Valid:
-                            var processTemplate = _networkHelper.GetProcessTemplate(_processObject.Name);
+                        var info = InfoPopup.ShowYesNo(
+                            $"Der Prozess \"{_processObject.Name}\", existiert bereits. Möchten Sie ihn ersetzen?");
 
-                            if (processTemplate != null)
-                            {
-                                var info = InfoPopup.ShowYesNo(
-                                    $"Der Prozess \"{_processObject.Name}\", existiert bereits. Möchten Sie ihn ersetzen?");
+                        if (info == false)
+                        {
+                            InfoPopup.ShowOk("Bitte überarbeiten Sie den Prozess.");
+                            Close();
+                            return;
+                        }
+                    }
 
-                                if (info == false)
-                                {
-                                    InfoPopup.ShowOk("Bitte überarbeiten Sie den Prozess.");
-                                    Close();
-                                    return;
-                                }
-                            }
-
-                            InfoText.Text = "Super! Die Datei scheint korrekt zu sein.";
-                            _filePath = dialog.FileName;
-                            _isOkay = true;
-
-                            break;
+                    InfoText.Text = "Super! Die Datei scheint korrekt zu sein.";
+                    _filePath = dialog.FileName;
+                    _isOkay = true;
+                }
+                catch (XmlFormatException xmle)
+                {
+                    switch (xmle.State)
+                    {
                         case XmlState.Missingattribute:
                             InfoPopup.ShowOk(
-                                "Einem der Tags scheint ein Attribut zu fehlen. Bitte prüfen Sie ihre Datei.");
+                                $"Einem der \"{xmle.TagName}\"-Tags scheint ein Attribut zu fehlen. Bitte prüfen Sie ihre Datei.");
                             break;
                         case XmlState.Missingparenttag:
                             InfoPopup.ShowOk(
-                                "Einer der Tags befindet sich nicht in seinem Parenttag. Bitte prüfen Sie ihre Datei.");
+                                $"Einer der \"{xmle.TagName}\"-Tags befindet sich nicht in seinem Parenttag. Bitte prüfen Sie ihre Datei.");
                             break;
                         case XmlState.Invalid:
                             InfoPopup.ShowOk(
                                 "Die Datei weist einen nicht eindeutigen Fehler auf. Fehlen Klammern, Tags oder Anführungszeichen? Bitte prüfen Sie ihre Datei.");
                             break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
                     }
                 }
                 catch (ArgumentOutOfRangeException e3)
                 {
-                    if(InfoText?.Text != null)
-                        InfoText.Text = $"Die XML beinhaltet einen unbekannten Tag \"{e3.ActualValue}\".";
+                    InfoText.Text = $"Die XML beinhaltet einen unbekannten Tag \"{e3.ActualValue}\".";
                 }
         }
 
         private List<DocTemplate> CheckDependencies()
         {
-            var list = new List<DocTemplate>();
-            var stepEnum = _processObject.Steps;
-
-            while (stepEnum.MoveNext())
+            try
             {
-                foreach (var receipt in stepEnum.Current.Receipts) CheckReceipt(receipt);
+                var list = new List<DocTemplate>();
+                var stepEnum = _processObject.Steps;
 
-                var validation = stepEnum.Current.GetValidationAtIndex(0);
-
-                if (validation != null)
+                while (stepEnum.MoveNext())
                 {
-                    if (validation.Accepted != null)
-                        foreach (var receipt in validation.Accepted.Receipts)
-                            list.Add(CheckReceipt(receipt));
+                    if (stepEnum.Current != null)
+                    {
+                        foreach (var receipt in stepEnum.Current.Receipts)
+                        {
+                            var docTemplate = CheckReceipt(receipt);
+                            if (docTemplate != null) list.Add(docTemplate);
+                        }
 
-                    if (validation.Declined != null)
-                        foreach (var receipt in validation.Declined.Receipts)
-                            list.Add(CheckReceipt(receipt));
+                        var validation = stepEnum.Current.GetValidationAtIndex(0);
+
+                        if (validation != null)
+                        {
+                            if (validation.Accepted != null)
+                                foreach (var receipt in validation.Accepted.Receipts)
+                                {
+                                    var docTemplate = CheckReceipt(receipt);
+                                    if (docTemplate != null) list.Add(docTemplate);
+                                }
+
+                            if (validation.Declined != null)
+                                foreach (var receipt in validation.Declined.Receipts)
+                                {
+                                    var docTemplate = CheckReceipt(receipt);
+                                    if (docTemplate != null) list.Add(docTemplate);
+                                }
+                        }
+                    }
                 }
-            }
 
-            return list;
+                return list;
+            }
+            catch (InvalidProcessCreationException)
+            {
+                return null;
+            }
         }
 
         private DocTemplate CheckReceipt(ReceiptElement receipt)
@@ -207,8 +229,7 @@ namespace DynamicDocsWPF.Windows
                     return new DocTemplate {Id = receipt.DraftName, FilePath = dialog.FileName};
 
                 InfoPopup.ShowOk("Ups. Da ist wohl etwas schief gelaufen. Die Datei konnte nicht gefunden werden.");
-                Close();
-                return null;
+                throw new InvalidProcessCreationException();
             }
 
             var info = InfoPopup.ShowYesNo(
@@ -225,12 +246,11 @@ namespace DynamicDocsWPF.Windows
                 }
 
                 InfoPopup.ShowOk("Ups. Da ist wohl etwas schief gelaufen. Die Datei konnte nicht gefunden werden.");
-                Close();
-                return null;
+                throw new InvalidProcessCreationException();
             }
 
             InfoPopup.ShowOk("Bitte überarbeiten Sie den Prozess.");
-            Close();
+            throw new InvalidProcessCreationException();
             return null;
         }
     }

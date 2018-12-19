@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Net;
@@ -15,14 +16,24 @@ using RestService.Model.Process;
 
 namespace DynamicDocsWPF.Windows
 {
-    public partial class ViewOwnInstances : UserControl
+    public partial class ViewOwnInstances
     {
         private readonly MainWindow _mainWindow;
         private readonly NetworkHelper _networkHelper;
         private ProcessObject _currentProcessObject;
         private CustomEnumerable<Dialog> _dialogs;
         private List<Entry> _entries;
+        private int _lastHash;
 
+        private bool ShowRunning
+        {
+            get { 
+                bool check = false;
+                Dispatcher.Invoke(() => { check = Running.IsChecked??false; });
+                return check;
+            }
+        }
+        
         public ViewOwnInstances(MainWindow mainWindow, NetworkHelper networkHelper)
         {
             InitializeComponent();
@@ -33,30 +44,42 @@ namespace DynamicDocsWPF.Windows
 
         private ProcessInstance SelectedInstance => (ProcessInstance) InstanceList.SelectedItem;
 
-        public void Refresh()
+        public void Refresh(bool force = false)
         {
-            var list = TryGetInstances();
-            if (list != null)
+            var worker = new BackgroundWorker();
+            List<ProcessInstance> list = null;
+            
+            worker.DoWork += (sender, e) => { list = TryGetInstances(); };
+            worker.RunWorkerCompleted += (sender, e) =>
             {
-                if (InstanceList?.ItemsSource != null)
-                    if (list.SequenceEqual((List<ProcessInstance>) InstanceList.ItemsSource))
-                        return;
+                if (_lastHash != 0)
+                    if(list!=null)
+                        if (list.GetHash() == _lastHash && !force)
+                            return;
 
-                var toShow = new List<ProcessInstance>(
-                    Running.IsChecked == true
-                        ? list.Where(e => e.Archived == false)
-                        : list.Where(e => e.Archived));
-                InstanceList.ItemsSource = toShow;
-            }
+                if (InstanceList != null)
+                {
+                    var toShow = new List<ProcessInstance>(
+                        ShowRunning
+                            ? list.Where(instance => !instance.Archived)
+                            : list.Where(instance => instance.Archived));
+                    Dispatcher.Invoke(() =>
+                    {
+                        InstanceList.SelectedItems.Clear();
+                        InstanceList.ItemsSource = toShow;
+                        if(list!=null)
+                            _lastHash = list.GetHash();
+                    });
+                }
+            };
+            worker.RunWorkerAsync();
         }
 
         private List<ProcessInstance> TryGetInstances()
         {
             try
             {
-                var processInstances = _networkHelper?.GetProcessInstances();
-
-                return processInstances;
+                return _networkHelper?.GetProcessInstances();
             }
             catch (WebException)
             {
@@ -109,6 +132,7 @@ namespace DynamicDocsWPF.Windows
 
         private void ShowCurrentDialog(List<Entry> entries)
         {
+            DialogCaption.Text = _dialogs.Current.Description;
             FillElements(entries, _dialogs.Current.Elements);
             ViewHolder.Content = _dialogs.Current.GetStackPanel();
         }
@@ -132,6 +156,28 @@ namespace DynamicDocsWPF.Windows
                 var newInstance = new CreateProcessInstance(process, _networkHelper);
                 newInstance.ShowDialog();
                 Refresh();
+            }
+            catch (XmlFormatException xmle)
+            {
+                switch (xmle.State)
+                {
+                    case XmlState.Missingattribute:
+                        InfoPopup.ShowOk(
+                            $"Einem der \"{xmle.TagName}\"-Tags scheint ein Attribut zu fehlen. Bitte kontaktieren Sie einen Administrator.");
+                        break;
+                    case XmlState.Missingparenttag:
+                        InfoPopup.ShowOk(
+                            $"Einer der \"{xmle.TagName}\"-Tags befindet sich nicht in seinem Parenttag. Bitte kontaktieren Sie einen Administrator.");
+                        break;
+                    case XmlState.Invalid:
+                        InfoPopup.ShowOk(
+                            "Die geladene XML-Datei weist einen nicht eindeutigen Fehler auf. Fehlen Klammern, Tags oder Anführungszeichen? Bitte prüfen Sie ihre Datei.");
+                        break;
+                }
+            }
+            catch (ArgumentOutOfRangeException e3)
+            {
+                InfoPopup.ShowOk($"Die vom Server bezogene XML-Datei beinhaltet einen unbekannten Tag \"{e3.ActualValue}\".");
             }
             catch (WebException)
             {
@@ -184,58 +230,85 @@ namespace DynamicDocsWPF.Windows
 
         private void LoadAndShowSelection()
         {
-            ContentSection.Visibility = InstanceList.SelectedIndex == -1 ? Visibility.Collapsed : Visibility.Visible;
-
-            if (SelectedInstance != null)
+            try
             {
-                var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
-                _currentProcessObject = XmlHelper.ReadXmlFromString(processText);
-                _dialogs = _currentProcessObject.GetStepAtIndex(0).Dialogs;
-                _entries = _networkHelper.GetEntries(SelectedInstance.Id);
-                TryShowNextDialog(_entries);
+                ContentSection.Visibility =
+                    InstanceList.SelectedIndex == -1 ? Visibility.Collapsed : Visibility.Visible;
 
-                ProgressPanel.Children.Clear();
-                for (var i = 0; i < _currentProcessObject.StepCount; i++)
+                if (SelectedInstance != null)
                 {
-                    var color = Colors.Transparent;
-                    var width = 10;
+                    var processText = _networkHelper.GetProcessTemplate(SelectedInstance.TemplateId);
+                    _currentProcessObject = XmlHelper.ReadXmlFromString(processText);
+                    _dialogs = _currentProcessObject.GetStepAtIndex(0).Dialogs;
+                    _entries = _networkHelper.GetEntries(SelectedInstance.Id);
+                    TryShowNextDialog(_entries);
 
-                    if (i < SelectedInstance.CurrentStepIndex)
+                    ProgressPanel.Children.Clear();
+                    for (var i = 0; i < _currentProcessObject.StepCount; i++)
                     {
-                        color = Colors.Green;
-                    }
-                    else if (i == SelectedInstance.CurrentStepIndex)
-                    {
-                        color = SelectedInstance.Declined ? Colors.Red : Colors.White;
-                        width = 15;
-                    }
-                    else if (i > SelectedInstance.CurrentStepIndex)
-                    {
-                        color = Colors.LightGray;
-                    }
+                        var color = Colors.Transparent;
+                        var width = 10;
+
+                        if (i < SelectedInstance.CurrentStepIndex)
+                        {
+                            color = Colors.Green;
+                        }
+                        else if (i == SelectedInstance.CurrentStepIndex)
+                        {
+                            color = SelectedInstance.Declined ? Colors.Red : Colors.White;
+                            width = 15;
+                        }
+                        else if (i > SelectedInstance.CurrentStepIndex)
+                        {
+                            color = Colors.LightGray;
+                        }
 
 
-                    ProgressPanel.Children.Add(new Ellipse
-                    {
-                        Width = width,
-                        Height = width,
-                        Fill = new SolidColorBrush(color),
-                        Margin = new Thickness(10, 0, 10, 0)
-                    });
+                        ProgressPanel.Children.Add(new Ellipse
+                        {
+                            Width = width,
+                            Height = width,
+                            Fill = new SolidColorBrush(color),
+                            Margin = new Thickness(10, 0, 10, 0)
+                        });
 
-                    if (SelectedInstance.CurrentStepIndex < _currentProcessObject.StepCount)
-                    {
-                        StepDescription.Text = _currentProcessObject.GetStepAtIndex(SelectedInstance.CurrentStepIndex)
-                            ?.Description;
+                        if (SelectedInstance.CurrentStepIndex < _currentProcessObject.StepCount)
+                        {
+                            StepDescription.Text = _currentProcessObject
+                                .GetStepAtIndex(SelectedInstance.CurrentStepIndex)
+                                ?.Description;
 
-                        if (SelectedInstance.Declined)
-                            StepDescription.Text += " - Abgelehnt";
-                    }
-                    else
-                    {
-                        StepDescription.Text = "Genehmigt.";
+                            if (SelectedInstance.Declined)
+                                StepDescription.Text += " - Abgelehnt";
+                        }
+                        else
+                        {
+                            StepDescription.Text = "Genehmigt.";
+                        }
                     }
                 }
+            }
+            catch (XmlFormatException xmle)
+            {
+                switch (xmle.State)
+                {
+                    case XmlState.Missingattribute:
+                        InfoPopup.ShowOk(
+                            $"Einem der \"{xmle.TagName}\"-Tags scheint ein Attribut zu fehlen. Bitte kontaktieren Sie einen Administrator.");
+                        break;
+                    case XmlState.Missingparenttag:
+                        InfoPopup.ShowOk(
+                            $"Einer der \"{xmle.TagName}\"-Tags befindet sich nicht in seinem Parenttag. Bitte kontaktieren Sie einen Administrator.");
+                        break;
+                    case XmlState.Invalid:
+                        InfoPopup.ShowOk(
+                            "Die geladene XML-Datei weist einen nicht eindeutigen Fehler auf. Fehlen Klammern, Tags oder Anführungszeichen? Bitte prüfen Sie ihre Datei.");
+                        break;
+                }
+            }
+            catch (ArgumentOutOfRangeException e3)
+            {
+                InfoPopup.ShowOk($"Die vom Server bezogene XML-Datei beinhaltet einen unbekannten Tag \"{e3.ActualValue}\".");
             }
         }
 
@@ -245,7 +318,7 @@ namespace DynamicDocsWPF.Windows
             {
                 var result = entries.First(entry => entry.FieldName.Equals(uiElement.Name));
                 uiElement.SetValueFromString(result.Data);
-                uiElement.SetEnabled(!SelectedInstance.Locked);
+                uiElement.SetEnabled(SelectedInstance.CurrentStepIndex < 2);
             }
             catch (Exception)
             {
@@ -293,13 +366,13 @@ namespace DynamicDocsWPF.Windows
         private void Archived_OnChecked(object sender, RoutedEventArgs e)
         {
             InstanceList.ItemsSource = null;
-            Refresh();
+            Refresh(true);
         }
 
         private void Running_OnChecked(object sender, RoutedEventArgs e)
         {
             InstanceList.ItemsSource = null;
-            Refresh();
+            Refresh(true);
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)

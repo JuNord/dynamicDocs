@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,9 +28,18 @@ namespace DynamicDocsWPF.Windows
         private CustomEnumerable<ProcessStep> _steps;
         private List<Entry> _entries;
         private int _curStepIndex;
+        private int _lastHash;
         
         private ProcessInstance SelectedInstance { get; set; }
-        
+        private bool ShowRunning
+        {
+            get { 
+                var check = false;
+                Dispatcher.Invoke(() => { check = Running.IsChecked??false; });
+                return check;
+            }
+        }
+
         public ViewPendingInstances(NetworkHelper networkHelper)
         {
             InitializeComponent();
@@ -41,13 +52,37 @@ namespace DynamicDocsWPF.Windows
         /// </summary>
         public void Refresh()
         {
-            var list = GetResponsibilities();
-            if (InstanceList?.ItemsSource != null)
-                if (list.SequenceEqual((List<ProcessInstance>) InstanceList.ItemsSource))
-                    return;
+            var worker = new BackgroundWorker();
+            List<ProcessInstance> list = null;
+            worker.DoWork += (sender, e) => { list = GetResponsibilities(); };
+            worker.RunWorkerCompleted += (sender, e) =>
+            {
+                if (_lastHash != 0)
+                    if(list!=null)
+                        if (list.GetHash() == _lastHash)
+                            return;
+                
+                if (InstanceList != null)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        InstanceList.SelectedItems.Clear();
+                        InstanceList.ItemsSource = list;
+                        if(list!=null)
+                            _lastHash = list.GetHash();
+                    });  
+                    
+                }
+            };
+            worker.RunWorkerAsync();
+            
+            
+            var containers = new List<AdministrationContainer>();
 
-            if (InstanceList != null) 
-                InstanceList.ItemsSource = list;
+
+            
+
+            
         }
 
         /// <summary>
@@ -60,7 +95,7 @@ namespace DynamicDocsWPF.Windows
             {
                 try
                 {
-                    if (Running.IsChecked == false) return _networkHelper.GetArchived();
+                    if (!ShowRunning) return _networkHelper.GetArchived();
 
                     var responsibilities = _networkHelper.GetResponsibilities();
                     //Retrieve a list of pending instances from the server
@@ -108,9 +143,6 @@ namespace DynamicDocsWPF.Windows
             //If we reached the last dialog AND step, handle validations and additional input by the validator
             else if (_curStepIndex + 1 > SelectedInstance.CurrentStepIndex)
             {
-                //If in the current step we have any input forms, send their input
-                if ((_steps.Current?.DialogCount??0) > 0) SendData();
-
                 //If theres no validation tags these values are automatically accepted after reading
                 if ((_steps.Current?.ValidationCount ?? 0) <= 0)
                 {
@@ -121,19 +153,24 @@ namespace DynamicDocsWPF.Windows
                 
                 //Ask the user if he accepts or declines the submitted data, reassure his answer and send an update to the server if necessary
                 var validates = InfoPopup.ShowYesNo(StringResources.WantsToValidate, "Genehmigen", "Ablehnen");
-                if (InfoPopup.ShowYesNo(StringResources.ValidationSure) == false) return;
+                if (InfoPopup.ShowYesNo(StringResources.ValidationSure, "Ja, Sicher","Abbrechen") == false) return;
 
                 if (_steps.Current != null)
                 {
                     var validationElement = _steps.Current.GetValidationAtIndex(0);
                     
+                    //If in the current step we have any input forms, send their input
+                    if ((_steps.Current?.DialogCount??0) > 0) SendData();
+                    
                     _networkHelper.PostProcessUpdate(SelectedInstance.Id, !validates, validationElement.Locks);
 
+                    
                     HandleReceipts(validates
                         ? validationElement.Accepted?.Receipts
                         : validationElement.Declined?.Receipts);
                 }
 
+                
                 Refresh();
             } 
         }
@@ -146,9 +183,12 @@ namespace DynamicDocsWPF.Windows
             if (TryShowLastDialog(_entries)) return;
             if (((string) BtnNext.Content).Equals("Änderungen Speichern")) BtnNext.Content = "Weiter";
 
-            if (_steps.Current != null) 
-                _dialogs = _steps.Current.Dialogs;
-            TryShowLastDialog(_entries);
+            if (_steps.MoveBack())
+            {
+                if (_steps.Current != null)
+                    _dialogs = _steps.Current.Dialogs;
+                TryShowLastDialog(_entries);
+            }
         }
 
         /// <summary>
@@ -237,17 +277,22 @@ namespace DynamicDocsWPF.Windows
         private void ShowCurrentDialog(IReadOnlyCollection<Entry> entries)
         {
             if (_dialogs.Current == null) return;
+            DialogCaption.Text = _dialogs.Current.Description;
             
             foreach (var uiElement in _dialogs.Current.Elements)
             {
                 try
                 {
+                    Block.Visibility = SelectedInstance.CurrentStepIndex < _curStepIndex ? Visibility.Visible : Visibility.Collapsed;
+                    
                     var result = entries.First(entry => entry.FieldName.Equals(uiElement.Name));
                     uiElement.SetValueFromString(result.Data);
-                    uiElement.SetEnabled(!SelectedInstance.Locked);
+                    uiElement.SetEnabled(SelectedInstance.CurrentStepIndex < _curStepIndex);
                 }
                 catch (Exception)
                 {
+                    if(SelectedInstance.CurrentStepIndex < _curStepIndex)
+
                     InfoPopup.ShowOk(
                         $"Für das Element \"{uiElement.Name}\" konnte kein Wert gefunden werden. Das Formular ist möglicherweise beschädigt.");
                 }
@@ -283,6 +328,28 @@ namespace DynamicDocsWPF.Windows
                         TryShowNextDialog(_entries);
                     }
                 }
+            }
+            catch (XmlFormatException xmle)
+            {
+                switch (xmle.State)
+                {
+                    case XmlState.Missingattribute:
+                        InfoPopup.ShowOk(
+                            $"Einem der \"{xmle.TagName}\"-Tags scheint ein Attribut zu fehlen. Bitte kontaktieren Sie einen Administrator.");
+                        break;
+                    case XmlState.Missingparenttag:
+                        InfoPopup.ShowOk(
+                            $"Einer der \"{xmle.TagName}\"-Tags befindet sich nicht in seinem Parenttag. Bitte kontaktieren Sie einen Administrator.");
+                        break;
+                    case XmlState.Invalid:
+                        InfoPopup.ShowOk(
+                            "Die geladene XML-Datei weist einen nicht eindeutigen Fehler auf. Fehlen Klammern, Tags oder Anführungszeichen? Bitte prüfen Sie ihre Datei.");
+                        break;
+                }
+            }
+            catch (ArgumentOutOfRangeException e3)
+            {
+                InfoPopup.ShowOk($"Die vom Server bezogene XML-Datei beinhaltet einen unbekannten Tag \"{e3.ActualValue}\".");
             }
             catch (Exception)
             {

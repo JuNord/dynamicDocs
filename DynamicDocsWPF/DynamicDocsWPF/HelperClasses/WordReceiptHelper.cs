@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using System.Windows.Shapes;
 using Microsoft.Office.Interop.Word;
+using Application = System.Windows.Application;
 
 namespace DynamicDocsWPF.HelperClasses
 {
@@ -10,7 +13,9 @@ namespace DynamicDocsWPF.HelperClasses
         {
             var wordApp = new ApplicationClass();
             // File Path
-            var strFilePath = documentPath;
+            var strFilePath = $"{System.AppDomain.CurrentDomain.BaseDirectory}\\{documentPath}";
+
+            if (!File.Exists(strFilePath)) return;
 
             // Create obj filename to pass it as paremeter in open 
             object objFile = strFilePath;

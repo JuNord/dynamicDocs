@@ -146,7 +146,7 @@ namespace WebServerWPF
         /// </summary>
         /// <param name="instanceId">The instanceId to search for.</param>
         /// <returns>The processInstance belonging to given InstanceId</returns>
-        public ProcessInstance GetProcessInstanceById(int instanceId)
+        public ProcessInstance GetInstanceById(int instanceId)
         {
             ProcessInstance processinstance = null;
 
@@ -194,7 +194,7 @@ namespace WebServerWPF
             var processObject = XmlHelper.ReadXmlFromString(File.ReadAllText(processTemplate.FilePath));
 
             IncrementProcessInstance(instanceId);
-            PushToNextUser(instanceId, processObject, GetProcessInstanceById(instanceId));
+            PushToNextUser(instanceId, processObject, GetInstanceById(instanceId));
 
             return instanceId;
         }
@@ -212,14 +212,14 @@ namespace WebServerWPF
 
         public void ApproveProcessInstance(int id)
         {
-            var instance = GetProcessInstanceById(id);
+            var instance = GetInstanceById(id);
             var template = GetProcessTemplateById(instance?.TemplateId);
 
             if (template == null) return;
             var processObject = XmlHelper.ReadXmlFromPath(template.FilePath);
 
             IncrementProcessInstance(id);
-            instance = GetProcessInstanceById(id);
+            instance = GetInstanceById(id);
 
             if (instance.CurrentStepIndex >= processObject.StepCount)
                 ArchiveProcessInstance(id);
@@ -268,7 +268,7 @@ namespace WebServerWPF
             }
         }
 
-        public List<PendingInstance> GetResponsibilities(User user)
+        public List<PendingInstance> GetPending(User user)
         {
             var responsibilities = new List<PendingInstance>();
             var roles = GetRolesByMail(user.Email);
@@ -276,7 +276,7 @@ namespace WebServerWPF
             MySqlCommand cmd;
 
             foreach (var role in roles)
-                using (var reader = Read($"SELECT * FROM pendinginstance WHERE role = \"{role.Role}\";"))
+                using (var reader = Read($"SELECT * FROM pendinginstance WHERE role = \"{role.RoleId}\";"))
                 {
                     while (reader.Read())
                         responsibilities.Add(new PendingInstance
@@ -317,7 +317,7 @@ namespace WebServerWPF
 
         private void ArchiveProcessInstance(int id)
         {
-            var processInstance = GetProcessInstanceById(id);
+            var processInstance = GetInstanceById(id);
             if (processInstance == null) return;
 
             RemoveAllPending(id);
@@ -380,16 +380,16 @@ namespace WebServerWPF
             Execute($"UPDATE User SET permissionlevel = {request.PermissionLevel} WHERE email = \"{request.Email}\";");
         }
 
-        public List<Roles> GetRolesByMail(string mail)
+        public List<Role> GetRolesByMail(string mail)
         {
-            var roles = new List<Roles>();
+            var roles = new List<Role>();
 
             using (var reader = Read($"SELECT * FROM roles WHERE mail = \"{mail}\";"))
             {
                 while (reader.Read())
-                    roles.Add(new Roles
+                    roles.Add(new Role
                     {
-                        Role = reader.GetString(0),
+                        RoleId = reader.GetString(0),
                         Mail = reader.GetString(1)
                     });
             }
@@ -398,16 +398,16 @@ namespace WebServerWPF
         }
 
         //SELECT * FROM ROLES
-        public List<Roles> GetRoles()
+        public List<Role> GetRoles()
         {
-            var roles = new List<Roles>();
+            var roles = new List<Role>();
 
             using (var reader = Read("SELECT * FROM ROLES;"))
             {
                 while (reader.Read())
-                    roles.Add(new Roles
+                    roles.Add(new Role
                     {
-                        Role = reader.GetString(0),
+                        RoleId = reader.GetString(0),
                         Mail = reader.GetString(1)
                     });
             }
@@ -416,9 +416,9 @@ namespace WebServerWPF
         }
 
         //INSERT INTO ROLES
-        public void AddRoles(Roles roles)
+        public void AddRole(Role role)
         {
-            Execute($"INSERT INTO Roles VALUES (\"{roles.Role}\",\"{roles.Mail}\");");
+            Execute($"INSERT INTO Roles VALUES (\"{role.RoleId}\",\"{role.Mail}\");");
         }
         //SELECT * FROM DOCTEMPLATES
         public List<DocTemplate> GetDocTemplates()

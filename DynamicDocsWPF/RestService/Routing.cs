@@ -10,6 +10,7 @@
         
         public const string GetProcesses = "/Process";
         public const string GetInstances = "/Instance";
+        public const string GetRoles = "/Roles";
         public const string GetArchived = "/Archived";
         public const string GetPending = "/Pending";
         public const string GetReceipts = "/Receipt";

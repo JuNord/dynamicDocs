@@ -74,7 +74,7 @@
     <Compile Include="Model\Database\Entry.cs" />
     <Compile Include="Model\Database\PendingInstance.cs" />
     <Compile Include="Model\Database\ProcessTemplate.cs" />
-    <Compile Include="Model\Database\Roles.cs" />
+    <Compile Include="Model\Database\Role.cs" />
     <Compile Include="Model\Database\ProcessInstance.cs" />
     <Compile Include="Model\Database\User.cs" />
     <Compile Include="Model\DateExtension.cs" />
@@ -110,6 +110,7 @@
     <Compile Include="RestDTOs\ReplyGetProcessTemplate.cs" />
     <Compile Include="RestDTOs\ReplyGetProcessTemplateList.cs" />
     <Compile Include="RestDTOs\ReplyGetResponsibilityList.cs" />
+    <Compile Include="RestDTOs\ReplyGetRoles.cs" />
     <Compile Include="RestDTOs\ReplyGetUserList.cs" />
     <Compile Include="RestDTOs\ReplyPermissionChange.cs" />
     <Compile Include="RestDTOs\ReplyPostDocTemplate .cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Routing.cs" />
     <Compile Include="UploadResult.cs" />
     <Compile Include="StackPanelFactory.cs" />
+    <Compile Include="XmlFormatException.cs" />
     <Compile Include="XMLHelper.cs" />
     <Compile Include="XmlState.cs" />
   </ItemGroup>

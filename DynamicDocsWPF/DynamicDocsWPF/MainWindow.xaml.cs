@@ -20,13 +20,18 @@ namespace DynamicDocsWPF
 
         public MainWindow()
         {
-            InitializeComponent();
-            Connect();
-            DisplayInfo(MoTD);
-            new Thread(AuthCheck) {IsBackground = true}.Start();
-
-
-            new Thread(Idle) {IsBackground = true}.Start();
+            try
+            {
+                InitializeComponent();
+                Connect();
+                DisplayInfo(MoTD);
+                new Thread(AuthCheck) {IsBackground = true}.Start();
+                new Thread(Idle) {IsBackground = true}.Start();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.InnerException.Message);
+            }
         }
 
         public static string MoTD
@@ -45,7 +50,7 @@ namespace DynamicDocsWPF
             while (true)
             {
                 Dispatcher.Invoke(HandlePermissionLevel);
-                Thread.Sleep(100);
+                Thread.Sleep(1000);
             }
         }
 
@@ -64,7 +69,7 @@ namespace DynamicDocsWPF
                         admin?.Refresh();
                     });
 
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
             }
         }
 
@@ -89,7 +94,7 @@ namespace DynamicDocsWPF
             }
             catch (WebException)
             {
-                InfoPopup.ShowOk("Der Server ist derzeit nicht erreichbar.");
+                InfoPopup.ShowOk(StringResources.ConnectionError);
                 login.Close();
                 Close();
             }
@@ -110,12 +115,6 @@ namespace DynamicDocsWPF
 
                 switch (level)
                 {
-                    case 0:
-                        Administration.Visibility = Visibility.Collapsed;
-                        MyProcesses.Visibility = Visibility.Collapsed;
-                        ForeignProcesses.Visibility = Visibility.Collapsed;
-                        NoPermissionText.Visibility = Visibility.Visible;
-                        break;
                     case 1:
                     {
                         Administration.Visibility = Visibility.Collapsed;
@@ -160,7 +159,12 @@ namespace DynamicDocsWPF
                             Visibility.Visible;
                         break;
                     }
-                    default: throw new ArgumentOutOfRangeException();
+                    default:    
+                        Administration.Visibility = Visibility.Collapsed;
+                        MyProcesses.Visibility = Visibility.Collapsed;
+                        ForeignProcesses.Visibility = Visibility.Collapsed;
+                        NoPermissionText.Visibility = Visibility.Visible;
+                        break;
                 }
             }
             else
@@ -185,7 +189,7 @@ namespace DynamicDocsWPF
             }
             catch (WebException)
             {
-                InfoPopup.ShowOk("Der Server ist derzeit nicht erreichbar.");
+                InfoPopup.ShowOk(StringResources.ConnectionError);
                 create?.Close();
                 Close();
             }

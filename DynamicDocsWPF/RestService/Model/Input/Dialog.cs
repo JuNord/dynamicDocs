@@ -6,12 +6,12 @@ using RestService.Model.Process;
 
 namespace RestService.Model.Input
 {
-    public class Dialog : Tag
+    public class Dialog : NamedTag
     {
         private readonly List<BaseInputElement> _elements;
         private StackPanel _stackPanel;
 
-        public Dialog(Tag parent) : base(parent)
+        public Dialog(Tag parent, string name, string description) : base(parent, name , description)
         {
             _elements = new List<BaseInputElement>();
             Elements = new CustomEnumerable<BaseInputElement>(_elements);

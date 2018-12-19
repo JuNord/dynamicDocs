@@ -1,27 +1,27 @@
 ﻿<process name="visit_training" description="Antrag zum Besuch einer Fortbildungsveranstaltung">
   <process-step name="Initialisation" description="Erstellung des Antrages">
-    <dialog>
+    <dialog name="dialog1" description="Allgemein">
       <teacher-dropdown name="teacher" description="Antragsteller: " obligatory="true"/>
       <text name="topic" description="Thema:" obligatory="true"/>
       <text name="operator" description="Veranstalter:" obligatory="true"/>
     </dialog>
-    <dialog>
+    <dialog name="dialog2" description="Zeit und Reise">
       <date-dropdown name="date" description="Datum: " obligatory="true"/>
       <text name="location" description="Ort:" obligatory="true"/>
       <text name="transportation" description="Verkehrsmittel:" obligatory="true"/>
     </dialog>
-    <dialog>
+    <dialog name="dialog3" description="Kosten">
       <number name="costs" description="Kosten:" obligatory="true"/>
       <number name="oncost" description="Folgekosten:" obligatory="true"/>
     </dialog>
-    <dialog>
+    <dialog name="dialog4" description="Weiteres">
       <text name="reason" description="Begründung/Fächerbezug" obligatory="true"/>
       <number name="time" description="Zeitrahmen in Std." obligatory="true"/>
     </dialog>
   </process-step>
   <process-step name="validationByPlanner" description="Genehmigung durch Stundenplaner" target="stundenplaner">
-    <dialog>
-	<text name="loveit" description="Begründung:" obligatory="true"/>
+    <dialog name="dialog5" description="Zustimmungsbegründung">
+	<text name="validationreason" description="Begründung:" obligatory="true"/>
     </dialog>
     <validation locks="true"/>
   </process-step>

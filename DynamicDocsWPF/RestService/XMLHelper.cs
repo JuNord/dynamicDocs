@@ -12,17 +12,12 @@ namespace RestService
     {
         public static ProcessObject ReadXmlFromString(string content)
         {
-            var valid = TryReadXmlFromString(content, out var processObject);
-            return valid == XmlState.Valid ? processObject : null;
-        }
-
-        public static XmlState TryReadXmlFromString(string content, out ProcessObject processObject)
-        {
+            
+            ProcessObject processObject = null;
             try
             {
                 using (var reader = XmlReader.Create(new StringReader(content)))
                 {
-                    processObject = null;
                     ProcessStep processStep = null;
                     Dialog dialog = null;
                     ValidationElement validation = null;
@@ -47,28 +42,29 @@ namespace RestService
                                 #region SurroundingTags
 
                                 case Wording.Process:
-                                    if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.Missingattribute;
+                                    if (AnyStringNullOrWhiteSpace(name, description)) throw new XmlFormatException( Wording.Process, XmlState.Missingattribute);
                                     processObject = new ProcessObject(name, description);
                                     break;
                                 case Wording.ProcessStep:
-                                    if (processObject == null) return XmlState.Missingparenttag;
+                                    if (processObject == null) throw new XmlFormatException( Wording.Process, XmlState.Missingparenttag);
                                     if (processObject?.StepCount > 0)
                                     {
                                         if (AnyStringNullOrWhiteSpace(name, description, target))
-                                            return XmlState.Missingattribute;
+                                            throw new XmlFormatException( Wording.ProcessStep, XmlState.Missingattribute);
                                     }
                                     else
                                     {
                                         if (AnyStringNullOrWhiteSpace(name, description))
-                                            return XmlState.Missingattribute;
+                                            throw new XmlFormatException( Wording.ProcessStep, XmlState.Missingattribute);
                                     }
 
                                     processStep = new ProcessStep(processObject, name, description, target);
                                     processObject.AddStep(processStep);
                                     break;
                                 case Wording.Dialog:
-                                    if (processStep == null || processObject == null) return XmlState.Missingparenttag;
-                                    dialog = new Dialog(processStep);
+                                    if (AnyStringNullOrWhiteSpace(name, description)) throw new XmlFormatException( Wording.Dialog, XmlState.Missingattribute);
+                                    if (processStep == null || processObject == null) throw new XmlFormatException( Wording.Dialog, XmlState.Missingparenttag);
+                                    dialog = new Dialog(processStep, name, description);
                                     processStep.AddDialog(dialog);
                                     break;
 
@@ -77,52 +73,52 @@ namespace RestService
                                 #region InputTags
 
                                 case Wording.TextInputBox:
-                                    if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.Missingattribute;
+                                    if (AnyStringNullOrWhiteSpace(name, description)) throw new XmlFormatException( Wording.TextInputBox, XmlState.Missingattribute);
                                     if (dialog == null || processStep == null || processObject == null)
-                                        return XmlState.Missingparenttag;
+                                        throw new XmlFormatException( Wording.TextInputBox, XmlState.Missingparenttag);
                                     var textInputBox = new TextInputBox(dialog, name, description, ToBool(obligatory));
                                     dialog.AddElement(textInputBox);
                                     break;
 
                                 case Wording.NumberInputBox:
-                                    if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.Missingattribute;
+                                    if (AnyStringNullOrWhiteSpace(name, description)) throw new XmlFormatException( Wording.NumberInputBox, XmlState.Missingattribute);
                                     if (dialog == null || processStep == null || processObject == null)
-                                        return XmlState.Missingparenttag;
+                                        throw new XmlFormatException( Wording.NumberInputBox, XmlState.Missingparenttag);
                                     var numberInputBox =
                                         new NumberInputBox(dialog, name, description, ToBool(obligatory), calculation);
                                     dialog.AddElement(numberInputBox);
                                     break;
 
                                 case Wording.TeacherDropdown:
-                                    if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.Missingattribute;
+                                    if (AnyStringNullOrWhiteSpace(name, description)) throw new XmlFormatException( Wording.TeacherDropdown, XmlState.Missingattribute);
                                     if (dialog == null || processStep == null || processObject == null)
-                                        return XmlState.Missingparenttag;
+                                        throw new XmlFormatException( Wording.TeacherDropdown, XmlState.Missingparenttag);
                                     var teacherDropdown =
                                         new TeacherDropdown(dialog, name, description, ToBool(obligatory));
                                     dialog.AddElement(teacherDropdown);
                                     break;
 
                                 case Wording.StudentDropdown:
-                                    if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.Missingattribute;
+                                    if (AnyStringNullOrWhiteSpace(name, description)) throw new XmlFormatException( Wording.StudentDropdown, XmlState.Missingattribute);
                                     if (dialog == null || processStep == null || processObject == null)
-                                        return XmlState.Missingparenttag;
+                                        throw new XmlFormatException( Wording.StudentDropdown, XmlState.Missingparenttag);
                                     var studentDropdown =
                                         new StudentDropdown(dialog, name, description, ToBool(obligatory));
                                     dialog.AddElement(studentDropdown);
                                     break;
                                 case Wording.DateDropdown:
-                                    if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.Missingattribute;
+                                    if (AnyStringNullOrWhiteSpace(name, description)) throw new XmlFormatException( Wording.DateDropdown, XmlState.Missingattribute);
                                     if (dialog == null || processStep == null || processObject == null)
-                                        return XmlState.Missingparenttag;
+                                        throw new XmlFormatException( Wording.DateDropdown, XmlState.Missingparenttag);
                                     var dateDropdown = new DateDropdown(dialog, name, description, ToBool(obligatory),
                                         calculation);
                                     dialog.AddElement(dateDropdown);
                                     break;
                                 case
                                     Wording.ClassDropdown:
-                                    if (AnyStringNullOrWhiteSpace(name, description)) return XmlState.Missingattribute;
+                                    if (AnyStringNullOrWhiteSpace(name, description)) throw new XmlFormatException( Wording.ClassDropdown, XmlState.Missingattribute);
                                     if (dialog == null || processStep == null || processObject == null)
-                                        return XmlState.Missingparenttag;
+                                        throw new XmlFormatException( Wording.ClassDropdown, XmlState.Missingparenttag);
                                     var classDropdown =
                                         new ClassDropDown(dialog, name, description, ToBool(obligatory));
                                     dialog.AddElement(classDropdown);
@@ -133,14 +129,14 @@ namespace RestService
                                 #region ProcessTags              
 
                                 case Wording.ArchivePermission:
-                                    if (AnyStringNullOrWhiteSpace(target)) return XmlState.Missingattribute;
-                                    if (processObject == null) return XmlState.Missingparenttag;
+                                    if (AnyStringNullOrWhiteSpace(target)) throw new XmlFormatException( Wording.ArchivePermission, XmlState.Missingattribute);
+                                    if (processObject == null)  throw new XmlFormatException( Wording.ArchivePermission, XmlState.Missingparenttag);
                                     var archivePermission = new ArchivePermissionElement(processObject, target);
                                     processObject.AddPermission(archivePermission);
                                     break;
                                 case Wording.MailNotification:
-                                    if (AnyStringNullOrWhiteSpace(target, text)) return XmlState.Missingattribute;
-                                    if (processStep == null || processObject == null) return XmlState.Missingparenttag;
+                                    if (AnyStringNullOrWhiteSpace(target, text)) throw new XmlFormatException( Wording.MailNotification, XmlState.Missingattribute);
+                                    if (processStep == null || processObject == null) throw new XmlFormatException( Wording.MailNotification, XmlState.Missingparenttag);
                                     var mailNotification = new MailNotificationElement(processStep, target, text);
                                     if (validation?.Accepted != null)
                                         validation.Accepted.AddNotification(mailNotification);
@@ -149,9 +145,8 @@ namespace RestService
                                     else processStep.AddNotification(mailNotification);
                                     break;
                                 case Wording.Receipt:
-                                    if (AnyStringNullOrWhiteSpace(draftname, filepath))
-                                        return XmlState.Missingattribute;
-                                    if (processStep == null || processObject == null) return XmlState.Missingparenttag;
+                                    if (AnyStringNullOrWhiteSpace(draftname)) throw new XmlFormatException( Wording.Receipt, XmlState.Missingattribute);
+                                    if (processStep == null || processObject == null) throw new XmlFormatException( Wording.Receipt, XmlState.Missingparenttag);
                                     var receipt = new ReceiptElement(processStep, draftname, filepath,
                                         ReceiptType.Word);
                                     if (validation?.Accepted != null)
@@ -161,20 +156,20 @@ namespace RestService
                                     else processStep.AddReceipt(receipt);
                                     break;
                                 case Wording.Validation:
-                                    if (processStep == null || processObject == null) return XmlState.Missingparenttag;
+                                    if (processStep == null || processObject == null) throw new XmlFormatException( Wording.Validation, XmlState.Missingparenttag);
                                     validation = new ValidationElement(processStep, ToBool(locks));
                                     processStep.AddValidation(validation);
                                     break;
                                 case Wording.ValidationAccepted:
                                     if (validation == null || processStep == null || processObject == null)
-                                        return XmlState.Missingparenttag;
+                                        throw new XmlFormatException( Wording.ValidationAccepted, XmlState.Missingparenttag);
 
                                     validation.Accepted = new ValidationAccepted(validation);
 
                                     break;
                                 case Wording.ValidationDeclined:
                                     if (validation == null || processStep == null || processObject == null)
-                                        return XmlState.Missingparenttag;
+                                        throw new XmlFormatException( Wording.ValidationDeclined, XmlState.Missingparenttag);
 
                                     validation.Declined = new ValidationDeclined(validation);
                                     break;
@@ -190,15 +185,15 @@ namespace RestService
                             switch (reader.Name.ToLower())
                             {
                                 case Wording.ProcessStep:
-                                    if (processStep == null) return XmlState.Missingparenttag;
+                                    if (processStep == null) throw new XmlFormatException( Wording.ProcessStep, XmlState.Missingparenttag);
                                     processStep = null;
                                     break;
                                 case Wording.Dialog:
-                                    if (dialog == null) return XmlState.Missingparenttag;
+                                    if (dialog == null) throw new XmlFormatException( Wording.Dialog, XmlState.Missingparenttag);
                                     dialog = null;
                                     break;
                                 case Wording.Validation:
-                                    if (validation == null) return XmlState.Missingparenttag;
+                                    if (validation == null) throw new XmlFormatException( Wording.Validation, XmlState.Missingparenttag);
                                     validation = null;
                                     break;
                             }
@@ -207,22 +202,17 @@ namespace RestService
             }
             catch (XmlException)
             {
-                processObject = null;
-                return XmlState.Invalid;
+                throw new XmlFormatException( null, XmlState.Invalid);
             }
             catch (NullReferenceException)
             {
-                processObject = null;
-                return XmlState.Invalid;
+                throw new XmlFormatException( null, XmlState.Invalid);
             }
 
-            return IsValidProcess(processObject) ? XmlState.Valid : XmlState.Invalid;
+            return processObject;
         }
 
-        public static XmlState TryReadXmlFromPath(string path, out ProcessObject processObject)
-        {
-            return TryReadXmlFromString(File.ReadAllText(path), out processObject);
-        }
+      
 
         public static ProcessObject ReadXmlFromPath(string path)
         {

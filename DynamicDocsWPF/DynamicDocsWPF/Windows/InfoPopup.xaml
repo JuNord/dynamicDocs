@@ -4,26 +4,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="Information" Height="Auto" Width="450" MaxHeight="350"
+        Title="Information" Height="Auto" Width="450"
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
-    <Grid>
+    <Grid Margin="25">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Rectangle Grid.RowSpan="2" RadiusX="8" RadiusY="8" Fill="#4BC3FF">
             <Rectangle.Effect>
-                <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="15" BlurRadius="5" />
             </Rectangle.Effect>
         </Rectangle>
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Width="Auto">
-            <TextBlock Name="InfoBlock" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+            <TextBlock Name="InfoBlock" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"
                        TextWrapping="Wrap" FontSize="22"
-                       FontFamily="Segoe UI Light" Margin="20" />
+                       FontFamily="Segoe UI Light" Margin="20" Text="Something went wrong"/>
         </ScrollViewer>
         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Name="Accept" Click="Accept_OnClick" Content="Bestätigen" Width="100" Height="35"

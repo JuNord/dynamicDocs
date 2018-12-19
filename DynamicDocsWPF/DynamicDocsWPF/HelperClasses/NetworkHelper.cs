@@ -91,6 +91,12 @@ namespace DynamicDocsWPF.HelperClasses
             var reply = JsonConvert.DeserializeObject<ReplyGetProcessTemplateList>(GetRequest(User, Routing.GetProcesses));
             return reply?.ProcessTemplates;
         }
+        
+        public IEnumerable<Role> GetRoles()
+        {
+            var reply = JsonConvert.DeserializeObject<ReplyGetRoles>(GetRequest(User, Routing.GetRoles));
+            return reply?.Roles;
+        }
 
         public IEnumerable<PendingInstance> GetResponsibilities()
         {
@@ -195,18 +201,25 @@ namespace DynamicDocsWPF.HelperClasses
 
         public UploadResult UploadProcessTemplate(string filePath, bool forceOverwrite)
         {
-            var process = XmlHelper.ReadXmlFromPath(filePath);
-            var request = new RequestPostProcessTemplate
+            try
             {
-                Id = process.Name,
-                Description = process.Description,
-                ForceOverWrite = forceOverwrite,
-                Text = File.ReadAllText(filePath)
-            };
-            var reply = JsonConvert.DeserializeObject<ReplyPostProcessTemplate>(
-                PostRequest(User, Routing.AddProcess, JsonConvert.SerializeObject(request))
-            );
-            return reply?.UploadResult ?? UploadResult.FailedOther;
+                var process = XmlHelper.ReadXmlFromPath(filePath);
+                var request = new RequestPostProcessTemplate
+                {
+                    Id = process.Name,
+                    Description = process.Description,
+                    ForceOverWrite = forceOverwrite,
+                    Text = File.ReadAllText(filePath)
+                };
+                var reply = JsonConvert.DeserializeObject<ReplyPostProcessTemplate>(
+                    PostRequest(User, Routing.AddProcess, JsonConvert.SerializeObject(request))
+                );
+                return reply?.UploadResult ?? UploadResult.FailedOther;
+            }
+            catch (XmlFormatException xmle)
+            {
+                return UploadResult.FailedOther;
+            }
         }
 
         public UploadResult UploadDocTemplate(string templateId, string filePath, bool forceOverwrite)
@@ -272,12 +285,13 @@ namespace DynamicDocsWPF.HelperClasses
             return reply?.UploadResult ?? UploadResult.FailedOther;
         }
 
-        public UploadResult PostPermissionChange(string email, int permissionLevel)
+        public UploadResult PostPermissionChange(string email, int permissionLevel, string role)
         {
             var request = new RequestPermissionChange
             {
                 Email = email,
-                PermissionLevel = permissionLevel
+                PermissionLevel = permissionLevel,
+                Role = role
             };
             var reply = JsonConvert.DeserializeObject<ReplyPostProcessUpdate>(
                 PostRequest(User, Routing.UpdatePermission, JsonConvert.SerializeObject(request))

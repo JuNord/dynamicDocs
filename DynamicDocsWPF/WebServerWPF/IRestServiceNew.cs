@@ -28,6 +28,11 @@ namespace WebServer
         [WebGet(UriTemplate = Routing.GetReceipts, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetDocTemplateList GetDocTemplateList();
+        
+        [OperationContract]
+        [WebGet(UriTemplate = Routing.GetRoles, BodyStyle = WebMessageBodyStyle.Bare,
+            ResponseFormat = WebMessageFormat.Json)]
+        ReplyGetRoles GetRoleList();
 
         [OperationContract]
         [WebGet(UriTemplate = Routing.GetAuthorized, BodyStyle = WebMessageBodyStyle.Bare,

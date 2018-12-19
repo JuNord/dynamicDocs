@@ -74,11 +74,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdministrationContainer.cs" />
     <Compile Include="HelperClasses\BoolToVisibilityConverter.cs" />
     <Compile Include="HelperClasses\IReceiptHelper.cs" />
     <Compile Include="HelperClasses\NetworkBase.cs" />
     <Compile Include="HelperClasses\NetworkHelper.cs" />
+    <Compile Include="HelperClasses\RevBoolToVisibilityConverter.cs" />
     <Compile Include="HelperClasses\WordReceiptHelper.cs" />
+    <Compile Include="InvalidProcessCreationException.cs" />
+    <Compile Include="ListExtension.cs" />
     <Compile Include="StringResources.cs" />
     <Compile Include="Windows\CreateProcessInstance.xaml.cs">
       <DependentUpon>CreateProcessInstance.xaml</DependentUpon>

@@ -144,7 +144,7 @@
                                     MinWidth="{TemplateBinding ActualWidth}"
                                     MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                     <Border
-                                        CornerRadius="2"
+                                        CornerRadius="10,10,10,10"
                                         x:Name="DropDownBorder"
                                         Background="White"
                                         BorderThickness="1"

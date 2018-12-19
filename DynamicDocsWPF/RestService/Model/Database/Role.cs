@@ -1,8 +1,8 @@
 namespace RestService.Model.Database
 {
-    public class Roles
+    public class Role
     {
-        public string Role { get; set; }
+        public string RoleId { get; set; }
         public string Mail { get; set; }
     }
 }

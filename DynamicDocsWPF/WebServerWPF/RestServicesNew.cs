@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
@@ -53,7 +54,7 @@ namespace WebServerWPF
                 {
                     var reply = new ReplyGetProcessInstance
                     {
-                        ProcessInstance = Database.GetProcessInstanceById(request.Id)
+                        ProcessInstance = Database.GetInstanceById(request.Id)
                     };
 
                     return reply;
@@ -166,6 +167,28 @@ namespace WebServerWPF
             return null;
         }
 
+        public ReplyGetRoles GetRoleList()
+        {
+            try
+            {
+                if (IsPermitted(GetAuthUser(), 3) == AuthorizationResult.Permitted)
+                {
+                    var reply = new ReplyGetRoles
+                    {
+                        Roles = Database.GetRoles()
+                    };
+
+                    return reply;
+                }
+            }
+            catch (Exception e)
+            {
+                PrintException(e);
+            }
+
+            return null;
+        }
+
         public ReplyGetProcessInstanceList GetProcessInstanceList()
         {
             try
@@ -218,7 +241,7 @@ namespace WebServerWPF
                 {
                     var reply = new ReplyGetResponsibilityList
                     {
-                        Responsibilities = Database.GetResponsibilities(GetAuthUser())
+                        Responsibilities = Database.GetPending(GetAuthUser())
                     };
 
                     return reply;
@@ -335,6 +358,28 @@ namespace WebServerWPF
 
                                 PrintException(e);
                             }
+                            catch (XmlFormatException xmle)
+                            {
+                                switch (xmle.State)
+                                {
+                                    case XmlState.Missingattribute:
+                                        MainWindow.PostToLog(
+                                            $"Einem der \"{xmle.TagName}\"-Tags scheint ein Attribut zu fehlen. Bitte kontaktieren Sie einen Administrator.");
+                                        break;
+                                    case XmlState.Missingparenttag:
+                                        MainWindow.PostToLog(
+                                            $"Einer der \"{xmle.TagName}\"-Tags befindet sich nicht in seinem Parenttag. Bitte kontaktieren Sie einen Administrator.");
+                                        break;
+                                    case XmlState.Invalid:
+                                        MainWindow.PostToLog(
+                                            "Die geladene XML-Datei weist einen nicht eindeutigen Fehler auf. Fehlen Klammern, Tags oder Anführungszeichen? Bitte prüfen Sie ihre Datei.");
+                                        break;
+                                }
+                            }
+                            catch (ArgumentOutOfRangeException e3)
+                            {
+                                MainWindow.PostToLog($"Die vom Server bezogene XML-Datei beinhaltet einen unbekannten Tag \"{e3.ActualValue}\".");
+                            }
 
                             File.WriteAllText(path, request.Text);
                         }
@@ -379,6 +424,11 @@ namespace WebServerWPF
                 {
                     case AuthorizationResult.Permitted:
                         Database.UpdateUserPermission(request);
+                        Database.AddRole(new Role()
+                        {
+                            Mail = request.Email,
+                            RoleId = request.Role
+                        });
                         break;
                     case AuthorizationResult.NoPermission:
                         reply.UploadResult = UploadResult.NoPermission;
@@ -435,10 +485,25 @@ namespace WebServerWPF
                                 FilePath = path
                             };
                             MainWindow.PostToLog("Registering in Database...");
-                            Database.AddDocTemplate(docTemplate);
+                            if (Database.GetDocTemplateById(docTemplate.Id) == null)
+                            {
+                                File.WriteAllBytes(path, Encoding.Default.GetBytes(request.Content));
+                                Database.AddDocTemplate(docTemplate);
+                                
+                                reply.UploadResult = UploadResult.Success;
+                            }
+                            else if (Database.GetDocTemplateById(docTemplate.Id) != null && request.ForceOverWrite)
+                            {
+                                File.WriteAllBytes(path, Encoding.Default.GetBytes(request.Content));
+                                
+                                reply.UploadResult = UploadResult.Success;
+                            }
+                            else
+                            {
+                                reply.UploadResult = UploadResult.FailedFileexists;
+                            }
+                                
                             MainWindow.PostToLog("Done!");
-
-                            File.WriteAllBytes(path, Encoding.Default.GetBytes(request.Content));
                         }
                         else
                         {
@@ -454,7 +519,6 @@ namespace WebServerWPF
                         reply.UploadResult = UploadResult.InvalidLogin;
                         break;
                 }
-                reply.UploadResult = UploadResult.Success;
             }
             catch (MySqlException e)
             {
@@ -486,20 +550,33 @@ namespace WebServerWPF
                 switch (auth)
                 {
                     case AuthorizationResult.Permitted:
-                        MainWindow.PostToLog("Received a process update.");
-                        if (request.Declined)
+                        var instance = Database.GetInstanceById(request.Id);
+                        var pending = Database.GetPending(GetAuthUser());
+                        var entries = Database.GetEntries(request.Id);
+
+                        if (instance.Archived || (instance.OwnerId.Equals(GetAuthUser().Email) && !request.Declined) || (!instance.OwnerId.Equals(GetAuthUser().Email) && !pending.Any(inst => inst.InstanceId == request.Id)))
                         {
-                            MainWindow.PostToLog("The process was declined.");
-                            Database.DeclineProcessInstance(request.Id);
+                            reply.UploadResult = UploadResult.NoPermission;
                         }
                         else
                         {
-                            MainWindow.PostToLog("The process was approved.");
-                            Database.ApproveProcessInstance(request.Id);
-                        }
+                            MainWindow.PostToLog("Received a process update.");
+                            if (request.Declined)
+                            {
+                                MainWindow.PostToLog("The process was declined.");
+                                Database.DeclineProcessInstance(request.Id);
+                            }
+                            else
+                            {
+                                MainWindow.PostToLog("The process was approved.");
+                                Database.ApproveProcessInstance(request.Id);
+                            }
 
-                        if (request.Locks)
-                            Database.LockProcessInstance(request.Id);
+                            if (request.Locks)
+                                Database.LockProcessInstance(request.Id);
+                            
+                            reply.UploadResult = UploadResult.Success;
+                        }
                         break;
                     case AuthorizationResult.NoPermission:
                         reply.UploadResult = UploadResult.NoPermission;
@@ -525,8 +602,6 @@ namespace WebServerWPF
                 PrintException(e);
                 reply.UploadResult = UploadResult.FailedOther;
             }
-
-            reply.UploadResult = UploadResult.Success;
             return reply;
         }
 
@@ -539,12 +614,19 @@ namespace WebServerWPF
                 switch (auth)
                 {
                     case AuthorizationResult.Permitted:
-                        MainWindow.PostToLog("Received an entry update.");
-                        var instance = Database.GetProcessInstanceById(requestPost.Entry.InstanceId);
-                        if (instance != null)
-                            if (!instance.Locked)
-                                Database.UpdateEntry(requestPost.Entry);
-
+                        var instance = Database.GetInstanceById(requestPost.Entry.InstanceId);
+                        if (instance.Archived || !instance.OwnerId.Equals(GetAuthUser().Email) || instance.CurrentStepIndex > 1)
+                        {
+                            reply.UploadResult = UploadResult.NoPermission;
+                        }
+                        else
+                        {
+                            MainWindow.PostToLog("Received an entry update.");
+                            if (instance != null)
+                                if (!instance.Locked)
+                                    Database.UpdateEntry(requestPost.Entry);
+                        }
+                        reply.UploadResult = UploadResult.Success;
                         break;
                     case AuthorizationResult.NoPermission:
                         reply.UploadResult = UploadResult.NoPermission;
@@ -554,7 +636,6 @@ namespace WebServerWPF
                         break;
                 }
 
-                reply.UploadResult = UploadResult.Success;
             }
             catch (MySqlException e)
             {
@@ -629,11 +710,24 @@ namespace WebServerWPF
                 switch (auth)
                 {
                     case AuthorizationResult.Permitted:
-                        MainWindow.PostToLog("Received request to add a new Entry.");
-                        var entry = request.Entry;
-                        MainWindow.PostToLog("Registering in Database...");
-                        Database.AddEntry(entry);
-                        MainWindow.PostToLog("Done!");
+                        var instance = Database.GetInstanceById(request.Entry.InstanceId);
+                        var pending = Database.GetPending(GetAuthUser());
+                        if (instance.Archived ||
+                            (instance.OwnerId.Equals(GetAuthUser().Email) && instance.CurrentStepIndex > 1) ||
+                            (!instance.OwnerId.Equals(GetAuthUser().Email) &&
+                             !pending.Any(inst => inst.InstanceId == request.Entry.InstanceId)))
+                        {
+                            reply.UploadResult = UploadResult.NoPermission;
+                        }
+                        else
+                        {
+                            MainWindow.PostToLog("Received request to add a new Entry.");
+                            var entry = request.Entry;
+                            MainWindow.PostToLog("Registering in Database...");
+                            Database.AddEntry(entry);
+                            MainWindow.PostToLog("Done!");
+                        }
+
                         break;
                     case AuthorizationResult.NoPermission:
                         reply.UploadResult = UploadResult.NoPermission;

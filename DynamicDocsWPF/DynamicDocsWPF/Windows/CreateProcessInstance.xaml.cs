@@ -25,13 +25,12 @@ namespace DynamicDocsWPF.Windows
             _networkHelper = networkHelper;
             var processStep = processObject.GetStepAtIndex(0);
 
-            Heading.Text = processObject.Description;
-
             _dialogEnumerable = processStep?.Dialogs;
 
             if (_dialogEnumerable == null) return;
 
             _dialogEnumerable?.MoveNext();
+            Heading.Text = _dialogEnumerable?.Current?.Description??_processObject.Description;
             ViewHolder.Content = _dialogEnumerable.Current?.GetStackPanel();
         }
 
@@ -108,6 +107,7 @@ namespace DynamicDocsWPF.Windows
 
             if (_dialogEnumerable.MoveNext())
             {
+                Heading.Text = _dialogEnumerable?.Current?.Description??_processObject.Description;
                 ViewHolder.Content = _dialogEnumerable.Current?.GetStackPanel();
             }
             else

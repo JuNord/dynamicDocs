@@ -19,11 +19,11 @@ USE `processmanagement`;
 -- Exportiere Struktur von Tabelle processmanagement.archivepermission
 CREATE TABLE IF NOT EXISTS `archivepermission` (
   `PROCESS_ID` int(11) NOT NULL,
-  `AUTHORIZEDUSER_ID` varchar(255) NOT NULL,
-  PRIMARY KEY (`PROCESS_ID`,`AUTHORIZEDUSER_ID`),
-  KEY `AUTHORIZEDUSER_ID` (`AUTHORIZEDUSER_ID`),
+  `MAIL` varchar(255) NOT NULL,
+  PRIMARY KEY (`PROCESS_ID`,`MAIL`),
+  KEY `AUTHORIZEDUSER_ID` (`MAIL`),
   CONSTRAINT `archivepermission_ibfk_1` FOREIGN KEY (`PROCESS_ID`) REFERENCES `processinstance` (`ID`) ON DELETE CASCADE,
-  CONSTRAINT `archivepermission_ibfk_2` FOREIGN KEY (`AUTHORIZEDUSER_ID`) REFERENCES `user` (`EMAIL`) ON DELETE CASCADE
+  CONSTRAINT `archivepermission_ibfk_2` FOREIGN KEY (`MAIL`) REFERENCES `user` (`EMAIL`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Daten Export vom Benutzer nicht ausgewählt
@@ -38,24 +38,23 @@ CREATE TABLE IF NOT EXISTS `doctemplate` (
 -- Exportiere Struktur von Tabelle processmanagement.entry
 CREATE TABLE IF NOT EXISTS `entry` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `PROCESS_ID` int(11) DEFAULT NULL,
-  `FIELDNAME` varchar(255) DEFAULT NULL,
+  `PROCESS_ID` int(11) NOT NULL,
+  `FIELDNAME` varchar(255) NOT NULL,
   `DATA` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
+  PRIMARY KEY (`ID`,`FIELDNAME`,`PROCESS_ID`),
   KEY `PROCESS_ID` (`PROCESS_ID`),
-  CONSTRAINT `entry_ibfk_1` FOREIGN KEY (`PROCESS_ID`) REFERENCES `processinstance` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+  CONSTRAINT `Entry_FK` FOREIGN KEY (`PROCESS_ID`) REFERENCES `processinstance` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
 
 -- Daten Export vom Benutzer nicht ausgewählt
 -- Exportiere Struktur von Tabelle processmanagement.pendinginstance
 CREATE TABLE IF NOT EXISTS `pendinginstance` (
   `INSTANCE_ID` int(11) NOT NULL,
-  `RESPONSIBLE_USER_ID` varchar(255) NOT NULL,
-  PRIMARY KEY (`INSTANCE_ID`,`RESPONSIBLE_USER_ID`),
+  `MAIL` varchar(255) NOT NULL,
+  `ROLE` varchar(255) NOT NULL,
+  PRIMARY KEY (`INSTANCE_ID`),
   KEY `INSTANCE_ID` (`INSTANCE_ID`),
-  KEY `RESPONSIBLE_USER_ID` (`RESPONSIBLE_USER_ID`),
-  CONSTRAINT `pending_ibfk_1` FOREIGN KEY (`INSTANCE_ID`) REFERENCES `processinstance` (`ID`) ON DELETE CASCADE,
-  CONSTRAINT `pending_ibfk_2` FOREIGN KEY (`RESPONSIBLE_USER_ID`) REFERENCES `user` (`EMAIL`) ON DELETE CASCADE
+  CONSTRAINT `pending_ibfk_1` FOREIGN KEY (`INSTANCE_ID`) REFERENCES `processinstance` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Daten Export vom Benutzer nicht ausgewählt
@@ -76,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `processinstance` (
   KEY `OWNER_ID` (`OWNER_ID`),
   CONSTRAINT `runningprocess_ibfk_1` FOREIGN KEY (`TEMPLATE_ID`) REFERENCES `processtemplate` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `runningprocess_ibfk_2` FOREIGN KEY (`OWNER_ID`) REFERENCES `user` (`EMAIL`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 -- Daten Export vom Benutzer nicht ausgewählt
 -- Exportiere Struktur von Tabelle processmanagement.processtemplate
@@ -91,10 +90,10 @@ CREATE TABLE IF NOT EXISTS `processtemplate` (
 -- Exportiere Struktur von Tabelle processmanagement.roles
 CREATE TABLE IF NOT EXISTS `roles` (
   `ID` varchar(255) NOT NULL,
-  `USER_ID` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `USER_ID` (`USER_ID`),
-  CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`EMAIL`) ON DELETE CASCADE
+  `MAIL` varchar(255) NOT NULL,
+  PRIMARY KEY (`ID`,`MAIL`),
+  KEY `USER_ID` (`MAIL`),
+  CONSTRAINT `Roles_FK` FOREIGN KEY (`MAIL`) REFERENCES `user` (`EMAIL`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Daten Export vom Benutzer nicht ausgewählt
@@ -103,7 +102,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `EMAIL` varchar(255) NOT NULL,
   `PASSWORD` varchar(255) DEFAULT NULL,
   `PERMISSIONLEVEL` int(11) DEFAULT NULL,
-  `ROLE` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`EMAIL`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

@@ -4,10 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:database="clr-namespace:RestService.Model.Database;assembly=RestService"
+             xmlns:dynamicDocsWpf="clr-namespace:DynamicDocsWPF"
              mc:Ignorable="d"
              Background="#3CA4FF"
              Foreground="White">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <ListView Grid.Row="0" Background="#7ed5ff" Foreground="White" BorderBrush="Transparent" Name="UserList">
             <ListView.Effect>
                 <DropShadowEffect Color="Black" Direction="-90" Opacity="0.5" ShadowDepth="6" BlurRadius="25" />
@@ -23,15 +28,15 @@
             </ListBox.ItemContainerStyle>
 
             <ListView.ItemTemplate>
-                <DataTemplate DataType="database:User">
+                <DataTemplate DataType="dynamicDocsWpf:AdministrationContainer">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200" />
                             <ColumnDefinition />
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock VerticalAlignment="Center" Text="{Binding Email}" FontSize="14" FontWeight="Bold" />
-                        <ComboBox Margin="20,0" Grid.Column="1" SelectionChanged="Selector_OnSelectionChanged"
-                                  SelectedIndex="{Binding PermissionLevel}" FontSize="12" FontWeight="Light">
+                        <ComboBox SelectionChanged="Selector_OnSelectionChanged" Margin="20,0,0,0" Grid.Column="1" SelectedIndex="{Binding PermissionLevel}" FontSize="12" FontWeight="Light">
                             <ComboBox.Items>
                                 <ComboBoxItem Content="0 - Keine Rechte" />
                                 <ComboBoxItem Content="1 - Basis Nutzer" />
@@ -39,9 +44,18 @@
                                 <ComboBoxItem Content="3 - Administrator" />
                             </ComboBox.Items>
                         </ComboBox>
+                        <TextBox TextChanged="TextBoxBase_OnTextChanged" Grid.Column="2" Width="250" VerticalAlignment="Center" Text="{Binding Role}" Margin="20,0,0,0"  FontSize="14"/>
+
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+                                           
+            <Button Grid.Row="1" Margin="20" Width="100" Height="35" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Content="Speichern" Background="#2196f3" Foreground="White"
+                    FontWeight="Black" Click="ButtonBase_OnClick">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="3" BlurRadius="5" />
+                </Button.Effect>
+            </Button>
     </Grid>
 </UserControl>

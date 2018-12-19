@@ -57,13 +57,20 @@
                     <DropShadowEffect Color="Black" Direction="-70" Opacity="0.5" ShadowDepth="6" BlurRadius="5" />
                 </Border.Effect>
                 <Grid>
-                    <ScrollViewer>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Name="DialogCaption" HorizontalAlignment="Left" FontSize="21" Foreground="#3384D1"
+                               FontFamily="Segoe UI Light" Margin="10,5,0,0"/>
+                    <ScrollViewer Grid.Row="1">
                         <ContentPresenter Name="ViewHolder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                           Margin="40,20" MaxWidth="700" />
                     </ScrollViewer>
-                    <Rectangle Visibility="Visible" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                    <Rectangle Name="Block" Grid.Row="1" Visibility="Visible" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                Fill="Aqua" Opacity="0" />
-                </Grid>
+                </Grid>    
+
             </Border>
             <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
                 <Button Click="Back_Click" Content="Zurück" Width="100" Height="35"
