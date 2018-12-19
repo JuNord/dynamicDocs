@@ -66,7 +66,7 @@
                         <RadioButton Checked="Archived_OnChecked" GroupName="ProcessTypes"
                                      Content="Archivierte" Foreground="White" VerticalAlignment="Center" Margin="2" />
                         <RadioButton Checked="Running_OnChecked" Name="Running" GroupName="ProcessTypes"
-                                     IsChecked="true" Content="Laufende" Foreground="White" VerticalAlignment="Center"
+                                     Content="Laufende" Foreground="White" VerticalAlignment="Center"
                                      Margin="2" />
                     </StackPanel>
 

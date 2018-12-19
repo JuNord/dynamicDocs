@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Net;
@@ -48,14 +49,26 @@ namespace DynamicDocsWPF.Windows
         {
             var worker = new BackgroundWorker();
             List<ProcessInstance> list = null;
-            
-            worker.DoWork += (sender, e) => { list = TryGetInstances(); };
+            File.AppendAllText("ErrorLog.txt", "Initializing OwnInstance \n");
+            worker.DoWork += (sender, e) =>
+            {
+                File.AppendAllText("ErrorLog.txt", "Receiving List \n");
+
+                list = TryGetInstances();
+                
+                File.AppendAllText("ErrorLog.txt", "Got List \n");
+
+            };
             worker.RunWorkerCompleted += (sender, e) =>
             {
+                File.AppendAllText("ErrorLog.txt", "Checking Hash \n");
+
                 if (_lastHash != 0)
                     if(list!=null)
                         if (list.GetHash() == _lastHash && !force)
                             return;
+
+                File.AppendAllText("ErrorLog.txt", "Continuing \n");
 
                 if (InstanceList != null)
                 {
@@ -63,8 +76,12 @@ namespace DynamicDocsWPF.Windows
                         ShowRunning
                             ? list.Where(instance => !instance.Archived)
                             : list.Where(instance => instance.Archived));
+                    File.AppendAllText("ErrorLog.txt", "Getting ToShowList \n");
+
                     Dispatcher.Invoke(() =>
                     {
+                        File.AppendAllText("ErrorLog.txt", "Initializing OwnInstance \n");
+
                         InstanceList.SelectedItems.Clear();
                         InstanceList.ItemsSource = toShow;
                         if(list!=null)

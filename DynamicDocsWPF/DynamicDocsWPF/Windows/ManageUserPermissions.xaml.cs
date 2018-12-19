@@ -28,24 +28,22 @@ namespace DynamicDocsWPF.Windows
 
         public void Refresh()
         {
-            var worker = new BackgroundWorker();
             List<User> users = null;
             Role[] roles = null;
 
-            worker.DoWork += (sender, e) =>
-            {
-                users = _networkHelper.GetUsers();
-                roles = _networkHelper.GetRoles().ToArray();
-            };
-            worker.RunWorkerCompleted += (sender, e) => {
-                var containers = new List<AdministrationContainer>();
+            users = _networkHelper.GetUsers();
+            roles = _networkHelper.GetRoles()?.ToArray();
 
+            var containers = new List<AdministrationContainer>();
+
+            if (users != null)
+            {
                 foreach (var user in users)
                     containers.Add(new AdministrationContainer()
                         {
                             Email = user.Email,
                             PermissionLevel = user.PermissionLevel,
-                            Role = roles.FirstOrDefault(role => role.Mail.Equals(user.Email))?.RoleId ?? ""
+                            Role = roles?.FirstOrDefault(role => role.Mail.Equals(user.Email))?.RoleId ?? ""
                         }
                     );
 
@@ -63,8 +61,7 @@ namespace DynamicDocsWPF.Windows
                     });
                     _lastHash = containers.GetHash();
                 }
-            };
-            worker.RunWorkerAsync();
+            }
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)

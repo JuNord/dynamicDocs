@@ -144,7 +144,7 @@ namespace DynamicDocsWPF.Windows
             else if (_curStepIndex + 1 > SelectedInstance.CurrentStepIndex)
             {
                 //If theres no validation tags these values are automatically accepted after reading
-                if ((_steps.Current?.ValidationCount ?? 0) <= 0)
+                if ((_steps.Current?.ValidationCount ?? 1) <= 0)
                 {
                     _networkHelper.PostProcessUpdate(SelectedInstance.Id, false, false);
                     InfoPopup.ShowOk("Sie haben die Daten gelesen und somit bestätigt. Sie haben nun keinen Zugriff mehr.");
@@ -185,6 +185,7 @@ namespace DynamicDocsWPF.Windows
 
             if (_steps.MoveBack())
             {
+                _curStepIndex -= 1;
                 if (_steps.Current != null)
                     _dialogs = _steps.Current.Dialogs;
                 TryShowLastDialog(_entries);
@@ -209,7 +210,7 @@ namespace DynamicDocsWPF.Windows
         /// <param name="receipt"></param>
         private void HandleReceipt(ReceiptElement receipt)
         {
-            var fileName = $"{receipt.DraftName}_{DateTime.Now.ToShortDateString()}.docx";
+            var fileName = $"{receipt.DraftName}_{SelectedInstance.OwnerId}_{DateTime.Now.ToShortDateString()}.docx";
             var documentTemplate = _networkHelper.GetDocTemplate(receipt.DraftName);
             File.WriteAllBytes(fileName, Encoding.Default.GetBytes(documentTemplate.Content));
 
@@ -315,6 +316,7 @@ namespace DynamicDocsWPF.Windows
                     InstanceList.SelectedIndex == -1 ? Visibility.Collapsed : Visibility.Visible;
                 if (InstanceList.SelectedIndex != -1)
                 {
+                    _curStepIndex = 0;
                     SelectedInstance =
                         _networkHelper.GetProcessInstanceById(((ProcessInstance) InstanceList.SelectedItem).Id);
                     _entries = _networkHelper.GetEntries(SelectedInstance.Id);

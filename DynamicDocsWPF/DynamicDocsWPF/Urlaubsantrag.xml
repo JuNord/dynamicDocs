@@ -15,10 +15,6 @@
 	</process-step>
 	<process-step name="Genehmigung_Stundenplaner" description="Genehmigung durch den Stundenplaner" target="Stundenplaner">
 		<validation locks="true">
-			<validation.accepted>
-				<receipt draftname="UrlaubsBestaetigung"/>
-			</validation.accepted>
-
 			<validation.declined>
 				<mailnotify target="Antragssteller" text="Der Antrag wurde abgelehnt"/>
 			</validation.declined>
@@ -28,7 +24,7 @@
 	<process-step name="Genehmigung_Schulleiter" description="Genehmigung durch den Schulleiter" target="Schulleiter">
 		<validation>
 			<validation.accepted>
-				<mailnotify target="Antragssteller" text="Der Antrag wurde akzeptiert"/>
+				<receipt draftname="UrlaubsBestaetigung"/>
 			</validation.accepted>
 
 			<validation.declined>

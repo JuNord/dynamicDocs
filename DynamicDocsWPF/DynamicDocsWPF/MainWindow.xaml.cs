@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading;
 using System.Windows;
@@ -20,18 +21,12 @@ namespace DynamicDocsWPF
 
         public MainWindow()
         {
-            try
-            {
                 InitializeComponent();
                 Connect();
                 DisplayInfo(MoTD);
                 new Thread(AuthCheck) {IsBackground = true}.Start();
                 new Thread(Idle) {IsBackground = true}.Start();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.InnerException.Message);
-            }
+            
         }
 
         public static string MoTD
