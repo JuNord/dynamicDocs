@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -21,6 +22,8 @@ namespace RestService
                     ProcessStep processStep = null;
                     Dialog dialog = null;
                     ValidationElement validation = null;
+                    List<string> dropDownItems = new List<string>();
+                    
                     while (reader.Read())
                         if (reader.NodeType == XmlNodeType.Element)
                         {
@@ -30,6 +33,7 @@ namespace RestService
                             var target = reader.GetAttribute("target");
                             var locks = reader.GetAttribute("locks");
                             var text = reader.GetAttribute("text");
+                            var source = reader.GetAttribute("source");
                             var draftname = reader.GetAttribute("draftname");
                             var filepath = reader.GetAttribute("filepath");
                             var obligatory = reader.GetAttribute("obligatory");
@@ -89,6 +93,22 @@ namespace RestService
                                     dialog.AddElement(numberInputBox);
                                     break;
 
+                                case Wording.Dropdown:
+                                    if (AnyStringNullOrWhiteSpace(name, description)) throw new XmlFormatException( Wording.Dropdown, XmlState.Missingattribute);
+                                    if (dialog == null || processStep == null || processObject == null)
+                                        throw new XmlFormatException( Wording.Dropdown, XmlState.Missingparenttag);
+                                    dropDownItems = new List<string>();
+                                    var dropDown = new DropDown(dialog, name, description, ToBool(obligatory), dropDownItems);
+                                    dialog.AddElement(dropDown);
+                                    break;
+                                
+                                case Wording.Item:
+                                    if (AnyStringNullOrWhiteSpace(text)) throw new XmlFormatException( Wording.Item, XmlState.Missingattribute);
+                                    if (dialog == null || processStep == null || processObject == null)
+                                        throw new XmlFormatException(Wording.Item, XmlState.Missingparenttag);
+                                    dropDownItems?.Add(text);
+                                    break;
+                                
                                 case Wording.TeacherDropdown:
                                     if (AnyStringNullOrWhiteSpace(name, description)) throw new XmlFormatException( Wording.TeacherDropdown, XmlState.Missingattribute);
                                     if (dialog == null || processStep == null || processObject == null)
@@ -195,6 +215,10 @@ namespace RestService
                                 case Wording.Validation:
                                     if (validation == null) throw new XmlFormatException( Wording.Validation, XmlState.Missingparenttag);
                                     validation = null;
+                                    break;
+                                case Wording.Dropdown:
+                                    if (dropDownItems == null) throw new XmlFormatException( Wording.Validation, XmlState.Missingparenttag);
+                                    dropDownItems = null;
                                     break;
                             }
                         }

@@ -58,7 +58,7 @@ namespace WebServer
         [WebGet(UriTemplate = Routing.GetUserList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]
         ReplyGetUserList GetUserList();
-
+        
         [OperationContract]
         [WebGet(UriTemplate = Routing.GetEntryList, BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json)]

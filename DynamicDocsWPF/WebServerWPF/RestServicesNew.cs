@@ -24,6 +24,7 @@ namespace WebServerWPF
     public class RestServiceNew : IRestServiceNew
     {
         private const string DocPath = "./Docs/";
+        private const string StringPath = "./Strings/";
         private const string ProcessPath = "./Processes/";
         private static readonly DatabaseHelper Database = new DatabaseHelper();
 
@@ -286,7 +287,7 @@ namespace WebServerWPF
 
             return null;
         }
-
+      
         public ReplyGetAuthenticationResult CheckAuthentication()
         {
             return new ReplyGetAuthenticationResult

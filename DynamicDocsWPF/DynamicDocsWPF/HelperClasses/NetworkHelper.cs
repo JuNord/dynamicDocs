@@ -85,7 +85,7 @@ namespace DynamicDocsWPF.HelperClasses
             var reply = JsonConvert.DeserializeObject<ReplyGetDocTemplateList>(GetRequest(User, Routing.GetReceipts));
             return reply?.DocTemplates;
         }
-
+        
         public IEnumerable<ProcessTemplate> GetProcessTemplates()
         {
             var reply = JsonConvert.DeserializeObject<ReplyGetProcessTemplateList>(GetRequest(User, Routing.GetProcesses));

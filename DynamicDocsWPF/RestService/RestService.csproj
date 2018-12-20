@@ -82,6 +82,7 @@
     <Compile Include="Model\Input\ClassDropDown.cs" />
     <Compile Include="Model\Input\DateDropdown.cs" />
     <Compile Include="Model\Input\Dialog.cs" />
+    <Compile Include="Model\Input\DropDown.cs" />
     <Compile Include="Model\Input\InputElement.cs" />
     <Compile Include="Model\Input\NumberInputBox.cs" />
     <Compile Include="Model\Input\StudentDropdown.cs" />
@@ -139,6 +140,9 @@
     <Compile Include="XmlFormatException.cs" />
     <Compile Include="XMLHelper.cs" />
     <Compile Include="XmlState.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="RestDTOs\ReplyGetStringList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

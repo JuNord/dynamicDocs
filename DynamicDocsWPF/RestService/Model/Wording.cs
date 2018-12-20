@@ -8,6 +8,8 @@ namespace DynamicDocsWPF.Model
         public const string TextInputBox = "text";
         public const string NumberInputBox = "number";
         public const string TeacherDropdown = "teacher-dropdown";
+        public const string Dropdown = "dropdown";
+        public const string Item = "item";
         public const string StudentDropdown = "student-dropdown";
         public const string ClassDropdown = "class-dropdown";
         public const string DateDropdown = "date-dropdown";
