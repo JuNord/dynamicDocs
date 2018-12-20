@@ -15,7 +15,6 @@ namespace RestService.Model.Input
         public TextInputBox(Tag parent, string name, string description, bool obligatory) : base(parent, name,
             description, obligatory, null, new TextBox(), DataType.String)
         {
-            ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
         }
 
         public override void Clear()
@@ -41,6 +40,11 @@ namespace RestService.Model.Input
         public override bool Calculate(string value1, string value2, char operand)
         {
             return false;
+        }
+
+        public override bool ObligatoryCheck()
+        {
+            return !string.IsNullOrWhiteSpace(ElevatedControl.Text);
         }
     }
 }

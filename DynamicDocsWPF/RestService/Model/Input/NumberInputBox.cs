@@ -18,9 +18,6 @@ namespace RestService.Model.Input
             parent, name,
             description, obligatory, calculation, new TextBox(), DataType.Int)
         {
-            if (!string.IsNullOrWhiteSpace(calculation)) BaseControl.IsEnabled = false;
-            ObligatoryCheck = () => !string.IsNullOrEmpty(ElevatedControl.Text);
-
             ControlErrorMsg = "Bitte nur Zahlen eingeben.";
             ControlValidityCheck = () =>
             {
@@ -59,7 +56,7 @@ namespace RestService.Model.Input
         public override void SetValueFromString(string value)
         {
             ElevatedControl.Text = value;
-        }
+        }    
 
         public override bool Calculate(string value1, string value2, char operand)
         {
@@ -103,6 +100,11 @@ namespace RestService.Model.Input
             }
 
             return false;
+        }
+
+        public override bool ObligatoryCheck()
+        {
+            return !string.IsNullOrEmpty(ElevatedControl.Text);
         }
     }
 }

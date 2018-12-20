@@ -13,6 +13,7 @@ namespace RestService.Model.Input
             BaseControl = control;
             Obligatory = obligatory;
             Calculation = calculation;
+            if (!string.IsNullOrWhiteSpace(calculation)) BaseControl.IsEnabled = false;
             SetStartValue();
         }
 
@@ -25,7 +26,6 @@ namespace RestService.Model.Input
         public DataType DataType { get; set; }
         public Func<bool> ProcessValidityCheck { private get; set; }
         protected Func<bool> ControlValidityCheck { private get; set; }
-        protected Func<bool> ObligatoryCheck { private get; set; }
 
         /// <summary>
         ///     Clears the underlying UI Control, according to its type
@@ -62,7 +62,7 @@ namespace RestService.Model.Input
         /// <returns></returns>
         public bool FulfillsObligatoryConditions()
         {
-            return !Obligatory || (ObligatoryCheck?.Invoke() ?? true);
+            return !Obligatory || ObligatoryCheck();
         }
 
         /// <summary>
@@ -85,9 +85,15 @@ namespace RestService.Model.Input
         /// <returns></returns>
         public abstract string GetFormattedValue();
 
+        /// <summary>
+        /// Sets the enabled Value of the BaseControl
+        /// </summary>
+        /// <param name="enabled"></param>
         public void SetEnabled(bool enabled)
         {
             BaseControl.IsEnabled = enabled;
         }
+
+        public abstract bool ObligatoryCheck();
     }
 }

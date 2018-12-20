@@ -17,7 +17,6 @@ namespace RestService.Model.Input
         public DropDown(Tag parent, string name, string description, bool obligatory, List<string> items) : base(parent, name,
             description, obligatory, null, new ComboBox(), DataType.String)
         {
-            ObligatoryCheck = () => ElevatedControl.SelectedIndex > -1;
             _items = items;
         }
 
@@ -34,6 +33,11 @@ namespace RestService.Model.Input
         public override bool Calculate(string value1, string value2, char operand)
         {
             return false;
+        }
+
+        public override bool ObligatoryCheck()
+        {
+            return ElevatedControl.SelectedIndex > -1;
         }
 
         public override string GetValue()

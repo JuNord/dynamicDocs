@@ -18,8 +18,6 @@ namespace RestService.Model.Input
             parent, name,
             description, obligatory, calculation, new DatePicker(), DataType.DateTime)
         {
-            if (!string.IsNullOrWhiteSpace(calculation)) BaseControl.IsEnabled = false;
-            ObligatoryCheck = () => !string.IsNullOrWhiteSpace(ElevatedControl.Text);
             ElevatedControl.SelectedDateChanged += delegate { ((Dialog) parent).PerformCalculations(); };
         }
 
@@ -44,6 +42,11 @@ namespace RestService.Model.Input
             ElevatedControl.SelectedDate = interpretedValue;
         }
 
+        public override bool ObligatoryCheck()
+        {
+            return !string.IsNullOrWhiteSpace(ElevatedControl.Text);
+        }
+        
         public override bool Calculate(string value1, string value2, char operand)
         {
             var isValue1Number = double.TryParse(value1, out var value1Double);
